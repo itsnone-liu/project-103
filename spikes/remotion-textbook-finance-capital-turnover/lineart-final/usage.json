@@ -1,0 +1,12 @@
+{
+  "project": "103-capital-turnover-lineart-remake",
+  "status": "complete",
+  "model_video_api_calls": 0,
+  "tts_api_calls": 0,
+  "reused_narration": true,
+  "reused_vtt": true,
+  "music": "deterministic local synthesis",
+  "render_engine": "Remotion 4.0.409",
+  "repair_rounds": 1,
+  "notes": "No diffusion video model used. All visuals are deterministic SVG/DOM code animation."
+}
