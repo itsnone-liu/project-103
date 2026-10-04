@@ -1,0 +1,55 @@
+{
+  "spike": "remotion-textbook-finance-capital-turnover",
+  "status": "complete",
+  "measurement_policy": {
+    "exact_provider_usage_preferred": true,
+    "fallback": "record character counts; do not invent token precision",
+    "local_render_is_not_llm_token": true
+  },
+  "llm": {
+    "input_tokens_exact": null,
+    "output_tokens_exact": null,
+    "total_tokens_exact": null,
+    "provider_usage_available": false,
+    "source_characters": 1421,
+    "generated_text_characters": 16896,
+    "generated_character_breakdown": {
+      "lesson_brief": 1314,
+      "storyboard": 1159,
+      "narration": 1932,
+      "video_tsx": 6365,
+      "style_css": 6126
+    }
+  },
+  "tts": {
+    "engine": "edge-tts",
+    "voice": "zh-CN-XiaoxiaoNeural",
+    "characters": 1932,
+    "audio_seconds": 277.44,
+    "cost": 0,
+    "live_provider_call_succeeded": true
+  },
+  "local_render": {
+    "target_duration_seconds": 280,
+    "frames": 8400,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "actual_duration_seconds": 280.043,
+    "output_bytes": 17644809,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "sha256": "69ffd5c983931ab63cdd549965bef19a1d8ea24a5c29c0d2fc398a51f5a14eac",
+    "verification_report": "verification/report.json",
+    "verification_passed": true
+  },
+  "repair": {
+    "allowed": 1,
+    "used": 1
+  },
+  "notes": [
+    "The runtime did not expose exact LLM provider token counters; exact fields remain null.",
+    "Baidu Baike desktop returned 403; content was verified from the public mobile page's embedded structured data.",
+    "Edge TTS and Remotion rendering are not counted as LLM tokens."
+  ]
+}

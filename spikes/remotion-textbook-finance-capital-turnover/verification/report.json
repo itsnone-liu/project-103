@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "video": "final.mp4",
+  "video_sha256": "69ffd5c983931ab63cdd549965bef19a1d8ea24a5c29c0d2fc398a51f5a14eac",
+  "probe": {
+    "path": "D:\\qjcNetDiskDownload\\deepseek-harness\\project\\103\\spikes\\remotion-textbook-finance-capital-turnover\\final\\out\\capital-turnover.mp4",
+    "size_bytes": 17644809,
+    "sha256": "69ffd5c983931ab63cdd549965bef19a1d8ea24a5c29c0d2fc398a51f5a14eac",
+    "duration_ms": 280043,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1",
+        "avg_frame_rate": "30/1",
+        "duration": "280.000000",
+        "side_data_list": [
+          {}
+        ]
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2,
+        "r_frame_rate": "0/0",
+        "avg_frame_rate": "0/0",
+        "duration": "280.042667"
+      }
+    ],
+    "has_video": true,
+    "has_audio": true,
+    "width": 1920,
+    "height": 1080,
+    "fps": "30/1",
+    "probe": "ffprobe",
+    "verification": {
+      "passed": true,
+      "failures": []
+    }
+  },
+  "keyframes": [
+    "verification/keyframes/keyframe-01.png",
+    "verification/keyframes/keyframe-02.png",
+    "verification/keyframes/keyframe-03.png",
+    "verification/keyframes/keyframe-04.png",
+    "verification/keyframes/keyframe-05.png",
+    "verification/keyframes/keyframe-06.png",
+    "verification/keyframes/keyframe-07.png",
+    "verification/keyframes/keyframe-08.png"
+  ],
+  "contact_sheet": "verification/contact-sheet.png"
+}

@@ -1,0 +1,58 @@
+{
+  "spike": "remotion-textbook-finance-inventory-turnover",
+  "status": "complete",
+  "measurement_policy": {
+    "exact_provider_usage_preferred": true,
+    "fallback": "record UTF-8 character counts and mark token values as estimates when provider usage is unavailable",
+    "estimation_method": "Chinese-heavy text: UTF-8/Unicode character counts are recorded; any token estimate is explicitly non-provider and approximate",
+    "local_render_is_not_llm_token": true
+  },
+  "llm": {
+    "calls": [],
+    "input_tokens_exact": null,
+    "output_tokens_exact": null,
+    "total_tokens_exact": null,
+    "provider_usage_available": false,
+    "estimated_input_tokens": null,
+    "estimated_output_tokens": null,
+    "estimated_total_tokens": null,
+    "source_characters": 2013,
+    "generated_text_characters": 24100,
+    "generated_character_breakdown": {
+      "lesson_brief": 2817,
+      "storyboard": 4203,
+      "narration": 1604,
+      "video_tsx": 8110,
+      "style_css": 7366
+    }
+  },
+  "tts": {
+    "engine": "edge-tts",
+    "voice": "zh-CN-XiaoxiaoNeural",
+    "characters": 1604,
+    "audio_seconds": 206.472,
+    "cost": 0
+  },
+  "local_render": {
+    "duration_seconds": 209,
+    "frames": 6270,
+    "render_wall_seconds": null,
+    "output_bytes": 15267465,
+    "video_probe": {
+      "duration_seconds": 209.045333,
+      "width": 1920,
+      "height": 1080,
+      "fps": 30,
+      "video_codec": "h264",
+      "audio_codec": "aac"
+    }
+  },
+  "repair": {
+    "allowed": 1,
+    "used": 1
+  },
+  "notes": [
+    "The interactive assistant runtime did not expose provider token counters for this production turn; exact token fields remain null rather than fabricating precision.",
+    "Remotion rendering, local validation, file reads/writes and Edge TTS are not counted as LLM tokens."
+  ]
+}

@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Node / Remotion dependencies and caches
+node_modules/
+.cache/
+.remotion/
+dist/
+build/
+
+# Rendered media and generated review frames
+*.mp4
+*.mp3
+*.wav
+*.webm
+*.mov
+*.gif
+*.zip
+**/out/
+**/review-frames/
+**/verification/keyframes/
+**/verification/contact-sheet.png
+**/verification/*.png
+**/representative.png
+
+# Run-local and transient artifacts
+runs/
+attempt-1/
+*.log
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# External research checkout and process state
+research/edulab/
+*.pid

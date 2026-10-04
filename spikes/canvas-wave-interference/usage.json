@@ -1,0 +1,33 @@
+{
+  "project": "canvas-wave-interference",
+  "llm": {
+    "provider": "session model",
+    "exact_input_tokens": null,
+    "exact_output_tokens": null,
+    "exact_total_tokens": null,
+    "fallback_metric": "Exact provider token usage was unavailable; no token values were fabricated."
+  },
+  "tts": {
+    "engine": "edge-tts",
+    "voice": "zh-CN-XiaoxiaoNeural",
+    "rate": "-2%",
+    "audio_duration_sec_approx": 60.0,
+    "cost": 0
+  },
+  "render": {
+    "engine": "Remotion 4.0.409",
+    "fps": 30,
+    "frames": 1800,
+    "width": 1920,
+    "height": 1080,
+    "canvas_buffer": "480x270",
+    "samples_per_frame": 129600,
+    "sample_updates_total": 233280000,
+    "final_duration_sec": 60.05,
+    "final_size_bytes": 27269800
+  },
+  "repair": {
+    "count": 1,
+    "scope": "P/Q physics labels, source phase visual consistency, final envelope clarity, representative frame"
+  }
+}

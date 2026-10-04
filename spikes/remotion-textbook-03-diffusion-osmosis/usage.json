@@ -1,0 +1,35 @@
+{
+  "spike": "remotion-textbook-03-diffusion-osmosis",
+  "status": "in_progress",
+  "measurement_policy": {
+    "exact_provider_usage_preferred": true,
+    "fallback": "record UTF-8 character counts and mark token values as estimates when provider usage is unavailable",
+    "local_render_is_not_llm_token": true
+  },
+  "llm": {
+    "calls": [],
+    "input_tokens_exact": null,
+    "output_tokens_exact": null,
+    "total_tokens_exact": null,
+    "estimated_input_tokens": null,
+    "estimated_output_tokens": null,
+    "estimated_total_tokens": null
+  },
+  "tts": {
+    "engine": "edge-tts",
+    "voice": "zh-CN-XiaoxiaoNeural",
+    "characters": null,
+    "audio_seconds": null,
+    "cost": 0
+  },
+  "local_render": {
+    "duration_seconds": null,
+    "frames": null,
+    "render_wall_seconds": null,
+    "output_bytes": null
+  },
+  "repair": {
+    "allowed": 1,
+    "used": 0
+  }
+}

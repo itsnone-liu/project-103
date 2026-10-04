@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>矩形面积在哪里最大？｜SVG Direct Geometry Spike 02</title>
+<style>
+:root{--ink:#172033;--muted:#667085;--paper:#f7f9fd;--panel:#fff;--fixed:#344054;--move:#1268d5;--area:#21a179;--areaFill:rgba(33,161,121,.18);--curve:#e15050;--gold:#e79b19;--line:#d9e0e9;--shadow:0 18px 48px rgba(31,48,78,.11)}
+*{box-sizing:border-box} body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 8% 0,#eaf3ff 0,transparent 30rem),var(--paper)}
+button,input{font:inherit}.page{width:min(1200px,calc(100% - 30px));margin:auto;padding:32px 0 48px}.eyebrow{font-size:12px;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:var(--move)}h1{margin:8px 0;font-size:clamp(28px,4vw,44px);letter-spacing:-.04em;line-height:1.1}.lead{max-width:850px;margin:0 0 20px;color:var(--muted);line-height:1.65}
+.workspace{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(310px,.85fr);gap:18px;align-items:stretch}.card{background:rgba(255,255,255,.96);border:1px solid #e5e9f0;border-radius:22px;box-shadow:var(--shadow)}.visuals{padding:12px;display:grid;grid-template-rows:minmax(390px,1fr) 178px;gap:8px;min-width:0}.diagram,.chart{display:block;width:100%;height:100%;border-radius:15px;background:linear-gradient(180deg,#fff,#fbfdff)}.chart{border-top:1px solid #edf0f5;border-radius:0 0 15px 15px}.side{padding:22px;display:flex;flex-direction:column;gap:16px}.readout{padding:16px;border:1px solid #e3e8ef;border-radius:16px;background:#fafcff}.metric{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.metric+.metric{margin-top:8px}.metric span:first-child{font-size:13px;color:var(--muted);font-weight:700}.value{font-size:27px;font-weight:850;color:var(--move);font-variant-numeric:tabular-nums}.value.area{color:var(--area)}.status{margin:10px 0 0;min-height:45px;font-size:14px;line-height:1.5;color:var(--muted)}.control label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:7px}input[type=range]{width:100%;accent-color:var(--move);cursor:pointer}.ticks{display:flex;justify-content:space-between;color:#98a2b3;font-size:11px;margin-top:4px}.buttons{display:flex;flex-wrap:wrap;gap:8px}button{border:1px solid #d6dde7;background:#fff;color:var(--ink);border-radius:11px;padding:9px 12px;font-weight:750;cursor:pointer;transition:.16s ease}button:hover{transform:translateY(-1px);border-color:#99b6dc}button.primary{background:var(--move);border-color:var(--move);color:#fff}button.gold{background:#fff8e9;border-color:#efc46f;color:#855006}.hint{padding:14px 15px;border-left:3px solid var(--move);background:#f2f7ff;border-radius:4px 12px 12px 4px;font-size:14px;line-height:1.55}.legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;color:var(--muted);font-size:12px}.legend span{display:flex;align-items:center;gap:7px}.swatch{width:11px;height:11px;border-radius:3px;background:currentColor}.result{display:none;margin-top:18px;padding:20px 22px;border:1px solid #c8e8dc;border-radius:18px;background:#f3fbf7}.result.show{display:block}.answer{font-size:clamp(23px,4vw,34px);font-weight:880;color:#157655;margin:5px 0 10px}.result p{margin:6px 0;line-height:1.65}details{margin-top:12px}summary{cursor:pointer;font-weight:780}.math{margin-top:10px;padding:13px 15px;border-radius:12px;background:#fff;line-height:1.75;overflow:auto}
+.triangle{fill:none;stroke:var(--fixed);stroke-width:3.2;stroke-linejoin:round;vector-effect:non-scaling-stroke}.rectangle{fill:var(--areaFill);stroke:var(--area);stroke-width:3;vector-effect:non-scaling-stroke}.guide{stroke:#99a4b5;stroke-width:2;stroke-dasharray:6 6;vector-effect:non-scaling-stroke}.point{fill:#fff;stroke:var(--fixed);stroke-width:2.5;vector-effect:non-scaling-stroke}.point-p{fill:var(--move);stroke:#fff;stroke-width:4;cursor:grab;vector-effect:non-scaling-stroke}.point-p:active{cursor:grabbing}.label{font:750 17px Inter,system-ui,sans-serif;fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round}.small-label{font:700 13px Inter,system-ui,sans-serif;fill:var(--muted);paint-order:stroke;stroke:#fff;stroke-width:4px}.area-label{font:850 18px Inter,system-ui,sans-serif;fill:#147557;paint-order:stroke;stroke:#fff;stroke-width:6px}.right-angle{fill:none;stroke:var(--fixed);stroke-width:2.2;vector-effect:non-scaling-stroke}.curve-axis{stroke:#9aa4b2;stroke-width:1.5;vector-effect:non-scaling-stroke}.curve-line{fill:none;stroke:var(--curve);stroke-width:3.5;vector-effect:non-scaling-stroke}.curve-fill{fill:rgba(225,80,80,.08)}.curve-dot{fill:var(--curve);stroke:#fff;stroke-width:3;vector-effect:non-scaling-stroke}.max-line{stroke:var(--gold);stroke-width:2;stroke-dasharray:5 5;vector-effect:non-scaling-stroke}.max-ring{fill:none;stroke:var(--gold);stroke-width:3;vector-effect:non-scaling-stroke}.chart-text{font:650 12px Inter,system-ui,sans-serif;fill:#667085}.chart-title{font:800 13px Inter,system-ui,sans-serif;fill:#344054}
+@media(max-width:840px){.workspace{grid-template-columns:1fr}.visuals{grid-template-rows:390px 170px}.side{padding:18px}.page{width:min(100% - 18px,720px);padding-top:22px}}@media(max-width:480px){.visuals{grid-template-rows:330px 165px}.legend{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="page">
+<header><div class="eyebrow">SVG Direct Geometry · Explore the area</div><h1>点 P 走到哪里，矩形面积最大？</h1><p class="lead">P 沿斜边 AB 运动。拖动蓝色点或下方滑块，观察矩形的一边变长、另一边变短时，面积 S 如何变化。</p></header>
+<section class="workspace">
+<div class="card visuals">
+<svg id="diagram" class="diagram" viewBox="0 0 700 480" role="img" aria-label="直角三角形 AOB、动点 P 与矩形 OMPN">
+  <path class="triangle" d="M110 400 L470 400 L110 80 Z"/>
+  <path class="right-angle" d="M110 378 L132 378 L132 400"/>
+  <line id="horizontalGuide" class="guide" x1="110" y1="400" x2="470" y2="400"/>
+  <line id="verticalGuide" class="guide" x1="110" y1="400" x2="110" y2="400"/>
+  <rect id="areaRect" class="rectangle" x="110" y="400" width="0" height="0"/>
+  <g aria-hidden="true">
+    <circle class="point" cx="110" cy="400" r="5"/><text class="label" x="85" y="425">O</text>
+    <circle class="point" cx="470" cy="400" r="5"/><text class="label" x="482" y="425">A</text>
+    <circle class="point" cx="110" cy="80" r="5"/><text class="label" x="84" y="75">B</text>
+  </g>
+  <g id="pointM"><circle class="point" cx="110" cy="400" r="6"/><text class="label" x="82" y="394">M</text></g>
+  <g id="pointN"><circle class="point" cx="110" cy="400" r="6"/><text class="label" x="118" y="425">N</text></g>
+  <g id="pointP"><circle id="pHandle" class="point-p" cx="470" cy="400" r="10" tabindex="0" role="slider" aria-label="沿 AB 拖动点 P" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0"/><text class="label" x="484" y="392">P</text></g>
+  <text class="small-label" x="278" y="450">OA = 6</text><text class="small-label" x="73" y="246" transform="rotate(-90 73 246)">OB = 8</text>
+  <text id="areaLabel" class="area-label" x="125" y="380">S = 0.00</text>
+</svg>
+<svg id="chart" class="chart" viewBox="0 0 700 178" role="img" aria-label="面积随点 P 位置变化的曲线">
+  <text class="chart-title" x="56" y="22">面积 S 随 P 位置的变化</text>
+  <line class="curve-axis" x1="56" y1="145" x2="660" y2="145"/><line class="curve-axis" x1="56" y1="145" x2="56" y2="34"/>
+  <path id="curveFill" class="curve-fill"/><path id="curvePath" class="curve-line"/>
+  <line class="max-line" x1="358" y1="34" x2="358" y2="145"/><line class="max-line" x1="56" y1="43" x2="660" y2="43"/>
+  <circle class="max-ring" cx="358" cy="43" r="7"/>
+  <circle id="curveDot" class="curve-dot" cx="56" cy="145" r="7"/>
+  <text class="chart-text" x="50" y="164">A</text><text class="chart-text" x="651" y="164">B</text><text class="chart-text" x="342" y="164">中点</text>
+  <text class="chart-text" x="22" y="149">0</text><text class="chart-text" x="16" y="47">12</text>
+</svg>
+</div>
+<aside class="card side">
+  <div class="readout" aria-live="polite">
+    <div class="metric"><span>位置比例 AP/AB = t</span><span id="uValue" class="value">0.000</span></div>
+    <div class="metric"><span>矩形面积 S</span><span id="sValue" class="value area">0.000</span></div>
+    <p id="statusText" class="status">P 在 A 点，矩形退化，面积为 0。向 B 方向移动看看。</p>
+  </div>
+  <div class="control"><label for="positionSlider"><span>移动 P</span><span>A → B</span></label><input id="positionSlider" type="range" min="0" max="1" step="0.001" value="0"/><div class="ticks"><span>A</span><span>AB 中点</span><span>B</span></div></div>
+  <div class="buttons"><button id="playButton" class="primary" type="button">▶ Play</button><button id="midButton" class="gold" type="button">跳到中点</button><button id="resetButton" type="button">回到 A</button></div>
+  <div class="legend"><span style="color:var(--fixed)"><i class="swatch"></i>固定三角形</span><span style="color:var(--move)"><i class="swatch"></i>动点 P</span><span style="color:var(--area)"><i class="swatch"></i>矩形 OMPN</span><span style="color:var(--curve)"><i class="swatch"></i>面积曲线</span></div>
+  <div id="hint" class="hint">面积并不是一直增加：留意曲线的最高点，以及此时 P 在 AB 上的位置。</div>
+  <button id="showResult" type="button">显示结论 / Show result</button>
+</aside>
+</section>
+<section id="result" class="result"><div class="eyebrow" style="color:#157655">探索结论</div><div class="answer">0 ≤ S ≤ 12，最大值为 12</div><p>最大面积在 <strong>P 是斜边 AB 的中点</strong>时取得。此时矩形两边分别为 3 和 4。</p><details><summary>查看简短解析</summary><div class="math">设 P 从 A 到 B 的位置比例为 t（0≤t≤1）。因为 A=(6,0)，B=(0,8)，所以 P=(6(1−t), 8t)。<br/>矩形面积为 <strong>S=6(1−t)·8t=48t(1−t)=12−48(t−1/2)²</strong>。<br/>因此 0≤S≤12；当 t=1/2，也就是 P 为 AB 中点时，S 取得最大值 12。</div></details></section>
+</main>
+<script>
+(()=>{'use strict';
+const X0=110,Y0=400,SX=60,SY=40; // 6·60=360, 8·40=320
+const slider=document.getElementById('positionSlider'),areaRect=document.getElementById('areaRect'),pointP=document.getElementById('pointP'),pointM=document.getElementById('pointM'),pointN=document.getElementById('pointN'),horizontalGuide=document.getElementById('horizontalGuide'),verticalGuide=document.getElementById('verticalGuide'),areaLabel=document.getElementById('areaLabel'),curveDot=document.getElementById('curveDot'),uValue=document.getElementById('uValue'),sValue=document.getElementById('sValue'),statusText=document.getElementById('statusText'),playButton=document.getElementById('playButton'),pHandle=document.getElementById('pHandle');
+let frame=null,startTime=0,from=0,dragging=false;
+const clamp=t=>Math.max(0,Math.min(1,Number(t)));
+function stateAt(raw){const t=clamp(raw),x=6*(1-t),y=8*t,S=x*y;return{t,x,y,S,px:X0+x*SX,py:Y0-y*SY};}
+function update(raw){const q=stateAt(raw),w=q.x*SX,h=q.y*SY;
+ areaRect.setAttribute('x',X0);areaRect.setAttribute('y',q.py);areaRect.setAttribute('width',w);areaRect.setAttribute('height',h);
+ horizontalGuide.setAttribute('x1',X0);horizontalGuide.setAttribute('y1',q.py);horizontalGuide.setAttribute('x2',q.px);horizontalGuide.setAttribute('y2',q.py);
+ verticalGuide.setAttribute('x1',q.px);verticalGuide.setAttribute('y1',Y0);verticalGuide.setAttribute('x2',q.px);verticalGuide.setAttribute('y2',q.py);
+ pointP.setAttribute('transform',`translate(${q.px-470} ${q.py-400})`);pointM.setAttribute('transform',`translate(0 ${q.py-400})`);pointN.setAttribute('transform',`translate(${q.px-110} 0)`);
+ const cramped=w<120||h<65,labelX=cramped?Math.max(125,q.px+14):X0+w/2-35,labelY=cramped?Math.max(30,q.py-14):q.py+h/2+5;areaLabel.setAttribute('x',labelX);areaLabel.setAttribute('y',labelY);areaLabel.textContent=`S = ${q.S.toFixed(2)}`;
+ const cx=56+604*q.t,cy=145-(102/12)*q.S;curveDot.setAttribute('cx',cx);curveDot.setAttribute('cy',cy);
+ uValue.textContent=q.t.toFixed(3);sValue.textContent=q.S.toFixed(3);pHandle.setAttribute('aria-valuenow',q.t.toFixed(3));
+ if(q.t<.0005)statusText.textContent='P 在 A 点，矩形退化，面积为 0。向 B 方向移动看看。';
+ else if(q.t>.9995)statusText.textContent='P 到达 B 点，矩形再次退化，面积回到 0。';
+ else if(Math.abs(q.t-.5)<.0005)statusText.textContent='曲线到达最高点：P 是 AB 中点，矩形为 3×4，面积为 12。';
+ else if(q.t<.5)statusText.textContent='一边缩短、另一边增长；目前增长带来的作用更大，面积正在上升。';
+ else statusText.textContent='越过中点后，面积开始下降；继续到 B 时会回到 0。';
+ return q;}
+function buildCurve(){let d='',fill='M56 145 ';for(let i=0;i<=120;i++){const q=stateAt(i/120),x=56+604*q.t,y=145-(102/12)*q.S;d+=`${i?'L':'M'}${x.toFixed(2)} ${y.toFixed(2)} `;fill+=`L${x.toFixed(2)} ${y.toFixed(2)} `}fill+='L660 145 Z';document.getElementById('curvePath').setAttribute('d',d);document.getElementById('curveFill').setAttribute('d',fill)}
+function stop(){if(frame!==null)cancelAnimationFrame(frame);frame=null;playButton.textContent='▶ Play'}
+function animate(now){if(!startTime)startTime=now;const t=from+(now-startTime)/5000;if(t>=1){slider.value='1';update(1);stop();return}slider.value=String(t);update(t);frame=requestAnimationFrame(animate)}
+function startPlay(){if(frame!==null){stop();return}from=Number(slider.value)>=.999?0:Number(slider.value);if(from===0)slider.value='0';startTime=0;playButton.textContent='❚❚ Pause';frame=requestAnimationFrame(animate)}
+function pointerToT(event){const svg=document.getElementById('diagram'),pt=svg.createSVGPoint();pt.x=event.clientX;pt.y=event.clientY;const local=pt.matrixTransform(svg.getScreenCTM().inverse()),ax=470,ay=400,bx=110,by=80,vx=bx-ax,vy=by-ay;return clamp(((local.x-ax)*vx+(local.y-ay)*vy)/(vx*vx+vy*vy))}
+slider.addEventListener('input',()=>{stop();update(slider.value)});playButton.addEventListener('click',startPlay);document.getElementById('midButton').addEventListener('click',()=>{stop();slider.value='.5';update(.5)});document.getElementById('resetButton').addEventListener('click',()=>{stop();slider.value='0';update(0)});
+pHandle.addEventListener('pointerdown',e=>{stop();dragging=true;pHandle.setPointerCapture(e.pointerId);const t=pointerToT(e);slider.value=String(t);update(t)});pHandle.addEventListener('pointermove',e=>{if(!dragging)return;const t=pointerToT(e);slider.value=String(t);update(t)});pHandle.addEventListener('pointerup',e=>{dragging=false;pHandle.releasePointerCapture(e.pointerId)});pHandle.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();stop();const delta=e.key==='ArrowRight'?.01:-.01,t=clamp(Number(slider.value)+delta);slider.value=String(t);update(t)});
+document.getElementById('showResult').addEventListener('click',e=>{const r=document.getElementById('result');r.classList.toggle('show');e.currentTarget.textContent=r.classList.contains('show')?'隐藏结论 / Hide result':'显示结论 / Show result';if(r.classList.contains('show'))r.scrollIntoView({behavior:'smooth',block:'nearest'})});
+buildCurve();window.geometrySpike02={stateAt,update:t=>{slider.value=String(clamp(t));return update(t)}};update(0);
+})();
+</script>
+</body>
+</html>

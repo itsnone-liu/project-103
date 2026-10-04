@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>圆与线段的两个临界值｜SVG Direct Geometry Spike 01</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #667085;
+      --paper: #fbfcff;
+      --panel: #ffffff;
+      --line: #c7ceda;
+      --fixed: #344054;
+      --moving: #1367d1;
+      --circle: #4c6fff;
+      --inside: #e5484d;
+      --outside: #8b5cf6;
+      --critical: #f59e0b;
+      --good: #137a52;
+      --shadow: 0 18px 50px rgba(36, 50, 79, .10);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: radial-gradient(circle at 15% 0%, #eef5ff 0, transparent 32rem), var(--paper);
+    }
+    button, input { font: inherit; }
+    .page { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 48px; }
+    header { margin-bottom: 20px; }
+    .eyebrow { color: var(--moving); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 8px 0 8px; font-size: clamp(26px, 4vw, 42px); line-height: 1.12; letter-spacing: -.035em; }
+    .lead { margin: 0; max-width: 800px; color: var(--muted); line-height: 1.65; }
+    .workspace { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(300px, .85fr); gap: 18px; align-items: stretch; }
+    .card { background: rgba(255,255,255,.94); border: 1px solid #e6eaf0; border-radius: 22px; box-shadow: var(--shadow); }
+    .stage { min-width: 0; overflow: hidden; padding: 10px; }
+    svg { display: block; width: 100%; height: min(65vh, 620px); min-height: 430px; border-radius: 15px; background: linear-gradient(180deg, #fff 0%, #fbfdff 100%); }
+    .side { padding: 22px; display: flex; flex-direction: column; gap: 18px; }
+    .readout { padding: 16px; border: 1px solid #e7ebf1; border-radius: 16px; background: #fafbfe; }
+    .x-row { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
+    .x-label { color: var(--muted); font-size: 13px; font-weight: 700; }
+    .x-value { font-variant-numeric: tabular-nums; font-size: 30px; font-weight: 800; color: var(--moving); }
+    .count { margin-top: 9px; font-weight: 750; }
+    .status { margin: 7px 0 0; min-height: 45px; color: var(--muted); line-height: 1.5; font-size: 14px; }
+    .control-group label { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+    input[type="range"] { width: 100%; accent-color: var(--moving); cursor: pointer; }
+    .ticks { display: flex; justify-content: space-between; color: #98a2b3; font-size: 11px; margin-top: 3px; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 9px; }
+    button { border: 1px solid #d9e0ea; color: var(--ink); background: #fff; border-radius: 11px; padding: 9px 12px; font-weight: 700; cursor: pointer; transition: .16s ease; }
+    button:hover { border-color: #9ab7df; transform: translateY(-1px); }
+    button.primary { color: #fff; border-color: var(--moving); background: var(--moving); }
+    button.critical { color: #8a4d00; border-color: #f3c064; background: #fff9e9; }
+    .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; font-size: 12px; color: var(--muted); }
+    .legend span { display: flex; align-items: center; gap: 7px; }
+    .dot { width: 10px; height: 10px; border-radius: 999px; background: currentColor; }
+    .prompt { padding: 15px 16px; border-left: 3px solid var(--moving); background: #f4f8ff; border-radius: 4px 12px 12px 4px; line-height: 1.55; font-size: 14px; }
+    .result { display: none; margin-top: 18px; padding: 20px 22px; border: 1px solid #cde8db; border-radius: 18px; background: #f5fcf8; }
+    .result.show { display: block; }
+    .answer { margin: 3px 0 9px; color: var(--good); font-size: clamp(23px, 4vw, 34px); font-weight: 850; letter-spacing: -.02em; }
+    .result p { margin: 6px 0; line-height: 1.6; }
+    details { margin-top: 12px; }
+    summary { cursor: pointer; font-weight: 750; }
+    .math { margin-top: 10px; padding: 13px 15px; border-radius: 12px; background: #fff; color: #344054; line-height: 1.75; overflow-x: auto; }
+    .geometry-fixed { fill: none; stroke: var(--fixed); stroke-width: 3; vector-effect: non-scaling-stroke; }
+    .diagonal { stroke-width: 3.5; }
+    .extension { fill: none; stroke: #98a2b3; stroke-width: 2.5; stroke-dasharray: 8 8; vector-effect: non-scaling-stroke; }
+    .circle-shape { fill: rgba(76,111,255,.065); stroke: var(--circle); stroke-width: 3; vector-effect: non-scaling-stroke; }
+    .radius { stroke: var(--moving); stroke-width: 2.5; stroke-dasharray: 6 6; vector-effect: non-scaling-stroke; }
+    .point-fixed { fill: #fff; stroke: var(--fixed); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+    .point-p { fill: var(--moving); stroke: #fff; stroke-width: 3; vector-effect: non-scaling-stroke; }
+    .hit-inside { fill: var(--inside); stroke: #fff; stroke-width: 3; vector-effect: non-scaling-stroke; }
+    .hit-outside { fill: #fff; stroke: var(--outside); stroke-width: 4; vector-effect: non-scaling-stroke; }
+    .hit-tangent { fill: var(--critical); stroke: #fff; stroke-width: 4; vector-effect: non-scaling-stroke; }
+    .halo { fill: none; stroke: var(--critical); stroke-width: 3; opacity: .6; vector-effect: non-scaling-stroke; animation: pulse 1.5s ease-out infinite; }
+    .svg-label { font: 700 17px Inter, system-ui, sans-serif; fill: var(--ink); paint-order: stroke; stroke: white; stroke-width: 5px; stroke-linejoin: round; }
+    .measure { font: 700 14px Inter, system-ui, sans-serif; fill: var(--moving); paint-order: stroke; stroke: white; stroke-width: 4px; }
+    .omega { font: italic 700 18px Georgia, serif; fill: var(--circle); paint-order: stroke; stroke: white; stroke-width: 5px; }
+    @keyframes pulse { from { r: 9px; opacity: .8; } to { r: 21px; opacity: 0; } }
+    @media (max-width: 820px) {
+      .workspace { grid-template-columns: 1fr; }
+      svg { height: 52vh; min-height: 360px; }
+      .page { width: min(100% - 20px, 720px); padding-top: 22px; }
+      .side { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="eyebrow">SVG Direct Geometry · Explore first</div>
+      <h1>两个交点，为什么只在这一段出现？</h1>
+      <p class="lead">拖动正方形边上的点 P。圆心是 P，半径始终等于 BP。观察圆与对角线 AC 的交点何时出现，又在何时越过端点 C。</p>
+    </header>
+
+    <section class="workspace">
+      <div class="card stage">
+        <svg id="diagram" viewBox="0 -130 700 540" role="img" aria-label="正方形、动点 P、动态圆和对角线交点">
+          <defs>
+            <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <line class="extension" x1="340" y1="130" x2="535" y2="-65" />
+          <path class="geometry-fixed" d="M100 370 L340 370 L340 130 L100 130 Z" />
+          <line class="geometry-fixed diagonal" x1="100" y1="370" x2="340" y2="130" />
+
+          <circle id="movingCircle" class="circle-shape" cx="340" cy="370" r="0" />
+          <line id="radiusLine" class="radius" x1="340" y1="370" x2="340" y2="370" />
+          <g id="hits"></g>
+
+          <g aria-hidden="true">
+            <circle class="point-fixed" cx="100" cy="370" r="5"/><text class="svg-label" x="80" y="395">A</text>
+            <circle class="point-fixed" cx="340" cy="370" r="5"/><text class="svg-label" x="351" y="395">B</text>
+            <circle class="point-fixed" cx="340" cy="130" r="5"/><text class="svg-label" x="351" y="126">C</text>
+            <circle class="point-fixed" cx="100" cy="130" r="5"/><text class="svg-label" x="79" y="124">D</text>
+          </g>
+          <g id="pointP">
+            <circle class="point-p" cx="340" cy="370" r="8"/>
+            <text id="pLabel" class="svg-label" x="354" y="365">P</text>
+          </g>
+          <text id="radiusLabel" class="measure" x="350" y="370">BP = 0</text>
+          <text id="omegaLabel" class="omega" x="365" y="350">ω</text>
+          <text class="measure" x="171" y="224" transform="rotate(-45 171 224)" style="fill:#667085;stroke-width:6px">线段 AC</text>
+          <text class="measure" x="397" y="77" transform="rotate(-45 397 77)" style="fill:#8b5cf6;stroke-width:6px">C 外延长线</text>
+        </svg>
+      </div>
+
+      <aside class="card side">
+        <div class="readout" aria-live="polite">
+          <div class="x-row"><span class="x-label">当前位置 BP = x</span><span id="xValue" class="x-value">0.000</span></div>
+          <div id="countText" class="count">线段 AC 上：0 个公共点</div>
+          <p id="statusText" class="status">圆还没有与直线 AC 相交。试着向上拖动 P。</p>
+        </div>
+
+        <div class="control-group">
+          <label for="xSlider"><span>拖动 P</span><span>0 ≤ x ≤ 6</span></label>
+          <input id="xSlider" type="range" min="0" max="6" step="0.001" value="0" />
+          <div class="ticks"><span>0</span><span>3</span><span>6</span></div>
+        </div>
+
+        <div class="buttons">
+          <button id="playButton" class="primary" type="button">▶ Play</button>
+          <button id="criticalA" class="critical" type="button">临界 A · 相切</button>
+          <button id="criticalB" class="critical" type="button">临界 B · 到达 C</button>
+        </div>
+
+        <div class="legend" aria-label="图例">
+          <span style="color:var(--moving)"><i class="dot"></i>运动点 P / 半径</span>
+          <span style="color:var(--circle)"><i class="dot"></i>圆 ω</span>
+          <span style="color:var(--inside)"><i class="dot"></i>AC 内交点</span>
+          <span style="color:var(--outside)"><i class="dot"></i>延长线交点</span>
+        </div>
+
+        <div class="prompt">先找到“刚刚出现两个交点”的位置，再观察其中一个交点是什么时候越过 C 的。</div>
+        <button id="showResult" type="button">显示结论 / Show result</button>
+      </aside>
+    </section>
+
+    <section id="result" class="result">
+      <div class="eyebrow" style="color:var(--good)">探索结论</div>
+      <div class="answer">6(√2 − 1) &lt; x ≤ 3</div>
+      <p><strong>左边界来自相切：</strong>在 x = 6(√2−1) 时，两个交点合并为一个切点，所以左端点不能取。</p>
+      <p><strong>右边界来自端点 C：</strong>x = 3 时仍有两个不同公共点，其中一个恰好是 C，所以 3 可以取；再增大 x，它便进入 C 外侧的延长线。</p>
+      <details>
+        <summary>查看简短数学推导</summary>
+        <div class="math">
+          取 A=(0,0)，B=(6,0)，C=(6,6)，P=(6,x)。令 AC 上一点 Q=(t,t)。<br/>
+          由 PQ=x，得 (t−6)²+(t−x)²=x²，即<br/>
+          <strong>t²−(6+x)t+18=0。</strong><br/>
+          要有两个不同实根，判别式须大于 0，得到 x&gt;6(√2−1)；再要求两个根都落在 [0,6]，得到 x≤3。
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+      const SVG_NS = 'http://www.w3.org/2000/svg';
+      const SCALE = 40;
+      const ORIGIN_X = 100;
+      const ORIGIN_Y = 370;
+      const TANGENT_X = 6 * (Math.SQRT2 - 1);
+      const EPS = 1e-7;
+
+      const slider = document.getElementById('xSlider');
+      const movingCircle = document.getElementById('movingCircle');
+      const radiusLine = document.getElementById('radiusLine');
+      const pointP = document.getElementById('pointP');
+      const pLabel = document.getElementById('pLabel');
+      const radiusLabel = document.getElementById('radiusLabel');
+      const omegaLabel = document.getElementById('omegaLabel');
+      const hitsLayer = document.getElementById('hits');
+      const xValue = document.getElementById('xValue');
+      const countText = document.getElementById('countText');
+      const statusText = document.getElementById('statusText');
+      const playButton = document.getElementById('playButton');
+      let animationId = null;
+      let playStart = 0;
+      let playFrom = 0;
+
+      const toSvg = (x, y) => ({ x: ORIGIN_X + SCALE * x, y: ORIGIN_Y - SCALE * y });
+
+      function intersectionsFor(x) {
+        // Substitution Q=(t,t) into |Q-P|=x gives t²-(6+x)t+18=0.
+        const discriminant = (6 + x) * (6 + x) - 72;
+        if (discriminant < -EPS) return { discriminant, tangent: false, line: [], segment: [] };
+        if (Math.abs(discriminant) <= EPS) {
+          const t = (6 + x) / 2;
+          const point = { t, ...toSvg(t, t), onSegment: t >= -EPS && t <= 6 + EPS };
+          return { discriminant: 0, tangent: true, line: [point], segment: point.onSegment ? [point] : [] };
+        }
+        const root = Math.sqrt(discriminant);
+        const ts = [((6 + x) - root) / 2, ((6 + x) + root) / 2];
+        const line = ts.map(t => ({ t, ...toSvg(t, t), onSegment: t >= -EPS && t <= 6 + EPS }));
+        return { discriminant, tangent: false, line, segment: line.filter(p => p.onSegment) };
+      }
+
+      function addHit(point, tangent) {
+        const circle = document.createElementNS(SVG_NS, 'circle');
+        circle.setAttribute('cx', point.x);
+        circle.setAttribute('cy', point.y);
+        circle.setAttribute('r', tangent ? 10 : 8);
+        circle.setAttribute('class', tangent ? 'hit-tangent' : (point.onSegment ? 'hit-inside' : 'hit-outside'));
+        if (tangent) circle.setAttribute('filter', 'url(#softGlow)');
+        hitsLayer.appendChild(circle);
+        if (tangent) {
+          const halo = document.createElementNS(SVG_NS, 'circle');
+          halo.setAttribute('cx', point.x);
+          halo.setAttribute('cy', point.y);
+          halo.setAttribute('r', '9');
+          halo.setAttribute('class', 'halo');
+          hitsLayer.appendChild(halo);
+        }
+      }
+
+      function update(rawX) {
+        const x = Math.max(0, Math.min(6, Number(rawX)));
+        const p = toSvg(6, x);
+        const b = toSvg(6, 0);
+        const geometry = intersectionsFor(x);
+
+        movingCircle.setAttribute('cx', p.x);
+        movingCircle.setAttribute('cy', p.y);
+        movingCircle.setAttribute('r', x * SCALE);
+        radiusLine.setAttribute('x1', b.x);
+        radiusLine.setAttribute('y1', b.y);
+        radiusLine.setAttribute('x2', p.x);
+        radiusLine.setAttribute('y2', p.y);
+        pointP.setAttribute('transform', `translate(0 ${p.y - ORIGIN_Y})`);
+        pLabel.setAttribute('y', 365);
+        radiusLabel.setAttribute('x', p.x + 10);
+        radiusLabel.setAttribute('y', (p.y + b.y) / 2);
+        radiusLabel.textContent = `BP = ${x.toFixed(2)}`;
+        omegaLabel.setAttribute('x', Math.min(610, p.x + x * SCALE * .73));
+        omegaLabel.setAttribute('y', p.y - Math.max(18, x * SCALE * .55));
+
+        hitsLayer.replaceChildren();
+        geometry.line.forEach(point => addHit(point, geometry.tangent));
+
+        xValue.textContent = Math.abs(x - TANGENT_X) < EPS ? '6(√2−1)' : x.toFixed(3);
+        const count = geometry.segment.length;
+        countText.textContent = `线段 AC 上：${count} 个${geometry.tangent ? '切点' : '公共点'}`;
+
+        if (geometry.line.length === 0) {
+          statusText.textContent = '圆还没有与直线 AC 相交。试着向上拖动 P。';
+        } else if (geometry.tangent) {
+          statusText.textContent = '临界 A：两个交点刚刚合并成一个切点，尚不满足“两个不同公共点”。';
+        } else if (count === 2 && geometry.line.some(q => Math.abs(q.t - 6) < EPS)) {
+          statusText.textContent = '临界 B：两个交点仍在线段上，其中一个恰好到达端点 C。';
+        } else if (count === 2) {
+          statusText.textContent = '圆与线段 AC 有两个不同公共点。继续观察靠近 C 的交点。';
+        } else if (count === 1 && geometry.line.some(q => q.t > 6 + EPS)) {
+          statusText.textContent = '直线上仍有两个交点，但一个已经越过 C，落在虚线延长线上。';
+        } else {
+          statusText.textContent = `由实时几何计算得到：线段 AC 上有 ${count} 个公共点。`;
+        }
+
+        return { x, ...geometry, segmentCount: count };
+      }
+
+      function stop() {
+        if (animationId !== null) cancelAnimationFrame(animationId);
+        animationId = null;
+        playButton.textContent = '▶ Play';
+      }
+
+      function animate(now) {
+        if (!playStart) playStart = now;
+        const x = playFrom + (now - playStart) / 1200;
+        if (x >= 6) {
+          slider.value = '6';
+          update(6);
+          stop();
+          return;
+        }
+        slider.value = String(x);
+        update(x);
+        animationId = requestAnimationFrame(animate);
+      }
+
+      slider.addEventListener('input', () => { stop(); update(slider.value); });
+      playButton.addEventListener('click', () => {
+        if (animationId !== null) { stop(); return; }
+        playFrom = Number(slider.value) >= 5.999 ? 0 : Number(slider.value);
+        playStart = 0;
+        if (playFrom === 0) slider.value = '0';
+        playButton.textContent = '❚❚ Pause';
+        animationId = requestAnimationFrame(animate);
+      });
+      document.getElementById('criticalA').addEventListener('click', () => { stop(); slider.value = String(TANGENT_X); update(TANGENT_X); });
+      document.getElementById('criticalB').addEventListener('click', () => { stop(); slider.value = '3'; update(3); });
+      document.getElementById('showResult').addEventListener('click', (event) => {
+        const result = document.getElementById('result');
+        result.classList.toggle('show');
+        event.currentTarget.textContent = result.classList.contains('show') ? '隐藏结论 / Hide result' : '显示结论 / Show result';
+        if (result.classList.contains('show')) result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+
+      // Small inspection surface for this spike's browser verification; the UI uses the same calculation.
+      window.geometrySpike = { update: x => { slider.value = String(x); return update(x); }, intersectionsFor, TANGENT_X };
+      update(0);
+    })();
+  </script>
+</body>
+</html>

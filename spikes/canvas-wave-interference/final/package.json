@@ -1,0 +1,23 @@
+{
+  "name": "canvas-wave-interference-final",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "preview": "remotion studio src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "render": "remotion render src/index.ts WaveInterference out/final.mp4 --codec=h264 --crf=18",
+    "still": "remotion still src/index.ts WaveInterference out/representative.png --frame=1660"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.409",
+    "@remotion/media": "4.0.409",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "remotion": "4.0.409"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  }
+}
