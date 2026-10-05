@@ -50,3 +50,4 @@ research/
 # Copied regression runtime (derivable: research clone + pipeline)
 base-compare/pattern-test/
 .git_disabled/
+audio/voice/

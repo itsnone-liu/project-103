@@ -13,7 +13,11 @@
   const S_T = [], S_C = [];
   for (let t = 0; t <= 12.6; t += .1) { S_T.push([t, xT(t), G]); if (t >= C0) S_C.push([t, xC(t), G - 26]); }
 
-  const N = narr([0, 2.4, 5.2, 7.0, 7.9, 9.8, 12.0]);   // 句锚: 题面/出发/追/相遇/证明/回顾
+  // Timing table = TTS physical truth (audio/timing_patterns_demo2.json, AUDIT PASS
+  // +0.02s): starts [0, 3.55, 7.15, 9.861, 13.99], total 19.635. k1 opens at 3.55 →
+  // "四秒时" lands ~3.7 (Clawd launches 4.0); k2 opens 7.15 → "七点二秒" lands ~7.3
+  // (visual meet 7.2). 差距缩小 is delegated to the live readout (动即推理).
+  const N = narr([0, 3.55, 7.15, 9.861, 13.99, 19.635]);
   beatCfg(120, 0);
 
   function ground(lt) {
@@ -93,11 +97,11 @@
     if (lt >= MEET_T + .1) {
       countUp(lt, MEET_T + .1, MEET_T + .9, 0, WALKED, 950, 300, { col: roleCol('known'), size: 26, unit: ' px' });
     }
-    // STAMP_ANSWER (句3)
-    if (lt >= N.at(3, .3)) stampAnswer('相遇 t=7.2s', W / 2, 430, lt, N.at(3, .3), { col: roleCol('ask') });
-    // SUPERPOSE_COPY proof (句4): clawd 路程条复制到乌龟条上重合
-    if (lt > N.at(4, .1)) {
-      const pk = ease(seg(lt, N.at(4, .1), N.at(4, .9)));
+    // STAMP_ANSWER (k2 相遇句中段)
+    if (lt >= N.at(2, .3)) stampAnswer('相遇 t=7.2s', W / 2, 430, lt, N.at(2, .3), { col: roleCol('ask') });
+    // SUPERPOSE_COPY proof (k3): clawd 路程条复制到乌龟条上重合
+    if (lt > N.at(3, .1)) {
+      const pk = ease(seg(lt, N.at(3, .1), N.at(3, .9)));
       const bx = 480, by = 560, bw = 300;
       const barT = rectPts(bx, by, bw, 26, 2), barC = rectPts(bx, by + 50, bw, 26, 2);
       paint(barT, { wash: roleCol('known'), washOp: 90, ink: roleCol('known'), sw: 1.2 });
@@ -110,9 +114,9 @@
     // sfx words (ENGINE signature: txt, x, y, size, color, age, o)
     sfx('嗖!', 700, 380, 46, roleCol('ask'), lt - 3.9, { life: .9 });
     sfx('啪!', 1100, 340, 54, PAL.rose, lt - MEET_T, { life: 1 });
-    // SHOW_BEFORE_AFTER (句5) with numbers
-    if (lt > N.at(5, 0)) beforeAfter(lt, {
-      at: N.at(5, 0), y: 620, w: 900, ticks: 8, span: 800, unit: 'px', numbers: true,
+    // SHOW_BEFORE_AFTER (k4) with numbers
+    if (lt > N.at(4, 0)) beforeAfter(lt, {
+      at: N.at(4, 0), y: 620, w: 900, ticks: 8, span: 800, unit: 'px', numbers: true,
       title: '同起点同相遇点: 路程相等, 时间不同',
       rows: [
         { col: roleCol('known'), from: 0, to: WALKED / 800 * 900, toVal: 384, fromVal: 0, dash: true },

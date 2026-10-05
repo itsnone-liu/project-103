@@ -66,6 +66,10 @@
     reasoning_effort=high）。
 30. **两段式交付**：storyboard → code 分开调用；大代码一次生成（max_tokens 65536，
     temp 1.0）；运输层错误 60s 退避重试，全量 prompt 有缓存。
+31. **旁白=物理时钟（音频管线）** 🆕：分镜出文案后先过 TTS（edge-tts，女声
+    Xiaoxiao），timing.json 的句起点直接注入 narr([...])；锚点=开口时刻对齐数学
+    事件（词与画面同拍）；锚前预算 ~3.5-4 字/秒；说不过来砍旁白不砍数学，
+    能交给 liveReadout 的不念。流程见 AUDIO.md。
 
 ## 分镜模板（吸收 PDoom 四列表 + edulab 四拍）
 

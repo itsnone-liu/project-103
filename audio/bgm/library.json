@@ -1,0 +1,25 @@
+{
+ "tracks": [
+  {
+   "file": "bgm/musicbox.wav",
+   "bpm": 100,
+   "mood": "轻快/讲解",
+   "gain": 0.13,
+   "dur": 38.4
+  },
+  {
+   "file": "bgm/plucky.wav",
+   "bpm": 110,
+   "mood": "活泼/演示",
+   "gain": 0.13,
+   "dur": 34.9
+  },
+  {
+   "file": "bgm/calm.wav",
+   "bpm": 70,
+   "mood": "沉静/总结",
+   "gain": 0.13,
+   "dur": 27.4
+  }
+ ]
+}

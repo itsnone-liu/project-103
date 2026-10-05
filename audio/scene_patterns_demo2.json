@@ -1,0 +1,14 @@
+{
+  "title": "patterns_demo2",
+  "voice": "zh-CN-XiaoxiaoNeural",
+  "bgm": {"file": "bgm/musicbox.wav", "gain": 0.13},
+  "gap": 0.25,
+  "tail": 1.8,
+  "sentences": [
+    {"text": "乌龟每秒走六十像素。", "pause_after": 0.25},
+    {"text": "四秒时，它两倍速追来。", "anchor_start": 3.55, "pause_after": 0.25},
+    {"text": "七点二秒，相遇了！", "anchor_start": 7.15, "pause_after": 0.5},
+    {"text": "相遇时，两只都走了三百八十四像素。", "pause_after": 0.35},
+    {"text": "同样的路程，不同的速度，时间就不同。"}
+  ]
+}
