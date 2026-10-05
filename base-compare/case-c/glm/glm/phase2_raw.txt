@@ -1,0 +1,334 @@
+```javascript
+// src/config.js: PROJECT = { duration: 20, bpm: 75 };
+// chase_meet.js — "The Slow and the Late". Clawd naps through the start of a walk-race; the turtle's 4 s
+// head start at 60 px/s is exactly paid off by Clawd running 120 px/s, so they meet at x = 880, t = 11.2.
+//   A 0–3.2   iris opens on the START post; turtle slow-blinks, Clawd ties a sweatband and flops, cocky.
+//   B 3.2–7.2 cut on the turtle's first step: it plods off alone; Clawd snores; a butterfly wakes him.
+//   C 7.2–9.2 cut mid-launch: Clawd bursts at exactly 2× the turtle's speed; the gap melts.
+//   D 9.2–11.2 whip pan: one stride behind, then level — nose touches shell at x = 880, t = 11.2.
+//   E 11.2–14.4 smash into freeze; flash-ring; the checkered flag stamps in; both trails retrace the course.
+//   F 14.4–18.2 dimmed BEFORE (ghost turtle at 640, ghost Clawd at 400, the 240 px gap bracketed) match-cuts
+//              on a beat to the AFTER: both trails full and equal — bulb, slow nod.
+//   G 18.2–20 brush wipe to the golden tableau at the flag; turtle bows, Clawd beams; iris to paper.
+(() => {
+  // ---------- Parameters (STORYBOARD.md — every position below is derived from these, exactly) ----------
+  // TURTLE_SPEED·T = CLAWD_SPEED·(T−HEAD_START) → 60T = 120(T−4) → T = MEET_T = 8.0 s after the turtle starts
+  // turtle: 400 + 60·8 = 880 · Clawd: 400 + 120·4 = 880 → MEET_X = 880, freeze at video t = 3.2 + 8 = 11.2
+  // at Clawd's start the turtle is at 400 + 60·4 = 640 → gap 240 px, closed at 60 px/s relative over 4.0 s
+  const TURTLE_SPEED = 60, CLAWD_SPEED = 120, HEAD_START = 4.0;
+  const START_X = 400, MEET_T = 8.0, MEET_X = 880;
+  const T0 = 3.2;                    // the turtle starts walking (video seconds)
+  const C0 = T0 + HEAD_START;        // 7.2 — Clawd starts
+  const TF = T0 + MEET_T;            // 11.2 — the meet / freeze
+  const turtleX = t => (t <= T0 ? START_X : Math.min(START_X + TURTLE_SPEED * (t - T0), MEET_X));
+  const clawdX  = t => (t <= C0 ? START_X : Math.min(START_X + CLAWD_SPEED * (t - C0), MEET_X));
+
+  const CU = 22, NOSE = 5 * CU;      // Clawd unit and nose offset (parameter x = his nose on the line)
+  const GROUND = 912, TURTLE_Y = 894, CLAWD_Y = 930;
+  const WIPE = [PAL.cream, mixCol(PAL.ochre, PAL.cream, .3)];
+  const warmK = t => seg(t, 6, 19);  // cool pale morning → golden
+  const sparkle = (x, y, r, k) => { if (k > 0 && k < 1) paint(starPts(x, y, r * backOut(k) * (1 - k * .6), .25, 4, k * 2), { wash: PAL.cream, washOp: Math.round(255 * (1 - k * k)), ink: null }); };
+
+  // ---------- the meadow ----------
+  function meadow(t) {
+    const warm = warmK(t);
+    const sky = mixCol(mixCol(PAL.sky, PAL.cream, .5), '#FFD9A6', .35 * warm);
+    const grass = mixCol(PAL.sap, mixCol(PAL.ochre, '#FFD9A6', .4), .18 * warm);
+    boilSeed('sky');
+    paint(rectPts(-600, -300, W + 1200, 1200, 4), { wash: sky, ink: null });
+    glow(320 + 240 * warm, 250, 300 + 160 * warm, '#FFE9B0', .2 + .32 * warm);   // the one true light
+    for (let i = 0; i < 3; i++) {
+      boilSeed('cl' + i);
+      const cx = ((hash(i) * 2400 + t * (5 + 3 * hash(i + 3))) % 2800) - 400, cy = 180 + hash(i + 6) * 210;
+      paint(ellPts(cx, cy, 130 + 60 * hash(i + 1), 32 + 14 * hash(i + 2), 22, 8), { fill: PAL.cream, fillOp: 115, bleed: .3, tex: .4, ink: null });
+    }
+    boilSeed('far');
+    paint(ellPts(900, 862, 2100, 150, 40, 8), { fill: mixCol(mixCol(PAL.teal, PAL.sky, .45), PAL.cream, .3), fillOp: 130, bleed: .25, tex: .5, ink: null });
+    boilSeed('ground');
+    paint(rectPts(-400, 782, W + 800, H, 4), { wash: grass, fill: mixCol(grass, PAL.teal, .25), fillOp: 80, bleed: .06, tex: .55, ink: null });
+    inkLine([[-400, 784], [W * .5, 778], [W + 400, 784]], 1, mixCol(PAL.ink, PAL.teal, .5), 'ink', .5);
+    boilSeed('path');
+    paint(rectPts(-400, 858, W + 800, 108, 6), { wash: mixCol(PAL.ochre, PAL.cream, .25), fill: mixCol(PAL.ochre, PAL.ink, .1), fillOp: 70, bleed: .12, tex: .5, ink: null });
+    inkLine([[-400, 860], [W + 400, 856]], .8, mixCol(PAL.ochre, PAL.ink, .45), 'dry', .4);
+    inkLine([[-400, 964], [W + 400, 968]], .8, mixCol(PAL.ochre, PAL.ink, .45), 'dry', .4);
+    for (let i = 0; i < 22; i++) {                       // grass tufts along the path, swaying on their own clocks
+      boilSeed('tuft' + i);
+      const x = i * 128 + hash(i) * 60, base = i % 2 ? 852 : 988, sway = wob(t, .5 + .3 * hash(i + 40), hash(i) * 6) * 6;
+      for (const k of [-1, 0, 1]) inkLine([[x + k * 5, base], [x + k * 9 + sway, base - 20 - 7 * hash(i + k)]], .8, mixCol(grass, PAL.ink, .35), 'inkfine', .4);
+    }
+    for (let i = 0; i < 8; i++) {
+      boilSeed('fl' + i);
+      const x = 120 + hash(i + 70) * 2300, y = i < 5 ? 800 + hash(i + 80) * 44 : 992 + hash(i + 80) * 55;
+      paint(ellPts(x + wob(t, .6, i) * 3, y, 5, 5, 8, 1), { wash: i % 2 ? mixCol(PAL.rose, PAL.cream, .3) : PAL.cream, ink: null });
+    }
+  }
+
+  // ---------- set pieces ----------
+  function post(t) {                                     // the striped START post at START_X
+    boilSeed('post');
+    const x = START_X, gy = GROUND + 4, w = 26, h = 205, red = mixCol('#D96A5A', PAL.ochre, .15 * warmK(t));
+    paint(ellPts(x, gy, 44, 11, 14, 1), { wash: mixCol(PAL.ochre, PAL.ink, .18), ink: null });
+    paint(rrPts(x - w / 2, gy - h, w, h, 7, 1.2), { wash: PAL.cream, ink: PAL.ink, sw: 1.1 });
+    for (let i = 0; i < 4; i++) { const y0 = gy - h + 16 + i * 47; paint([[x - 9, y0 + 14], [x + 9, y0], [x + 9, y0 + 13], [x - 9, y0 + 27]], { wash: red, ink: null }); }
+    paint(ellPts(x, gy - h, 14, 9, 12, .8), { wash: red, ink: PAL.ink, sw: 1 });
+  }
+
+  function flag(t) {                                     // the checkered MEET flag, stamped in at t = 12.1
+    const t0 = 12.1; if (t < t0) return;
+    const drop = (1 - easeIn(seg(t, t0, t0 + .38))) * -300, unf = backOut(seg(t, t0 + .32, t0 + .95));
+    boilSeed('flag');
+    const px = MEET_X, gy = GROUND + 6, top = gy - 215 + drop, fy = top + 10, fh = 17 * unf, fw = 24;
+    paint(ellPts(px, gy, 40, 10, 14, 1), { wash: mixCol(PAL.ochre, PAL.ink, .2), ink: null });
+    paint(rrPts(px - 4, top, 8, gy - top, 4, .8), { wash: '#B98A5A', ink: PAL.ink, sw: 1 });
+    paint(ellPts(px, top, 8, 7, 10, .6), { wash: PAL.cream, ink: PAL.ink, sw: .9 });
+    for (let r = 0; r < 2; r++) for (let c = 0; c < 5; c++) {
+      const x0 = px + 5 + c * fw * unf, x1 = px + 5 + (c + 1) * fw * unf;
+      const o0 = wob(t, 2.2, c * .8) * 4 * (c / 5), o1 = wob(t, 2.2, (c + 1) * .8) * 4 * ((c + 1) / 5);
+      paint([[x0, fy + r * fh + o0], [x1, fy + r * fh + o1], [x1, fy + (r + 1) * fh + o1], [x0, fy + (r + 1) * fh + o0]], { wash: (r + c) % 2 ? PAL.ink : PAL.cream, ink: null });
+    }
+    if (unf > .9) inkLine([[px + 5, fy], [px + 5 + 5 * fw, fy + wob(t, 2.2, .8) * 4], [px + 5 + 5 * fw, fy + 2 * fh + wob(t, 2.2, 4.8) * 4], [px + 5, fy + 2 * fh]], 1, PAL.ink, 'ink', .3);
+  }
+
+  // ---------- the turtle: parameter x is its shell's back edge, so contact is exact at MEET_X ----------
+  function turtle(x, gy, t, o = {}) {
+    boilSeed(o.key || 'turtle');
+    const C = c => (o.ghost ? mixCol(c, PAL.paper, .55) : c), op = a => Math.round(a * (o.ghost ? .65 : 1));
+    const p = o.plod || 0, bow = o.bow || 0, moving = !!o.moving;
+    const bob = moving ? Math.sin(p * .5) * 2 : Math.sin(t * 1.7) * .9;      // plod bob / resting breath
+    push();
+    if (bow) { const bx = x + 84; translate(bx, gy); rotate(.17 * bow); translate(-bx, -gy); }
+    const shellC = C(mixCol(PAL.teal, PAL.sap, .45)), skin = C(mixCol(PAL.sap, PAL.cream, .55)),
+          belly = C('#EADFC1'), dk = C(mixCol(PAL.teal, PAL.ink, .35));
+    for (const [lx, off] of [[x + 14, Math.PI], [x + 98, 0]]) {              // far legs, darker
+      const lift = Math.max(0, Math.sin(p + off)) * 6, fwd = Math.cos(p + off) * 5;
+      paint(ellPts(lx + fwd * .7, gy - 9 - lift * .6, 9, 13, 10, .8), { wash: dk, ink: null });
+    }
+    paint([[x + 2, gy - 30], [x - 12, gy - 24 + Math.sin(t * 2) * 1.5], [x + 2, gy - 18]], { wash: skin, ink: C(PAL.ink), sw: .8, curv: .4 });
+    for (const [lx, off] of [[x + 30, 0], [x + 84, Math.PI]]) {              // near legs, plodding
+      const lift = Math.max(0, Math.sin(p + off)) * 7, fwd = Math.cos(p + off) * 7;
+      paint(ellPts(lx + fwd, gy - 8 - lift, 10, 14 - lift * .35, 10, .8), { wash: skin, ink: C(PAL.ink), sw: .9 });
+    }
+    paint(ellPts(x + 52, gy - 50 - bob * .5, 54, 42, 26, 1.2), { wash: shellC, fill: dk, fillOp: op(40), ink: C(PAL.ink), sw: 1.2 });
+    paint(ellPts(x + 52, gy - 22 - bob * .5, 57, 12, 20, 1), { wash: belly, ink: C(PAL.ink), sw: 1 });
+    inkLine([[x + 8, gy - 46 - bob * .5], [x + 52, gy - 78 - bob * .5], [x + 96, gy - 46 - bob * .5]], .8, dk, 'inkfine', .5);
+    inkLine([[x + 22, gy - 26], [x + 52, gy - 68 - bob * .5], [x + 82, gy - 26]], .7, dk, 'inkfine', .5);
+    const nod = o.nod || 0, hx = x + 118 + (moving ? Math.sin(p) * 2 : 0), hy = gy - 46 - bob * .6 + Math.sin(t * 1.3) + nod * 8;
+    paint([[x + 92, gy - 62 - bob * .5], [hx + 8, hy - 8], [hx + 10, hy + 8], [x + 92, gy - 24 - bob * .5]], { wash: skin, ink: null, curv: .3 });
+    paint(ellPts(hx, hy, 16, 14, 16, .8), { wash: skin, ink: C(PAL.ink), sw: 1 });
+    const blink = frac(t / 4.6 + (o.seed || 0)) < .07 ? 1 : 0, lid = .45 + .55 * blink + nod * .5;   // calm half-lids, slow blink
+    paint(ellPts(hx + 6, hy - 3, 3.4, 3.6 * Math.max(.12, 1 - lid), 8, .3), { wash: C(PAL.ink), ink: null });
+    inkLine([[hx + 1, hy - 6], [hx + 11, hy - 5]], .8, C(PAL.ink), 'ink', .3);
+    if (!o.ghost) paint(ellPts(hx + 13, hy + 3, 2.6, 1.9, 6, .3), { fill: C(PAL.rose), fillOp: 120, ink: null });
+    pop();
+    boilSeed('turtleEnd');
+  }
+  const racerTurtle = (t, extra = {}) => turtle(turtleX(t), TURTLE_Y, t, { moving: t > T0 && t < TF, plod: Math.max(0, Math.min(t - T0, MEET_T)) * 3.4, seed: .2, ...extra });
+
+  // ---------- trails: the turtle's dotted prints and Clawd's dust ribbon, both from START_X ----------
+  function turtleTrail(x0, x1, o = {}) {
+    if (x1 <= x0 + 4) return;
+    boilSeed('ttrail' + (o.key || ''));
+    const n = Math.floor((x1 - x0) / 34);
+    for (let i = 0; i <= n; i++) {
+      const px = x0 + i * 34; if (px > x1) break;
+      const k = o.trace ? backOut(clamp((x1 - px) / 70, 0, 1)) : 1, side = i % 2 ? 1 : -1;
+      paint(ellPts(px + hash(i) * 8, TURTLE_Y + 4 + side * 8, 5.5 * k, 3.4 * k, 7, .5),
+        { wash: mixCol(PAL.ochre, PAL.ink, .4), washOp: Math.round((o.a ?? 190) * (o.trace ? .55 + .45 * k : 1)), ink: null });
+    }
+  }
+  function dustTrail(x0, x1, t, o = {}) {
+    if (x1 <= x0 + 24) return;
+    boilSeed('dtrail' + (o.key || ''));
+    for (let px = x0 + 24; px <= x1; px += 42) {
+      const s = px | 0;
+      let a; if (o.trace) { const pop = clamp((x1 - px) / 80, 0, 1); a = .5 * pop + .5 * backOut(pop); }
+      else { const age = t - (C0 + (px - START_X) / CLAWD_SPEED); a = clamp(1 - age / 4.5, .12, 1); }
+      paint(ellPts(px + hash(s) * 12, CLAWD_Y - 12 - hash(s + 7) * 18, 24 + hash(s + 3) * 14, 11 + hash(s + 5) * 6, 12, 2),
+        { fill: mixCol(PAL.cream, PAL.ochre, .45), fillOp: Math.round(105 * a), bleed: .32, tex: .5, ink: null });
+    }
+  }
+
+  // ---------- Clawd's run: x stays exactly linear (the math), the launch reads through pose only ----------
+  function runner(t) {
+    const u = CU, x = clawdX(t) - NOSE, ph = Math.min(t - C0, TF - C0) * 8.6, set = clamp((t - C0) / .55, 0, 1);
+    return { x, gy: CLAWD_Y, u, o: {
+      view: 'side', walk: ph, rot: .1 - .06 * set,
+      dy: -Math.abs(Math.sin(ph)) * .55 * set,
+      sq: (1 - easeOut(set)) * -.34 + Math.cos(ph * 2) * .07 * set + spring(t, C0 + .5, .3, 8) * .12,
+      aL: .35 + .5 * Math.sin(ph + Math.PI), aR: .35 + .5 * Math.sin(ph),
+      smear: t < C0 + .18 ? 1 : 0, smearDir: 1 } };
+  }
+  const stander = (t, extra = {}) => ({ view: 'q', walk: 0, dy: Math.sin(t * 1.2) * .35, rot: 0, aL: .1, aR: .3, ...extra });
+
+  function launchBurst(t) {
+    const a = t - C0; if (a < 0 || a > .5) return;
+    boilSeed('burst');
+    for (let i = 0; i < 8; i++) {
+      const k = easeOut(clamp(a / (.3 + .25 * hash(i)), 0, 1)), ang = -Math.PI * (.25 + .5 * hash(i + 4)), r = 20 + 150 * k;
+      paint(ellPts(START_X + Math.cos(ang) * r, CLAWD_Y - 10 + Math.sin(ang) * r * .5, (16 + 12 * hash(i + 8)) * (1 - k * .55), (10 + 8 * hash(i + 12)) * (1 - k * .55), 10, 2),
+        { fill: mixCol(PAL.cream, PAL.ochre, .5), fillOp: Math.round(170 * (1 - k)), bleed: .35, tex: .55, ink: null });
+    }
+  }
+  function dustKick(t) {
+    boilSeed('kick');
+    const x = clawdX(t) - NOSE - 70;
+    for (let i = 0; i < 4; i++) {
+      const k = frac(t * 2.2 + i * .37);
+      paint(ellPts(x - i * 26 + hash(i) * 14, CLAWD_Y - 6 - hash(i + 9) * 16 - k * 26, 8 + 26 * k, (8 + 26 * k) * .55, 10, 2),
+        { fill: mixCol(PAL.cream, PAL.ochre, .45), fillOp: Math.round((1 - k) * (60 + (i === 0 ? pulse(t, 4) * 90 : 60))), bleed: .3, tex: .5, ink: null });
+    }
+  }
+  function whipSmear(k) {                                  // horizontal smear for the whip pans
+    if (k <= 0) return;
+    boilSeed('smear');
+    for (let i = 0; i < 9; i++) {
+      const y = 140 + hash(i) * 800, len = (420 + hash(i + 9) * 720) * (.35 + .65 * k), x0 = 90 + hash(i + 20) * (W - 200) + jit(40);
+      paint([[x0, y - 5], [x0 + len, y - 2 - hash(i + 30) * 8], [x0 + len, y + 6], [x0, y + 5]],
+        { wash: i % 3 ? mixCol(PAL.sap, PAL.cream, .35) : mixCol(PAL.ochre, PAL.cream, .45), washOp: Math.round(150 * k), ink: null });
+    }
+  }
+  function butterfly(t) {                                  // lands on the sleeping nose at START_X
+    if (t < 5.1 || t > 7.25) return;
+    const nose = [START_X, CLAWD_Y - 6 * CU + 53];
+    let x, y, flap = 20;
+    if (t < 5.7) { const k = ease(seg(t, 5.1, 5.7)), p = arcPt([820, 470], nose, 110, k); x = p[0] + wob(t, 3.1, 0) * 10 * (1 - k); y = p[1] + wob(t, 4.3, 1) * 12 * (1 - k); }
+    else if (t < 6.55) { x = nose[0] + wob(t, 2.4, 2) * 2.5; y = nose[1] + wob(t, 3.2, 3) * 2.5; flap = 9; }
+    else { const p = arcPt(nose, [1060, 430], 130, easeIn(seg(t, 6.55, 7.2))); x = p[0]; y = p[1]; }
+    boilSeed('bf');
+    push(); translate(x, y); rotate(t < 6.55 ? .15 : -.35 + .3 * Math.sin(t * 6));
+    const f = Math.sin(t * flap);
+    for (const s of [-1, 1]) {
+      push(); rotate(s * (.55 + f * .4));
+      paint(ellPts(0, -9, 6.5, 9.5, 10, .4), { wash: mixCol(PAL.rose, PAL.cream, .3), ink: PAL.ink, sw: .6 });
+      paint(ellPts(0, 3, 4.5, 6, 8, .4), { wash: mixCol(PAL.rose, PAL.cream, .55), ink: PAL.ink, sw: .5 });
+      pop();
+    }
+    inkLine([[0, -9], [0, 8]], 1.5, PAL.ink, 'ink', .2);
+    pop(); boilSeed('bfEnd');
+  }
+
+  // ---------- A · 0–3.2 · iris onto the START post ----------
+  function shotA(t, lt, dur) {
+    camBegin(kf(t, [[0, 880], [3.2, 640]]), kf(t, [[0, 505], [3.2, 550]]), kf(t, [[0, .9], [3.2, 1]]));
+    meadow(t); post(t);
+    // PATTERN: STAGGER_REVEAL (two racers, one at a time: the turtle lifts its head and slow-blinks first…)
+    const lift = ease(seg(t, 1.15, 1.75)) * (1 - .4 * ease(seg(t, 2.3, 3)));
+    turtle(START_X, TURTLE_Y, t, { nod: lift * .35, seed: .1 });
+    // PATTERN: FOCUS_REVEAL (…then Clawd bounces, ties the sweatband, and flops lazily at the post — not racing)
+    const mood = emotions(t, [[0, 'cool'], [2.3, 'smug', { lid: .45 }]]);
+    let pose, view, hat;
+    if (t < 2.2) {
+      const armUp = ease(seg(t, 1.25, 1.5)) * (1 - ease(seg(t, 2, 2.2)));
+      pose = { ...move('bounce', t), view: 'front', aL: .15 + 1.15 * armUp + armUp * wob(t, 10, 0) * .3, aR: .15 + 1.25 * armUp + armUp * wob(t, 9, 2) * .3 };
+      hat = t > 1.95 ? 'sweatband' : null;
+    } else {
+      const k = backOut(seg(t, 2.2, 2.95));
+      view = t < 2.45 ? turn(t, 2.2, 2.45, 0, .25) : { view: 'side' };
+      pose = { dy: 2.5 * k, sq: .16 * k, rot: .09 * k, aL: -.25 * k, aR: -.05 * k, walk: 0, view: view.view, smear: view.smear, smearDir: view.smearDir };
+      hat = 'sweatband';
+    }
+    const cl = { ...mood, ...pose, dy: (pose.dy || 0) + (mood.dy || 0) * .6, sq: (pose.sq || 0) + (mood.sq || 0) };
+    if (hat) cl.hat = hat;
+    clawd(clawdX(t) - NOSE, CLAWD_Y, CU, cl);
+    const pTop = toScreen(START_X, GROUND - 205);
+    camEnd();
+    // PATTERN: FOCUS_REVEAL (the iris opens from paper onto the striped post: the course begins HERE)
+    if (lt < .5) iris(pTop[0], pTop[1], lerp(0, 1500, easeIn(lt / .5)), PAL.paper);
+  }
+
+  // ---------- B · 3.2–7.2 · cut on the turtle's first step: the head start, slept through ----------
+  function shotB(t, lt, dur) {
+    camBegin(kf(lt, [[0, 630], [4, 700]]) + wob(t, .3, 5) * 6, 548, kf(lt, [[0, 1], [4, 1.06]]));
+    meadow(t); post(t);
+    // PATTERN: SHOW_RELATIVE_DIFFERENCE (his dotted prints lengthen from the post while the sleeper snores — the head start, measured)
+    turtleTrail(START_X, turtleX(t), { a: 150 });
+    // PATTERN: CHASE_MOTION (the turtle crosses the line alone at exactly TURTLE_SPEED, steady plod)
+    racerTurtle(t);
+    const mood = emotions(lt, [[0, 'smug'], [.75, 'sleepy'], [2.5, 'surprised', { emote: '!', lookX: .6, lookY: -.3 }], [3.45, 'determined']]);
+    const up = ease(seg(lt, 2.5, 3));                        // the take sits him up
+    // PATTERN: ACCELERATE_AND_SETTLE (scramble up off the ground and coil into the launch crouch)
+    const hop = jump(lt, 3.5, 3.95, 2.2), coil = backOut(seg(lt, 3.6, 4));
+    const pose = { view: 'side', walk: 0,
+      dy: lerp(2.6, 0, up) + Math.sin(t * 1.1) * .5 * (1 - up) + (hop.dy || 0) + 1.6 * coil,
+      sq: .16 * (1 - up) + (hop.sq || 0) + .2 * coil, rot: .09 * (1 - up) + .06 * coil,
+      aL: lerp(-.25, -.9, coil) + wob(t, 12, 0) * .06 * coil, aR: lerp(-.05, -.8, coil) + wob(t, 11, 2) * .06 * coil };
+    clawd(clawdX(t) - NOSE, CLAWD_Y, CU, { ...mood, ...pose, dy: (pose.dy || 0) + (mood.dy || 0) * .5, sq: (pose.sq || 0) + (mood.sq || 0), hat: 'sweatband' });
+    // PATTERN: EVENT_EMPHASIS (the butterfly lands on his nose; the eyes snap open, huge take, '!')
+    butterfly(t);
+    camEnd();
+  }
+
+  // ---------- C · 7.2–9.2 · cut mid-launch: twice the pace ----------
+  function shotC(t, lt, dur) {
+    const mid = (turtleX(t) + clawdX(t)) / 2, wk = easeOut(seg(lt, 0, .3));
+    // PATTERN: SHOW_RELATIVE_DIFFERENCE (the mid-track camera holds both: turtle ahead, Clawd eating the gap)
+    camBegin(lerp(700, mid + 40, wk) + (t < C0 + .5 ? shakeXY(t, 5 * Math.exp(-(t - C0) * 9))[0] : 0),
+             lerp(548, 770, wk) + (t < C0 + .5 ? shakeXY(t, 5 * Math.exp(-(t - C0) * 9))[1] : 0), lerp(1.06, 2.15, wk));
+    meadow(t); post(t);
+    turtleTrail(START_X, turtleX(t), { a: 150 });
+    // PATTERN: CHASE_MOTION (the turtle keeps its exact 60 px/s plod, serene)
+    racerTurtle(t);
+    // PATTERN: ACCELERATE_AND_SETTLE (burst off the line: stretch, smear, dust — then settle into the stride)
+    // PATTERN: CHASE_MOTION (Clawd at exactly CLAWD_SPEED = 2 × the turtle: 400 + 120·(t−7.2))
+    launchBurst(t);
+    dustTrail(START_X, clawdX(t) - 110, t);
+    if (t > C0 + .3) dustKick(t);
+    const r = runner(t), mood = emotions(lt, [[0, 'determined'], [.65, 'excited']]);
+    clawd(r.x, r.gy, r.u, { ...mood, ...r.o, dy: (mood.dy || 0) * .5 + r.o.dy, sq: (mood.sq || 0) + r.o.sq, hat: 'sweatband' });
+    camEnd();
+    if (lt < .3) whipSmear(1 - lt / .3);                     // the whip that sells the cut on action
+  }
+
+  // ---------- D · 9.2–11.2 · whip pan: one stride behind, then touch ----------
+  function shotD(t, lt, dur) {
+    const mid = (turtleX(t) + clawdX(t)) / 2, wk = easeOut(seg(lt, 0, .28));
+    // PATTERN: CHASE_MOTION (whip onto the pair; the gap is exactly TURTLE_SPEED·(TF−t) px and melts to 0)
+    // PATTERN: SHOW_RELATIVE_DIFFERENCE (one stride behind and closing — both trails on the same path)
+    camBegin(lerp(620, mid + 55, wk) + wob(t, .8, 3) * 3, kf(lt, [[0, 745], [2, 796]]), kf(lt, [[0, 2.02], [.28, 2.3], [2, 2.62]]));
+    meadow(t); post(t);
+    turtleTrail(START_X, turtleX(t), { a: 150 });
+    racerTurtle(t);
+    dustTrail(START_X, clawdX(t) - 110, t);
+    dustKick(t);
+    const r = runner(t), reach = ease(seg(lt, 1.2, 2));
+    // PATTERN: CHASE_MOTION (level … touch: the contact frame lands at t = 11.2 with both exactly at MEET_X)
+    // PATTERN: EVENT_EMPHASIS (the reach grows through the last strides; the strain peaks on the beat)
+    const mood = emotions(lt, [[0, 'excited'], [1.3, 'determined', { squint: .35, mouth: 'teeth' }]]);
+    clawd(r.x, r.gy, r.u, { ...mood, ...r.o,
+      dy: (mood.dy || 0) * .5 + r.o.dy - reach * .8, sq: (mood.sq || 0) + r.o.sq - .12 * reach,
+      aL: lerp(r.o.aL, 1.05, reach), aR: lerp(r.o.aR, .85, reach), rot: r.o.rot - .05 * reach, hat: 'sweatband' });
+    boilSeed('streak');
+    for (let i = 0; i < 3; i++) inkLine([[r.x - 150 - i * 34, CLAWD_Y - 40 - i * 26], [r.x - 60 - i * 30, CLAWD_Y - 44 - i * 26]], 1.6 - i * .3, mixCol(PAL.cream, PAL.ochre, .3), 'dry', .2);
+    camEnd();
+    if (lt < .25) whipSmear(1 - lt / .25);                   // the whip pan with smear, same screen direction
+  }
+
+  // ---------- E · 11.2–14.4 · smash into freeze; ring, flag, traced trails ----------
+  function shotE(t, lt, dur) {
+    // PATTERN: CAMERA_PUSH (the camera pulls back from the pair until START and MEET share one frame)
+    const pk = ease(seg(lt, 1.5, 3.2));
+    const amt = 4 * Math.exp(-(t - TF) * 7) + (t > 12.48 ? 3 * Math.exp(-(t - 12.48) * 9) : 0);
+    const sh = shakeXY(t, amt);
+    camBegin(lerp(935, 640, pk) + sh[0], lerp(796, 715, pk) + sh[1], lerp(2.62, 1.55, pk));
+    meadow(t); post(t);
+    // PATTERN: FREEZE_EVENT (both locked at MEET_X = 880: turtleX(11.2) = 400+60·8 = clawdX(11.2) = 400+120·4)
+    racerTurtle(t);
+    const r = runner(t), settle = spring(lt, .03, .5, 9), standK = ease(seg(lt, 2.2, 3));
+    const o = { ...r.o };
+    if (standK > 0) { o.view = standK < 1 ? 'side' : 'q'; o.walk = lerp(r.o.walk, 0, standK); o.dy = lerp(r.o.dy, Math.sin(t * 1.2) * .35, standK);
+      o.rot = lerp(r.o.rot, 0, standK); o.aL = lerp(r.o.aL, .1, standK); o.aR = lerp(r.o.aR, .3, standK); o.sq = r.o.sq + .1 * Math.sin(standK * Math.PI); }
+    const mood = emotions(lt, [[0, 'determined'], [1, 'relieved'], [2.3, 'proud']]);
+    clawd(r.x, r.gy, r.u, { ...mood, ...o, dy: (mood.dy || 0) * .5 + o.dy + settle * .6, sq: (mood.sq || 0) + o.sq + settle * .15, hat: 'sweatband' });
+    // PATTERN: FREEZE_EVENT (only boil, emotes and light stay alive) + EVENT_EMPHASIS (flash-ring: they meet, HERE)
+    const rk = seg(lt, 0, 1.05);
+    if (rk < 1) {
+      const R = 40 + 560 * easeOut(rk), fade = 1 - rk;
+      glow(MEET_X, 828, 90 + 320 * easeOut(rk), '#FFE9A8', .85 * fade);
+      paint(ellPts(MEET_X, 834, R, R * .4, 44, 3), { wash: PAL.cream, washOp: Math.round(210 * fade), ink: null });
+      paint(ellPts(MEET_X, 834, R * .8, R * .32, 44, 3), { wash: '#FFD98F', washOp: Math.round(150 * fade), ink: null });
+      for (let i = 0; i < 8; i++) { const a = i * TAU / 8 - Math.PI / 2; sparkle(MEET_X + Math.cos(a) * R * .9, 834 + Math.sin(a) * R * .36, 15, seg(rk, .05 + i * .05, .5 + i * .05)); }
+    }
+    // PATTERN: FOCUS_REVEAL (the checkered flag stamps into the ground beside them — the twin of the START post)
+    flag(t);
+    // PATTERN: TRACE_PATH (both trails trace the full 400→880 course from the same post — one path, drawn twice)
+    const traceK = ease(seg

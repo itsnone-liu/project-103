@@ -1,0 +1,229 @@
+```javascript
+// config.js: PROJECT = { duration: 20, bpm: 96, offset: 0 };
+(() => {
+  const START_X = 300;
+  const TURTLE_SPEED = 30;
+  const CLAWD_SPEED = 60;
+  const HEAD_START = 4;
+  const MEET_TIME = 8;
+  const MEET_X = 540;
+  const GROUND_Y = 740;
+  const TURTLE_LANE = 722;
+  const CLAWD_LANE = 758;
+  const U = 16;
+  const WIPE = [PAL.cream, PAL.ochre];
+
+  const turtleX = t => Math.min(START_X + TURTLE_SPEED * t, MEET_X);
+  const clawdX = t => t < HEAD_START ? START_X : Math.min(START_X + CLAWD_SPEED * (t - HEAD_START), MEET_X);
+
+  function backdrop(t) {
+    boilSeed('path-sky');
+    paint(rectPts(-500, -300, W + 1000, H + 600), { wash: PAL.cream, ink: null });
+    paint(ellPts(960, 990, 1650, 620, 42, 8), {
+      wash: mixCol(PAL.sap, PAL.cream, .25 + .04 * Math.sin(t * .18)),
+      fill: PAL.sap, fillOp: 55, bleed: .18, tex: .55, ink: null
+    });
+    boilSeed('path-ground');
+    paint(ellPts(960, 1100, 1800, 430, 42, 8), {
+      wash: mixCol(PAL.sap, PAL.cream, .12),
+      fill: PAL.teal, fillOp: 22, bleed: .18, tex: .5, ink: null
+    });
+    inkLine([[START_X, 844], [960, 842 + 3 * Math.sin(t * .5)], [1650, 845]], 1.2, mixCol(PAL.sap, PAL.cream, .38), 'dry', .25);
+  }
+
+  function marker(x, y) {
+    boilSeed('left-marker');
+    paint(ellPts(x, y, 11, 11, 18, 1), { wash: PAL.ochre, ink: PAL.ink, sw: .8 });
+    paint(ellPts(x, y, 4, 4, 12, .4), { wash: PAL.cream, ink: null });
+  }
+
+  function track(points, colour, width, opacity = 255) {
+    if (points.length > 1) {
+      boilSeed('track-' + colour + '-' + width);
+      paint(ribbon(points, width * .65, width), { wash: colour, washOp: opacity, ink: null });
+      inkLine(points, Math.max(.45, width * .055), mixCol(colour, PAL.cream, .3), 'dry', .45);
+    }
+  }
+
+  function turtle(x, y, t, mood = 0) {
+    const bob = 2.2 * Math.sin(t * 5.2);
+    boilSeed('turtle-shell');
+    paint(ellPts(x, y - 18 + bob, 39, 27, 26, 2), { wash: mixCol(PAL.sap, PAL.ochre, .22), ink: PAL.ink, sw: 1.15 });
+    paint(ellPts(x - 2, y - 22 + bob, 26, 16, 18, 1.4), { wash: mixCol(PAL.sap, PAL.cream, .25), ink: null });
+    inkLine([[x - 21, y - 18 + bob], [x - 8, y - 8 + bob], [x + 6, y - 8 + bob], [x + 22, y - 18 + bob]], .8, PAL.ink, 'inkfine', .45);
+    for (const [i, dx] of [-1, 1].entries()) {
+      const step = Math.sin(t * 7 + i * 1.7) * 3;
+      paint(ellPts(x + dx * 23, y - 2 + step, 9, 12, 14, 1), { wash: mixCol(PAL.sap, PAL.ochre, .35), ink: PAL.ink, sw: .7 });
+    }
+    paint(ellPts(x + 34, y - 27 + bob, 15, 13, 16, 1), { wash: mixCol(PAL.sap, PAL.cream, .18), ink: PAL.ink, sw: .85 });
+    paint(ellPts(x + 39, y - 31 + bob - mood * 2, 2.2, 3, 10, .3), { wash: PAL.ink, ink: null });
+    inkLine([[x + 39, y - 20 + bob], [x + 45, y - 19 + bob]], .7, PAL.ink, 'inkfine', .3);
+  }
+
+  function pathPoints(endX, laneY, meet = false) {
+    const endY = meet ? GROUND_Y : laneY;
+    const midX = Math.min(endX, MEET_X - 1);
+    return [[START_X, GROUND_Y], [START_X + 8, laneY], [midX, laneY], [endX, endY]];
+  }
+
+  function travelerScene(t, lt, dur, shot) {
+    // Fixed world coordinates preserve the declared speeds and exact meeting point.
+    const meetHold = t >= MEET_TIME;
+    const tx = turtleX(t);
+    const cx = clawdX(t);
+    const trailEndT = tx;
+    const trailEndC = t < HEAD_START ? START_X : cx;
+    const cameraX = shot === 'A' ? 420 + 7 * Math.sin(lt * .5) :
+                    shot === 'B' ? 430 + 8 * Math.sin(lt * .45) :
+                    shot === 'C' ? 420 + 10 * Math.sin(lt * .4) :
+                    420 + 5 * Math.sin(lt * .35);
+    camBegin(cameraX, 540, 2.45);
+    backdrop(t);
+
+    marker(START_X, GROUND_Y);
+
+    // PATTERN: TRACE_PATH
+    track(pathPoints(trailEndT, TURTLE_LANE, meetHold), mixCol(PAL.sap, PAL.cream, .12), 7, 190);
+    if (t >= HEAD_START) {
+      track(pathPoints(trailEndC, CLAWD_LANE, meetHold), mixCol(PAL.clay, PAL.cream, .1), 8, 225);
+    }
+
+    // PATTERN: SHOW_RELATIVE_DIFFERENCE
+    const turtleIsMoving = t < MEET_TIME;
+    turtle(tx, GROUND_Y, t, shot === 'C' && t > 10.4 ? 1 : 0);
+    const clMood = shot === 'A'
+      ? emotions(t, [[0, 'curious'], [2.1, 'thinking'], [3.1, 'eager', { lookX: .8 }]])
+      : shot === 'B'
+        ? emotions(t, [[0, 'curious'], [4.15, 'excited', { lookX: .8 }], [6.5, 'eager', { lookX: .8 }]])
+        : shot === 'C'
+          ? emotions(t, [[0, 'surprised'], [2.4, 'proud'], [3.0, 'thinking', { lookY: .7 }]])
+          : emotions(t, [[0, 'proud'], [1.5, 'thinking'], [3.2, 'happy']]);
+    const lean = shot === 'A' ? -.10 * ease(seg(t, 2, 4)) :
+                 shot === 'B' && t >= HEAD_START ? -.07 : 0;
+    const clawdY = GROUND_Y + (meetHold && shot === 'C' ? 0 : 0);
+    clawd(cx, clawdY, U, {
+      ...clMood,
+      view: 'side',
+      flip: false,
+      walk: t >= HEAD_START && t < MEET_TIME ? (t - HEAD_START) * 8 : 0,
+      rot: lean + (meetHold && shot === 'C' ? .015 * Math.sin(lt * 3) : 0),
+      lookX: shot === 'C' && t > 10.4 ? -.4 : (clMood.lookX ?? .55),
+      aL: shot === 'D' && lt > 2.6 ? .45 : clMood.aL,
+      aR: shot === 'D' && lt > 2.6 ? .15 : clMood.aR,
+      boilKey: 'story-clawd'
+    });
+
+    // PATTERN: FOCUS_REVEAL
+    if (shot === 'A' && lt < .7) {
+      const k = ease(seg(lt, 0, .7));
+      glow(START_X, GROUND_Y - 20, 25 + 70 * k, PAL.ochre, .14 * (1 - k));
+    }
+
+    // PATTERN: STAGGER_REVEAL
+    if (shot === 'B' && lt < .6) {
+      const k = ease(seg(lt, 0, .6));
+      glow(START_X, GROUND_Y - 18, 20 + 95 * k, PAL.clay, .24 * (1 - k));
+    }
+
+    // PATTERN: CHASE_MOTION
+    if (shot === 'B' && t >= HEAD_START && t < MEET_TIME) {
+      const gap = Math.max(0, tx - cx);
+      if (gap > 0) {
+        boilSeed('chase-dashes');
+        for (let i = 0; i < 3; i++) {
+          const px = cx + 38 + i * 15;
+          if (px < tx - 18) inkLine([[px, GROUND_Y - 45 - i * 5], [px + 10, GROUND_Y - 45 - i * 5]], 1.3, PAL.ochre, 'dry', .2);
+        }
+      }
+    }
+
+    // PATTERN: FREEZE_EVENT
+    if (shot === 'C' && t >= MEET_TIME) {
+      // Both trajectories clamp to x=540 at t=8; the shared endpoint is never eased or offset.
+      glow(MEET_X, GROUND_Y - 8, 48 + 8 * Math.sin(lt * 3), '#E9B866', .28);
+    }
+
+    // PATTERN: EVENT_EMPHASIS
+    if (shot === 'C' && lt < .55) {
+      const k = ease(seg(lt, 0, .55));
+      boilSeed('meeting-ring');
+      paint(ellPts(MEET_X, GROUND_Y - 7, 24 + 53 * k, 13 + 25 * k, 32, 1.3), {
+        wash: null, ink: mixCol(PAL.ochre, PAL.cream, .2), sw: 2.2 * (1 - .55 * k)
+      });
+    }
+
+    // PATTERN: SHOW_BEFORE_AFTER
+    if (shot === 'E') {
+      const revealT = ease(seg(lt, 1.2, 2.8));
+      const revealC = ease(seg(lt, 2.4, 3.5));
+      track([[START_X, 831], [START_X + 240 * revealT, 831]], PAL.sap, 9, 240);
+      track([[START_X, 866], [START_X + 240 * revealC, 866]], PAL.clay, 9, 245);
+      marker(START_X + 240, 831);
+      marker(START_X + 240, 866);
+      // Small paired "before" figures above the distance strokes; the completed travelers remain at the shared endpoint.
+      turtle(START_X, 795, t + .3);
+      clawd(START_X, 798, 9, { ...feel('thinking', t), view: 'side', boilKey: 'before-clawd' });
+      clawd(MEET_X, GROUND_Y, U, {
+        ...feel('happy', t),
+        view: 'side',
+        lookX: -.35,
+        walk: 0,
+        aL: .25,
+        boilKey: 'end-clawd'
+      });
+      turtle(MEET_X, GROUND_Y, t + .7);
+    }
+
+    // PATTERN: DIM_OTHERS
+    if (shot === 'D') {
+      const focus = lt < 2.6 ? ease(seg(lt, 1.2, 2.6)) : 1;
+      track([[START_X, TURTLE_LANE], [MEET_X, GROUND_Y]], mixCol(PAL.sap, PAL.cream, .18), 7, 90 + 130 * focus);
+      track([[START_X, CLAWD_LANE], [MEET_X, GROUND_Y]], mixCol(PAL.clay, PAL.cream, .14), 8, 90 + 135 * ease(seg(lt, 2.0, 3.2)));
+      if (lt > 2.6) {
+        inkLine([[MEET_X, GROUND_Y - 60], [MEET_X, GROUND_Y + 18]], 1.6, PAL.ochre, 'dry', .3);
+      }
+    }
+
+    // PATTERN: MATCH_CUT
+    // A→B and D→E preserve the same left-to-right track geometry and painted endpoint.
+    if (shot === 'D' && lt < .35) {
+      glow(MEET_X, GROUND_Y - 8, 54 * (1 - ease(seg(lt, 0, .35))), PAL.ochre, .2);
+    }
+
+    const eye = toScreen(cx, GROUND_Y - 4 * U);
+    camEnd();
+
+    if (shot === 'A' && lt < .8) brushWipe(.5 + lt / 1.6, WIPE);
+    if (shot === 'E' && lt > dur - .6) brushWipe((lt - (dur - .6)) / .6, WIPE);
+  }
+
+  function shotA(t, lt, dur) {
+    // PATTERN: SHOW_RELATIVE_DIFFERENCE
+    travelerScene(t, lt, dur, 'A');
+  }
+
+  function shotB(t, lt, dur) {
+    // PATTERN: STAGGER_REVEAL
+    // Clawd remains at START until video time 4, then follows x=300+60(t-4) exactly.
+    travelerScene(t, lt, dur, 'B');
+  }
+
+  function shotC(t, lt, dur) {
+    // PATTERN: FREEZE_EVENT
+    // At video time 8, both x positions evaluate to precisely 540 px and remain together.
+    travelerScene(t, lt, dur, 'C');
+  }
+
+  function shotD(t, lt, dur) {
+    // PATTERN: DIM_OTHERS
+    travelerScene(t, lt, dur, 'D');
+  }
+
+  function shotE(t, lt, dur) {
+    // PATTERN: SHOW_BEFORE_AFTER
+    travelerScene(t, lt, dur, 'E');
+  }
+
+  shots([[0, shotA], [4, shotB], [8, shotC], [12, shotD], [16, shotE]]);
+})();
+```

@@ -1,0 +1,178 @@
+// src/scenes/butterfly.js — "The Butterfly", 15 s.
+// config.js must contain:  duration: 15,  (bpm: 96 recommended)
+(() => {
+  const WIPE = [mixCol(PAL.ochre, PAL.cream, .4), mixCol(PAL.rose, PAL.cream, .3)];
+  const GRASS = mixCol(PAL.sap, PAL.cream, .18);
+  const GRASSD = mixCol(PAL.sap, PAL.night, .3);
+
+  // ---------- the butterfly: two painted wings flapping on the beat, a body, a flutter path ----------
+  function butterfly(x, y, s, ang, flap, colA = '#F28DB2', colB = '#F4C95D') {
+    boilSeed('butterfly');
+    push(); translate(x, y); rotate(ang);
+    const w = Math.sin(flap * TAU);           // 1 open .. -1 folded
+    for (const side of [-1, 1]) {
+      const wx = side * (0.55 + 0.45 * w) * s; // wings fold toward the body
+      paint(ellPts(wx * .6, -s * .42, s * .62 * (0.4 + 0.6 * w), s * .5, 14, 1.5),
+        { wash: colA, ink: PAL.ink, sw: Math.max(.4, s / 30), curv: .8 });
+      paint(ellPts(wx * .62, s * .18, s * .42 * (0.4 + 0.6 * w), s * .34, 12, 1.5),
+        { wash: colB, ink: PAL.ink, sw: Math.max(.35, s / 34), curv: .8 });
+    }
+    paint(ellPts(0, 0, s * .1, s * .45, 10, .6), { wash: PAL.ink, ink: null });
+    pop();
+  }
+  // fluttering position: figure-eight-ish wander around (cx, cy), always moving, never still
+  const flutter = (t, cx, cy, r, ph = 0) => [
+    cx + Math.sin(t * 2.1 + ph) * r + Math.sin(t * 5.3 + ph) * r * .2,
+    cy + Math.sin(t * 4.2 + ph * 2) * r * .45 + Math.cos(t * 3.1) * r * .12
+  ];
+
+  // ---------- meadow ----------
+  function meadow(t, wide = true) {
+    boilSeed('sky');
+    paint(rectPts(-400, -300, W + 800, H + 600), { wash: mixCol(PAL.cream, PAL.sky, .35), ink: null });
+    paint(ellPts(W * .5, -160, W * .9, 380, 30, 12), { fill: PAL.ochre, fillOp: 60, bleed: .3, tex: .5, ink: null });
+    if (wide) {
+      boilSeed('hills');
+      paint(ellPts(W * .25, 980, 1100, 300, 30, 6), { fill: mixCol(PAL.ochre, PAL.cream, .3), fillOp: 160, bleed: .2, tex: .5, ink: null });
+      paint(ellPts(W * .82, 1020, 1000, 280, 30, 6), { fill: mixCol(PAL.sap, PAL.cream, .4), fillOp: 150, bleed: .2, tex: .5, ink: null });
+    }
+    boilSeed('ground');
+    paint(ellPts(W / 2, H + 320, W * .95, 440, 40, 8), { wash: GRASS, fill: GRASSD, fillOp: 70, bleed: .06, tex: .6, ink: null });
+    // flowers, each still (hashed) with a boiled sway
+    for (let i = 0; i < 26; i++) {
+      boilSeed('fl' + i);
+      const fx = hash(i) * (W + 300) - 150, fy = 800 + hash(i + 50) * 280;
+      const sway = wob(t, .4, hash(i + 9) * 3) * 6;
+      inkLine([[fx, fy], [fx + sway, fy - 46 - 14 * hash(i + 7)]], .8, mixCol(GRASS, PAL.night, .3), 'inkfine', .4);
+      paint(ellPts(fx + sway, fy - 50 - 14 * hash(i + 7), 11, 11, 8, 1), { wash: hash(i + 3) > .5 ? PAL.rose : '#F4C95D', ink: PAL.ink, sw: .6 });
+    }
+  }
+  const petalBurst = (x, y, t0, t) => {
+    for (let i = 0; i < 9; i++) {
+      const k = seg(t - t0, i * .02, .6 + i * .04); if (k <= 0 || k >= 1) continue;
+      const a = -Math.PI / 2 + (i - 4) * .4, d = 60 + 130 * easeOut(k);
+      boilSeed('pet' + i);
+      paint(ellPts(x + Math.cos(a) * d, y + Math.sin(a) * d + 60 * k * k, 9 * (1 - k * .5), 6, 8, 1), { wash: PAL.rose, washOp: 255 * (1 - k), ink: null, rot: a });
+    }
+  };
+
+  // ---------- shot A: dozing, the visit, the first pounce (0 – 5.2) ----------
+  function shotA(t, lt, dur) {
+    const CX = 700, CY = 890, u = 21;
+    const tWake = 2.1, tIdea = 2.9, tJump = 3.7, tLand = 4.1;
+    camBegin(kf(t, [[0, 900], [3, 860], [dur, 820]]), kf(t, [[0, 560], [dur, 530]]), kf(t, [[0, 1], [1.8, 1.05], [3, 1.1], [dur, 1.06]]));
+    meadow(t);
+    // the butterfly: loops up high, then circles down over Clawd, then flits away upward
+    let bx, by;
+    if (t < tWake) { [bx, by] = flutter(t, 640, 620, 90); if (t > 1.6) { const k = ease(seg(t, 1.6, 2.4)); bx = lerp(bx, CX + 120, k * .6); by = lerp(by, CY - 190, k * .6); } }
+    else if (t < tJump) { const k = t - tWake; bx = CX + 120 * Math.cos(k * 3.2); by = CY - 190 - 30 * Math.sin(k * 4) - 10 * k; }
+    else { const k = easeOut(seg(t, tJump, tJump + .6)); bx = CX + 120 + 320 * k; by = CY - 220 - 420 * k + (t > tJump + .3 ? flutter(t, 0, 0, 14)[1] * .2 : 0); }
+    glow(bx, by, 60, '#FFF3C0', .18);
+    butterfly(bx, by, 17, Math.cos(t * 2.1) * .3, frac(t * 2.4));
+
+    // Clawd: dozing → wake → idea → pounce → face-plant, head pops up dizzy
+    const mood = emotions(lt, [[0, 'sleepy'], [tWake, 'surprised', { lookX: .6, lookY: -.5 }], [tIdea, 'idea'], [tJump + .05, 'excited', { lookX: .8, lookY: -.6 }], [tLand + .15, 'dizzy']]);
+    let pose;
+    if (lt < tJump) {
+      const watch = Math.min(1, (lt - 1.9) / .5);   // eyes lead: look up at it before anything else
+      pose = { lookX: .6 * watch, lookY: -.6 * watch, rot: -.06 * watch };
+    } else {
+      const j = jump(lt, tJump, tLand, 4);
+      const miss = seg(lt, tLand, tLand + .3);
+      pose = { ...j, rot: lerp(.4, 1.35, easeIn(miss)), dy: (j.dy || 0), sq: (j.sq || 0) + .35 * miss, view: 'side', flip: true };
+      if (lt > tLand + .35) {   // head pops back up, dizzy
+        const k = backOut(seg(lt, tLand + .35, tLand + .6));
+        pose = { rot: lerp(1.35, 0, k), sq: -.12 * spring(lt, tLand + .35, 6), dy: -1.5 * k, view: 'q', lookX: .3, lookY: -.3 };
+      }
+    }
+    clawd(CX, CY, u, { ...mood, ...pose, sq: (mood.sq || 0) + (pose.sq || 0), dy: (mood.dy || 0) + (pose.dy || 0) });
+    const eye = toScreen(CX, CY - 4 * u);
+    camEnd();
+    boilSeed('tr');
+    if (lt < .5) iris(lerp(W / 2, eye[0], lt / .5), lerp(H / 2, eye[1], lt / .5), lerp(0, 1500, easeIn(lt / .5)));
+    if (lt > dur - .3) brushWipe((lt - (dur - .3)) / .6, WIPE);
+  }
+
+  // ---------- shot B: the sneak and the second miss (5.2 – 10.4) ----------
+  function shotB(t, lt, dur) {
+    const u = 23, G = 940;
+    const tSneak = 0.2, tWind = 2.4, tJump = 2.7, tLand = 3.1;
+    const walk = stroll(lt, tSneak, tWind, 260, 1180, u);
+    const camX = t < tSneak ? 260 : lerp(260, 1240, ease(seg(lt, tSneak, tJump + .4)));
+    camBegin(camX + 15 * Math.sin(lt * .7), kf(lt, [[0, 545], [tJump, 520], [dur, 545]]), kf(lt, [[0, 1.05], [tWind, 1.12], [dur, 1.05]]));
+    meadow(t, false);
+    // the butterfly ahead, drifting further each approach
+    const drift = 300 + 140 * ease(seg(lt, 1.2, tWind));
+    const [bx, by] = flutter(t, 260 + drift, G - 260, 46, 1.7);
+    glow(bx, by, 60, '#FFF3C0', .18);
+    butterfly(bx, by, 17, Math.cos(t * 2.3) * .3, frac(t * 2.4));
+    if (lt > tJump) {   // loops up and over Clawd's leap
+      const k = ease(seg(lt, tJump, tJump + .8));
+      butterfly(bx - 0, by - 0, 0, 0, 0); // noop guard (kept simple: single path below)
+    }
+    // Clawd: low crouch tiptoe → wind-up → leap under it → flower-patch crash
+    const mood = emotions(lt, [[0, 'determined'], [1.6, 'mischief'], [tWind, 'determined'], [tJump + .05, 'excited'], [tLand + .2, 'dizzy'], [dur - 1, 'sad']]);
+    let pose;
+    if (lt < tWind) {
+      const crouch = .22 * Math.min(1, (lt - tSneak) / .8);
+      pose = { view: 'side', walk: lt > tSneak ? walk.walk : 0, dy: walk.dy + crouch, sq: crouch, lookX: .9, lookY: -.5, aL: -.9, aR: -.5 };
+      if (lt > tWind - .5) { const w = ease(seg(lt, tWind - .5, tJump)); pose = { ...pose, dy: crouch + .1 * w, sq: crouch + .15 * w, aL: -1.2 * w, walk: 0 }; } // the frozen wind-up
+    } else {
+      const j = jump(lt, tJump, tLand, 5), land = lt - tLand;
+      pose = { view: 'side', ...j, lookX: .9, lookY: -.8 };
+      if (lt > tLand) pose = { view: 'front', dy: (j.dy || 0) - .8 * Math.exp(-land * 4), sq: .3 - .25 * backOut(seg(lt, tLand, tLand + .4)), aL: .6, aR: .6 };
+    }
+    const x = lt < tSneak ? 260 : walk.x;
+    clawd(x, G, u, { ...mood, ...pose, sq: (mood.sq || 0) + (pose.sq || 0), dy: (mood.dy || 0) * .5 + (pose.dy || 0) });
+    if (lt > tLand) petalBurst(x + 30, G - 40, tLand, lt);
+    // the butterfly's escape hop over the leap
+    if (lt > tJump) {
+      const k = seg(lt, tJump, tJump + .9);
+      const ox = bx - 420 * easeIn(k), oy = by - 260 * Math.sin(Math.PI * Math.min(1, k));
+      glow(ox, oy, 60, '#FFF3C0', .18);
+      butterfly(ox, oy, 17, -.2 - k, frac(t * 2.4));
+    }
+    const eye = toScreen(x, G - 4 * u);
+    camEnd();
+    boilSeed('tr');
+    if (lt < .3) brushWipe(.5 + lt / .6, WIPE);
+    if (lt > dur - .45) { const r = lerp(1500, 300, easeIn(seg(lt, dur - .45, dur - .1))); iris(...eye, r); }
+  }
+
+  // ---------- shot C: stillness wins (10.4 – 15.0) ----------
+  function shotC(t, lt, dur) {
+    const u = 46, CX = 960, CY = 980;
+    const tNotice = .8, tChoice = 1.6, tStill = 2.4, tLandN = 4.1, tJoy = 4.8, tIris = 5.6;
+    camBegin(960 + 10 * Math.sin(lt * .5), kf(lt, [[0, 560], [tLandN, 540], [dur, 550]]), kf(lt, [[0, 1.35], [tLandN, 1.28], [dur, 1.32]]));
+    meadow(t, false);
+    // the butterfly comes home: drifts in from the right, circles, spirals down to the nose
+    const nose = [CX - 10, CY - 6.4 * u];
+    let bx, by, done = false;
+    if (lt < tStill) { [bx, by] = flutter(t, 1500 - 480 * easeOut(seg(lt, .2, tStill)), 480, 40, 2.4); }
+    else if (lt < tLandN) { const k = seg(lt, tStill, tLandN), a = k * 5; bx = nose[0] + Math.cos(a) * 230 * (1 - k); by = nose[1] - 40 + Math.sin(a) * 120 * (1 - k) - 90 * (1 - k); }
+    else { bx = nose[0]; by = nose[1] - 14 + 2 * Math.sin(t * 2.5); done = true; }
+    glow(bx, by, 90, '#FFE9B0', .22);
+    butterfly(bx, by, 19, done ? 0 : Math.cos(t * 2) * .3, done ? .18 + .28 * pulse(t, .5) : frac(t * 2.4));
+
+    // Clawd: worn out → notices → wants to pounce → chooses stillness → the landing → love
+    const mood = emotions(lt, [[0, 'sad'], [tNotice, 'surprised', { lookX: .8, lookY: -.4 }], [tChoice, 'mischief'], [tStill + .1, 'shy', { squint: .9 }], [tJoy, 'love']]);
+    let pose = {};
+    if (lt > tNotice) { const k = Math.min(1, (lt - tNotice) / .3); pose.lookX = .8 * k; pose.lookY = -.4 * k; }
+    if (lt > tChoice && lt < tStill) { const w = Math.sin(seg(lt, tChoice, tStill) * Math.PI * 3) * .1; pose.sq = .15 + w; pose.dy = .15; } // twitchy, almost-pounce shivers
+    if (lt >= tStill) { const s = backOut(seg(lt, tStill, tStill + .5)); pose = { ...pose, sq: .1 * (1 - s) - .04 * s, dy: .1 * (1 - s) + spring(lt, tLandN, 5) * .06, squint: .9 - .25 * seg(lt, tLandN, tLandN + .3), lookY: lerp(-.4, .6, seg(lt, tLandN, tLandN + .5)) }; }
+    if (lt >= tJoy) { const b = Math.sin((lt - tJoy) * 2.6); pose.dy = (pose.dy || 0) + .06 * b; } // tiny happy bounce, nose steady-ish (butterfly rides its own bob above)
+    clawd(CX, CY, u, { ...mood, ...pose, sq: (mood.sq || 0) + (pose.sq || 0), dy: (mood.dy || 0) * .5 + (pose.dy || 0), blush: .5 + .3 * seg(lt, tJoy, tJoy + .4) });
+    const eye = toScreen(CX, CY - 6 * u);
+    camEnd();
+    boilSeed('tr');
+    if (lt < .4) { const r = lerp(300, 1500, easeOut(lt / .4)); iris(CX, 540, r); }
+    if (lt > tIris) {
+      const r = lt < tIris + .5 ? lerp(1500, 330, ease(seg(lt, tIris, tIris + .5)))
+        : lt < dur - .35 ? lerp(330, 305, seg(lt, tIris + .5, dur - .35))
+        : lerp(305, 0, easeIn(seg(lt, dur - .35, dur - .08)));
+      iris(...eye, r);
+    }
+  }
+
+  shots([[0, shotA], [5.2, shotB], [10.4, shotC]]);
+})();

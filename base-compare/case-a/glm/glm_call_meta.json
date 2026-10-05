@@ -1,0 +1,15 @@
+{
+ "secs": 71.5,
+ "usage": {
+  "completion_tokens": 5844,
+  "completion_tokens_details": {
+   "reasoning_tokens": 37
+  },
+  "prompt_tokens": 15203,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  },
+  "total_tokens": 21047
+ },
+ "model": "glm-5.3"
+}

@@ -1,0 +1,64 @@
+Logline: A slow turtle sets off from the left marker; Clawd starts later but walks faster, and their shared starting point leads to a precisely timed meeting and a visual comparison of the distance each traveled.
+
+World: A warm, hand-painted flat 2D walking path, with a soft sage ground, cream sky, and terracotta Clawd. One clear left-hand marker anchors every shot. The palette warms slightly as the meeting approaches. No lettering or numeric labels; distance is shown with equal-length painted trail segments and visible endpoints.
+
+Motif: A pair of parallel, brush-painted tracks that begin together at the left marker, then reveal that the slower, earlier traveler and faster, later traveler have covered equal distances at the meeting.
+
+Parameters:
+- Turtle speed: 30 px/s, steady and slow.
+- Clawd speed: 60 px/s, steady and faster.
+- Head-start: 4 s.
+- START x: 300 px.
+- Turtle position for elapsed time `t` after the start: `xT(t) = 300 + 30t`.
+- Clawd position for `t ≥ 4`: `xC(t) = 300 + 60(t − 4)`.
+- MEET time: solve `300 + 30t = 300 + 60(t − 4)`, so `30t = 60t − 240`, `t = 8 s` after the turtle starts (video time 8 s).
+- MEET x: `300 + 30 × 8 = 540 px` (also `300 + 60 × 4 = 540 px`).
+- Distance at meeting: turtle `240 px`; Clawd `240 px`.
+- Both trajectories use these same positions, speeds, start time, and meeting point throughout the storyboard.
+
+Clawd's arc: Curious and patient as the turtle sets off; eager when it enters the chase; surprised at the exact meeting; proud and thoughtful as the equal distances become clear.
+
+Shots:
+
+A  0–4 s  [transition in: a soft brush wipe uncovers the left marker and path]  
+Wide enough to establish the marker, but keep the turtle large and readable. The turtle begins walking right from START at a steady slow pace; Clawd waits beside the same marker. The moving turtle draws a faint painted trail. Clawd’s eyes follow it. Camera gently tracks right.  
+Reads:
+- 0.0–0.7 s — Find the left marker and the two characters gathered there. [FOCUS_REVEAL]
+- 0.7–2.0 s — The turtle leaves the marker and steadily walks right, leaving a trail. [TRACE_PATH]
+- 2.0–4.0 s — Clawd remains at the shared start while the turtle gains distance; Clawd leans forward in anticipation. [SHOW_RELATIVE_DIFFERENCE]
+
+B  4–8 s  [transition: match cut on the turtle’s continuing rightward stride; Clawd pushes off from the same marker]  
+The turtle continues at 30 px/s. At exactly video time 4 s, Clawd starts from START and walks right at 60 px/s. Keep both characters and their trails legible; camera tracks with them. Their approach is eased at the ends, but their indicated travel distance remains faithful to the stated speeds.  
+Reads:
+- 4.0–4.6 s — Clawd launches from the same left marker only after the turtle has already traveled for 4 seconds. [STAGGER_REVEAL]
+- 4.6–6.3 s — Clawd moves right faster and begins closing the visible gap; the two separate trails clarify each path. [CHASE_MOTION] [TRACE_PATH]
+- 6.3–8.0 s — Both travelers approach the same point; Clawd’s eager look shifts toward the turtle. [SHOW_RELATIVE_DIFFERENCE] [FOCUS_REVEAL]
+
+C  8–12 s  [transition: cut on the final steps, with the camera move carrying through]  
+At video time 8 s, turtle and Clawd arrive together at x = 540 px. Their feet meet at the same painted point. Hold the exact meeting pose while a warm brush ring highlights the shared point and both trails remain visible behind them. After the hold, the highlight settles but the characters keep small idle motion.  
+Reads:
+- 8.0–8.5 s — The last steps resolve into a simultaneous meeting at one point. [FREEZE_EVENT] [EVENT_EMPHASIS]
+- 8.5–10.4 s — Hold the meeting pose; the shared point is highlighted and both trails lead back to START. [FREEZE_EVENT] [TRACE_PATH]
+- 10.4–12.0 s — Clawd and the turtle glance down the two trails, registering that both paths end at the same place. [SHOW_RELATIVE_DIFFERENCE]
+
+D  12–16 s  [transition: the highlight ring stretches into two parallel trail strokes]  
+A clear graphic view of the journey, still grounded in the same painted path. The turtle’s trail runs from x = 300 to x = 540; Clawd’s trail also runs from x = 300 to x = 540, with Clawd’s later start shown by a delayed, brighter stroke. Clawd gestures toward each trail in turn; the turtle’s shell bobs gently.  
+Reads:
+- 12.0–13.2 s — The two distinct trajectories are traced from the shared marker to the meeting point. [TRACE_PATH] [STAGGER_REVEAL]
+- 13.2–14.6 s — The matching trail lengths become apparent, one after the other. [SHOW_RELATIVE_DIFFERENCE] [DIM_OTHERS]
+- 14.6–16.0 s — Clawd points from the turtle’s trail to its own; both end markers remain aligned. [FOCUS_REVEAL] [SHOW_BEFORE_AFTER]
+
+E  16–20 s  [transition: match cut from the two aligned trails to a side-by-side painted distance comparison; transition out: trails sweep into a soft brush wipe]  
+End on a visual before/after summary without labels or numbers. On the left, show the turtle at START before its walk; on the right, show Clawd at START before its later walk. Beneath each, reveal one equal-length trail segment ending at the same distance mark, then settle both characters at the shared meeting point above the two matching trails. The opening marker composition is echoed, now completed by the equal distances.  
+Reads:
+- 16.0–17.2 s — The two starting positions are shown as a paired “before” image. [SHOW_BEFORE_AFTER] [MATCH_CUT]
+- 17.2–18.8 s — Each traveler’s painted distance is revealed in sequence; both trail segments are visibly equal in length. [STAGGER_REVEAL] [SHOW_RELATIVE_DIFFERENCE]
+- 18.8–20.0 s — Hold the completed comparison: same start, equal walked distance, shared meeting point. Clawd and the turtle stay alive with gentle idle motion as the brush wipe carries the image out. [EVENT_EMPHASIS] [SHOW_BEFORE_AFTER]
+
+Transitions:
+- Into A: brush wipe from warm paper.
+- A to B: match cut on the turtle’s ongoing rightward stride; Clawd’s start at 4 s continues the action.
+- B to C: cut on the last steps into the precisely timed meeting, with camera movement carried through.
+- C to D: the meeting highlight stretches into the two trajectory trails.
+- D to E: match cut from equal-length trails to the side-by-side before/after comparison.
+- Out of E: soft brush wipe that completes before the 20-second end.

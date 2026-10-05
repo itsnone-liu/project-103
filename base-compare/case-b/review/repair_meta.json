@@ -1,0 +1,15 @@
+{
+ "secs": 67.2,
+ "finish": "stop",
+ "usage": {
+  "prompt_tokens": 5029,
+  "completion_tokens": 3589,
+  "total_tokens": 8618,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  },
+  "completion_tokens_details": {
+   "reasoning_tokens": 319
+  }
+ }
+}

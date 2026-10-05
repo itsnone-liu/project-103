@@ -1,0 +1,27 @@
+{
+ "storyboard_tags": [
+  "ACCELERATE_AND_SETTLE",
+  "CAMERA_PUSH",
+  "CHASE_MOTION",
+  "EVENT_EMPHASIS",
+  "FOCUS_REVEAL",
+  "SHOW_RELATIVE_DIFFERENCE",
+  "STAGGER_REVEAL"
+ ],
+ "code_markers": [
+  "ACCELERATE_AND_SETTLE",
+  "CAMERA_PUSH",
+  "CHASE_MOTION",
+  "DIM_OTHERS",
+  "EVENT_EMPHASIS",
+  "FOCUS_REVEAL",
+  "FREEZE_EVENT",
+  "MATCH_CUT",
+  "SHOW_BEFORE_AFTER",
+  "SHOW_RELATIVE_DIFFERENCE",
+  "STAGGER_REVEAL",
+  "TRACE_PATH"
+ ],
+ "alignment": 1.0,
+ "missing_in_code": []
+}

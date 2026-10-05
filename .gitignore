@@ -44,3 +44,9 @@ Thumbs.db
 # External research checkout and process state
 research/edulab/
 *.pid
+
+# External research clones (re-cloneable; mining outputs live in pattern-library/corpus/)
+research/
+# Copied regression runtime (derivable: research clone + pipeline)
+base-compare/pattern-test/
+.git_disabled/

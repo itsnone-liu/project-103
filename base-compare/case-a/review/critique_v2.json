@@ -1,0 +1,48 @@
+{
+ "verdict": "revise",
+ "issues": [
+  {
+   "severity": "high",
+   "time": "0.0–1.8",
+   "dimension": 1,
+   "problem": "主体不明确：首帧中蝴蝶过小且无动态引导，Clawd睡姿模糊（仅轮廓+Z字），观众难以第一时间识别主角与核心动作；分镜要求‘eye is led by the only moving thing’但实际蝴蝶静止或微动，缺乏视觉锚点。",
+   "fix": "放大蝴蝶尺寸至画面1/6高度，添加轻微上下浮动+翅膀开合动画；Clawd头部加简笔‘Z’符号+微鼾气泡，确保0.5s内可辨识角色状态。"
+  },
+  {
+   "severity": "high",
+   "time": "3.6–4.0",
+   "dimension": 4,
+   "problem": "motion不自然：Clawd扑击动作无预备姿态（无蹲伏蓄力），直接从站立跳起，违反物理惯性；分镜明确要求‘crouch → pounce’，但关键帧2中Clawd为直立举手状，非蓄力姿势。",
+   "fix": "插入0.2s过渡帧：Clawd双膝弯曲、手臂后摆、重心下沉；同步蝴蝶上扬轨迹提前0.1s，强化‘扑空’因果链。"
+  },
+  {
+   "severity": "mid",
+   "time": "8.2–9.2",
+   "dimension": 5,
+   "problem": "transition生硬：第4帧（Clawd飞过）到第5帧（落地花丛）无中间过程，镜头突变导致空间断裂；分镜描述‘sails beneath it’应有弧线轨迹，但实际为瞬移式位移。",
+   "fix": "在第4与第5帧间插入一帧：Clawd身体呈水平抛物线姿态，蝴蝶在其头顶画小半圈，背景花丛做速度线模糊处理，保持运动连续性。"
+  },
+  {
+   "severity": "high",
+   "time": "12.0–12.8",
+   "dimension": 9,
+   "problem": "关键事件未被motion强化：Clawd‘决定静止’的转折点（12.0–12.8）无冻结/强调——所有帧均含微动（如手臂抖、眼眨），削弱‘主动选择静止’的戏剧张力；分镜要求‘held beat, everything calm’但实际无停顿。",
+   "fix": "将第6帧（Clawd坐地）延长至0.8s（原0.4s），删除所有微动：闭眼时睫毛静止、手臂贴身不动、背景花瓣悬浮；仅用1帧显示‘睁眼→闭眼’切换，突出思想转变瞬间。"
+  },
+  {
+   "severity": "mid",
+   "time": "13.5–14.2",
+   "dimension": 7,
+   "problem": "存在无意义motion：第7帧中Clawd微笑时嘴角持续上扬+头部微晃，但分镜要求‘beat of stillness’后才‘eyes cross’；额外晃动分散对蝴蝶落鼻的注意力。",
+   "fix": "固定Clawd面部至14.0s：仅双眼缓慢下转（2帧完成），嘴角保持静态微笑；蝴蝶落地后0.3s再启动‘翅膀轻扇’动画，避免多动作竞争。"
+  },
+  {
+   "severity": "low",
+   "time": "14.2–15.0",
+   "dimension": 8,
+   "problem": "scene continuity断裂：结尾iris收束时背景色突变为深紫（第5格中央黑底圆窗），与全程暖调冲突；分镜强调‘colour arc subtle: cooler→warmer’，但此处冷色破坏情绪闭环。",
+   "fix": "将黑底圆窗改为暖赭石色渐变底，保留Clawd与蝴蝶剪影；iris收缩路径沿原画面色彩过渡（草绿→金黄），确保终帧色调最暖。"
+  }
+ ],
+ "storyboard_alignment": "分镜承诺的核心叙事弧（追逐→静止→接纳）基本成立，但关键节奏点（扑空、抉择、落地）的视觉执行弱于文字设计：动作逻辑缺失、情绪转折未被动画强调、色彩情绪线中断。需修正3处高危问题以匹配‘stillness beats chasing’的主题强化。"
+}

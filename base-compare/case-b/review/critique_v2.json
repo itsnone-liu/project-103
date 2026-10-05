@@ -1,0 +1,48 @@
+{
+ "verdict": "revise",
+ "issues": [
+  {
+   "severity": "high",
+   "time": "0.65–2.55",
+   "dimension": 4,
+   "problem": "Motion is not natural: Clawd’s grab (frame 2) is a static pose with no anticipatory wind-up or follow-through; the butterfly’s escape lacks directional continuity—it appears to teleport leftward rather than loop away as described in storyboard (‘slips past’, ‘loops away’).",
+   "fix": "Add intermediate frames showing Clawd’s arm cocking back (0.8–1.2s), then forward thrust with body lean (1.3–1.8s); animate butterfly with curved, petal-like arc passing *just* beyond Clawd’s fingertips before ascending rightward (matching motif)."
+  },
+  {
+   "severity": "high",
+   "time": "7.55–9.65",
+   "dimension": 8,
+   "problem": "Scene continuity breaks: In frame 4 (supposedly 7.55–9.65), Clawd is on the far right of the hill, but the butterfly is still high and distant—contradicting ‘butterfly lands on a flower; Clawd stills’. No flower is visible near Clawd, and his posture shows active pursuit, not stillness/thought.",
+   "fix": "Reposition Clawd closer to center-left in this segment; add a small pink flower at ground level near his feet; change his pose to upright, hands relaxed at sides, eyes gently fixed on the perched butterfly (not looking up)."
+  },
+  {
+   "severity": "mid",
+   "time": "10.0–12.0",
+   "dimension": 5,
+   "problem": "Transition is jarring: The match cut from B to C (frame 4→5) cuts from wide garden view to close-up without visual bridge; the butterfly’s descent isn’t carried through the cut, breaking the ‘descending arc’ continuity.",
+   "fix": "Insert a transitional frame (or extend frame 4) where the butterfly begins descending toward lower-right; in frame 5, show it mid-descent approaching Clawd’s hand—maintain same camera height and horizon line."
+  },
+  {
+   "severity": "mid",
+   "time": "12.0–14.1",
+   "dimension": 9,
+   "problem": "Key event not emphasized: The butterfly landing on Clawd’s hand (11.55–12.0) is visually undersold—no freeze/hold or subtle motion cue (e.g., wing flutter pause, Clawd’s breath hitch). The tender reaction (frame 6) appears abruptly without buildup.",
+   "fix": "Hold on the exact moment of landing for 0.5s with slight zoom-in; add micro-motion: butterfly wings briefly still, then soft pulse; Clawd’s eyes widen subtly, then soften—delay the heart icons until after this beat."
+  },
+  {
+   "severity": "low",
+   "time": "0.0–4.8",
+   "dimension": 2,
+   "problem": "Read clarity issue: In frame 1 (iris open), Clawd’s expression is neutral; the ‘curious → excited’ arc isn’t legible until frame 2, missing the initial curiosity cue at 0.0–0.65.",
+   "fix": "In first frame, tilt Clawd’s head slightly upward, pupils focused on upper-left sky (where butterfly will enter); add faint eyebrow lift to signal curiosity before excitement builds."
+  },
+  {
+   "severity": "low",
+   "time": "14.1–15.0",
+   "dimension": 10,
+   "problem": "Overall quality below reference: Background texture is overly grainy/noisy (especially sky), reducing the ‘soft teal/sap green’ aesthetic promised; iris closure is abrupt (frame 8) with no gradual vignette fade, weakening the emotional resolution.",
+   "fix": "Reduce film grain in post; render iris closure as slow radial fade over 0.8s (14.2–15.0), keeping Clawd and butterfly centered and softly lit."
+  }
+ ],
+ "storyboard_alignment": "Partial alignment: Core narrative beats (grab → miss → wait → gentle offer → perch) are present, but timing, motion logic, and visual motifs (looping flight, shared stillness) are inconsistently executed. Key emotional transitions lack supporting animation cues, and spatial continuity fails in Act B. Requires targeted revision to fulfill storyboard’s poetic intent."
+}

@@ -1,0 +1,17 @@
+{
+ "secs": 77.7,
+ "finish": "stop",
+ "usage": {
+  "prompt_tokens": 15070,
+  "completion_tokens": 4133,
+  "total_tokens": 19203,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  },
+  "completion_tokens_details": {
+   "reasoning_tokens": 276
+  }
+ },
+ "model": "gpt-6-luna",
+ "content_chars": 9819
+}
