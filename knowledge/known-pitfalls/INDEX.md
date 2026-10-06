@@ -22,13 +22,15 @@
 - **规避**：渲染判定 = 返回码 ≠ 0 **或** 归一化错误通道非空，两者任一即失败
 - **来源**：Case C/D 渲染判定反复打补丁的总结
 
-# KP-004 · GLM coding 端点 thinking 烧穿：瘦身+关 thinking 或通用端点 budget
+# KP-004 · GLM coding 端点 thinking 烧穿 → 已终解：顶层 `reasoning_effort` 分档
 
 - **栈**：LLM 调用层（glm-5.3, open.bigmodel.cn/api/coding/paas/v4）
-- **症状**：大 prompt（~21k token）代码生成任务中推理烧满 65536 token、内容 0、finish=length；`reasoning_effort` 与 `thinking.budget_tokens` 均无效（coding 端点不认 budget）
-- **已验证缓解**：瘦身 prompt 到 ~14k + `thinking:{type:'disabled'}` → 8.2k 内容/91s 成功。**注意 thinking 关闭损质量**——slim+thinking 开的组合是首选实验（未测完，被 key 失效中断）；备选换通用端点 /api/paas/v4 + budget_tokens 硬封
-- **边界**：故事板阶段（12k prompt）默认 thinking 工作正常（15.3k 推理→优秀输出）——烧穿与任务形态+prompt 尺寸强相关，不是 thinking 本身不可用
-- **来源**：Case D GLM phase-2 三次烧穿实证，2026-10-06
+- **症状**：代码生成任务推理烧满上限、内容 0、finish=length——271 token slim prompt 也烧（与 prompt 大小无关）
+- **根因与终解（2026-10-06 二轮实验+官方文档定稿）**：烧穿是 **max 档**对代码任务的行为；Coding Plan 支持**顶层** `reasoning_effort` 字段（不是 `thinking.type`，也不是 `thinking.budget_tokens`——两者在 coding 端点无效/被忽略，第一轮实验被嵌套形状误导）。档位映射：`none/minimal/low`→low、`medium/high`→high、`xhigh/max`→max
+- **已验证**：`reasoning_effort:'low'` + 真实 codegen prompt → 341 推理 + 5,073 内容，52s，finish=stop 自然收敛✓；slim 空泛 prompt 下 low 档也花 14k 推理后照常出内容✓；`high` 档照烧✗；glm-5.2+`none` 文档说放弃思考但实测仍烧✗（文档与实现不符，勿用）
+- **管线配置**（pipeline/llm.py GLM_THINK 策略）：storyboard/decide=默认 max 档（分镜实测 22k tok 优秀）；codegen/repair=`low`（think='low'）
+- **教训**：参数无效 ≠ 该端点不支持此能力——先查官方文档的参数**位置**（顶层 vs 嵌套）再下结论
+- **来源**：Case D 三次烧穿 + 2026-10-06 capital2 五组对照实验 + [官方 thinking 文档](https://docs.bigmodel.cn/cn/guide/capabilities/thinking)
 
 # KP-005 · GLM/Luna 长输出后段漂移：用结构化契约+lint 闸门兜底
 
