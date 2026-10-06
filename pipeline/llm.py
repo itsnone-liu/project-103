@@ -51,11 +51,14 @@ def call(model: str, messages: list, *, max_tokens: int = 65536,
     if temperature is not None:
         payload["temperature"] = temperature
     if model == "glm":
+        # 2026-10-06 终局（官方 thinking 文档 + coding 端点实证）：
+        # 顶层 reasoning_effort 在 Coding Plan 生效：5.3 档位 none/minimal/low→low, medium/high→high, xhigh/max→max
+        # 实测 slim 代码任务：low=14.4k 推理后出内容✓, high=烧穿✗, 5.2+none=仍烧✗(文档与实现不符)
         policy = (think or os.environ.get("GLM_THINK", "off")).lower()
-        if policy == "on":
-            pass  # 端点默认 thinking，不传字段
-        elif policy == "budget":
-            payload["thinking"] = {"type": "enabled", "budget_tokens": 16384}
+        if policy in ("on", "max"):
+            pass  # 端点默认 = max 档（分镜/决策用，实测优秀）
+        elif policy == "low":
+            payload["reasoning_effort"] = "low"   # codegen 档：有思考且收敛
         else:
             payload["thinking"] = {"type": "disabled"}
     if effort and model == "luna":

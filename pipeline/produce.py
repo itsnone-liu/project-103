@@ -175,7 +175,7 @@ def main() -> int:
         code = code_path.read_text(encoding="utf-8"); log("codegen: 复用", code_path.name)
     else:
         log(f"codegen ({backend}): 生成中…")
-        code, meta = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="off")
+        code, meta = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="low")
         m = re.search(r"```(?:\w+)?\n(.*?)```", code, re.S)
         code = (m.group(1) if m else code).strip()
         if len(code) < 200:
@@ -195,7 +195,7 @@ def main() -> int:
             backend, decision["backend"] = "web_2d", "WEB_2D"
             if not (wd / "code" / "index.html").exists():
                 log("codegen: 回退 web_2d 重新生成…")
-                code, _ = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="off")
+                code, _ = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="low")
                 m = re.search(r"```(?:\w+)?\n(.*?)```", code, re.S)
                 (wd / "code" / "index.html").write_text((m.group(1) if m else code).strip(), encoding="utf-8")
 
@@ -213,7 +213,7 @@ def main() -> int:
         if round_i >= args.repair_rounds:
             log("repair 轮次耗尽，终止"); return 1
         log(f"repair round {round_i + 1}…")
-        fixed, _ = llm.call(args.model, think="off", messages=prompts.repair_prompt(decision, code, errors, "（帧证据见 qa_report）"))
+        fixed, _ = llm.call(args.model, think="low", messages=prompts.repair_prompt(decision, code, errors, "（帧证据见 qa_report）"))
         m = re.search(r"```(?:\w+)?\n(.*?)```", fixed, re.S)
         if m:
             code = m.group(1).strip(); code_path.write_text(code, encoding="utf-8")
@@ -229,7 +229,7 @@ def main() -> int:
         return 1
     if not report["pass"] and args.repair_rounds > 0 and not report["checks"]["frame_variance"]["pass"]:
         log("qa: 空帧率超标 → repair…")
-        fixed, _ = llm.call(args.model, think="off", messages=prompts.repair_prompt(
+        fixed, _ = llm.call(args.model, think="low", messages=prompts.repair_prompt(
             decision, code,
             [{"kind": "frame", "message": f"blank_frames={report['checks']['frame_variance']['blank_frames']} — 大量帧接近纯色，元素疑似未绘制"}],
             "qa_sheet.jpg"))
