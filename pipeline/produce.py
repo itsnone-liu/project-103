@@ -211,7 +211,7 @@ def main() -> int:
         if round_i >= args.repair_rounds:
             log("repair 轮次耗尽，终止"); return 1
         log(f"repair round {round_i + 1}…")
-        fixed, _ = llm.call(args.model, think="off", messages=prompts.repair_prompt(decision, code, errors, "（帧证据见 qa_report）"), think="off")
+        fixed, _ = llm.call(args.model, think="off", messages=prompts.repair_prompt(decision, code, errors, "（帧证据见 qa_report）"))
         m = re.search(r"```(?:\w+)?\n(.*?)```", fixed, re.S)
         if m:
             code = m.group(1).strip(); code_path.write_text(code, encoding="utf-8")
