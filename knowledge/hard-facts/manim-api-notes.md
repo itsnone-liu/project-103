@@ -23,5 +23,6 @@
 渲染环境：
 
 - 类名固定 `class P103Scene(Scene)`，渲染命令 `python -m manim -ql --disable_caching`
+- **镜头动画（zoom/pan）必须继承 `MovingCameraScene`**：`class P103Scene(MovingCameraScene)` 然后才能用 `self.camera.frame.animate.scale(...)`——普通 Scene 的 camera 没有 frame 属性（2026-10-06 capital2 实证）
 - ffmpeg 由管线注入 PATH，勿在代码里调用外部命令
 - 确定性：不用 random（要用则 `random.Random(42)` 实例）
