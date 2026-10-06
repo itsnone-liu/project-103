@@ -1,10 +1,10 @@
-﻿import os
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Case A Base run: one-shot GLM 5.3 call over the ClaudeAnimationBase
 context (same inputs Opus gets: ANIMATION_GUIDE.md + demo.js as format
 example + the original task prompt). Writes GLM's scene + storyboard to
 disk for rendering. Base test = no extra hints beyond the guide."""
 from __future__ import annotations
+import os
 import json
 import re
 import sys
@@ -17,7 +17,7 @@ CASE = Path(r'D:\qjcNetDiskDownload\deepseek-harness\project\103'
 OUT_DIR = CASE / 'glm'
 OUT_DIR.mkdir(exist_ok=True)
 API = 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions'
-KEY = 'os.environ.get('GLM_API_KEY','')'
+KEY = os.environ.get('GLM_API_KEY', '')
 
 TASK_PROMPT = ("Read ANIMATION_GUIDE.md, then make a 15-second video of "
                "Clawd trying to catch a butterfly.")

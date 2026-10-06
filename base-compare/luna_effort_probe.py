@@ -6,7 +6,7 @@ import time
 import urllib.request
 
 API = 'http://127.0.0.1:8080/v1/chat/completions'
-KEY = 'os.environ.get('LUNA_API_KEY','')'
+KEY = os.environ.get('LUNA_API_KEY', '')
 
 for effort in (None, 'low', 'high'):
     payload = {'model': 'gpt-6-luna',

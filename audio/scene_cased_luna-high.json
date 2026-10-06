@@ -1,0 +1,33 @@
+{
+ "title": "cased_luna-high",
+ "voice": "zh-CN-XiaoxiaoNeural",
+ "bgm": {
+  "file": "bgm/musicbox.wav",
+  "gain": 0.13
+ },
+ "gap": 0.3,
+ "tail": 1.8,
+ "sentences": [
+  {
+   "text": "看，三角形有三个内角。"
+  },
+  {
+   "text": "我们把三个角分别染色。"
+  },
+  {
+   "text": "沿顶点撕下蓝角和红角。"
+  },
+  {
+   "text": "把它们飞到绿色角旁。"
+  },
+  {
+   "text": "三个角排开，正好成直线。"
+  },
+  {
+   "text": "五十加六十加七十，等于一百八十。"
+  },
+  {
+   "text": "所以，三角形内角和是平角。"
+  }
+ ]
+}

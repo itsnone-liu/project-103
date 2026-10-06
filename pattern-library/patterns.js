@@ -375,7 +375,10 @@ function markParallel(x, y, s, o = {}) {       // double chevron
 }
 function markAngle(x, y, r, p0, p1, o = {}) {  // angle arc + sector, k animates the sweep
   const c = o.col ?? PAL.rose, k = ease(o.k ?? 1);
-  const a0 = Math.atan2(p0[1] - y, p0[0] - x), a1 = Math.atan2(p1[1] - y, p1[0] - x);
+  // p0/p1 polymorphic: point arrays -> atan2; numbers -> radians directly.
+  const a2 = p => Array.isArray(p) ? Math.atan2(p[1] - y, p[0] - x) : p;
+  const a0 = a2(p0), a1 = a2(p1);
+  if (![a0, a1, r, x, y].every(Number.isFinite)) return;  // NaN guard
   let d = a1 - a0; while (d < -Math.PI) d += Math.PI * 2; while (d > Math.PI) d -= Math.PI * 2;
   const P = [];
   for (let i = 0; i <= 18; i++) { const a = a0 + d * k * i / 18; P.push([x + Math.cos(a) * r, y + Math.sin(a) * r]); }

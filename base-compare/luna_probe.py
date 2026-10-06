@@ -4,7 +4,7 @@
 import json
 import urllib.request
 
-KEY = 'os.environ.get('LUNA_API_KEY','')'
+KEY = os.environ.get('LUNA_API_KEY', '')
 body = json.dumps({
     'model': 'gpt-6-luna',
     'messages': [{'role': 'user', 'content': 'Reply with exactly: LUNA-OK'}],

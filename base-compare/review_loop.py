@@ -28,9 +28,9 @@ VISION_API = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
 VISION_KEY = 'sk-50103d72d57446bcaa3b1bce37609c07'
 VISION_MODEL = 'qwen3-vl-plus'
 GLM_API = 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions'
-GLM_KEY = 'os.environ.get('GLM_API_KEY','')'
+GLM_KEY = os.environ.get('GLM_API_KEY', '')
 LUNA_API = 'http://127.0.0.1:8080/v1/chat/completions'
-LUNA_KEY = 'os.environ.get('LUNA_API_KEY','')'
+LUNA_KEY = os.environ.get('LUNA_API_KEY', '')
 
 CHECKLIST = (
     "1.主体是否明确 2.每个read是否清楚 3.是否同时出现过多信息 "

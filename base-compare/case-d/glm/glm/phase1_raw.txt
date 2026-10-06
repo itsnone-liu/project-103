@@ -1,0 +1,89 @@
+```markdown
+# STORYBOARD — 三角形内角和 180°：撕角重拼证明（~30s）
+
+Logline: 我们要证明三角形三个内角合起来是 180°，但"内角"看不见摸不着，所以当场把两个角撕下来、搬到第三个角的顶点旁拼起来——三个彩色角楔严丝合缝排成一条直线，内角和 = 180°。
+
+World: 手绘水彩练习纸世界：PAL.paper 底 + 极淡 PAL.sky 晕染，三角与角楔为平涂 wash + 沸腾墨线（boil），无 3D、无渐变。三角色即三角色彩：rose(∠A 撕下)、teal(∠B 宿主)、sap(∠C 撕下)；结论时刻引入 sun 金色 glow。色彩弧线：冷纸面 → 三色点亮 → 金色 180° 收束。Motif：彩色角楔——开头标在三角上，结尾在 0–180° 刻度尺上原样复现。数字（60/70/50/180）为教学正当文字，其余零文字。
+
+## Parameters（代码阶段必须严格采用；一切角度由这些像素顶点推导）
+- 画布 1920×1080，y 向下。方向角以 y-up CCW 记：screen 点 = V + (r·cosθ, −r·sinθ)
+- 顶点（px）：A(700, 800) 底左 · B(1220, 800) 底右【装配宿主】· C(1019, 248) 顶点
+- 边长：|AB| = 520.0，|AC| = √406465 ≈ 637.5，|BC| = √345105 ≈ 587.5
+- 内角（由顶点 acos 计算，保留 0.1°）：∠A = 60.0°（射线 A→B 0°，A→C 60.0°）· ∠B = 70.0°（B→C 110.0°，B→A 180°）· ∠C = 50.0°（C→A 240°，C→B 290°）
+- 内角和 = 60.0° + 70.0° + 50.0° = 180.0°
+- 角楔弧半径 r = 110 px；COLOR_BIND：∠B = teal(known 宿主) · ∠A = rose(ask 先撕) · ∠C = sap(aux 后撕) · 结论 = hi/sun
+- 撕下副本装配 @B（y-up span）：rose 楔 → [0°, 60°]（自 A 纯平移，净旋转 0°）；sap 楔 → [60°, 110°]（原件 span [240°, 290°]，飞行中旋转 180°）；teal 宿主 [110°, 180°]；并集 = [0°, 180°] 平角，无缝无叠
+- 直线：过 B 的 y = 800，x ∈ [940, 1500]
+- 悬停待命点：rose → (540, 380)，sap → (1350, 300)；飞行 arcThrow h ≈ 180
+- 数字：60 / 70 / 50 / 180；等式行位于 (960, 190)：60°+70°+50°=180°
+- 节拍 bpm = 96；相机：A–C 于 (960,620) zoom 1.0→1.04 漂移，D–F push 至 (1120,680) zoom 1.18，G–H 回 (960,560) zoom 1.0
+- 时长：8 句共约 83 字 ≈ 21s 语音 + 句间停顿 ≈ 29–32s；全部动作窗以 narr().at(k, f) 锚定，不写死秒数
+
+## Narration（TTS，每句 ≤18 字）
+1. 这是一个三角形，有三个内角。
+2. 先撕下左下这个角。
+3. 再撕下顶上的角。
+4. 把两个角送到右下顶点。
+5. 三个角拼在一起。
+6. 正好排成一条直线。
+7. 六十加七十加五十，等于一百八十。
+8. 三角形内角和，是一百八十度。
+
+## Shots（每镜头锚定一句旁白；reads 即时间表，(k,f) 分数时刻）
+A · k=1 f0→1 · [入：iris 自纸色，中心 (980,616)] 三角成形
+   reads:
+   (1,.10)–(1,.45) 三条边一笔描出，顶点落墨点 · [TRACE_PATH][NARRATION_ANCHOR]
+   (1,.45)–(1,.72) 三条角弧按 rose→teal→sap 依次弹出铺色 · [STAGGER_REVEAL][COLOR_BIND]
+   (1,.72)–(1,1.0) 每弧旁数字 60/70/50 逐一落墨定住 · [LIVE_ANNOTATION][HOLD]
+
+B · k=2 f0→1 · [转场：match cut——rose 弧脉冲接下帧抖动] 事件：撕下 ∠A
+   reads:
+   (2,.05)–(2,.30) rose 楔先抖后翘（撕纸卷边），画面其余压暗 · [ANTICIPATION_WINDUP][FOCUS_REVEAL]
+   (2,.30)–(2,.62) 脱离母体飞至悬停点 (540,380)，原位留虚线残影 · [ARC_TOSS][LEAVE_MARK]
+   (2,.62)–(2,1.0) 悬停微浮动，宿主三角墨线轻颤一下 · [HOLD][BEAT_GRID]
+
+C · k=3 f0→1 · [转场：brushWipe（sap 色笔触）] 事件：撕下 ∠C（rose 楔背景悬停，不抢戏）
+   reads:
+   (3,.05)–(3,.30) sap 楔抖动卷边起翘，压暗聚焦 · [ANTICIPATION_WINDUP][FOCUS_REVEAL]
+   (3,.30)–(3,.62) 飞至悬停点 (1350,300)，C 处留虚线残影 · [ARC_TOSS][LEAVE_MARK]
+   (3,.62)–(3,1.0) 双楔各自悬停，相机微推预告出发 · [HOLD][CAMERA_PUSH]
+
+D · k=4 f0→1 · [转场：cut on action——相机 push 起手帧切入] 事件：双楔起飞送至 B
+   reads:
+   (4,.05)–(4,.35) rose 楔沿弧线飞向 B，微旋转 · [ARC_TOSS][CAMERA_PUSH]
+   (4,.35)–(4,.68) sap 楔错峰起飞，途中翻半周（180°）对准缺口 · [ARC_TOSS][STAGGER_REVEAL]
+   (4,.68)–(4,1.0) 双楔悬停 B 上方待命，缺口边缘闪两下 · [EVENT_EMPHASIS][HOLD]
+
+E · k=5 f0→1 · [转场：cut on action——悬停未稳即切] 事件：三楔拼合
+   reads:
+   (5,.05)–(5,.30) 两楔旋入 [0°,60°] 与 [60°,110°] 槽位，teal 宿主不动 · [SUPERPOSE_COPY][ANTICIPATION_WINDUP]
+   (5,.30)–(5,.50) 吸合瞬间：freeze + flash + 双环 · [FREEZE_EVENT][IMPACT_BURST]
+   (5,.50)–(5,1.0) 定格全景：三色楔严丝合缝 · [HOLD][COLOR_BIND]
+
+F · k=6 f0→1 · [转场：无剪切，同一 push 运动贯穿] 事件：直线显形
+   reads:
+   (6,.08)–(6,.45) 底边直线自 B 向两侧扫出至 x∈[940,1500] · [TRACE_PATH][LEAVE_MARK]
+   (6,.45)–(6,1.0) 三色楔沿节拍逐个高亮，显示无缝无叠 · [BEAT_GRID][STAGGER_REVEAL]
+
+G · k=7 f0→1 · [转场：brushWipe（纸色）] 事件：算式成立
+   reads:
+   (7,.05)–(7,.55) 顶部等式 60+70+50 逐项 countUp，对应色楔同步闪 · [COUNT_UP][COLOR_BIND]
+   (7,.55)–(7,1.0) 总数滚到 180，弹脉冲环 · [LIVE_READOUT][EVENT_EMPHASIS]
+
+H · k=8 f0→1 · [转场：irisShape 三角形孔，孔心 (960,540)] 事件：盖章 + 回顾板
+   reads:
+   (8,.05)–(8,.32) "180°" 大章砸在装配图上方，squash 落定 · [STAMP_ANSWER][IMPACT_BURST]
+   (8,.32)–(8,.72) 回顾板：左 = 原三角形三色弧(before)，右 = 0–180° 刻度尺三色行程(after) · [SHOW_BEFORE_AFTER][HIGHLIGHT_BOX]
+   (8,.72)–(8,1.0) 金色微 glow 定格收束，iris 收于章面 · [HOLD][FOCUS_REVEAL]
+
+## Transitions
+- 入场：iris 自纸色（中心 = 三角重心 (980,616)）
+- A→B：match cut（rose 角弧末尾脉冲 → 下一帧同弧开始抖动）
+- B→C：brushWipe，sap 色笔触
+- C→D：cut on action（起飞前一帧切入，push 同时起手）
+- D→E：cut on action（悬停未稳即切，拼合动作延续过剪）
+- E→F：不剪，相机同一 push 连续贯穿（运动携带过缝）
+- F→G：brushWipe，纸色
+- G→H：irisShape（三角形孔，呼应主角）
+- 出场：iris 收于 180° 章面，淡入纸色收尾（结尾与开头同纸面，母题回环）
+```

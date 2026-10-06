@@ -1,10 +1,10 @@
-﻿import os
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Probe: two-phase GLM call with thinking ENABLED.
 Phase 1 = storyboard only (small deliverable -> bounded rumination).
 max_tokens 65536 headroom so thinking can FINISH and content can start.
 """
 from __future__ import annotations
+import os
 import json
 import time
 import urllib.request
@@ -15,7 +15,7 @@ CASE = Path(r'D:\qjcNetDiskDownload\deepseek-harness\project\103'
 OUT = CASE / 'glm_v2'
 OUT.mkdir(exist_ok=True)
 API = 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions'
-KEY = 'os.environ.get('GLM_API_KEY','')'
+KEY = os.environ.get('GLM_API_KEY', '')
 TASK = ("Read ANIMATION_GUIDE.md, then make a 15-second video of Clawd "
         "trying to catch a butterfly.")
 

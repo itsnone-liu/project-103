@@ -1,0 +1,294 @@
+```javascript
+// PROJECT = { duration: 23.783, bpm: 96, offset: 0 };
+(() => {
+  const TOTAL = 23.783;
+  const N = narr([0.0, 3.017, 5.675, 8.669, 11.445, 14.658, 18.588]);
+
+  const A = [610, 820], B = [1310, 820], C = [1098, 238];
+  const COL_A = roleCol('known');
+  const COL_B = roleCol('ask');
+  const COL_C = roleCol('aux');
+  const COL_HI = roleCol('hi');
+
+  const vec = (p, q) => [q[0] - p[0], q[1] - p[1]];
+  const angle = (p, q) => Math.atan2(q[1] - p[1], q[0] - p[0]);
+  const wrap = a => {
+    while (a > Math.PI) a -= TAU;
+    while (a < -Math.PI) a += TAU;
+    return a;
+  };
+  const interior = (v, p, q) => Math.abs(wrap(angle(v, q) - angle(v, p)));
+  const angA = interior(A, B, C);
+  const angB = interior(B, A, C);
+  const angC = interior(C, A, B);
+  const deg = a => a * 180 / Math.PI;
+  const mix = (a, b, k) => [lerp(a[0], b[0], k), lerp(a[1], b[1], k)];
+  const sectorPts = (x, y, r, start, sweep, steps = 18) => {
+    const pts = [[x, y]];
+    for (let i = 0; i <= steps; i++) {
+      const a = start + sweep * i / steps;
+      pts.push([x + r * Math.cos(a), y + r * Math.sin(a)]);
+    }
+    return pts;
+  };
+  const appear = (k, sentence) => ease(seg(lt, N.at(sentence, 0.15), N.at(sentence, 0.8)));
+  const visible = (sentence, f = 0.15) => lt >= N.at(sentence, f);
+
+  function triangle180(t, lt, dur) {
+    const paper = mixCol(PAL.cream, PAL.sky, 0.12);
+    const reveal = ease(seg(lt, N.at(0, 0.15), N.at(0, 0.8)));
+    const kBlue = appear(0, 1);
+    const kRed = appear(0, 1);
+    const kGreen = appear(0, 1);
+
+    camBegin(
+      960 + 8 * Math.sin(lt * 0.22),
+      540 + 5 * Math.sin(lt * 0.31),
+      1 + 0.025 * ease(seg(lt, N.at(3, 0.15), N.at(4, 0.8)))
+    );
+
+    // PATTERN: [FOCUS_REVEAL]
+    // PATTERN: [NARRATION_ANCHOR]
+    boilSeed('paper');
+    paint(rectPts(-100, -100, W + 200, H + 200), {
+      wash: paper, ink: null
+    });
+    paint(ellPts(960, 545, 970, 590, 36, 4), {
+      fill: PAL.cream, fillOp: 100, bleed: 0.18, tex: 0.55, ink: null
+    });
+
+    // PATTERN: [TRACE_PATH]
+    // PATTERN: CUSTOM: triangle-line-reveal
+    const edges = [[A, B], [B, C], [C, A]];
+    const edgeProgress = reveal * 3;
+    for (let i = 0; i < edges.length; i++) {
+      const local = clamp(edgeProgress - i);
+      if (local > 0) {
+        const p = edges[i][0], q = edges[i][1], end = mix(p, q, local);
+        inkLine([p, end], 3.2, PAL.indigo, 'ink', 0.2);
+      }
+    }
+
+    // PATTERN: [STAGGER_REVEAL]
+    // PATTERN: [COLOR_BIND]
+    // PATTERN: [LIVE_ANNOTATION]
+    const angleReady = visible(1, 0.15);
+    const angleProgressA = angleReady ? appear(0, 1) : 0;
+    const angleProgressB = visible(1, 0.36) ? ease(seg(lt, N.at(1, 0.36), N.at(1, 0.8))) : 0;
+    const angleProgressC = visible(1, 0.62) ? ease(seg(lt, N.at(1, 0.62), N.at(1, 0.8))) : 0;
+    const rMark = 92;
+
+    if (angleProgressA > 0) {
+      markAngle(A[0], A[1], rMark, angle(B, A), angle(C, A), {
+        k: angleProgressA, col: COL_A, fill: COL_A
+      });
+      label(`${Math.round(deg(angA))}°`, A[0] + 100, A[1] - 25, 31, { col: COL_A });
+    }
+    if (angleProgressB > 0) {
+      markAngle(B[0], B[1], rMark, angle(A, B), angle(C, B), {
+        k: angleProgressB, col: COL_B, fill: COL_B
+      });
+      label(`${Math.round(deg(angB))}°`, B[0] - 116, B[1] - 25, 31, { col: COL_B });
+    }
+    if (angleProgressC > 0) {
+      markAngle(C[0], C[1], rMark, angle(A, C), angle(B, C), {
+        k: angleProgressC, col: COL_C, fill: COL_C
+      });
+      label(`${Math.round(deg(angC))}°`, C[0] + 15, C[1] + 112, 31, { col: COL_C });
+    }
+
+    // PATTERN: [LEAVE_MARK]
+    // PATTERN: [ANTICIPATION_WINDUP]
+    // PATTERN: [FREEZE_EVENT]
+    // PATTERN: [IMPACT_BURST]
+    const tearBlue = ease(seg(lt, N.at(2, 0.15), N.at(2, 0.54)));
+    const tearRed = ease(seg(lt, N.at(2, 0.54), N.at(2, 0.82)));
+    const blueDetached = lt >= N.at(2, 0.54);
+    const redDetached = lt >= N.at(2, 0.82);
+    if (blueDetached) {
+      inkLine([[A[0] - 22, A[1] - 18], [A[0] - 7, A[1] - 5], [A[0] + 8, A[1] - 17]], 2, COL_A, 'dry', 0.15);
+    }
+    if (redDetached) {
+      inkLine([[B[0] - 8, B[1] - 17], [B[0] + 7, B[1] - 5], [B[0] + 22, B[1] - 18]], 2, COL_B, 'dry', 0.15);
+    }
+
+    // PATTERN: [ARC_TOSS]
+    // PATTERN: [TRACE_PATH]
+    // PATTERN: [STAGGER_REVEAL]
+    // PATTERN: [CAMERA_PUSH]
+    // PATTERN: [EVENT_EMPHASIS]
+    // PATTERN: [HOLD]
+    const O = [1250, 630];
+    const flightBlue = ease(seg(lt, N.at(3, 0.15), N.at(3, 0.8)));
+    const flightRed = ease(seg(lt, N.at(3, 0.38), N.at(3, 0.8)));
+    const blueStart = mix(A, O, flightBlue);
+    const redStart = mix(B, O, flightRed);
+
+    if (blueDetached && !visible(3, 0.8)) {
+      const arc = arcThrow(lt, N.at(3, 0.15), N.at(3, 0.8), A, O, {
+        h: 200, accel: 1
+      });
+      paint(sectorPts(arc[0], arc[1], 68, angle(B, A), -angA, 14), {
+        wash: COL_A, washOp: 150, ink: COL_A, sw: 1.5
+      });
+      const trail = [];
+      for (let j = 6; j >= 0; j--) {
+        const tt = Math.max(N.at(3, 0.15), lt - j * 0.035);
+        const pt = arcThrow(tt, N.at(3, 0.15), N.at(3, 0.8), A, O, { h: 200, accel: 1 });
+        trail.push([pt[0], pt[1]]);
+      }
+      tracePath(trail, lt, { mode: 'line', tail: 7, col: COL_A, size: 3 });
+    }
+    if (redDetached && !visible(3, 0.8)) {
+      const arc = arcThrow(lt, N.at(3, 0.38), N.at(3, 0.8), B, O, {
+        h: 140, accel: 1
+      });
+      paint(sectorPts(arc[0], arc[1], 68, angle(A, B), angB, 14), {
+        wash: COL_B, washOp: 150, ink: COL_B, sw: 1.5
+      });
+      const trail = [];
+      for (let j = 6; j >= 0; j--) {
+        const tt = Math.max(N.at(3, 0.38), lt - j * 0.035);
+        const pt = arcThrow(tt, N.at(3, 0.38), N.at(3, 0.8), B, O, { h: 140, accel: 1 });
+        trail.push([pt[0], pt[1]]);
+      }
+      tracePath(trail, lt, { mode: 'line', tail: 7, col: COL_B, size: 3 });
+    }
+
+    // PATTERN: [FOCUS_REVEAL]
+    // PATTERN: [TRACE_PATH]
+    // PATTERN: [SUPERPOSE_COPY]
+    // PATTERN: [STAGGER_REVEAL]
+    // PATTERN: [COLOR_BIND]
+    // PATTERN: [FREEZE_EVENT]
+    // PATTERN: [HIGHLIGHT_BOX]
+    // PATTERN: [HOLD]
+    const lineReveal = ease(seg(lt, N.at(4, 0.15), N.at(4, 0.3)));
+    const alignBlue = ease(seg(lt, N.at(4, 0.3), N.at(4, 0.62)));
+    const alignRed = ease(seg(lt, N.at(4, 0.42), N.at(4, 0.62)));
+    const lineStart = Math.PI;
+    const blueSweep = -angA;
+    const greenSweep = -angC;
+    const redSweep = -angB;
+    const blueEnd = lineStart + blueSweep;
+    const greenEnd = blueEnd + greenSweep;
+    const baseR = 132;
+
+    if (lineReveal > 0) {
+      inkLine([[O[0] - 175, O[1]], [O[0] + 175, O[1]]], 2.2 * lineReveal, PAL.ochre, 'dry', 0);
+    }
+    paint(sectorPts(O[0], O[1], baseR, blueEnd, blueSweep * alignBlue), {
+      wash: COL_A, washOp: 155, ink: COL_A, sw: 2
+    });
+    paint(sectorPts(O[0], O[1], baseR, blueEnd + greenSweep, greenSweep), {
+      wash: COL_C, washOp: 155, ink: COL_C, sw: 2
+    });
+    paint(sectorPts(O[0], O[1], baseR, greenEnd + redSweep * (1 - alignRed), redSweep * alignRed), {
+      wash: COL_B, washOp: 155, ink: COL_B, sw: 2
+    });
+
+    const sourceA = sectorPts(A[0], A[1], 60, angle(B, A), -angA, 14);
+    const sourceB = sectorPts(B[0], B[1], 60, angle(A, B), angB, 14);
+    if (blueDetached && alignBlue > 0) {
+      superposeCopy(sourceA, O[0] - A[0], O[1] - A[1], blueSweep * alignBlue, alignBlue, { col: COL_A });
+    }
+    if (redDetached && alignRed > 0) {
+      superposeCopy(sourceB, O[0] - B[0], O[1] - B[1], -redSweep * alignRed, alignRed, { col: COL_B });
+    }
+
+    const proofReady = visible(4, 0.62);
+    if (proofReady) {
+      markAngle(O[0], O[1], 166, Math.PI, 0, { k: 1, col: COL_HI, fill: COL_HI });
+      highlightBox(O[0] - 205, O[1] - 165, 410, 205, ease(seg(lt, N.at(4, 0.62), N.at(4, 0.92))), { col: COL_HI });
+      pulseRing(O[0], O[1], ease(seg(lt, N.at(4, 0.62), N.at(4, 0.8))), {
+        r0: 142, r1: 210, col: COL_HI
+      });
+    }
+
+    // PATTERN: [COUNT_UP]
+    // PATTERN: [LIVE_READOUT]
+    // PATTERN: [NARRATION_ANCHOR]
+    // PATTERN: [STAMP_ANSWER]
+    // PATTERN: [IMPACT_BURST]
+    const sumStart = N.at(5, 0.25);
+    const sumEnd = N.at(5, 0.68);
+    countUp(lt, sumStart, sumEnd, 0, 180, 970, 900, {
+      dec: 0, unit: '°', col: COL_HI, size: 56
+    });
+    if (visible(5, 0.25)) {
+      label(`${Math.round(deg(angA))} + ${Math.round(deg(angC))} + ${Math.round(deg(angB))} =`, 950, 830, 38, {
+        col: PAL.ink, align: 'center'
+      });
+      liveReadout(960, 925, [['内角和', `${Math.round(deg(angA) + deg(angB) + deg(angC))}°`]], {
+        w: 270, lh: 48, size: 28, valCol: COL_HI
+      });
+    }
+    stampAnswer('180°', 960, 900, lt, N.at(5, 0.68), {
+      col: COL_HI, w: 210, h: 96, size: 58, rot: -0.025
+    });
+    if (visible(5, 0.68)) {
+      impactBurst(960, 900, lt, N.at(5, 0.68), {
+        n: 8, g: 550, col: COL_HI, v0: 90, spread: 1.1, size: 5, life: 0.55
+      });
+    }
+
+    // PATTERN: [SHOW_BEFORE_AFTER]
+    // PATTERN: [COLOR_BIND]
+    // PATTERN: [FOCUS_REVEAL]
+    // PATTERN: [HIGHLIGHT_BOX]
+    // PATTERN: [STAMP_ANSWER]
+    // PATTERN: [NARRATION_ANCHOR]
+    // PATTERN: [HOLD]
+    const recap = visible(6, 0.15);
+    if (recap) {
+      const k = ease(seg(lt, N.at(6, 0.15), N.at(6, 0.42)));
+      const left = [450, 575], mini = 0.36;
+      inkLine([mix(left, [left[0] + (B[0] - A[0]) * mini, left[1]], k),
+               mix(left, [left[0] + (B[0] - A[0]) * mini, left[1]], k)], 2, PAL.indigo, 'ink', 0);
+      const mA = [left[0], left[1] + 105], mB = [left[0] + 250, left[1] + 105], mC = [left[0] + 174, left[1] - 104];
+      inkLine([mA, mB, mC, mA], 2.5 * k, PAL.indigo, 'ink', 0.15);
+      markAngle(mA[0], mA[1], 34, angle(mB, mA), angle(mC, mA), { k, col: COL_A, fill: COL_A });
+      markAngle(mB[0], mB[1], 34, angle(mA, mB), angle(mC, mB), { k, col: COL_B, fill: COL_B });
+      markAngle(mC[0], mC[1], 34, angle(mA, mC), angle(mB, mC), { k, col: COL_C, fill: COL_C });
+
+      const recapO = [1370, 575];
+      inkLine([[recapO[0] - 140, recapO[1]], [recapO[0] + 140, recapO[1]]], 3 * k, PAL.indigo, 'ink', 0);
+      paint(sectorPts(recapO[0], recapO[1], 76, Math.PI, -angA), { wash: COL_A, washOp: 165, ink: COL_A, sw: 1.4 });
+      paint(sectorPts(recapO[0], recapO[1], 76, Math.PI - angA, -angC), { wash: COL_C, washOp: 165, ink: COL_C, sw: 1.4 });
+      paint(sectorPts(recapO[0], recapO[1], 76, Math.PI - angA - angC, -angB), { wash: COL_B, washOp: 165, ink: COL_B, sw: 1.4 });
+      label('180°', recapO[0], recapO[1] + 112, 42, { col: COL_HI, align: 'center' });
+
+      highlightBox(1120, 430, 500, 330, ease(seg(lt, N.at(6, 0.42), N.at(6, 0.76))), { col: COL_HI });
+      stampAnswer('180°', 1370, 730, lt, N.at(6, 0.42), {
+        col: COL_HI, w: 180, h: 78, size: 44, rot: -0.02
+      });
+    }
+
+    // PATTERN: CUSTOM: clawd-pointing
+    const mood = emotions(lt, [
+      [N.at(0, 0.15), 'thinking', { lookX: 0.6 }],
+      [N.at(3, 0.8), 'surprised', { lookX: 0.5 }],
+      [N.at(5, 0.68), 'happy']
+    ]);
+    const pointPose = visible(6, 0.76) ? { aR: 1.15 } : { aR: 0.45 };
+    clawd(320, 820, 25, {
+      ...mood,
+      ...pointPose,
+      lookX: visible(6, 0.76) ? 0.8 : 0.35,
+      boilKey: 'triangle-clawd'
+    });
+
+    camEnd();
+
+    // PATTERN: [NARRATION_ANCHOR]
+    // PATTERN: [HOLD]
+    if (lt < N.at(0, 0.15)) iris(960, 540, lerp(0, 1500, ease(seg(lt, 0, N.at(0, 0.15)))), paper);
+    if (lt > N.at(6, 0.76)) {
+      brushWipe(ease(seg(lt, N.at(6, 0.76), TOTAL)), [paper, PAL.cream]);
+    }
+    flushLetters();
+  }
+
+  shots([[0, triangle180]]);
+})();
+```

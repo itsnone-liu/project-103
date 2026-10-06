@@ -51,3 +51,4 @@ research/
 base-compare/pattern-test/
 .git_disabled/
 audio/voice/
+case-d/*/node_modules/

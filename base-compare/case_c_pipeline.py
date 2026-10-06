@@ -26,9 +26,9 @@ sys.path.insert(0, str(ROOT))
 import p103.video_qa as video_qa  # noqa: E402
 
 GLM_API = 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions'
-GLM_KEY = 'os.environ.get('GLM_API_KEY','')'
+GLM_KEY = os.environ.get('GLM_API_KEY', '')
 LUNA_API = 'http://127.0.0.1:8080/v1/chat/completions'
-LUNA_KEY = 'os.environ.get('LUNA_API_KEY','')'
+LUNA_KEY = os.environ.get('LUNA_API_KEY', '')
 
 TASK = (
     "Read ANIMATION_GUIDE.md, then make a 20-second teaching animation: "

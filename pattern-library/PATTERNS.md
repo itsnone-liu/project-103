@@ -63,7 +63,7 @@ beforeAfter 是标准收尾：刻度尺+双色行程条+数字标注。
 markRight(x,y,s,{col,dot})        // LEAVE_MARK 直角符号
 markTicks(a,b,n,{col})            // n 等分刻度
 markParallel(x,y,s,{col})         // 平行箭头对
-markAngle(x,y,r,p0,p1,{k,col,fill}) // 角弧+扇形(k 动画扫描)
+markAngle(x,y,r,p0,p1,{k,col,fill}) // 角弧+扇形(k 动画扫描); p0/p1 = 边上的点[x,y]或弧度数字(两种都收)
 superposeCopy(pts,dx,dy,rot,k,{col}) // SUPERPOSE_COPY 复制品叠合证明
 ```
 

@@ -1,0 +1,6 @@
+{
+ "verdict": "revise",
+ "issues": [],
+ "note": "unparseable",
+ "raw": "{\n  \"verdict\": \"revise\",\n  \"issues\": [\n    {\n      \"severity\": \"high\",\n      \"time\": \"11.2–14.4\",\n      \"dimension\": 9,\n      \"problem\": \"关键相遇点未冻结高亮：实际画面中无明显冻结帧（角色仍在微动/无闪光环），也无checkered flag stamp-in动作；轨迹线未出现（无turtle dotted prints或Clawd dust ribbon）。\",\n      \"fix\": \"在视频t=11.2处强制插入1秒完全静帧（角色姿势锁定、眼眨/表情动画暂停），叠加白色脉冲闪光环（radius 30px, 3-pulse fade），同时在x=880处动态生成checkered flag（从地面弹出+轻震）。紧接着在t=12.2–14.4用淡入方式绘制两条轨迹线：turtle的浅灰虚线点（间距12px）从x=400→880，Clawd的浅棕尘迹带（宽6px，半透明）同步绘制，确保终点对齐。\"\n    },\n    {\n      \"sever"
+}
