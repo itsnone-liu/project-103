@@ -17,3 +17,5 @@
 ## 语义标签表（审计词表，不绑定实现）
 
 REVEAL · COMPARE · TRACE · EMPHASIS · DERIVE · FREEZE_EVENT · COUNT_UP · SUPERPOSE · TRANSITION · RECAP —— storyboard 可用作自述结构，QA 用作对齐度量；任何 renderer 不要求实现任何固定 API。
+
+叙事自述词表（可选，来源：外部标杆案例集，见 `knowledge/success-cases/EXTERNAL-opus5-teaching-benchmark-2026-10.md`）：直觉先行 → 机制 → 形式化；每段一个核心类比；结尾回收。仅作 storyboard 自述参考，非必填结构。
