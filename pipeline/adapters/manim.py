@@ -33,10 +33,14 @@ def render(workdir: Path, timing: dict, *, scene_py: Path | None = None) -> dict
     if not scene_py.exists():
         return {"ok": False, "errors": [{"kind": "env", "message": f"缺少 {scene_py}"}]}
     media = workdir / "out" / "media"
+    import os
+    env_path = dict(os.environ)
+    comp = str(FFMPEG.parent)                                   # manim 需要 ffmpeg 可执行
+    env_path["PATH"] = comp + os.pathsep + env_path.get("PATH", "")
     r = subprocess.run([env["python"], "-m", "manim", "-ql", "--disable_caching",
                         "--media_dir", str(media), str(scene_py), "P103Scene"],
                        capture_output=True, timeout=1800,
-                       encoding="utf-8", errors="replace")
+                       encoding="utf-8", errors="replace", env=env_path)
     videos = sorted(media.glob("videos/**/*.mp4"))
     if r.returncode != 0 or not videos:                     # KP-003：exit + stderr 通道
         tail = (r.stderr or r.stdout or "")[-600:] or f"exit={r.returncode}, no video"

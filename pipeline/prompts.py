@@ -95,6 +95,10 @@ def codegen_prompt(decision: dict, storyboard: str, timing: dict, profile: dict)
         pat = (ROOT / "styles" / "hand-drawn" / "PATTERNS.md").read_text(encoding="utf-8")
         pack = f"\n## 风格包 API（项目指定手绘风格，可用可不用，无实现义务之外的限制）\n{pat[:6000]}\n"
     starts = timing["starts"] + [timing["total"]]          # KP-002：n+1，含 tEnd
+    api_notes = ""
+    if backend == "manim":                                  # 硬事实：API 签名卡（反幻觉）
+        api_notes = "\n## Manim 0.21 API 事实卡（严格按签名写，勿发明参数）\n" + \
+                    (KNOW / "hard-facts" / "manim-api-notes.md").read_text(encoding="utf-8")
     return [{"role": "user", "content": f"""你是自主动画工程师。为以下教学视频编写渲染代码——视觉方案由技术总监已定，实现方式完全由你决定。
 
 ## 分镜（内容/旁白/数学——数学量必须原样使用，可机器审计）
@@ -111,7 +115,7 @@ total = {timing['total']} 秒
 {b['contract']}
 
 ## 该栈已知坑（避坑用，不限制设计）
-{_pitfalls(b['pitfall_tags'])}{pack}
+{_pitfalls(b['pitfall_tags'])}{api_notes}{pack}
 
 ## 输出要求
 只输出一个代码块，内容为一个完整可运行文件（{ 'index.html（自包含，无网络依赖）' if backend == 'web_2d' else 'scene.py' }），不要解释。
