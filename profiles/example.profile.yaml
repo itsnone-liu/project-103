@@ -1,0 +1,29 @@
+# production-profile 示例（ARCHITECTURE-v2 §12）
+# 三模式：OPEN（默认，最大创作自由）/ ASSISTED（可用知识库不强制）/ PROJECT_ROUTE（项目固定路线）
+
+mode: PROJECT_ROUTE
+
+visual:
+  style: clean_vector          # 项目自述，无系统语义
+  style_pack: null             # 设为 hand-drawn 时加载手绘风格包 API（styles/hand-drawn/）
+  reference_project: algebra-grade7-v1
+
+backend:
+  preferred: manim             # 建议项，模型可偏离（须给理由）
+  allowed:                     # 候选集
+    - manim
+    - web_2d
+
+storyboard:
+  pacing: medium
+  intro_max_seconds: 8
+
+knowledge:
+  use_project_cases: true
+  use_global_success_cases: false
+  use_failure_memory: true     # known-pitfalls 默认就该用
+
+creative_freedom:
+  allow_new_layout: true
+  allow_new_transition: true
+  backend_escape_hatch: true   # 逃生舱（否决门验证后可提名菜单外技术）

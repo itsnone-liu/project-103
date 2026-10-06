@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!-- BAC 冒烟夹具：确定性 renderFrame（旋转角+扫过弧，种子化无随机），用于验证捕获链健康 -->
+<html><head><meta charset="utf-8"><style>body{margin:0}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script>
+const cv = document.getElementById('c'), cx = cv.getContext('2d');
+window.P103 = {
+  duration: 10 / 24, fps: 24, width: 1920, height: 1080,
+  renderFrame(t) {
+    cx.fillStyle = '#F5F0E6'; cx.fillRect(0, 0, 1920, 1080);
+    const k = t / this.duration;
+    cx.strokeStyle = '#2B2233'; cx.lineWidth = 8;
+    cx.beginPath(); cx.arc(960, 540, 300, -Math.PI / 2, -Math.PI / 2 + k * Math.PI * 1.5); cx.stroke();
+    cx.fillStyle = '#D97757';
+    cx.beginPath(); cx.arc(960 + 300 * Math.cos(-Math.PI / 2 + k * Math.PI * 1.5),
+                           540 + 300 * Math.sin(-Math.PI / 2 + k * Math.PI * 1.5), 26, 0, 7); cx.fill();
+    return true;
+  }
+};
+</script></body></html>

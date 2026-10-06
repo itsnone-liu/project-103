@@ -49,6 +49,7 @@ research/edulab/
 research/
 # Copied regression runtime (derivable: research clone + pipeline)
 base-compare/pattern-test/
+base-compare/diag-probe/
 .git_disabled/
 audio/voice/
 case-d/*/node_modules/
