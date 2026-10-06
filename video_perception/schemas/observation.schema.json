@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "observation",
+  "type": "object",
+  "required": ["shot_id", "start", "end", "frames", "objects", "motion_events"],
+  "properties": {
+    "shot_id": {"type": "string"},
+    "start": {"type": "number"},
+    "end": {"type": "number"},
+    "frames": {"type": "array", "items": {"type": "string"}},
+    "objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "first_visible", "last_visible"],
+        "properties": {
+          "id": {"type": "string"},
+          "kind": {"type": "string", "enum": ["text", "shape", "icon", "image", "line", "other"]},
+          "first_visible": {"type": "number"},
+          "last_visible": {"type": "number"},
+          "position_changes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["ts", "where"],
+              "properties": {
+                "ts": {"type": "number"},
+                "where": {"type": "string"},
+                "size_change": {"type": "string"},
+                "color": {"type": "string"}
+              }
+            }
+          },
+          "ocr": {"type": "string"}
+        }
+      }
+    },
+    "motion_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ts", "subject", "what_changed", "evidence"],
+        "properties": {
+          "ts": {"type": "number"},
+          "subject": {"type": "string"},
+          "what_changed": {"type": "string"},
+          "evidence": {"type": "array", "items": {"type": "string"}, "minItems": 2},
+          "detail_frames_requested": {"type": "boolean"}
+        }
+      }
+    },
+    "scene_changes": {"type": "array", "items": {"type": "number"}},
+    "camera_observations": {
+      "type": "array",
+      "items": {"type": "object", "required": ["ts", "fact"], "properties": {"ts": {"type": "number"}, "fact": {"type": "string"}}}
+    },
+    "audio_chapter_hypothesis": {"type": "array", "items": {"type": "number"}}
+  }
+}

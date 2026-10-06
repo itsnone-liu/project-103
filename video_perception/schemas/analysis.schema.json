@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "analysis",
+  "type": "object",
+  "required": ["scenes"],
+  "properties": {
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["shot_id", "composition", "motion", "teaching", "implementation"],
+        "properties": {
+          "shot_id": {"type": "string"},
+          "composition": {"type": "object", "properties": {
+            "visual_center": {"type": "string"},
+            "hierarchy_changes": {"type": "string"},
+            "layering": {"type": "string"},
+            "negative_space": {"type": "string"}
+          }},
+          "motion": {"type": "array", "items": {
+            "type": "object",
+            "required": ["claim", "semantic_role", "evidence", "status"],
+            "properties": {
+              "claim": {"type": "string"},
+              "semantic_role": {"type": "string"},
+              "evidence": {"type": "array", "items": {"type": "string"}},
+              "status": {"type": "string", "enum": ["CONFIRMED", "LIKELY", "UNCERTAIN"]}
+            }
+          }},
+          "teaching": {"type": "object", "properties": {
+            "viewer_read": {"type": "string"},
+            "prerequisite": {"type": "string"},
+            "new_information": {"type": "string"},
+            "visual_encoding": {"type": "string"},
+            "why_motion_needed": {"type": "string"},
+            "motion_removable": {"type": "boolean"},
+            "cognitive_load": {"type": "string", "enum": ["low", "medium", "high"]},
+            "hold_time_sufficient": {"type": "boolean"}
+          }},
+          "implementation": {"type": "object", "properties": {
+            "likely_primitives": {"type": "array", "items": {"type": "string"}},
+            "recommended_backend": {"type": "string"},
+            "possible_implementation": {"type": "object"},
+            "failure_risks": {"type": "array", "items": {"type": "string"}},
+            "confidence": {"type": "number"}
+          }}
+        }
+      }
+    },
+    "cross_scene_narrative": {"type": "string"}
+  }
+}
