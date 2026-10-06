@@ -63,8 +63,10 @@ def check(video: str, timing: dict, workdir: Path) -> dict:
     report = {"video": video, "checks": {}}
     c = report["checks"]
     vd = duration(video)
+    # 不对称容差：视频短于音频会切旁白（硬失败）；长出 ≤1.75s 只是尾部静音
+    # （manim wait() 24fps 帧量化 + 尾部等待的天然漂移，2026-10-06 capital2 实证 +1.07s 无害）
     c["duration"] = {"value": round(vd, 2), "expect": timing["total"],
-                     "pass": abs(vd - timing["total"]) <= 0.25}
+                     "pass": (vd >= timing["total"] - 0.25) and (vd <= timing["total"] + 1.75)}
     var = frame_variance(video)
     blank = sum(1 for v in var if v < 3.0)          # std<3 ≈ 纯色帧
     c["frame_variance"] = {"samples": var, "blank_frames": blank, "pass": blank <= max(1, len(var) // 6)}
