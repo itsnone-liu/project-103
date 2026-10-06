@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>资金周转率 · 一笔钱的循环旅程</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #0d1420; width: 1920px; height: 1080px; overflow: hidden; }
+  #stage { display: block; width: 1920px; height: 1080px; }
+</style>
+</head>
+<body>
+<canvas id="stage" width="1920" height="1080"></canvas>
+<script src="js/util.js"></script>
+<script src="js/world.js"></script>
+<script src="js/chapters.js"></script>
+<script src="js/main.js"></script>
+<script>
+window.P103 = {
+  duration: 66.014, fps: 24, width: 1920, height: 1080,
+  renderFrame(t) { return P103Main.render(t); }
+};
+</script>
+</body>
+</html>
