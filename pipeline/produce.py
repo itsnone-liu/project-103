@@ -41,6 +41,48 @@ def scene_json(sb: dict, title: str) -> dict:
             "gap": 0.25, "tail": 1.5, "sentences": [{"text": s, "pause_after": 0.25} for s in sb["narration"]]}
 
 
+def visual_repair(args) -> int:
+    """视觉迭代轮（ARCHITECTURE-v2 附录补丁1配套）：VLM/人工看 qa_sheet 后的定向修复。
+    输入=既有完整产物（timing/decision/code）+ 视觉问题笔记；动作=repair→render→qa→mux。"""
+    from pipeline.adapters import web2d, manim
+    wd = args.workdir.resolve()
+    title = args.title or wd.name
+    timing = json.loads((ROOT / "audio" / f"timing_{title}.json").read_text(encoding="utf-8"))
+    decision = json.loads((wd / "decision.json").read_text(encoding="utf-8"))
+    backend = (decision.get("backend") or "WEB_2D").lower()
+    code_path = wd / "code" / ("index.html" if backend in ("web_2d", "three_3d") else "scene.py")
+    code = code_path.read_text(encoding="utf-8")
+    notes = args.visual_repair.read_text(encoding="utf-8")
+    print(f"[{title}] visual-repair: 注入视觉反馈\n---\n{notes[:400]}\n---", flush=True)
+    fixed, meta = llm.call(args.model, prompts.repair_prompt(
+        decision, code,
+        [{"kind": "visual", "message": "视觉迭代反馈（比错误修复优先级低，改画面不改数学）：\n" + notes}],
+        "qa_sheet.jpg 拼图已人审/VLM审，问题清单见上"))
+    import re as _re
+    m = _re.search(r"```(?:\w+)?\n(.*?)```", fixed, _re.S)
+    if not m or len(m.group(1)) < 200:
+        print("visual-repair: 修复产出无效（无代码块/过短）"); return 1
+    code_path.write_text(m.group(1).strip(), encoding="utf-8")
+    print(f"visual-repair: 新代码 {len(m.group(1))} chars")
+    adapter = web2d if backend in ("web_2d", "three_3d") else manim
+    res = adapter.render(wd, timing)
+    if not res["ok"]:
+        print("visual-repair: 重渲失败", res["errors"][:3]); return 1
+    report = qa.check(res["video"], timing, wd)
+    print("visual-repair qa:", "PASS" if report["pass"] else "FAIL",
+          json.dumps(report["checks"].get("frame_variance", {}), ensure_ascii=False)[:100])
+    final = wd / "out" / f"final_{title}.mp4"
+    r = _sh([sys.executable, str(ROOT / "audio.py"), "mux", str(res["video"]), str(timing_path_of(title)), str(final)])
+    if r.returncode != 0:
+        print("mux 失败:", r.stderr[-300:]); return 1
+    print("final:", [l for l in r.stdout.splitlines() if l.startswith("final:")])
+    return 0
+
+
+def timing_path_of(title: str) -> Path:
+    return ROOT / "audio" / f"timing_{title}.json"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("workdir", type=Path)
@@ -51,8 +93,13 @@ def main() -> int:
     ap.add_argument("--title", default=None)
     ap.add_argument("--repair-rounds", type=int, default=1)
     ap.add_argument("--blind-sample", action="store_true", help="菜单盲测采样：decide/codegen 只见契约不见菜单")
+    ap.add_argument("--visual-repair", type=Path, default=None, metavar="NOTES.md",
+                    help="视觉迭代轮：用笔记中的视觉问题做一轮定向修复+重渲+重QA+重mux（需先有完整产物）")
     ap.add_argument("--stage", default=None, help="只跑到该阶段（storyboard|tts|decide|codegen|smoke|render|qa|mux|final）")
     args = ap.parse_args()
+
+    if args.visual_repair:
+        return visual_repair(args)
 
     wd = args.workdir.resolve(); wd.mkdir(parents=True, exist_ok=True)
     (wd / "code").mkdir(exist_ok=True); (wd / "out").mkdir(exist_ok=True)
@@ -69,7 +116,7 @@ def main() -> int:
         sb = parse_storyboard(sb_path.read_text(encoding="utf-8")); log("storyboard: 复用")
     else:
         log("storyboard: 生成中…")
-        out, meta = llm.call(args.model, prompts.storyboard_prompt(topic, prof))
+        out, meta = llm.call(args.model, prompts.storyboard_prompt(topic, prof), think="on")
         sb_path.write_text(out, encoding="utf-8")
         sb = parse_storyboard(out); log(f"storyboard: {len(sb['narration'])} 句 ({meta['usage'].get('completion_tokens', '?')} tok)")
 
@@ -105,13 +152,13 @@ def main() -> int:
         decision = json.loads(dec_path.read_text(encoding="utf-8")); log("decide: 复用", decision.get("backend"))
     else:
         steps = prompts.decision_prompts(topic, sb_path.read_text(encoding="utf-8"), prof, blind=args.blind_sample)
-        plan_free, _ = llm.call(args.model, steps[0])
+        plan_free, _ = llm.call(args.model, steps[0], think="on")
         (wd / "decision_stepA.md").write_text(plan_free, encoding="utf-8")
         if args.blind_sample:
             decision = {"backend": "CUSTOM", "blind_sample": True, "reason": plan_free[:400],
                         "alternative": None, "risk": None, "why_not": {}}
         else:
-            raw, _ = llm.call(args.model, steps[1])
+            raw, _ = llm.call(args.model, steps[1], think="on")
             m = re.search(r"\{.*\}", raw, re.S)
             decision = json.loads(m.group(0)) if m else {"backend": prof["backend"]["preferred"] or "WEB_2D",
                                                           "reason": "fallback(决策解析失败)", "alternative": None,
@@ -128,7 +175,7 @@ def main() -> int:
         code = code_path.read_text(encoding="utf-8"); log("codegen: 复用", code_path.name)
     else:
         log(f"codegen ({backend}): 生成中…")
-        code, meta = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof))
+        code, meta = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="off")
         m = re.search(r"```(?:\w+)?\n(.*?)```", code, re.S)
         code = (m.group(1) if m else code).strip()
         if len(code) < 200:
@@ -148,7 +195,7 @@ def main() -> int:
             backend, decision["backend"] = "web_2d", "WEB_2D"
             if not (wd / "code" / "index.html").exists():
                 log("codegen: 回退 web_2d 重新生成…")
-                code, _ = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof))
+                code, _ = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="off")
                 m = re.search(r"```(?:\w+)?\n(.*?)```", code, re.S)
                 (wd / "code" / "index.html").write_text((m.group(1) if m else code).strip(), encoding="utf-8")
 
@@ -164,7 +211,7 @@ def main() -> int:
         if round_i >= args.repair_rounds:
             log("repair 轮次耗尽，终止"); return 1
         log(f"repair round {round_i + 1}…")
-        fixed, _ = llm.call(args.model, prompts.repair_prompt(decision, code, errors, "（帧证据见 qa_report）"))
+        fixed, _ = llm.call(args.model, think="off", messages=prompts.repair_prompt(decision, code, errors, "（帧证据见 qa_report）"), think="off")
         m = re.search(r"```(?:\w+)?\n(.*?)```", fixed, re.S)
         if m:
             code = m.group(1).strip(); code_path.write_text(code, encoding="utf-8")
@@ -177,7 +224,7 @@ def main() -> int:
     log("qa:", "PASS" if report["pass"] else "FAIL", json.dumps(report["checks"].get("frame_variance", {}), ensure_ascii=False)[:120])
     if not report["pass"] and args.repair_rounds > 0 and not report["checks"]["frame_variance"]["pass"]:
         log("qa: 空帧率超标 → repair…")
-        fixed, _ = llm.call(args.model, prompts.repair_prompt(
+        fixed, _ = llm.call(args.model, think="off", messages=prompts.repair_prompt(
             decision, code,
             [{"kind": "frame", "message": f"blank_frames={report['checks']['frame_variance']['blank_frames']} — 大量帧接近纯色，元素疑似未绘制"}],
             "qa_sheet.jpg"))

@@ -15,6 +15,21 @@ ENDPOINTS = {
 }
 
 
+def _key_for(key_env: str) -> str:
+    """环境变量优先；缺失时从用户注册表兜底（harness pwsh 不继承 User env——
+    2026-10-06 教训：空 Bearer 报的也是 401"令牌已过期或验证不正确"，勿误诊为 key 失效）。"""
+    k = os.environ.get(key_env, "")
+    if k:
+        return k
+    try:
+        import winreg
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as rk:
+            v, _ = winreg.QueryValueEx(rk, key_env)
+            return v
+    except OSError:
+        return k
+
+
 def _post(url: str, key: str, payload: dict, timeout: int = 1800):
     req = urllib.request.Request(url, data=json.dumps(payload).encode(),
                                  headers={"Authorization": "Bearer " + key,
@@ -24,16 +39,19 @@ def _post(url: str, key: str, payload: dict, timeout: int = 1800):
 
 
 def call(model: str, messages: list, *, max_tokens: int = 65536,
-         temperature: float | None = None, effort: str | None = None) -> tuple[str, dict]:
-    """返回 (content, usage)。重试策略内建；烧穿（finish=length 且 0 内容）返回 ('', meta) 由上层裁决。"""
+         temperature: float | None = None, effort: str | None = None,
+         think: str | None = None) -> tuple[str, dict]:
+    """返回 (content, usage)。think: None=环境默认 / 'on'|'off'|'budget' 逐调用覆盖。
+    2026-10-06 实验矩阵（KP-004 定稿）：coding 端点代码任务 thinking 必烧穿（与 prompt
+    大小无关，271tok 也烧）；通用端点有 low/high/max 旋钮但 coding key 无余额(1113)。
+    → 生产=分相：storyboard/decide 开，codegen/repair 关。"""
     url, key_env, model_id = ENDPOINTS[model]
-    key = os.environ.get(key_env, "")
+    key = _key_for(key_env)
     payload = {"model": model_id, "messages": messages, "max_tokens": max_tokens}
     if temperature is not None:
         payload["temperature"] = temperature
     if model == "glm":
-        # KP-004：thinking 策略可由环境强制；默认代码任务关（安全），GLM_THINK=on 为首选实验位
-        policy = os.environ.get("GLM_THINK", "off").lower()
+        policy = (think or os.environ.get("GLM_THINK", "off")).lower()
         if policy == "on":
             pass  # 端点默认 thinking，不传字段
         elif policy == "budget":
@@ -53,6 +71,10 @@ def call(model: str, messages: list, *, max_tokens: int = 65536,
             return content, meta
         except urllib.error.HTTPError as e:
             body = e.read().decode("utf-8", "replace")[:300]
+            if "1113" in body or "余额不足" in body:
+                raise RuntimeError("1113 余额不足/无资源包（该端点对此 key 不可用，不重试）") from e
+            if "1210" in body:
+                raise RuntimeError(f"1210 参数被拒（always-thinking 模型不吃该参数）: {body[:120]}") from e
             if e.code in (429, 500, 502, 503, 504):
                 wait = 900 if "1308" in body or "上限" in body else 75   # 教训：1308 报文不含 quota 字样
                 print(f"[llm] HTTP {e.code} {body[:80]} — sleep {wait}s")
