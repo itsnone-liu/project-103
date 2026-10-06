@@ -16,6 +16,7 @@
 
 - `self.play(Create(m), run_time=2, rate_func=smooth)`；`self.wait(1)` 单位是秒
 - `Transform(a, b)` 保留原对象句柄；连续变换用 `ReplacementTransform` 或 `FadeTransform`
+- 旋转/缩放锚点参数是 **about_point=**（没有 `about_point_axis`，幻觉高发，capital2 实证）
 - `m.animate.shift(RIGHT * 2).set_color(RED)` 链式
 - `Indicate / Flash / Circumscribe / FocusOn` 强调动效现成
 - 场景总时长必须 = timing total（wait 补齐到秒）
