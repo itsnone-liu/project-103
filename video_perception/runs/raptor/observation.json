@@ -1,0 +1,66 @@
+{
+  "shot_id": "R1",
+  "source": "oneshotted.io/v/interactive-3d-raptor-3-rocket-engine-webgl-model",
+  "start": 0, "end": 34.7,
+  "frames": "uniform 0.5s×70 + 12 sheets（00/02/04/06/08/10 观察）",
+  "meta_facts": {"duration": 34.7, "fps": 60, "resolution": "1280x720", "audio": "无音轨"},
+  "objects": [
+    {"id": "engine_model_3d", "kind": "other", "first_visible": 0, "last_visible": 34.7,
+     "position_changes": [
+       {"ts": 0, "where": "完整装配，水平放置于黑黄支架，喷口朝右", "color": "银灰金属高光"},
+       {"ts": 6.0, "where": "剖切视图：内部涡轮泵/燃烧室暴露", "color": "内部件彩色（青蓝/橙黄/紫红）"},
+       {"ts": 13.0, "where": "泵壳开始沿轴向左移分离", "color": "分离壳体变浅灰半透明"},
+       {"ts": 14.0, "where": "两泵壳完全脱离转子，最大分离位", "color": "同上"},
+       {"ts": 18.5, "where": "剖切关闭→外观完整模型，视角右移后退"},
+       {"ts": 24.0, "where": "爆炸图：涡轮泵与喷管分离同轴线", "color": "喉部淡紫辉光"},
+       {"ts": 31.0, "where": "爆炸图收拢", "size_change": "喷管左移合拢"},
+       {"ts": 31.5, "where": "近景特写涡轮泵，圆形展台，低角度", "size_change": "放大"},
+       {"ts": 32.5, "where": "逆时针转台旋转约30°+，展台蓝色光带"}
+     ]},
+    {"id": "plume", "kind": "other", "first_visible": 0.5, "last_visible": 20.5,
+     "position_changes": [
+       {"ts": 0.5, "where": "喷口淡紫羽流，长约1.5×喷径"},
+       {"ts": 1.0, "where": "增长至2.5×，亮度增，中段两个固定亮斑"},
+       {"ts": 18.5, "where": "白→紫→淡蓝锥形"},
+       {"ts": 20.0, "where": "无（消失）"}]},
+    {"id": "pipe_flows", "kind": "other",
+     "position_changes": [
+       {"ts": 12.0, "where": "两条主管路白色微粒流右向"},
+       {"ts": 13.0, "where": "氧化剂路粒子中断（对应壳体分离）"},
+       {"ts": 14.5, "where": "全部消失"},
+       {"ts": 18.0, "where": "燃料路橙黄线+光点右行；氧化剂蓝白虚线+光点下行；冷却回路绿线+光点右行"},
+       {"ts": 20.0, "where": "全部消失"},
+       {"ts": 24.0, "where": "白粒子右向+青色粒子+红点流从燃烧室侧壁斜下射出"},
+       {"ts": 31.5, "where": "泵入口两股对称白色薄雾"}]},
+    {"id": "ui_panel", "kind": "text", "first_visible": 0,
+     "position_changes": [
+       {"ts": 0, "where": "右上：Focus标签组(All/Oxygen/Methane/Fire/Exhaust)、滑杆(100%)、按钮组(Test Run/Valve/Vacuum/White/Colour/Extended)"},
+       {"ts": 8.5, "where": "Oxygen 标签悬停高亮（浅蓝底）；Expanded 按钮悬停"},
+       {"ts": 24.0, "where": "Turbopump 标签高亮；Thrust 滑杆~70%；Engine 激活态；左下数值 281.17 kN / 345 bar / 799 kg/s"},
+       {"ts": 24.5, "where": "数值更新 285.17 kN / 348 bar"},
+       {"ts": 30.0, "where": "Running 绿色按钮；滑杆 Oxygen:48 / Fuel gas:79 / Thrust:100%"}]},
+    {"id": "title_text", "kind": "text", "first_visible": 0,
+     "position_changes": [
+       {"ts": 0, "where": "AIRSUP / Inside the Raptor 3 / 长段说明文字 / 280 kT | 250 bar | 600 kg/s"},
+       {"ts": 30.5, "where": "标题变为 One shaft, two jobs"}]},
+    {"id": "nav_tabs", "kind": "text", "ocr": "Raptor 1(灰)/Raptor 2(灰)/Raptor 3(蓝高亮)/TurboPump(灰)；底部箭头；X Follow；水印 airsup.ai/rocket-engine"}
+  ],
+  "motion_events": [
+    {"ts": 0.5, "subject": "plume", "what_changed": "喷口出现并增长的锥形羽流", "evidence": ["f_0000.00", "f_0000.50", "f_0010.0(sheet00格3)"]},
+    {"ts": 13.0, "subject": "pump_housings", "what_changed": "泵壳沿轴左移，逐步脱离转子；变半透明", "evidence": ["f_0012.50", "f_0013.00", "f_0013.50", "f_0014.00", "f_0014.50"]},
+    {"ts": 13.0, "subject": "pipe_flows", "what_changed": "部件分离同时对应管路粒子流中断→消失", "evidence": ["f_0012.50", "f_0013.00", "f_0014.50"]},
+    {"ts": 18.5, "subject": "engine_model_3d", "what_changed": "剖切↔外观切换 + 视角右移后退", "evidence": ["f_0018.00", "f_0018.50", "f_0019.00"]},
+    {"ts": 31.5, "subject": "engine_model_3d", "what_changed": "收拢→特写→转台逆时针旋转", "evidence": ["f_0031.00", "f_0031.50", "f_0032.00", "f_0032.50"]}
+  ],
+  "scene_changes": [],
+  "camera_observations": [
+    {"ts": 18.5, "fact": "视角偏航增大+相机后退（模型相对变小）"},
+    {"ts": 24.5, "fact": "相机轻微右移约0.5°"},
+    {"ts": 31.5, "fact": "切近景低角度仰视+模型自身转台旋转（相机固定）"}],
+  "audio_chapter_hypothesis": [],
+  "open_questions": [
+    "t=8.5 与 t=30+ 的 UI 标签组文字不完全一致（Test Run/Valve/Vacuum vs Reset/Start-Stop/Catalyst）——UI 随模式换组还是 OCR 漂移，需全分辨率单帧核对",
+    "0-1s 羽流出现时是否有滑杆动作（点火由 Test Run 按钮还是滑杆触发）",
+    "数值持续小幅更新（281.17→285.17 kN）是实时仿真状态还是动画伪装"
+  ]
+}
