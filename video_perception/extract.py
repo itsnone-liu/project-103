@@ -43,10 +43,16 @@ def scene_changes(video, t0, t1, threshold=0.22):
     return pts
 
 
-def activity(video, out_dir, t0, t1, sample_fps=6, cell=48, native_fps=24):
+def activity(video, out_dir, t0, t1, sample_fps=6, cell=48, native_fps=None):
     """帧差分活动度曲线：原速小帧 PNG → Python 子采样 → 灰度差均值 → {ts: score}。
-    （bundled ffmpeg 无 rawvideo muxer / fps 滤镜，全部 Python 侧处理。）"""
+    （bundled ffmpeg 无 rawvideo muxer / fps 滤镜，全部 Python 侧处理。）
+    native_fps 缺省自动 probe（2026-10-06 raptor 盲测：60fps 视频撞 24 假设时间戳全错）。"""
     from PIL import Image
+    if native_fps is None:
+        import probe
+        native_fps = probe.meta(video)["fps"]
+        if not native_fps or native_fps <= 0:
+            native_fps = 24
     out = Path(out_dir)
     adir = out / "_activity"; adir.mkdir(parents=True, exist_ok=True)
     for old in adir.glob("*.png"):
