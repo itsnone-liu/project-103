@@ -35,10 +35,12 @@ def render(workdir: Path, timing: dict, *, scene_py: Path | None = None) -> dict
     media = workdir / "out" / "media"
     r = subprocess.run([env["python"], "-m", "manim", "-ql", "--disable_caching",
                         "--media_dir", str(media), str(scene_py), "P103Scene"],
-                       capture_output=True, text=True, timeout=1800)
+                       capture_output=True, timeout=1800,
+                       encoding="utf-8", errors="replace")
     videos = sorted(media.glob("videos/**/*.mp4"))
     if r.returncode != 0 or not videos:                     # KP-003：exit + stderr 通道
-        return {"ok": False, "errors": [{"kind": "render", "message": (r.stderr or r.stdout)[-600:]}]}
+        tail = (r.stderr or r.stdout or "")[-600:] or f"exit={r.returncode}, no video"
+        return {"ok": False, "errors": [{"kind": "render", "message": tail}]}
     return {"ok": True, "video": str(videos[-1]), "meta": {"manim": env["version"]}}
 
 
