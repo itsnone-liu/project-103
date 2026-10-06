@@ -224,6 +224,9 @@ def main() -> int:
     # ---------- qa ----------
     report = qa.check(video, timing, wd)
     log("qa:", "PASS" if report["pass"] else "FAIL", json.dumps(report["checks"].get("frame_variance", {}), ensure_ascii=False)[:120])
+    if not report["checks"]["duration"]["pass"]:
+        log(f"qa: 时长闸门未过 {report['checks']['duration']} —— 禁止 mux（防分段误抓/渲染截断）")
+        return 1
     if not report["pass"] and args.repair_rounds > 0 and not report["checks"]["frame_variance"]["pass"]:
         log("qa: 空帧率超标 → repair…")
         fixed, _ = llm.call(args.model, think="off", messages=prompts.repair_prompt(
