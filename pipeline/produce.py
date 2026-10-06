@@ -208,6 +208,8 @@ def main() -> int:
             log(f"render: OK → {Path(res['video']).name}"); break
         errors = res["errors"]
         log(f"render: FAIL ({len(errors)} errors)"); log("  ", *errors[:3])
+        if all(e.get("kind") == "env" for e in errors):
+            log("环境类错误（代码修不了，不烧 repair 轮）"); return 1
         if round_i >= args.repair_rounds:
             log("repair 轮次耗尽，终止"); return 1
         log(f"repair round {round_i + 1}…")
