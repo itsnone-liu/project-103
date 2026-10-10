@@ -36,9 +36,7 @@ async function init() {
   $("#lesson-title").textContent = lesson.title;
 
   video.src = `${PKG}/${lesson.video}`;
-  const tr = document.createElement("track");
-  tr.src = `${PKG}/${lesson.transcript}`; tr.kind = "subtitles"; tr.srclang = "zh"; tr.label = "中文"; tr.default = true;
-  video.appendChild(tr);
+  // 字幕：原片画面已自带底部旁白面板，不再叠加 VTT 渲染（transcript.vtt 留在 Package 里供 AI1 上下文/平台字幕用）
 
   $("#video-meta").innerHTML =
     `<span>⏱ ${Math.round(lesson.duration)}s</span><span>🎯 ${cues.length} 个互动点</span>` +
