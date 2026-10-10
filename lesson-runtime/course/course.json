@@ -1,0 +1,20 @@
+{
+  "schema": "course-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "title": "环境心理学·互动课件（单课测试）",
+  "version": "0.1",
+  "chapters": [
+    {
+      "chapter_id": "chapter-06",
+      "title": "第六章 空间行为",
+      "lessons": [
+        {
+          "lesson_id": "lesson-t1-personal-space",
+          "title": "看不见的气泡——个人空间与人际距离（6.1）",
+          "duration": 348.6,
+          "package": "course/chapter-06/lesson-t1-personal-space"
+        }
+      ]
+    }
+  ]
+}

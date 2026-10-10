@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>环境心理学 · Web Lesson Runtime（测试）</title>
+<link rel="stylesheet" href="runtime.css">
+</head>
+<body>
+<header id="crumb">
+  <span id="course-title">课程加载中…</span>
+  <span class="sep">›</span><span id="chapter-title"></span>
+  <span class="sep">›</span><b id="lesson-title"></b>
+  <span id="phase-badge" title="对应讨论稿 Phase I1/I2-lite/I4：播放+自动暂停+题型卡片+摘要+疑问标记，全程 0 token">Runtime MVP · 0-token 播放</span>
+</header>
+
+<main id="layout">
+  <!-- ── 左：视频主轨（稳定区，不遮挡） ── -->
+  <section id="video-pane">
+    <div id="video-wrap">
+      <video id="video" controls preload="metadata" playsinline></video>
+      <div id="ask-fab" title="在当前时间点标记疑问（不暂停，不调 AI）">我有疑问 <b id="ask-count">0</b></div>
+      <div id="toast"></div>
+    </div>
+    <div id="timeline-bar"></div>
+    <div id="video-meta"></div>
+  </section>
+
+  <!-- ── 右：内容卡片区（动态区） ── -->
+  <aside id="cards">
+    <div id="cue-card" class="card hidden">
+      <div class="card-tag" id="cue-tag">互动</div>
+      <div class="q" id="cue-q"></div>
+      <div id="cue-body"></div>
+      <div id="cue-feedback"></div>
+      <div class="row">
+        <button id="cue-submit" class="btn primary">提交</button>
+        <button id="cue-skip" class="btn ghost">稍后再答，继续播放</button>
+      </div>
+    </div>
+
+    <div class="card" id="kp-card">
+      <div class="card-tag gold">本节结构</div>
+      <div id="kp-list"></div>
+      <div class="card-tag gold" style="margin-top:14px">知识点</div>
+      <div id="kp-points" class="chips"></div>
+    </div>
+
+    <div class="card" id="sum-card">
+      <div class="card-tag">本节摘要 <span class="dim">（summary.json · 0 token）</span></div>
+      <div id="sum-body"></div>
+    </div>
+
+    <div class="card" id="qa-card">
+      <div class="card-tag gold">我的疑问 <b id="qa-count2">0</b></div>
+      <div id="qa-list" class="dim">暂无。看视频时随时点左下角「我有疑问」，看完后在这里统一向 AI 提问。</div>
+      <button id="qa-preview-btn" class="btn ghost" style="margin-top:10px">预览将发给课后 AI 的上下文（Phase AI1 演示 · 不真正调用）</button>
+      <pre id="qa-preview" class="hidden"></pre>
+    </div>
+
+    <div class="card" id="ans-card">
+      <div class="card-tag">答题记录</div>
+      <div id="ans-list" class="dim">暂无</div>
+    </div>
+  </aside>
+</main>
+
+<footer id="navbar">
+  <button id="prev-btn" class="btn ghost" disabled>‹ 上一课</button>
+  <div id="progress-line"><i id="progress-fill"></i><span id="progress-text">0%</span></div>
+  <button id="next-btn" class="btn ghost" disabled>下一课 ›</button>
+</footer>
+
+<script src="runtime.js"></script>
+</body>
+</html>

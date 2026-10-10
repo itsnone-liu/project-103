@@ -82,7 +82,7 @@ td,th{border:1px solid #2a3540;padding:4px 10px;text-align:left}th{color:#8fb}</
 <video controls preload="metadata" src="/glm.mp4"></video>
 <p class="meta">277.8s · 40 句 · model=glm（不占 sol 额度）· QA PASS · 自动 repair 1 轮 · storyboard 29,183 tok + codegen 65,321 tok<br>
 设计语言规范蒸馏进 brief 后 GLM 全项复刻成功：深蓝底/青绿强调/扁平图解/旁白面板/页码骨架 5/5 一致；分镜 Math-check 20+ 条；基钦 1994 五功能页完整。<b>结论：种子→扩散路线成立，可放量。</b></p>
-<p class="meta"><a href="/glm-storyboard.md">GLM storyboard</a> · <a href="/tts.html">🔊 TTS 音色 A/B 试听页</a></p>
+<p class="meta"><a href="/glm-storyboard.md">GLM storyboard</a> · <a href="/tts.html">🔊 TTS 音色 A/B 试听页</a> · <a href="http://100.84.28.40:8862/?p=course/chapter-06/lesson-t1-personal-space">🎮 互动课件 Runtime 测试页（T1 单课）</a></p>
 </body></html>"""
 
 TTS_PAGE = """<!doctype html><meta charset="utf-8"><title>TTS 音色 A/B</title>
