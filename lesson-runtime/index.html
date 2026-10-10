@@ -19,8 +19,11 @@
   <section id="video-pane">
     <div id="video-wrap">
       <video id="video" controls preload="metadata" playsinline></video>
-      <div id="ask-fab" title="在当前时间点标记疑问（不暂停，不调 AI）">我有疑问 <b id="ask-count">0</b></div>
       <div id="toast"></div>
+    </div>
+    <div id="video-tools">
+      <button id="ask-fab" title="在当前时间点标记疑问（不暂停，不调 AI）">❓ 我有疑问 <b id="ask-count">0</b> <span class="dim" id="ask-at">@ 00:00</span></button>
+      <span class="dim" id="ask-hint">随时点一下，记下这个时间点的疑问；看完视频在右侧统一向 AI 提问</span>
     </div>
     <div id="timeline-bar"></div>
     <div id="video-meta"></div>

@@ -191,6 +191,7 @@ function wireProgress() {
   video.addEventListener("timeupdate", () => {
     $("#progress-fill").style.width = `${(video.currentTime / lesson.duration) * 100}%`;
     $("#progress-text").textContent = `${Math.round((video.currentTime / lesson.duration) * 100)}% · ${fmt(video.currentTime)}`;
+    $("#ask-at").textContent = `@ ${fmt(video.currentTime)}`;
     store.set(`pg:${lesson.lesson_id}`, { lastTime: video.currentTime, completed: video.ended });
   });
   video.addEventListener("ended", () => { store.set(`pg:${lesson.lesson_id}`, { lastTime: lesson.duration, completed: true }); toast("本节完成 ✔ 摘要与疑问卡在右侧"); });
