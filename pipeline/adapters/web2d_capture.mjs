@@ -27,11 +27,20 @@ try {
   page.on('console', m => { if (m.type() === 'error') errors.push({ kind: 'console', message: m.text().slice(0, 300) }); });
   await page.goto('file:///' + html.replace(/\\/g, '/'), { waitUntil: 'load', timeout: 30000 });
   await page.waitForFunction('window.P103 && typeof window.P103.renderFrame === "function"', { timeout: 15000 });
+  // 竞态防御：取消页面自驱动的 rAF/定时器循环（如"本地预览"），它们会在
+  // renderFrame(t) 与 screenshot 之间用自有时钟重绘画布，污染捕获帧。
+  await page.evaluate(() => {
+    for (let id = 1; id < 100000; id++) { window.cancelAnimationFrame(id); window.clearInterval(id); window.clearTimeout(id); }
+  });
 
   const spec = await page.evaluate(() => ({ ...window.P103, renderFrame: null }));
   const duration = argv.duration ? +argv.duration : (spec.duration || 0);
   if (!duration || duration <= 0) throw new Error('P103.duration 缺失/非法');
   const fpsEff = spec.fps || fps, w = spec.width || 1920, h = spec.height || 1080;
+  // Match capture viewport to declared frame size; center-aligned preview layouts
+  // otherwise get cropped by the old fixed 1920x1080 viewport clip.
+  await page.setViewport({ width: w, height: h });
+  await page.addStyleTag({ content: `html,body{width:${w}px!important;height:${h}px!important;min-height:0!important;margin:0!important;padding:0!important;display:block!important;overflow:hidden!important} canvas#stage{position:absolute!important;left:0!important;top:0!important;width:${w}px!important;height:${h}px!important;max-width:none!important;box-shadow:none!important} .cap{display:none!important}` });
   const n = Math.max(1, Math.round(duration * fpsEff));
 
   for (let i = 0; i < n; i++) {

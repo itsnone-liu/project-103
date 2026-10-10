@@ -1,0 +1,28 @@
+# 环境心理学课程 production-profile（5 分钟长片系列，2026-10-10）
+# 用法: python -m pipeline.produce <workdir> --topic <brief.md> --model sol --profile profiles/envpsy.profile.yaml
+
+mode: PROJECT_ROUTE
+
+visual:
+  style: clean_vector
+  style_pack: null
+
+backend:
+  preferred: null
+  allowed:
+    - web_2d
+    - manim
+
+narration:
+  sentences: 35-45 句
+  duration: 约 280-320 秒（约 5 分钟）
+  note: 主题文件含分节时长预算与必讲内容清单；句数服从总时长目标；单一主概念+支撑点的节奏，不做赶稿式堆砌。
+
+storyboard:
+  pacing: medium
+  intro_max_seconds: 25
+
+knowledge:
+  use_project_cases: true
+  use_global_success_cases: false
+  use_failure_memory: true

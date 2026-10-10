@@ -11,7 +11,9 @@ BACKENDS = {
         "capabilities": "SVG / Canvas 2D / GSAP / HTML+CSS / 现代 motion graphics；任意视觉风格；文字排版最强",
         "limitations": "几何精度取决于自绘代码质量；无自带数学对象",
         "contract": "交付单个自包含 index.html（无网络依赖），实现 window.P103 = {duration, fps, width, height, renderFrame(t)}。"
-                    "renderFrame(t) 必须纯函数式按 t 重建整帧（state=F(t)），返回 true；禁止真实时钟/未种子化随机。",
+                    "renderFrame(t) 必须纯函数式按 t 重建整帧（state=F(t)），返回 true；禁止真实时钟/未种子化随机。"
+                    "禁止任何自驱动渲染循环（requestAnimationFrame/setInterval/setTimeout 反复调用 render 或 renderFrame，含所谓'本地预览'）——"
+                    "捕获器外部驱动 renderFrame(t)，页面自驱动画布重绘会与截图竞态、污染捕获帧。",
         "pitfall_tags": ["web_2d", "generic"],
     },
     "manim": {

@@ -11,3 +11,5 @@
 | `project-routes/` | 项目级固定生产路线 | 仅 PROJECT_ROUTE |
 
 准入纪律（§15）：任何一条成功经验不得因一次成功升格为全局规则。
+
+近期案例：`success-cases/EXTERNAL-moyun-living-rice-paper-2026-10.md` 是外部作品考据；`success-cases/PROJECT-moyun-birthday-user-review-2026-10.md` 记录 103《岁添一枝春》两组 MP4 的用户审片（效果不错；逗号多余、下次可试琴音；本版不改）。两者均为条件性参考，**不是**全局默认注入，也不能据单次两臂对照宣称知识库有效。

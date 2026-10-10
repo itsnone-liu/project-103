@@ -10,7 +10,10 @@ import json, os, time, urllib.request, urllib.error
 from pathlib import Path
 
 ENDPOINTS = {
-    "luna": ("http://127.0.0.1:8080/v1/chat/completions", "LUNA_API_KEY", "gpt-6-luna"),
+    # codex 代理两个模型共用一个 key：用户注册表实测只有 CODEX_PROXY_API_KEY
+    # （LUNA_API_KEY 从未设置——2026-10-10 修正，此前 401 的根因）
+    "luna": ("http://127.0.0.1:8080/v1/chat/completions", "CODEX_PROXY_API_KEY", "gpt-6-luna"),
+    "sol":  ("http://127.0.0.1:8080/v1/chat/completions", "CODEX_PROXY_API_KEY", "gpt-6-sol"),
     "glm":  ("https://open.bigmodel.cn/api/coding/paas/v4/chat/completions", "GLM_API_KEY", "glm-5.3"),
 }
 
@@ -61,7 +64,7 @@ def call(model: str, messages: list, *, max_tokens: int = 65536,
             payload["reasoning_effort"] = "low"   # codegen 档：有思考且收敛
         else:
             payload["thinking"] = {"type": "disabled"}
-    if effort and model == "luna":
+    if effort and model in ("luna", "sol"):
         payload["reasoning_effort"] = effort
     for attempt in range(6):
         try:

@@ -1,0 +1,26 @@
+# T3 学科史专用 profile：绪论 3 分钟规格（v2 裁决：绪论可短）
+mode: PROJECT_ROUTE
+
+visual:
+  style: clean_vector
+  style_pack: null
+
+backend:
+  preferred: null
+  allowed:
+    - web_2d
+    - manim
+
+narration:
+  sentences: 22-26 句
+  duration: 约 170-190 秒（约 3 分钟）
+  note: 学科史叙事型（T3）：时间轴推进 + 人物/事件卡 + 风格化场景插画；年代数字是骨架锚点，所有年份必须与 Parameters 一致；史实句凝练（单句 15-22 字），总计约 500-560 字。
+
+storyboard:
+  pacing: medium
+  intro_max_seconds: 20
+
+knowledge:
+  use_project_cases: true
+  use_global_success_cases: false
+  use_failure_memory: true

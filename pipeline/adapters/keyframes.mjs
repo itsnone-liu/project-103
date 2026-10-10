@@ -23,6 +23,10 @@ try {
   page.on('console', m => { if (m.type() === 'error') errors.push({ kind: 'console', message: m.text().slice(0, 300) }); });
   await page.goto('file:///' + html.replace(/\\/g, '/'), { waitUntil: 'load', timeout: 30000 });
   await page.waitForFunction('window.P103 && typeof window.P103.renderFrame === "function"', { timeout: 15000 });
+  // 竞态防御：取消页面自驱动 rAF/定时器（同 web2d_capture）。
+  await page.evaluate(() => {
+    for (let id = 1; id < 100000; id++) { window.cancelAnimationFrame(id); window.clearInterval(id); window.clearTimeout(id); }
+  });
   for (const t of times) {
     let ok;
     try { ok = await page.evaluate(tt => window.P103.renderFrame(tt), t); }

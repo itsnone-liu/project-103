@@ -28,21 +28,27 @@ def _pitfalls(tags: list[str]) -> str:
 
 
 def storyboard_prompt(topic: str, profile: dict) -> list[dict]:
-    """分镜=内容+旁白+数学，渲染器中立。视觉设计留给 decide/codegen 阶段。"""
+    """分镜=内容+旁白+数学，渲染器中立。视觉设计留给 decide/codegen 阶段。
+    旁白规格可由 profile["narration"] 覆盖（sentences/duration/note），
+    缺省 8-12 句 / 20-35 秒（envpsy 5 分钟长片走 profile 覆盖）。"""
     pk = ""
     if (profile.get("visual") or {}).get("style_pack"):
         pk = "\n风格要求：本项目指定手绘风格包（细节在后续代码阶段提供）。\n"
+    nar = profile.get("narration") or {}
+    sentences = nar.get("sentences", "8-12 句")
+    duration = nar.get("duration", "约 20-35 秒")
+    note = f"\n{nar['note']}" if nar.get("note") else ""
     return [{"role": "user", "content": f"""你是教学视频编剧。为主题写分镜脚本——只管内容、旁白与数学，不管视觉实现（视觉在后续阶段由设计决策独立完成）。
 
 主题/教学内容：
 {topic}
 
 输出（纯文本，严格遵守）：
-1. `## Narration` 段：中文旁白，每行一句并编号（1. 2. 3. …），8-12 句，口语化、可直接朗读，总朗读时长约 20-35 秒。
+1. `## Narration` 段：中文旁白，每行一句并编号（1. 2. 3. …），{sentences}，口语化、可直接朗读，总朗读时长{duration}。
 2. `## Parameters` 段：本题全部数学量的精确值（坐标/角度/长度/数值），带单位，供代码阶段直接使用与审计。
 3. `## Math-check` 段：一行一个可机器验证的事实（如 三角度之和=180），供数学审计。
 
-约束：数学必须自洽（Parameters 里的数值经得起重算）；旁白句即 TTS 单位；不要描述任何视觉/动画实现细节。{pk}"""}]
+约束：数学必须自洽（Parameters 里的数值经得起重算）；旁白句即 TTS 单位；不要描述任何视觉/动画实现细节。{pk}{note}"""}]
 
 
 def decision_prompts(topic: str, storyboard: str, profile: dict, blind: bool = False) -> list[list[dict]]:

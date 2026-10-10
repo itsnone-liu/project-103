@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>岁添一枝春 · 103 ASSISTED</title>
+<!--
+  103 · experiments/moyun-birthday · ASSISTED 臂（assisted = 额外收到外部知识卡，REFERENCE ONLY / NON-BINDING）
+  分镜（用户已确认）：墨滴洇开 → 梅枝生长 → 朱砂红梅绽放；画面唯一文字「岁岁欢喜，年年胜意」；无音频（纸墨音效由父级统一混轨）。
+  Harness 契约：window.P103 = { duration:12, fps:24, width:1280, height:720, renderFrame(t) }
+    - renderFrame(t)：t∈[0,12] 秒，纯函数、确定性（同 t 必得同像素）；任何外部调用会永久停掉本页的自动预览循环。
+    - 无网络、无外部资源、无 Date/wall-clock/Math.random 出现在渲染路径；
+      种子 PRNG（mulberry32，固定种子）仅用于加载期一次性静态预计算（宣纸纤维、枝条抖动、花位排布）。
+  参考来源：knowledge/success-cases/EXTERNAL-moyun-living-rice-paper-2026-10.md —— 只参考“活宣纸/墨渗”质感思路，
+  不照抄原作者山水元素：本片刻意不含远山/松/水/船/朱砂日/题诗/印章；技术栈自选 Canvas2D（卡片不绑定 WebGL）。
+-->
+<style>
+  html,body{margin:0;padding:0;min-height:100vh;background:#262320;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+  canvas{width:min(96vw,1280px);height:auto;aspect-ratio:16/9;box-shadow:0 22px 60px rgba(0,0,0,.5);background:#f6f1e3;display:block}
+  .cap{color:#8d857a;font:12px/1.6 system-ui,"Segoe UI","Microsoft YaHei",sans-serif;letter-spacing:.08em;user-select:none}
+</style>
+</head>
+<body>
+<canvas id="stage" width="1280" height="720" aria-label="墨滴洇开，梅枝生长，朱砂红梅绽放，题字岁岁欢喜年年胜意"></canvas>
+<div class="cap">103 ASSISTED · 自动画预览（12s 循环）· 采集端请调用 window.P103.renderFrame(t)（首次外部调用即停预览）· 加 ?still 可禁预览</div>
+<script>
+(() => {
+'use strict';
+
+/* ================= 常量与确定性工具 ================= */
+const W = 1280, H = 720, DUR = 12;
+const BC = { x: 430, y: 470 };              // 墨滴落点 / 梅枝根部
+const clamp01 = p => p < 0 ? 0 : p > 1 ? 1 : p;
+const lerp = (a, b, p) => a + (b - a) * p;
+const smooth = (a, b, x) => { const p = clamp01((x - a) / (b - a)); return p * p * (3 - 2 * p); };
+const smooth01 = p => { p = clamp01(p); return p * p * (3 - 2 * p); };
+const easeOutBack = p => { const c = 1.70158, q = p - 1; return 1 + (c + 1) * q * q * q + c * q * q; };
+const TAU = Math.PI * 2;
+
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const Rpaper = mulberry32(20261009); // 纸纹
+const Rgeo   = mulberry32(77123);    // 枝条/溅墨
+const Rflora = mulberry32(97531);    // 花朵排布
+
+/* ================= 静态预计算：宣纸 ================= */
+const paper = document.createElement('canvas');
+paper.width = W; paper.height = H;
+{
+  const c = paper.getContext('2d');
+  c.fillStyle = '#f6f1e3'; c.fillRect(0, 0, W, H);
+  for (let i = 0; i < 46; i++) {                 // 大块洇渍（暖/冷交替，极淡）
+    const x = Rpaper() * W, y = Rpaper() * H, r = 60 + Rpaper() * 180;
+    const g = c.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, Rpaper() < 0.5 ? 'rgba(214,197,160,0.05)' : 'rgba(255,252,240,0.05)');
+    g.addColorStop(1, 'rgba(255,252,240,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill();
+  }
+  for (let i = 0; i < 420; i++) {                // 纤维丝
+    const x = Rpaper() * W, y = Rpaper() * H, a = Rpaper() * Math.PI, l = 8 + Rpaper() * 46;
+    c.strokeStyle = Rpaper() < 0.5 ? 'rgba(190,175,140,0.05)' : 'rgba(255,255,248,0.06)';
+    c.lineWidth = 0.6 + Rpaper() * 0.7;
+    c.beginPath(); c.moveTo(x, y); c.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); c.stroke();
+  }
+  for (let i = 0; i < 260; i++) {                // 纸点
+    c.fillStyle = 'rgba(120,105,80,' + (0.03 + Rpaper() * 0.05).toFixed(3) + ')';
+    c.fillRect(Rpaper() * W, Rpaper() * H, 1, 1);
+  }
+  const vg = c.createRadialGradient(W / 2, H * 0.46, H * 0.25, W / 2, H / 2, W * 0.62);
+  vg.addColorStop(0, 'rgba(80,66,40,0)');
+  vg.addColorStop(1, 'rgba(80,66,40,0.10)');
+  c.fillStyle = vg; c.fillRect(0, 0, W, H);
+}
+
+/* ================= 静态预计算：梅枝骨架 ================= */
+function bezier(p0, p1, p2, p3, n) {
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, u = 1 - t;
+    pts.push({
+      x: u * u * u * p0.x + 3 * u * u * t * p1.x + 3 * u * t * t * p2.x + t * t * t * p3.x,
+      y: u * u * u * p0.y + 3 * u * u * t * p1.y + 3 * u * t * t * p2.y + t * t * t * p3.y
+    });
+  }
+  return pts;
+}
+function jitter(pts, amp) {                      // 沿法向的平滑随机抖动（枯笔手感）
+  let off = 0; const out = [];
+  for (let i = 0; i < pts.length; i++) {
+    off = off * 0.72 + (Rgeo() - 0.5) * 1.2 * amp;
+    const prev = pts[Math.max(i - 1, 0)], next = pts[Math.min(i + 1, pts.length - 1)];
+    let dx = next.x - prev.x, dy = next.y - prev.y;
+    const L = Math.hypot(dx, dy) || 1; dx /= L; dy /= L;
+    out.push({ x: pts[i].x - dy * off, y: pts[i].y + dx * off });
+  }
+  return out;
+}
+function mkBranch(pts, w0, w1) {
+  const cum = [0]; let L = 0;
+  for (let i = 1; i < pts.length; i++) {
+    L += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y); cum.push(L);
+  }
+  return {
+    pts, cum, L, w0, w1,
+    alphas: pts.map(() => 0.80 + Rgeo() * 0.15),
+    sides:  pts.map(() => (Rgeo() < 0.75 ? (Rgeo() < 0.5 ? -1 : 1) : 0)),
+    offs:   pts.map(() => (Rgeo() - 0.5) * 0.9)
+  };
+}
+function pointAt(b, f) {
+  f = clamp01(f);
+  const target = f * b.L; let i = 0;
+  while (i < b.cum.length - 2 && b.cum[i + 1] < target) i++;
+  const seg = b.cum[i + 1] - b.cum[i] || 1;
+  const p = clamp01((target - b.cum[i]) / seg);
+  return { x: lerp(b.pts[i].x, b.pts[i + 1].x, p), y: lerp(b.pts[i].y, b.pts[i + 1].y, p) };
+}
+
+const mainRaw = bezier({ x: 430, y: 470 }, { x: 455, y: 340 }, { x: 600, y: 415 }, { x: 875, y: 225 }, 110);
+const main = mkBranch(jitter(mainRaw, 3.2), 11, 2.4);
+
+const a0 = pointAt(main, 0.30);
+const subA = mkBranch(jitter(bezier(a0, { x: a0.x + 16, y: a0.y - 58 }, { x: 466, y: 225 }, { x: 414, y: 176 }, 46), 2.0), 5.2, 1.5);
+const b0 = pointAt(main, 0.55);
+const subB = mkBranch(jitter(bezier(b0, { x: b0.x + 62, y: b0.y + 6 }, { x: 744, y: 446 }, { x: 797, y: 468 }, 46), 2.0), 6, 1.8);
+const c0 = pointAt(main, 0.74);
+const twigC = mkBranch(jitter(bezier(c0, { x: c0.x - 14, y: c0.y - 26 }, { x: 676, y: 262 }, { x: 652, y: 242 }, 26), 1.4), 3.4, 1.1);
+const a1 = pointAt(subA, 0.52);
+const twigA = mkBranch(jitter(bezier(a1, { x: a1.x + 22, y: a1.y - 14 }, { x: a1.x + 40, y: a1.y - 34 }, { x: 474, y: a1.y - 58 }, 22), 1.2), 2.6, 0.9);
+const b1 = pointAt(subB, 0.58);
+const twigB = mkBranch(jitter(bezier(b1, { x: b1.x + 22, y: b1.y - 12 }, { x: b1.x + 44, y: b1.y - 16 }, { x: 843, y: b1.y - 18 }, 22), 1.2), 2.5, 0.9);
+const tip = b => b.pts[b.pts.length - 1];
+const tMain = tip(main), tA = tip(subA), tB = tip(subB), tC = tip(twigC), tA2 = tip(twigA), tB2 = tip(twigB);
+
+/* ================= 静态预计算：花、蕾、溅墨、垂瓣 ================= */
+const VERM = ['#c8372a', '#d2452f', '#b32a1e', '#dd5a41', '#cf4a33'];
+const flowers = [
+  { x: tMain.x - 8,  y: tMain.y + 4,  r: 26, start: 6.55 },
+  { x: tMain.x - 36, y: tMain.y - 22, r: 18, start: 6.95 },
+  { x: tMain.x + 22, y: tMain.y + 28, r: 14, start: 7.30 },
+  { x: tA.x + 5,     y: tA.y + 6,     r: 20, start: 6.35 },
+  { x: tA.x + 30,    y: tA.y + 24,    r: 14, start: 6.75 },
+  { x: tA.x - 22,    y: tA.y + 28,    r: 12, start: 7.10 },
+  { x: tC.x,         y: tC.y - 4,     r: 15, start: 7.50 },
+  { x: tA2.x,        y: tA2.y,        r: 13, start: 7.70 },
+  { x: 525,          y: 362,          r: 11, start: 7.95 },
+  { x: tB.x - 6,     y: tB.y - 4,     r: 19, start: 8.35 },
+  { x: tB.x - 32,    y: tB.y + 12,    r: 12, start: 8.75 },
+  { x: tB2.x,        y: tB2.y,        r: 12, start: 8.55 }
+].map(f => Object.assign(f, { col: VERM[(Rflora() * VERM.length) | 0], rot: Rflora() * TAU }));
+
+const buds = [
+  { x: tMain.x + 28, y: tMain.y - 34, r: 6, start: 7.60 },
+  { x: tA.x - 26,    y: tA.y - 26,    r: 5, start: 7.00 },
+  { x: 548,          y: 346,          r: 5, start: 7.30 },
+  { x: tB.x + 20,    y: tB.y - 30,    r: 5, start: 8.20 },
+  { x: tC.x - 20,    y: tC.y + 18,    r: 4, start: 7.90 }
+].map(b => Object.assign(b, { col: VERM[(Rflora() * VERM.length) | 0] }));
+
+const splatter = [];
+for (let i = 0; i < 7; i++) {
+  const ang = Rgeo() * TAU, d = 22 + Rgeo() * 26;
+  splatter.push({ x: BC.x + Math.cos(ang) * d, y: BC.y + Math.sin(ang) * d, r: 1 + Rgeo() * 1.4 });
+}
+const tendrils = [];
+for (let i = 0; i < 6; i++) {
+  tendrils.push({ ang: Rgeo() * TAU, fac: 1.12 + Rgeo() * 0.38, wf: 0.26 + Rgeo() * 0.12 });
+}
+const speckles = [];
+for (let i = 0; i < 8; i++) {
+  speckles.push({ a: Rgeo() * TAU, d: 0.2 + Rgeo() * 0.55, r: 1 + Rgeo() });
+}
+
+const fallPetals = [
+  { x0: 858, y0: 232, x1: 842, y1: 648, ta: 10.35, dur: 1.75, ph: 0.3, amp: 34, rot0: 0.4 },
+  { x0: 430, y0: 196, x1: 414, y1: 610, ta: 10.65, dur: 1.85, ph: 2.1, amp: 30, rot0: 2.2 },
+  { x0: 786, y0: 300, x1: 772, y1: 640, ta: 10.95, dur: 1.70, ph: 4.0, amp: 26, rot0: 1.1 }
+];
+
+/* 唯一画面文字：岁岁欢喜，年年胜意 —— 逐字核对的基准就是下面这个字符串字面量（9 字，含全角逗号）。
+   竖排两列、右列先读：前 5 字（岁岁欢喜，）入右列，后 4 字（年年胜意）入左列；布局由 PHRASE 派生，不会与文字脱钩。 */
+const PHRASE = '岁岁欢喜，年年胜意';
+const GLYPHS = [];
+{
+  let k = 0;
+  const colR = 1090, colL = 978, nR = 5;
+  for (let i = 0; i < PHRASE.length; i++) {
+    const inR = i < nR;
+    const g = { ch: PHRASE[i], cx: inR ? colR : colL, cy: 168 + (inR ? i : i - nR) * 88, k: k++ };
+    if (g.ch === '，') { g.ox = 10; g.oy = -8; }   // 竖排标点：右列末格向右上微移
+    GLYPHS.push(g);
+  }
+}
+const FONT = '64px "KaiTi","STKaiti","BiauKai","DFKai-SB","TW-Kai","SimSun",serif';
+
+/* ================= 绘制原语 ================= */
+const cv = document.getElementById('stage');
+const ctx = cv.getContext('2d');
+
+function blobPath(c, cx, cy, R) {               // 不规则墨团轮廓（固定相位，纯缩放）
+  c.beginPath();
+  const N = 64;
+  for (let i = 0; i <= N; i++) {
+    const th = i / N * TAU;
+    const r = R * (1 + 0.14 * Math.sin(3 * th + 0.7) + 0.08 * Math.sin(5 * th + 2.9) + 0.05 * Math.sin(8 * th + 5.1));
+    const x = cx + Math.cos(th) * r, y = cy + Math.sin(th) * r;
+    if (i === 0) c.moveTo(x, y); else c.lineTo(x, y);
+  }
+  c.closePath();
+}
+function petalPath(c, cx, cy, ang, len) {       // 圆头梅花瓣
+  const Wd = len * 0.60, ca = Math.cos(ang), sa = Math.sin(ang);
+  const px = (d, q) => cx + ca * d - sa * q, py = (d, q) => cy + sa * d + ca * q;
+  c.beginPath();
+  c.moveTo(px(-len * 0.12, 0), py(-len * 0.12, 0));
+  c.bezierCurveTo(px(len * 0.16, -Wd), py(len * 0.16, -Wd), px(len * 0.72, -Wd * 0.72), py(len * 0.72, -Wd * 0.72), px(len * 0.98, 0), py(len * 0.98, 0));
+  c.bezierCurveTo(px(len * 0.72, Wd * 0.72), py(len * 0.72, Wd * 0.72), px(len * 0.16, Wd), py(len * 0.16, Wd), px(-len * 0.12, 0), py(-len * 0.12, 0));
+  c.closePath();
+}
+
+/* ================= 场景分层 ================= */
+function drawWash(t) {                           // 左下淡水墨晕（2.6s 后缓缓显）
+  const a = 0.05 * smooth(2.6, 3.8, t);
+  if (a <= 0) return;
+  ctx.fillStyle = 'rgba(120,108,88,' + a.toFixed(4) + ')';
+  ctx.beginPath(); ctx.ellipse(298, 568, 100, 62, -0.35, 0, TAU); ctx.fill();
+}
+function drawDropFall(t) {                       // 0~0.55s 落墨
+  if (t >= 0.55) return;
+  const p = clamp01(t / 0.55);
+  const y = lerp(150, BC.y, p * p);
+  const a = Math.min(1, t / 0.08), st = 1 + p * 0.8;
+  ctx.fillStyle = 'rgba(28,23,18,' + (0.95 * a).toFixed(3) + ')';
+  ctx.beginPath(); ctx.ellipse(BC.x, y, 6, 8 * st, 0, 0, TAU); ctx.fill();
+  for (let i = 1; i <= 2; i++) {                 // 尾迹
+    ctx.fillStyle = 'rgba(28,23,18,' + (a * 0.3 / i).toFixed(3) + ')';
+    ctx.beginPath(); ctx.ellipse(BC.x, y - i * 16 * st, 4.5 - i * 1.5, 6 - i * 2, 0, 0, TAU); ctx.fill();
+  }
+}
+function drawImpact(t) {                         // 落点涟漪 + 溅墨点
+  if (t < 0.55) return;
+  const q = clamp01((t - 0.55) / 0.4);
+  if (q < 1) {
+    ctx.strokeStyle = 'rgba(42,36,30,' + (0.32 * (1 - q)).toFixed(3) + ')';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.ellipse(BC.x, BC.y, 8 + 26 * q, (8 + 26 * q) * 0.8, 0, 0, TAU); ctx.stroke();
+  }
+  const sp = clamp01((t - 0.58) / 0.12);
+  if (sp <= 0) return;
+  for (const d of splatter) {
+    ctx.fillStyle = 'rgba(30,25,20,' + (0.55 * sp).toFixed(3) + ')';
+    ctx.beginPath(); ctx.arc(d.x, d.y, d.r * (0.6 + 0.4 * sp), 0, TAU); ctx.fill();
+  }
+}
+function smallBlob(cx, cy, R, t, start, dur) {   // 卫星墨点
+  const p = clamp01((t - start) / dur);
+  if (p <= 0) return null;
+  return 2 + R * (1 - Math.pow(1 - p, 2.2));
+}
+function drawBlotSystem(t) {                     // 墨滴洇开主体（0.55s 起）
+  const p = clamp01((t - 0.55) / 2.6);
+  if (p <= 0) return;
+  const R = 6 + 96 * (1 - Math.pow(1 - p, 2.4));
+  blobPath(ctx, BC.x, BC.y, R * 1.20); ctx.fillStyle = 'rgba(107,98,88,0.10)'; ctx.fill();
+  blobPath(ctx, BC.x, BC.y, R * 1.07); ctx.fillStyle = 'rgba(74,66,58,0.20)';  ctx.fill();
+  const tp = clamp01((p - 0.12) / 0.5);          // 毛细触须（滞后生长）
+  if (tp > 0) {
+    for (const d of tendrils) {
+      const L = R * d.fac * (0.4 + 0.6 * tp);
+      const dx = BC.x + Math.cos(d.ang) * R * 0.7, dy = BC.y + Math.sin(d.ang) * R * 0.7;
+      ctx.fillStyle = 'rgba(40,34,28,0.50)';
+      ctx.beginPath(); ctx.ellipse(dx, dy, L * 0.5, R * d.wf, d.ang, 0, TAU); ctx.fill();
+    }
+  }
+  blobPath(ctx, BC.x, BC.y, R);        ctx.fillStyle = 'rgba(30,25,20,0.82)'; ctx.fill();
+  blobPath(ctx, BC.x, BC.y, R * 0.62); ctx.fillStyle = 'rgba(20,16,12,0.85)'; ctx.fill();
+  for (const s of speckles) {                    // 墨内沉积颗粒
+    ctx.fillStyle = 'rgba(15,12,9,0.25)';
+    ctx.beginPath();
+    ctx.arc(BC.x + Math.cos(s.a) * R * s.d, BC.y + Math.sin(s.a) * R * s.d, s.r, 0, TAU);
+    ctx.fill();
+  }
+  let sr = smallBlob(505, 502, 15, t, 1.15, 1.2);
+  if (sr !== null) { blobPath(ctx, 505, 502, sr); ctx.fillStyle = 'rgba(30,25,20,0.72)'; ctx.fill(); }
+  sr = smallBlob(398, 520, 9, t, 1.5, 1.0);
+  if (sr !== null) { blobPath(ctx, 398, 520, sr); ctx.fillStyle = 'rgba(30,25,20,0.68)'; ctx.fill(); }
+}
+function drawBranch(b, g, wetTip) {              // 按弧长揭示的枯笔枝条
+  if (g <= 0) return;
+  const reveal = clamp01(g) * b.L;
+  ctx.lineCap = 'round';
+  for (let i = 0; i < b.pts.length - 1; i++) {
+    if (b.cum[i] >= reveal) break;
+    const seg = b.cum[i + 1] - b.cum[i] || 1;
+    const p = reveal > b.cum[i + 1] ? 1 : clamp01((reveal - b.cum[i]) / seg);
+    if (p <= 0) continue;
+    const s = b.cum[i] / b.L;
+    const w = Math.max(0.7, b.w0 * Math.pow(1 - s, 1.25) + b.w1);
+    const A = b.pts[i], B = b.pts[i + 1];
+    const ex = lerp(A.x, B.x, p), ey = lerp(A.y, B.y, p);
+    ctx.strokeStyle = 'rgba(42,36,30,' + b.alphas[i].toFixed(3) + ')';
+    ctx.lineWidth = w;
+    ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(ex, ey); ctx.stroke();
+    const side = b.sides[i];
+    if (side !== 0 && w > 1.6) {                 // 飞白侧锋
+      let dx = B.x - A.x, dy = B.y - A.y;
+      const L = Math.hypot(dx, dy) || 1; dx /= L; dy /= L;
+      const o = w * 0.5 * side * (0.6 + 0.4 * b.offs[i]);
+      ctx.strokeStyle = 'rgba(42,36,30,' + (b.alphas[i] * 0.32).toFixed(3) + ')';
+      ctx.lineWidth = Math.max(0.5, w * 0.3);
+      ctx.beginPath();
+      ctx.moveTo(A.x - dy * o, A.y + dx * o);
+      ctx.lineTo(ex - dy * o, ey + dx * o);
+      ctx.stroke();
+    }
+  }
+  if (wetTip && g < 1) {                         // 生长中的湿墨笔尖
+    const tp = pointAt(b, g);
+    ctx.fillStyle = 'rgba(28,23,18,0.55)';
+    ctx.beginPath();
+    ctx.arc(tp.x, tp.y, Math.max(1.2, (b.w0 * (1 - g) + b.w1) * 0.8), 0, TAU);
+    ctx.fill();
+  }
+}
+function drawBuds(t) {
+  for (const b of buds) {
+    const p = clamp01((t - b.start) / 0.25);
+    if (p <= 0) continue;
+    const s = Math.max(0.05, easeOutBack(p));
+    ctx.fillStyle = b.col;
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r * s, 0, TAU); ctx.fill();
+    ctx.strokeStyle = 'rgba(124,21,14,0.6)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r * s, 0, TAU); ctx.stroke();
+  }
+}
+function drawFlower(f, t) {
+  const open = clamp01((t - f.start) / 0.9);
+  if (open <= 0) return;
+  const spin = (1 - clamp01(open / 0.75)) * 0.55;         // 展瓣旋向
+  const scale = f.r * Math.max(0.02, easeOutBack(open));
+  const petalLen = scale * (0.55 + 0.45 * clamp01(open / 0.8));
+  for (let k = 0; k < 5; k++) {
+    petalPath(ctx, f.x, f.y, f.rot + k * TAU / 5 + spin, petalLen);
+    ctx.globalAlpha = 0.92; ctx.fillStyle = f.col; ctx.fill();
+    ctx.globalAlpha = 0.35; ctx.strokeStyle = '#7c150e'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  if (open > 0.5) {                              // 花蕊
+    const sp = clamp01((open - 0.5) / 0.5);
+    ctx.fillStyle = '#7e150f';
+    ctx.beginPath(); ctx.arc(f.x, f.y, f.r * 0.15, 0, TAU); ctx.fill();
+    for (let k = 0; k < 9; k++) {
+      const a = f.rot * 1.3 + k * 0.698 + 0.3;
+      const L = f.r * 0.34 * sp * (0.8 + 0.35 * Math.sin(k * 2.7 + 1));
+      const ex = f.x + Math.cos(a) * L, ey = f.y + Math.sin(a) * L;
+      ctx.strokeStyle = 'rgba(233,201,138,0.9)'; ctx.lineWidth = 1.1;
+      ctx.beginPath();
+      ctx.moveTo(f.x + Math.cos(a) * f.r * 0.1, f.y + Math.sin(a) * f.r * 0.1);
+      ctx.lineTo(ex, ey);
+      ctx.stroke();
+      ctx.fillStyle = '#d9a441';
+      ctx.beginPath(); ctx.arc(ex, ey, 1.5, 0, TAU); ctx.fill();
+    }
+  } else {
+    ctx.fillStyle = '#8c1d14';
+    ctx.beginPath(); ctx.arc(f.x, f.y, f.r * 0.14 * open + 0.5, 0, TAU); ctx.fill();
+  }
+}
+function drawFallPetals(t) {
+  for (const q of fallPetals) {
+    const p = clamp01((t - q.ta) / q.dur);
+    if (p <= 0) continue;
+    const e = smooth01(p);
+    const x = lerp(q.x0, q.x1, e) + q.amp * Math.sin(p * 5.2 + q.ph);
+    const y = lerp(q.y0, q.y1, Math.pow(p, 1.5));
+    const rot = q.rot0 + p * 4.4;
+    const fade = p > 0.8 ? 1 - (p - 0.8) / 0.2 : 1;
+    ctx.globalAlpha = 0.92 * fade;
+    petalPath(ctx, x, y, rot, 11);
+    ctx.fillStyle = '#c8372a'; ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+function drawText(t) {                           // 8.45s 起逐字洇入，终帧清晰
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = FONT;
+  for (const g of GLYPHS) {
+    const p = clamp01((t - (8.45 + g.k * 0.15)) / 0.5);
+    if (p <= 0) continue;
+    const x = g.cx + (g.ox || 0), y = g.cy + (g.oy || 0) + (1 - p) * 5;
+    if (p < 1) {
+      ctx.save();
+      ctx.shadowColor = 'rgba(38,32,25,0.85)';
+      ctx.shadowBlur = 16 * (1 - p);
+      ctx.globalAlpha = 0.22 * p + 0.05;
+      ctx.fillStyle = '#262019';
+      ctx.fillText(g.ch, x, y);
+      ctx.restore();
+    }
+    ctx.globalAlpha = p;
+    ctx.fillStyle = '#262019';
+    ctx.fillText(g.ch, x, y);
+    ctx.globalAlpha = 1;
+  }
+}
+
+/* ================= 纯帧渲染 ================= */
+function renderInternal(t) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1;
+  ctx.clearRect(0, 0, W, H);
+  ctx.drawImage(paper, 0, 0);
+
+  const m = smooth(2.4, 6.4, t);                          // 主枝生长进度
+  const win = (base, a, d) => smooth01(clamp01((base - a) / d));
+  const gSubA = win(m, 0.30, 0.42), gSubB = win(m, 0.55, 0.50), gTwigC = win(m, 0.74, 0.30);
+  const gTwigA = win(gSubA, 0.52, 0.34), gTwigB = win(gSubB, 0.58, 0.36);
+
+  drawWash(t);
+  drawDropFall(t);
+  drawImpact(t);
+  drawBlotSystem(t);
+  drawBranch(main,  m,      true);
+  drawBranch(subA,  gSubA,  true);
+  drawBranch(subB,  gSubB,  true);
+  drawBranch(twigC, gTwigC, true);
+  drawBranch(twigA, gTwigA, true);
+  drawBranch(twigB, gTwigB, true);
+  drawBuds(t);
+  for (const f of flowers) drawFlower(f, t);
+  drawFallPetals(t);
+  drawText(t);
+}
+
+/* ================= 预览（可被外部采集永久停用） ================= */
+let previewActive = false, rafId = 0;
+function stopPreview() {
+  if (previewActive) { previewActive = false; cancelAnimationFrame(rafId); }
+}
+function startPreview() {
+  if (previewActive) return;
+  if (new URLSearchParams(location.search).has('still') || location.hash === '#still') return;
+  previewActive = true;
+  const t0 = performance.now();
+  const step = now => {
+    if (!previewActive) return;
+    renderInternal(((now - t0) / 1000) % DUR);
+    rafId = requestAnimationFrame(step);
+  };
+  rafId = requestAnimationFrame(step);
+}
+
+/* ================= Harness 契约 ================= */
+window.P103 = {
+  duration: 12,
+  fps: 24,
+  width: 1280,
+  height: 720,
+  renderFrame: function (t) {
+    stopPreview();                                        // 外部驱动优先
+    const tt = Math.max(0, Math.min(DUR, Number(t) || 0));
+    renderInternal(tt);
+    return true;
+  }
+};
+
+renderInternal(0);                                        // 首帧
+startPreview();
+})();
+</script>
+</body>
+</html>

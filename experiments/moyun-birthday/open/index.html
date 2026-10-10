@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P103 OPEN · 墨梅贺寿</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #23231f; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="stage" width="1280" height="720"></canvas>
+<script>
+(function () {
+  "use strict";
+
+  /* ============================================================
+     P103 OPEN arm — 墨滴洇开 · 梅枝生长 · 朱砂梅绽 · 岁岁欢喜年年胜意
+     Deterministic single-shot 2D rice-paper ink animation.
+     - All randomness is consumed at LOAD time from one fixed-seed
+       PRNG into immutable data; renderFrame(t) is a pure function
+       of t. Same t in -> same pixels out, no Date/random/network.
+     - No external libraries / fonts / images.
+     Timeline (12s @24fps):
+       0.12-0.52  ink drop falls
+       0.50-1.35  blot blooms (墨滴洇开)
+       1.00-6.40  trunk grows up-right (root stub to lower-left)
+       2.2-7.9    secondary branches + twigs keep growing
+       3.9-9.6    cinnabar blossoms & buds bloom in growth order
+       7.62-8.77  vertical brush text writes in (8 chars + comma)
+       8.35-8.70  seal stamps; >=8.8s full hold to 12.0 (>=3.2s)
+       9.5-11.9   a few petals drift down
+     ============================================================ */
+
+  var W = 1280, H = 720, DURATION = 12, FPS = 24;
+
+  var canvas = document.getElementById('stage');
+  var ctx = canvas.getContext('2d');
+
+  /* ---------- deterministic PRNG (mulberry32, fixed seed) ---------- */
+  function mulberry32(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  var rnd = mulberry32(0x1030A1D);
+  function rr(a, b) { return a + (b - a) * rnd(); }
+
+  /* ---------- tiny math helpers ---------- */
+  function clamp(x, a, b) { return x < a ? a : (x > b ? b : x); }
+  function lerp(a, b, p) { return a + (b - a) * p; }
+  function smooth(p) { p = clamp(p, 0, 1); return p * p * (3 - 2 * p); }
+  function easeOutQuad(p) { p = clamp(p, 0, 1); return 1 - (1 - p) * (1 - p); }
+  function easeInOutSine(p) { p = clamp(p, 0, 1); return 0.5 - 0.5 * Math.cos(Math.PI * p); }
+  function easeOutCubic(p) { p = clamp(p, 0, 1); var q = p - 1; return 1 + q * q * q; }
+  function easeOutBack(p) { p = clamp(p, 0, 1); var c = 1.35, q = p - 1; return 1 + (c + 1) * q * q * q + c * q * q; }
+
+  /* ============================================================
+     PAPER — pre-rendered once to an offscreen canvas (static).
+     ============================================================ */
+  var paper = document.createElement('canvas');
+  paper.width = W; paper.height = H;
+  (function paintPaper() {
+    var p = paper.getContext('2d');
+    p.fillStyle = '#efe7d5';
+    p.fillRect(0, 0, W, H);
+
+    // soft mottling (age stains)
+    for (var i = 0; i < 30; i++) {
+      var x = rr(0, W), y = rr(0, H), r = rr(50, 230);
+      var g = p.createRadialGradient(x, y, 0, x, y, r);
+      var warm = rnd() < 0.5;
+      g.addColorStop(0, warm ? 'rgba(214,197,160,0.055)' : 'rgba(233,224,200,0.07)');
+      g.addColorStop(1, 'rgba(214,197,160,0)');
+      p.fillStyle = g;
+      p.fillRect(x - r, y - r, r * 2, r * 2);
+    }
+    // paper fibers
+    var dark = ['#d8cbab', '#cfc2a4', '#c9b998'];
+    var lite = ['#f7f0de', '#f4ecd8'];
+    for (i = 0; i < 2900; i++) {
+      var fx = rr(0, W), fy = rr(0, H), fl = rr(1.6, 7), fa = rr(0, Math.PI);
+      var cArr = rnd() < 0.16 ? lite : dark;
+      p.strokeStyle = cArr[(rnd() * cArr.length) | 0];
+      p.globalAlpha = rr(0.05, 0.17);
+      p.lineWidth = rr(0.5, 1.15);
+      p.beginPath();
+      p.moveTo(fx, fy);
+      p.lineTo(fx + Math.cos(fa) * fl, fy + Math.sin(fa) * fl);
+      p.stroke();
+    }
+    // a few long stray fibers
+    for (i = 0; i < 130; i++) {
+      fx = rr(0, W); fy = rr(0, H); fl = rr(9, 26); fa = rr(0, Math.PI);
+      p.strokeStyle = '#cbbc9a';
+      p.globalAlpha = rr(0.04, 0.09);
+      p.lineWidth = rr(0.5, 0.9);
+      p.beginPath(); p.moveTo(fx, fy);
+      p.lineTo(fx + Math.cos(fa) * fl, fy + Math.sin(fa) * fl);
+      p.stroke();
+    }
+    p.globalAlpha = 1;
+    // gentle light from top-right
+    var lg = p.createRadialGradient(W * 0.72, H * 0.2, 60, W * 0.72, H * 0.2, 900);
+    lg.addColorStop(0, 'rgba(255,250,236,0.09)');
+    lg.addColorStop(1, 'rgba(255,250,236,0)');
+    p.fillStyle = lg; p.fillRect(0, 0, W, H);
+    // vignette
+    var vg = p.createRadialGradient(W / 2, H * 0.46, H * 0.42, W / 2, H * 0.5, W * 0.72);
+    vg.addColorStop(0, 'rgba(205,186,148,0)');
+    vg.addColorStop(1, 'rgba(196,175,134,0.20)');
+    p.fillStyle = vg; p.fillRect(0, 0, W, H);
+  })();
+
+  /* ============================================================
+     BRANCH SKELETON — Catmull-Rom paths, arc-length parameterised.
+     ============================================================ */
+  function crPoint(p0, p1, p2, p3, t) {
+    var t2 = t * t, t3 = t2 * t;
+    return {
+      x: 0.5 * ((2 * p1.x) + (-p0.x + p2.x) * t + (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 + (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3),
+      y: 0.5 * ((2 * p1.y) + (-p0.y + p2.y) * t + (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 + (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3)
+    };
+  }
+  function samplePath(ctrl, seg) {
+    var pts = [], n = ctrl.length;
+    var P = [ctrl[0]].concat(ctrl, [ctrl[n - 1]]);
+    for (var i = 1; i < P.length - 2; i++)
+      for (var j = 0; j < seg; j++)
+        pts.push(crPoint(P[i - 1], P[i], P[i + 1], P[i + 2], j / seg));
+    pts.push({ x: ctrl[n - 1].x, y: ctrl[n - 1].y });
+    return pts;
+  }
+  function makeBranch(name, ctrl, w0, w1, wp) {
+    var pts = samplePath(ctrl, 26);
+    var cum = [0], i;
+    for (i = 1; i < pts.length; i++) {
+      cum[i] = cum[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y);
+    }
+    var wob = [];
+    for (i = 0; i < 9; i++) wob.push(1 + (rnd() - 0.5) * 0.34);
+    return { name: name, pts: pts, cum: cum, len: cum[cum.length - 1], w0: w0, w1: w1, wp: wp || 1, wob: wob };
+  }
+  function idxAtArc(b, s) { // dense index for arc-length s (always {i>=1, f})
+    s = clamp(s, 0, b.len);
+    var lo = 0, hi = b.cum.length - 1;
+    while (lo < hi) { var mid = (lo + hi) >> 1; if (b.cum[mid] < s) lo = mid + 1; else hi = mid; }
+    if (lo === 0) return { i: 1, f: 0 };
+    var c0 = b.cum[lo - 1], c1 = b.cum[lo];
+    return { i: lo, f: clamp((s - c0) / Math.max(1e-6, c1 - c0), 0, 1) };
+  }
+  function pointAt(b, s) {
+    var q = idxAtArc(b, s), i = q.i, f = q.f, P = b.pts;
+    return { x: lerp(P[i - 1].x, P[i].x, f), y: lerp(P[i - 1].y, P[i].y, f) };
+  }
+  function tangentAt(b, s) {
+    var q = idxAtArc(b, s), P = b.pts, a = Math.max(0, q.i - 1), c = Math.min(P.length - 1, q.i + 1);
+    var dx = P[c].x - P[a].x, dy = P[c].y - P[a].y, d = Math.hypot(dx, dy) || 1;
+    return { x: dx / d, y: dy / d };
+  }
+  function widthAt(b, s) {
+    var u = s / b.len;
+    var w = lerp(b.w0, b.w1, Math.pow(u, b.wp));
+    var v = u * 8, i = Math.floor(v), f = v - i;
+    var n = (i >= 8) ? b.wob[8] : lerp(b.wob[i], b.wob[i + 1], f);
+    return w * n;
+  }
+  function findArc(b, x, y) { // nearest arc-length to a point (attach helper)
+    var best = 0, bd = 1e18;
+    for (var i = 0; i < b.pts.length; i += 2) {
+      var d = (b.pts[i].x - x) * (b.pts[i].x - x) + (b.pts[i].y - y) * (b.pts[i].y - y);
+      if (d < bd) { bd = d; best = b.cum[i]; }
+    }
+    return best;
+  }
+
+  var TRUNK = makeBranch('trunk', [
+    { x: -45, y: 742 }, { x: 120, y: 672 }, { x: 210, y: 618 }, { x: 330, y: 565 }, { x: 455, y: 545 },
+    { x: 560, y: 470 }, { x: 635, y: 380 }, { x: 690, y: 290 }, { x: 725, y: 195 }, { x: 738, y: 110 }
+  ], 15, 2.6, 0.9);
+
+  var S1 = makeBranch('s1', [
+    { x: 555, y: 478 }, { x: 640, y: 522 }, { x: 722, y: 562 }, { x: 830, y: 625 }
+  ], 7, 1.9, 1);
+
+  var S2 = makeBranch('s2', [
+    { x: 683, y: 302 }, { x: 702, y: 240 }, { x: 678, y: 178 }, { x: 644, y: 140 }
+  ], 5.2, 1.6, 1);
+
+  var TWIGS = [
+    makeBranch('t1', [{ x: 455, y: 545 }, { x: 505, y: 508 }, { x: 556, y: 506 }], 3.2, 0.8, 1),
+    makeBranch('t2', [{ x: 598, y: 428 }, { x: 690, y: 352 }, { x: 742, y: 344 }], 3.0, 0.8, 1),
+    makeBranch('t3', [{ x: 500, y: 515 }, { x: 452, y: 472 }, { x: 414, y: 432 }], 2.8, 0.7, 1),
+    makeBranch('t4', [{ x: 718, y: 560 }, { x: 762, y: 532 }, { x: 802, y: 527 }], 2.6, 0.7, 1),
+    makeBranch('t5', [{ x: 782, y: 595 }, { x: 822, y: 577 }, { x: 862, y: 587 }], 2.5, 0.7, 1),
+    makeBranch('t6', [{ x: 712, y: 242 }, { x: 757, y: 216 }, { x: 797, y: 207 }], 2.8, 0.75, 1),
+    makeBranch('t7', [{ x: 681, y: 182 }, { x: 651, y: 152 }, { x: 622, y: 149 }], 2.4, 0.7, 1),
+    makeBranch('t8', [{ x: 398, y: 540 }, { x: 364, y: 508 }, { x: 331, y: 491 }], 2.7, 0.7, 1),
+    makeBranch('t9', [{ x: 735, y: 118 }, { x: 768, y: 95 }, { x: 801, y: 79 }], 2.6, 0.7, 1),
+    makeBranch('t10', [{ x: 642, y: 522 }, { x: 663, y: 556 }, { x: 653, y: 591 }], 2.4, 0.7, 1),
+    makeBranch('t11', [{ x: 568, y: 452 }, { x: 537, y: 414 }, { x: 512, y: 390 }], 2.4, 0.65, 1),
+    makeBranch('t12', [{ x: 662, y: 335 }, { x: 698, y: 308 }, { x: 724, y: 300 }], 2.2, 0.65, 1)
+  ];
+
+  /* ---------- growth timing ---------- */
+  var T0 = 1.00, T1 = 6.40;          // trunk up-stroke window
+  var DOWN_DUR = 1.0;                // trunk root stub (exits toward lower-left corner)
+  var S_BLOT = findArc(TRUNK, 330, 565);
+  var BLOT = pointAt(TRUNK, S_BLOT);
+
+  // inverse of easeInOutSine via LUT (for attach-time lookup)
+  var LUT_N = 512, LUT = [];
+  for (var li = 0; li <= LUT_N; li++) LUT.push(easeInOutSine(li / LUT_N));
+  function invSine(y) {
+    y = clamp(y, 0, 1);
+    var lo = 0, hi = LUT_N;
+    while (lo < hi) { var mid = (lo + hi) >> 1; if (LUT[mid] < y) lo = mid + 1; else hi = mid; }
+    var f = lo / LUT_N;
+    return clamp(f, 0, 1);
+  }
+  function trunkTimeAt(s) {
+    if (s >= S_BLOT) return T0 + (T1 - T0) * invSine((s - S_BLOT) / (TRUNK.len - S_BLOT));
+    var frac = (S_BLOT - s) / S_BLOT;                 // easeOutQuad inverse
+    return T0 + DOWN_DUR * (1 - Math.sqrt(1 - frac));
+  }
+  function branchTimeAt(b, s) {                        // sub-branch front (easeOutQuad)
+    return b.birth + b.dur * (1 - Math.sqrt(1 - clamp(s / b.len, 0, 1)));
+  }
+  function attachSub(b, parent, ax, ay, growDur) {
+    b.attach = findArc(parent, ax, ay);
+    b.birth = (parent === TRUNK ? trunkTimeAt(b.attach) : branchTimeAt(parent, b.attach)) + 0.15 + rnd() * 0.25;
+    b.dur = growDur;
+  }
+
+  attachSub(S1, TRUNK, 555, 478, 2.9);
+  attachSub(S2, TRUNK, 683, 302, 1.9);
+  var TWIG_ATTACH = [
+    [TRUNK, 455, 545], [TRUNK, 598, 428], [TRUNK, 500, 515],
+    [S1, 718, 560], [S1, 782, 595], [TRUNK, 712, 242],
+    [S2, 681, 182], [TRUNK, 398, 540], [TRUNK, 735, 118],
+    [S1, 642, 522], [TRUNK, 568, 452], [TRUNK, 662, 335]
+  ];
+  for (var ti = 0; ti < TWIGS.length; ti++) {
+    var tw = TWIGS[ti], at = TWIG_ATTACH[ti];
+    attachSub(tw, at[0], at[1], at[2], clamp(tw.len / 105, 0.8, 1.6));
+  }
+
+  /* ============================================================
+     FLOWERS — blossoms + buds, born as growth passes them.
+     ============================================================ */
+  function flowerDef(br, su, off, R, kind) {
+    var s = su * br.len;
+    var p = pointAt(br, s), tn = tangentAt(br, s);
+    var nx = -tn.y, ny = tn.x;
+    return {
+      x: p.x + nx * off, y: p.y + ny * off, R: R, kind: kind,
+      birth: Math.min(branchTimeAt(br, s) + 0.10 + rr(0.05, 0.5), 9.45),
+      rot0: rr(-0.22, 0.22), ph: rr(0, Math.PI * 2),
+      pa: [], pl: [], sa: [], sy: [], ochre: []
+    };
+  }
+  var FLOWERS = [
+    flowerDef(TWIGS[0], 0.96, -8, 40, 'bloom'),
+    flowerDef(TWIGS[0], 0.62, 10, 34, 'bloom'),
+    flowerDef(TWIGS[1], 0.97, 6, 44, 'bloom'),
+    flowerDef(TWIGS[1], 0.58, -10, 34, 'bloom'),
+    flowerDef(TWIGS[2], 0.96, 8, 38, 'bloom'),
+    flowerDef(TWIGS[3], 0.96, -8, 40, 'bloom'),
+    flowerDef(TWIGS[4], 0.97, -10, 38, 'bloom'),
+    flowerDef(TWIGS[5], 0.96, 8, 42, 'bloom'),
+    flowerDef(TWIGS[5], 0.55, -10, 32, 'bloom'),
+    flowerDef(TWIGS[6], 0.95, 6, 34, 'bloom'),
+    flowerDef(TWIGS[7], 0.96, -8, 36, 'bloom'),
+    flowerDef(TWIGS[8], 0.96, 8, 40, 'bloom'),
+    flowerDef(TWIGS[8], 0.55, -8, 30, 'bloom'),
+    flowerDef(S2, 0.97, 8, 42, 'bloom'),
+    flowerDef(S2, 0.55, -10, 34, 'bloom'),
+    flowerDef(TWIGS[9], 0.95, 6, 36, 'bloom'),
+    flowerDef(TWIGS[10], 0.95, 8, 34, 'bloom'),
+    flowerDef(TWIGS[11], 0.95, -6, 34, 'bloom'),
+    flowerDef(TWIGS[2], 0.55, -10, 13, 'bud'),
+    flowerDef(TWIGS[3], 0.55, 10, 12, 'bud'),
+    flowerDef(TWIGS[4], 0.55, 8, 12, 'bud'),
+    flowerDef(TWIGS[0], 0.35, 8, 11, 'bud'),
+    flowerDef(S1, 0.30, -12, 13, 'bud'),
+    flowerDef(TWIGS[1], 0.30, 10, 12, 'bud')
+  ];
+  FLOWERS.forEach(function (f) {
+    for (var k = 0; k < 5; k++) { f.pa.push(k * 72 * Math.PI / 180 + rr(-0.09, 0.09)); f.pl.push(rr(0, 1)); }
+    var n = 7 + ((rnd() * 3) | 0);
+    for (k = 0; k < n; k++) {
+      f.sa.push(rr(0, Math.PI * 2));
+      f.sy.push(rr(2, 5) * (rnd() < 0.5 ? -1 : 1));
+      f.ochre.push(rnd() < 0.32);
+    }
+  });
+
+  /* falling petals (start pos fixed to chosen blossoms) */
+  var DROP_IDX = [2, 6, 7, 12, 14], DROP_T = [9.5, 9.9, 10.2, 10.5, 10.8];
+  var PETALS = DROP_IDX.map(function (idx, i) {
+    return {
+      f: FLOWERS[idx], t0: DROP_T[i],
+      vx: rr(-26, -14), vy: rr(28, 42),
+      amp: rr(8, 15), frq: rr(1.6, 2.3), ph: rr(0, 6.28),
+      spin: rr(1.2, 2.4) * (rnd() < 0.5 ? -1 : 1), rot0: rr(0, 6.28),
+      size: rr(8, 11)
+    };
+  });
+
+  /* ============================================================
+     INK BLOT geometry (fixed wavy outlines)
+     ============================================================ */
+  function wavyRing(n, lo, hi) {
+    var a = [];
+    for (var i = 0; i < n; i++) a.push(rr(lo, hi));
+    var b = a.slice();
+    for (i = 0; i < n; i++) b[i] = a[(i - 1 + n) % n] * 0.15 + a[i] * 0.7 + a[(i + 1) % n] * 0.15;
+    return b;
+  }
+  var RING_CORE = wavyRing(26, 0.64, 1.04);
+  var RING_MID = wavyRing(26, 0.76, 1.08);
+  var RING_OUT = wavyRing(26, 0.80, 1.14);
+  var TENDRILS = [
+    { idx: 3, r: 0.11, a: 0.30 }, { idx: 9, r: 0.14, a: 0.26 },
+    { idx: 15, r: 0.10, a: 0.30 }, { idx: 21, r: 0.12, a: 0.24 }
+  ];
+  var SATS = [{ dx: -38, dy: 26, r: 3.6, t: 0.80 }, { dx: 46, dy: 18, r: 4.6, t: 0.88 }, { dx: 24, dy: -44, r: 2.8, t: 0.96 }];
+
+  function blobPath(cx, cy, R, ring) {
+    var n = ring.length, pts = [], i, a, r;
+    for (i = 0; i < n; i++) {
+      a = i / n * Math.PI * 2; r = R * ring[i];
+      pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]);
+    }
+    ctx.beginPath();
+    ctx.moveTo((pts[0][0] + pts[n - 1][0]) / 2, (pts[0][1] + pts[n - 1][1]) / 2);
+    for (i = 0; i < n; i++) {
+      var p = pts[i], q = pts[(i + 1) % n];
+      ctx.quadraticCurveTo(p[0], p[1], (p[0] + q[0]) / 2, (p[1] + q[1]) / 2);
+    }
+    ctx.closePath();
+  }
+
+  /* ============================================================
+     DRAWING — branches
+     ============================================================ */
+  function strokeSpan(b, s0, s1, wMul, color, alpha, taperStart, taperEnd) {
+    if (s1 - s0 < 2) return;
+    var step = 6, L = [], Rt = [], s = s0;
+    while (s <= s1) {
+      var q = idxAtArc(b, s), P = b.pts, i = q.i, f = q.f;
+      var x = lerp(P[i - 1].x, P[i].x, f), y = lerp(P[i - 1].y, P[i].y, f);
+      var i2 = Math.min(P.length - 1, i + 2), i0 = Math.max(0, i - 2);
+      var dx = P[i2].x - P[i0].x, dy = P[i2].y - P[i0].y, d = Math.hypot(dx, dy) || 1;
+      var nx = -dy / d, ny = dx / d;
+      var w = widthAt(b, s) * wMul;
+      if (taperEnd) { var dT = (s1 - s) / 26; if (dT < 1) w *= 0.22 + 0.78 * smooth(dT); }
+      if (taperStart) { var dS = (s - s0) / 18; if (dS < 1) w *= 0.35 + 0.65 * smooth(dS); }
+      w = Math.max(0.35, w);
+      L.push([x + nx * w / 2, y + ny * w / 2]);
+      Rt.push([x - nx * w / 2, y - ny * w / 2]);
+      s += step;
+    }
+    // ensure exact tip point
+    var pe = pointAt(b, s1), te = tangentAt(b, s1);
+    var pex = -te.y, pey = te.x;
+    L.push([pe.x + pex * 0.2, pe.y + pey * 0.2]);
+    Rt.push([pe.x - pex * 0.2, pe.y - pey * 0.2]);
+    ctx.beginPath();
+    ctx.moveTo(L[0][0], L[0][1]);
+    for (var k = 1; k < L.length; k++) ctx.lineTo(L[k][0], L[k][1]);
+    for (k = Rt.length - 1; k >= 0; k--) ctx.lineTo(Rt[k][0], Rt[k][1]);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.globalAlpha = alpha;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  function dryStreak(b, s0, s1, off, alpha) { // 飞白 dry-brush streak inside a stroke
+    if (s1 - s0 < 30) return;
+    ctx.strokeStyle = '#efe7d5';
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    var s = s0 + 8, first = true;
+    while (s < s1 - 6) {
+      var p = pointAt(b, s), tn = tangentAt(b, s);
+      var w = widthAt(b, s);
+      var ox = -tn.y * off * w, oy = tn.x * off * w;
+      var wob = Math.sin(s * 0.05 + off * 9) * w * 0.06;
+      if (first) { ctx.moveTo(p.x + ox - tn.y * wob, p.y + oy + tn.x * wob); first = false; }
+      else ctx.lineTo(p.x + ox - tn.y * wob, p.y + oy + tn.x * wob);
+      s += 7;
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawSubBranch(b, t) {
+    var p = clamp((t - b.birth) / b.dur, 0, 1);
+    if (p <= 0) return;
+    var s1 = b.len * easeOutQuad(p);
+    strokeSpan(b, 0, s1, 2.1, '#8b8b92', 0.10, false, true);   // ink halo
+    strokeSpan(b, 0, s1, 1.0, '#26262b', 0.93, false, true);   // core
+    if (b.w0 >= 4.5 && p > 0.25) {
+      dryStreak(b, b.len * 0.06, s1 * 0.92, 0.22, 0.13);
+      dryStreak(b, b.len * 0.12, s1 * 0.85, -0.24, 0.10);
+    }
+    // joint knot
+    var a = pointAt(b, 0);
+    ctx.fillStyle = '#26262b';
+    ctx.globalAlpha = 0.55;
+    ctx.beginPath(); ctx.arc(a.x, a.y, widthAt(b, 0) * 0.62, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawTrunk(t) {
+    if (t <= T0) return;
+    var p = clamp((t - T0) / (T1 - T0), 0, 1);
+    var frontUp = S_BLOT + (TRUNK.len - S_BLOT) * easeInOutSine(p);
+    var frontDown = S_BLOT * easeOutQuad(clamp((t - T0) / DOWN_DUR, 0, 1));
+    if (frontUp - frontDown < 2) return;
+    var growingDown = frontDown < S_BLOT - 0.5;
+    strokeSpan(TRUNK, frontDown, frontUp, 1.9, '#8b8b92', 0.10, growingDown, p < 1);
+    strokeSpan(TRUNK, frontDown, frontUp, 1.0, '#26262b', 0.94, growingDown, p < 1);
+    if (p > 0.3) {
+      dryStreak(TRUNK, frontDown + 20, frontUp - 6, 0.24, 0.14);
+      dryStreak(TRUNK, frontDown + 40, frontUp * 0.9, -0.26, 0.10);
+    }
+  }
+
+  /* ============================================================
+     DRAWING — flowers, buds, petals
+     ============================================================ */
+  var CINNABAR = { base: '#c2392e', deep: '#992a22', line: '#7c221b', bud: '#b7352c' };
+  var INK_DARK = '#2e2a28';
+
+  function petalPath(ang, L, W) {
+    var ux = Math.cos(ang), uy = Math.sin(ang), px = -uy, py = ux;
+    var bx = ux * L * 0.16, by = uy * L * 0.16;
+    var tx = ux * L, ty = uy * L;
+    ctx.beginPath();
+    ctx.moveTo(bx, by);
+    ctx.bezierCurveTo(
+      ux * L * 0.30 + px * W, uy * L * 0.30 + py * W,
+      ux * L * 0.80 + px * W * 0.52, uy * L * 0.80 + py * W * 0.52,
+      tx, ty);
+    ctx.bezierCurveTo(
+      ux * L * 0.80 - px * W * 0.52, uy * L * 0.80 - py * W * 0.52,
+      ux * L * 0.30 - px * W, uy * L * 0.30 - py * W,
+      bx, by);
+    ctx.closePath();
+  }
+
+  function drawBloom(f, t) {
+    var p = clamp((t - f.birth) / 0.75, 0, 1);
+    if (p <= 0) return;
+    var sc = easeOutBack(p);
+    var sway = 0.02 * Math.sin(t * 1.15 + f.ph);
+    ctx.save();
+    ctx.translate(f.x, f.y);
+    ctx.rotate(f.rot0 + sway - 0.10 * (1 - p));
+    ctx.scale(sc, sc);
+    ctx.globalAlpha = clamp(p * 2.4, 0, 1);
+    for (var k = 0; k < 5; k++) {
+      var L = f.R * (0.90 + f.pl[k] * 0.18);
+      petalPath(f.pa[k], L, L * 0.62);
+      ctx.fillStyle = CINNABAR.base; ctx.fill();
+      // inner shading
+      ctx.save();
+      ctx.scale(0.58, 0.58);
+      ctx.translate(Math.cos(f.pa[k]) * f.R * 0.10, Math.sin(f.pa[k]) * f.R * 0.10);
+      petalPath(f.pa[k], L, L * 0.55);
+      ctx.fillStyle = CINNABAR.deep;
+      ctx.globalAlpha = clamp(p * 2.4, 0, 1) * 0.5;
+      ctx.fill();
+      ctx.restore();
+      // petal edge
+      petalPath(f.pa[k], L, L * 0.62);
+      ctx.strokeStyle = CINNABAR.line;
+      ctx.lineWidth = 1.1;
+      ctx.globalAlpha = clamp(p * 2.4, 0, 1) * 0.55;
+      ctx.stroke();
+      ctx.globalAlpha = clamp(p * 2.4, 0, 1);
+    }
+    // heart of the flower
+    ctx.fillStyle = '#4b2420';
+    ctx.beginPath(); ctx.arc(0, 0, f.R * 0.15, 0, Math.PI * 2); ctx.fill();
+    // stamens
+    if (p > 0.35) {
+      var sa = clamp((p - 0.35) / 0.65, 0, 1);
+      ctx.strokeStyle = INK_DARK; ctx.lineWidth = 1;
+      for (k = 0; k < f.sa.length; k++) {
+        var a = f.sa[k], bow = f.sy[k];
+        var r0 = f.R * 0.12, r1 = f.R * (0.50 + 0.10 * sa);
+        var cx = Math.cos(a) * (r0 + r1) / 2 - Math.sin(a) * bow;
+        var cyv = Math.sin(a) * (r0 + r1) / 2 + Math.cos(a) * bow;
+        var ex = Math.cos(a) * r1, ey = Math.sin(a) * r1;
+        ctx.globalAlpha = sa * 0.9;
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(a) * r0, Math.sin(a) * r0);
+        ctx.quadraticCurveTo(cx, cyv, ex, ey);
+        ctx.stroke();
+        ctx.fillStyle = f.ochre[k] ? '#c9973f' : INK_DARK;
+        ctx.beginPath(); ctx.arc(ex, ey, 1.8, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
+  function drawBud(f, t) {
+    var p = clamp((t - f.birth) / 0.55, 0, 1);
+    if (p <= 0) return;
+    var sc = easeOutBack(p);
+    ctx.save();
+    ctx.translate(f.x, f.y);
+    ctx.rotate(f.rot0 * 0.6);
+    ctx.scale(sc, sc);
+    ctx.globalAlpha = clamp(p * 2.2, 0, 1);
+    ctx.fillStyle = CINNABAR.bud;
+    ctx.beginPath(); ctx.ellipse(0, 0, f.R * 0.72, f.R, 0.3, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#5b2320'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.ellipse(0, 0, f.R * 0.72, f.R, 0.3, 0, Math.PI * 2); ctx.stroke();
+    // sepals
+    ctx.strokeStyle = '#5b2320'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(-f.R * 0.5, f.R * 0.55); ctx.lineTo(-f.R * 0.15, f.R * 1.05); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(f.R * 0.45, f.R * 0.6); ctx.lineTo(f.R * 0.2, f.R * 1.1); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawPetalFall(pt, t) {
+    var q = (t - pt.t0) / 2.3;
+    if (q <= 0 || q >= 1) return;
+    var f = pt.f;
+    var x = f.x + pt.vx * q * 2.3 + Math.sin(q * 2.3 * pt.frq + pt.ph) * pt.amp;
+    var y = f.y + pt.vy * q * 2.3 * 0.9 + 6 * Math.sin(q * 4 + pt.ph);
+    var alpha = q > 0.82 ? clamp((1 - q) / 0.18, 0, 1) * 0.92 : 0.92;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(pt.rot0 + q * 2.3 * pt.spin);
+    ctx.globalAlpha = alpha;
+    petalPath(0, pt.size, pt.size * 0.6);
+    ctx.fillStyle = CINNABAR.base; ctx.fill();
+    ctx.strokeStyle = CINNABAR.line; ctx.lineWidth = 0.8; ctx.globalAlpha = alpha * 0.6; ctx.stroke();
+    ctx.restore();
+  }
+
+  /* ============================================================
+     DRAWING — ink drop / blot
+     ============================================================ */
+  function drawBlot(t) {
+    var bx = BLOT.x, by = BLOT.y;
+    // falling drop 0.12 -> 0.52
+    var dp = clamp((t - 0.12) / 0.40, 0, 1);
+    if (t < 0.52) {
+      if (t >= 0.12) {
+        var dy = lerp(by - 175, by, dp * dp);
+        var st = 1 + 0.5 * dp;
+        ctx.fillStyle = '#23232a';
+        ctx.globalAlpha = 0.95;
+        ctx.beginPath();
+        ctx.ellipse(bx + 6 * (1 - dp), dy - 4 * st, 4.2, 6.5 * st, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
+    // impact ripple
+    var rp = clamp((t - 0.52) / 0.16, 0, 1);
+    if (rp > 0 && rp < 1) {
+      ctx.strokeStyle = '#55555c';
+      ctx.globalAlpha = 0.28 * (1 - rp);
+      ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.arc(bx, by, 7 + 30 * rp, 0, Math.PI * 2); ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    // blot bloom 0.50 -> 1.35 (continuous gradient diffusion, no hard steps)
+    var q = clamp((t - 0.50) / 0.85, 0, 1);
+    if (q > 0) {
+      var R = easeOutQuad(q) * 70;
+      var g1 = ctx.createRadialGradient(bx, by, R * 0.25, bx, by, R * 1.62);
+      g1.addColorStop(0, 'rgba(106,106,112,0.15)');
+      g1.addColorStop(0.75, 'rgba(106,106,112,0.06)');
+      g1.addColorStop(1, 'rgba(106,106,112,0)');
+      blobPath(bx, by, R * 1.62, RING_OUT);
+      ctx.fillStyle = g1; ctx.fill();
+      var g2 = ctx.createRadialGradient(bx, by, R * 0.45, bx, by, R * 1.30);
+      g2.addColorStop(0, 'rgba(56,56,62,0.42)');
+      g2.addColorStop(0.8, 'rgba(56,56,62,0.10)');
+      g2.addColorStop(1, 'rgba(56,56,62,0)');
+      blobPath(bx, by, R * 1.30, RING_MID);
+      ctx.fillStyle = g2; ctx.fill();
+      // ink tendril fingers creeping along the paper fibers
+      ctx.fillStyle = 'rgba(56,56,62,0.28)';
+      for (var td = 0; td < TENDRILS.length; td++) {
+        var T = TENDRILS[td], ta = T.idx / 26 * Math.PI * 2;
+        var tr = R * 1.02 * RING_OUT[T.idx];
+        ctx.beginPath();
+        ctx.arc(bx + Math.cos(ta) * tr, by + Math.sin(ta) * tr, R * T.r * easeOutQuad(q), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      var g3 = ctx.createRadialGradient(bx, by, 0, bx, by, R * 1.02);
+      g3.addColorStop(0, 'rgba(33,33,40,0.93)');
+      g3.addColorStop(0.7, 'rgba(33,33,40,0.82)');
+      g3.addColorStop(1, 'rgba(33,33,40,0.45)');
+      blobPath(bx, by, R * 1.02, RING_CORE);
+      ctx.fillStyle = g3; ctx.fill();
+      // satellite droplets
+      for (var i = 0; i < SATS.length; i++) {
+        var sp = clamp((t - SATS[i].t) / 0.3, 0, 1);
+        if (sp > 0) {
+          ctx.fillStyle = '#23232a';
+          ctx.globalAlpha = 0.8 * sp;
+          ctx.beginPath();
+          ctx.arc(bx + SATS[i].dx * easeOutQuad(sp), by + SATS[i].dy * easeOutQuad(sp), SATS[i].r * sp, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      }
+    }
+  }
+
+  /* ============================================================
+     DRAWING — text (岁岁欢喜，年年胜意) + seal
+     ============================================================ */
+  var FONT_MAIN = '70px KaiTi,STKaiti,DFKai-SB,"AR PL UKai CN","Noto Serif CJK SC","Noto Serif SC",SimSun,serif';
+  var FONT_SMALL = '44px KaiTi,STKaiti,DFKai-SB,"AR PL UKai CN","Noto Serif CJK SC","Noto Serif SC",SimSun,serif';
+  var PHRASE = '岁岁欢喜，年年胜意';          /* exact literal — the only visible text */
+  var COL1 = PHRASE.slice(0, 5).split('');    /* right column: 岁岁欢喜， */
+  var COL2 = PHRASE.slice(5).split('');       /* left column:  年年胜意  */
+  var CHAR_Y = [344, 426, 508, 590];
+  var X1 = 1062, X2 = 974, Y_COMMA = 652;
+
+  function drawGlyph(ch, x, y, font, p, rot) {
+    if (p <= 0) return;
+    var a = clamp(p, 0, 1);
+    var dy = (1 - easeOutCubic(a)) * -10;
+    ctx.save();
+    ctx.translate(x, y + dy);
+    ctx.rotate(rot);
+    ctx.font = font;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#2b2320';
+    // wet-ink halo pass
+    ctx.globalAlpha = 0.30 * clamp(a * 1.6, 0, 1);
+    ctx.shadowColor = '#2b2320';
+    ctx.shadowBlur = 4.5 + (1 - a) * 5;
+    ctx.fillText(ch, 0, 0);
+    // crisp pass
+    ctx.shadowBlur = (1 - a) * 5;
+    ctx.globalAlpha = a;
+    ctx.fillText(ch, 0, 0);
+    ctx.restore();
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+  }
+
+  function drawText(t) {
+    // right column first (traditional reading order), staggered write-on
+    for (var i = 0; i < COL1.length; i++) {
+      var isComma = (i === 4);
+      var start = 7.62 + i * 0.13;
+      var p = clamp((t - start) / 0.50, 0, 1);
+      drawGlyph(COL1[i], X1, isComma ? Y_COMMA : CHAR_Y[i], isComma ? FONT_SMALL : FONT_MAIN, p, (i % 2 ? 0.010 : -0.012));
+    }
+    for (i = 0; i < COL2.length; i++) {
+      var p2 = clamp((t - (7.88 + i * 0.13)) / 0.50, 0, 1);
+      drawGlyph(COL2[i], X2, CHAR_Y[i], FONT_MAIN, p2, (i % 2 ? -0.010 : 0.012));
+    }
+  }
+
+  function drawSeal(t) {
+    var p = clamp((t - 8.35) / 0.35, 0, 1);
+    if (p <= 0) return;
+    var sc = lerp(1.45, 1, easeOutCubic(p));
+    var cx = 900, cy = 648, r = 19;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(-0.05);
+    ctx.scale(sc, sc);
+    ctx.globalAlpha = 0.96 * p;
+    // seal body
+    ctx.fillStyle = '#b93b2b';
+    var rr2 = 4;
+    ctx.beginPath();
+    ctx.moveTo(-r + rr2, -r);
+    ctx.arcTo(r, -r, r, r, rr2);
+    ctx.arcTo(r, r, -r, r, rr2);
+    ctx.arcTo(-r, r, -r, -r, rr2);
+    ctx.arcTo(-r, -r, r, -r, rr2);
+    ctx.closePath();
+    ctx.fill();
+    // worn edges (paper chips)
+    ctx.globalAlpha = 0.20 * p;
+    ctx.fillStyle = '#efe7d5';
+    ctx.beginPath(); ctx.arc(-r * 0.7, -r * 0.82, 2.6, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(r * 0.85, r * 0.6, 2.0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(r * 0.5, -r * 0.9, 1.6, 0, Math.PI * 2); ctx.fill();
+    // carved plum blossom (negative)
+    ctx.globalAlpha = 0.95 * p;
+    ctx.fillStyle = '#efe7d5';
+    var cr = 4.6, ring = 6.8;
+    for (var k = 0; k < 5; k++) {
+      var a = -Math.PI / 2 + k * 72 * Math.PI / 180;
+      ctx.beginPath(); ctx.arc(Math.cos(a) * ring, Math.sin(a) * ring, cr, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.beginPath(); ctx.arc(0, 0, 2.6, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    ctx.globalAlpha = 1;
+  }
+
+  /* ============================================================
+     FRAME COMPOSITION — pure function of t
+     ============================================================ */
+  function renderFrame(t) {
+    t = clamp(+t || 0, 0, DURATION);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 1;
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(paper, 0, 0);
+    drawBlot(t);
+    drawTrunk(t);
+    drawSubBranch(S1, t);
+    drawSubBranch(S2, t);
+    for (var i = 0; i < TWIGS.length; i++) drawSubBranch(TWIGS[i], t);
+    for (i = 0; i < FLOWERS.length; i++) {
+      if (FLOWERS[i].kind === 'bud') drawBud(FLOWERS[i], t);
+    }
+    for (i = 0; i < FLOWERS.length; i++) {
+      if (FLOWERS[i].kind === 'bloom') drawBloom(FLOWERS[i], t);
+    }
+    for (i = 0; i < PETALS.length; i++) drawPetalFall(PETALS[i], t);
+    drawText(t);
+    // Only the approved blessing is rendered; no extra written seal.
+    return true;
+  }
+
+  window.P103 = {
+    duration: DURATION,
+    fps: FPS,
+    width: W,
+    height: H,
+    renderFrame: renderFrame
+  };
+
+  /* initial paint (frame 0 by default; ?t=<seconds> for QA preview) */
+  (function initialPaint() {
+    var m = /[?&]t=([0-9.]+)/.exec(location.search || '');
+    renderFrame(m ? parseFloat(m[1]) : 0);
+    if (/[?&]play=1/.test(location.search || '')) {
+      var t0 = null;
+      var loop = function (ts) {
+        if (t0 === null) t0 = ts;
+        renderFrame(((ts - t0) / 1000) % DURATION);
+        requestAnimationFrame(loop);
+      };
+      requestAnimationFrame(loop);
+    }
+  })();
+})();
+</script>
+</body>
+</html>

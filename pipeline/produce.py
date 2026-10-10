@@ -1,6 +1,6 @@
 """produce.py — v2 生产编排 CLI。
 
-  python -m pipeline.produce <workdir> --topic <topic.md> [--model luna|glm]
+  python -m pipeline.produce <workdir> --topic <topic.md> [--model luna|sol|glm]
        [--mode open|assisted|project-route] [--profile profiles/xxx.yaml]
        [--repair-rounds 1] [--blind-sample] [--stage <name>] [--dry-audio]
 
@@ -57,7 +57,7 @@ def visual_repair(args) -> int:
     fixed, meta = llm.call(args.model, prompts.repair_prompt(
         decision, code,
         [{"kind": "visual", "message": "视觉迭代反馈（比错误修复优先级低，改画面不改数学）：\n" + notes}],
-        "qa_sheet.jpg 拼图已人审/VLM审，问题清单见上"))
+        "qa_sheet.jpg 拼图已人审/VLM审，问题清单见上"), effort=args.effort)
     import re as _re
     m = _re.search(r"```(?:\w+)?\n(.*?)```", fixed, _re.S)
     if not m or len(m.group(1)) < 200:
@@ -87,11 +87,13 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("workdir", type=Path)
     ap.add_argument("--topic", type=Path, required=True)
-    ap.add_argument("--model", default="luna", choices=["luna", "glm"])
+    ap.add_argument("--model", default="luna", choices=["luna", "sol", "glm"])
     ap.add_argument("--mode", default=None, choices=["open", "assisted", "project-route"])
     ap.add_argument("--profile", type=Path, default=None)
     ap.add_argument("--title", default=None)
     ap.add_argument("--repair-rounds", type=int, default=1)
+    ap.add_argument("--effort", default=None, choices=["low", "medium", "high"],
+                    help="reasoning_effort 透传（luna/sol 生效；glm 走 think 分支不受影响）")
     ap.add_argument("--blind-sample", action="store_true", help="菜单盲测采样：decide/codegen 只见契约不见菜单")
     ap.add_argument("--visual-repair", type=Path, default=None, metavar="NOTES.md",
                     help="视觉迭代轮：用笔记中的视觉问题做一轮定向修复+重渲+重QA+重mux（需先有完整产物）")
@@ -116,7 +118,7 @@ def main() -> int:
         sb = parse_storyboard(sb_path.read_text(encoding="utf-8")); log("storyboard: 复用")
     else:
         log("storyboard: 生成中…")
-        out, meta = llm.call(args.model, prompts.storyboard_prompt(topic, prof), think="on")
+        out, meta = llm.call(args.model, prompts.storyboard_prompt(topic, prof), think="on", effort=args.effort)
         sb_path.write_text(out, encoding="utf-8")
         sb = parse_storyboard(out); log(f"storyboard: {len(sb['narration'])} 句 ({meta['usage'].get('completion_tokens', '?')} tok)")
 
@@ -152,13 +154,13 @@ def main() -> int:
         decision = json.loads(dec_path.read_text(encoding="utf-8")); log("decide: 复用", decision.get("backend"))
     else:
         steps = prompts.decision_prompts(topic, sb_path.read_text(encoding="utf-8"), prof, blind=args.blind_sample)
-        plan_free, _ = llm.call(args.model, steps[0], think="on")
+        plan_free, _ = llm.call(args.model, steps[0], think="on", effort=args.effort)
         (wd / "decision_stepA.md").write_text(plan_free, encoding="utf-8")
         if args.blind_sample:
             decision = {"backend": "CUSTOM", "blind_sample": True, "reason": plan_free[:400],
                         "alternative": None, "risk": None, "why_not": {}}
         else:
-            raw, _ = llm.call(args.model, steps[1], think="on")
+            raw, _ = llm.call(args.model, steps[1], think="on", effort=args.effort)
             m = re.search(r"\{.*\}", raw, re.S)
             decision = json.loads(m.group(0)) if m else {"backend": prof["backend"]["preferred"] or "WEB_2D",
                                                           "reason": "fallback(决策解析失败)", "alternative": None,
@@ -175,7 +177,7 @@ def main() -> int:
         code = code_path.read_text(encoding="utf-8"); log("codegen: 复用", code_path.name)
     else:
         log(f"codegen ({backend}): 生成中…")
-        code, meta = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="low")
+        code, meta = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="low", effort=args.effort)
         m = re.search(r"```(?:\w+)?\n(.*?)```", code, re.S)
         code = (m.group(1) if m else code).strip()
         if len(code) < 200:
@@ -195,7 +197,7 @@ def main() -> int:
             backend, decision["backend"] = "web_2d", "WEB_2D"
             if not (wd / "code" / "index.html").exists():
                 log("codegen: 回退 web_2d 重新生成…")
-                code, _ = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="low")
+                code, _ = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="low", effort=args.effort)
                 m = re.search(r"```(?:\w+)?\n(.*?)```", code, re.S)
                 (wd / "code" / "index.html").write_text((m.group(1) if m else code).strip(), encoding="utf-8")
 
@@ -213,7 +215,7 @@ def main() -> int:
         if round_i >= args.repair_rounds:
             log("repair 轮次耗尽，终止"); return 1
         log(f"repair round {round_i + 1}…")
-        fixed, _ = llm.call(args.model, think="low", messages=prompts.repair_prompt(decision, code, errors, "（帧证据见 qa_report）"))
+        fixed, _ = llm.call(args.model, think="low", effort=args.effort, messages=prompts.repair_prompt(decision, code, errors, "（帧证据见 qa_report）"))
         m = re.search(r"```(?:\w+)?\n(.*?)```", fixed, re.S)
         if m:
             code = m.group(1).strip(); code_path.write_text(code, encoding="utf-8")
@@ -229,7 +231,7 @@ def main() -> int:
         return 1
     if not report["pass"] and args.repair_rounds > 0 and not report["checks"]["frame_variance"]["pass"]:
         log("qa: 空帧率超标 → repair…")
-        fixed, _ = llm.call(args.model, think="low", messages=prompts.repair_prompt(
+        fixed, _ = llm.call(args.model, think="low", effort=args.effort, messages=prompts.repair_prompt(
             decision, code,
             [{"kind": "frame", "message": f"blank_frames={report['checks']['frame_variance']['blank_frames']} — 大量帧接近纯色，元素疑似未绘制"}],
             "qa_sheet.jpg"))
