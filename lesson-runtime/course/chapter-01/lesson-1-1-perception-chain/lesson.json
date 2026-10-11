@@ -1,0 +1,63 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-01",
+  "lesson_id": "lesson-1-1-perception-chain",
+  "title": "感觉、知觉与认知——环境信息的加工流水线（1.1·龙小淳(知性积极女)）",
+  "duration": 399.4,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "感觉/知觉/认知三级流水线",
+    "绝对阈限：下阈限与上阈限",
+    "感觉剥夺实验与托蒂案例",
+    "图式、同化与顺化（皮亚杰）",
+    "耶文斯黑豆实验与注意广度 7 临界",
+    "知觉定势、习惯化适应、韦伯-费希纳定律"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 30.2,
+      "type": "intro",
+      "topic": "鸟鸣开场"
+    },
+    {
+      "start": 30.2,
+      "end": 110.7,
+      "type": "concept",
+      "topic": "感觉：采集与阈限"
+    },
+    {
+      "start": 110.7,
+      "end": 205.0,
+      "type": "concept",
+      "topic": "知觉与认知：组织与图式"
+    },
+    {
+      "start": 205.0,
+      "end": 264.4,
+      "type": "concept",
+      "topic": "鸟鸣流水线模型"
+    },
+    {
+      "start": 264.4,
+      "end": 385.3,
+      "type": "application",
+      "topic": "流水线的三个 bug"
+    },
+    {
+      "start": 385.3,
+      "end": 399.4,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

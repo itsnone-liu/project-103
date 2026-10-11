@@ -54,8 +54,48 @@ async def _tts_one(text, out, voice, rate_pct):
     c = edge_tts.Communicate(text, voice, rate=rate)
     await c.save(str(out))
 
+# --- cosyvoice（百炼 cosyvoice-v3-plus，voice 形如 "cosy:longshu_v3"）---
+COSY_URL = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer"
+
+def _cosy_tts(text, out, voice_spec, rate_pct):
+    """voice_spec: "<voice_id>" 或 "<model>/<voice_id>"（默认 cosyvoice-v3-plus）。
+    v3-plus 仅开放标杆音色(longanyang/longanhuan)；完整龙家班音色库在 cosyvoice-v2。"""
+    import urllib.request, urllib.error
+    if "/" in voice_spec:
+        model, voice_id = voice_spec.split("/", 1)
+    else:
+        model, voice_id = os.environ.get("COSY_MODEL", "cosyvoice-v3-plus"), voice_spec
+    key = os.environ.get("DASHSCOPE_API_KEY", "")
+    if not key:
+        raise RuntimeError("DASHSCOPE_API_KEY 未设置（User 级环境变量）")
+    body = json.dumps({"model": model,
+                       "input": {"text": text, "voice": voice_id, "format": "mp3",
+                                 "sample_rate": 24000,
+                                 **({"speech_rate": round(1 + rate_pct / 100, 3)}
+                                    if rate_pct else {})}}).encode("utf-8")
+    last = None
+    for attempt in range(4):                      # 冷启动可能慢；SSL 悬挂快速失败
+        req = urllib.request.Request(COSY_URL, data=body, headers={
+            "Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=90) as r:
+                js = json.loads(r.read())
+            url = ((js.get("output") or {}).get("audio") or {}).get("url")
+            if not url:
+                raise RuntimeError(f"cosy 无音频: {json.dumps(js, ensure_ascii=False)[:200]}")
+            out.write_bytes(urllib.request.urlopen(url, timeout=120).read())
+            return
+        except Exception as e:                    # noqa: BLE001
+            last = e
+            print(f"  cosy retry {attempt+1}: {e}", file=sys.stderr)
+            import time as _t; _t.sleep(3 * (attempt + 1))
+    raise last
+
 def tts_sentence(text, out, voice, rate_pct=0):
-    asyncio.run(_tts_one(text, out, voice, rate_pct))
+    if voice.startswith("cosy:"):
+        _cosy_tts(text, out, voice[5:], rate_pct)
+    else:
+        asyncio.run(_tts_one(text, out, voice, rate_pct))
     # edge-tts 带 ~0.15-0.2s 头静音;本 ffmpeg 无 silenceremove → silencedetect 量出后 ss 裁剪存 wav
     wav = out.with_suffix(".wav")
     r = run([_ffmpeg_path(), "-i", str(out), "-af", "silencedetect=noise=-45dB:d=0.05",
@@ -78,8 +118,12 @@ def cmd_tts(scene_json):
     t, starts, ends, rates, texts = 0.0, [], [], [], []
     for k, s in enumerate(sc["sentences"]):
         f = vdir / f"sent_{k:02d}.mp3"
+        wav = vdir / f"sent_{k:02d}.wav"
         rate = 0; cap = s.get("rate_cap", 30)
-        dur = tts_sentence(s["text"], f, voice, 0)
+        if wav.exists() and wav.stat().st_size > 40000:   # 断点续跑：已合成句直接量时长
+            dur = dur_of(wav)
+        else:
+            dur = tts_sentence(s["text"], f, voice, 0)
         # 锚点 = 开口时刻: 说早了→垫拍等待; 说晚了(t>锚)→按 5% 阶梯加速语速
         anchor = s.get("anchor_start")
         if anchor is not None and t > anchor + 0.05:

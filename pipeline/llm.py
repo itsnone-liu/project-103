@@ -13,7 +13,7 @@ ENDPOINTS = {
     # codex 代理两个模型共用一个 key：用户注册表实测只有 CODEX_PROXY_API_KEY
     # （LUNA_API_KEY 从未设置——2026-10-10 修正，此前 401 的根因）
     "luna": ("http://127.0.0.1:8080/v1/chat/completions", "CODEX_PROXY_API_KEY", "gpt-6-luna"),
-    "sol":  ("http://127.0.0.1:8080/v1/chat/completions", "CODEX_PROXY_API_KEY", "gpt-6-sol"),
+    "sol":  ("http://127.0.0.1:8080/v1/chat/completions", "CODEX_PROXY_API_KEY", "gpt-6.1-sol"),
     "glm":  ("https://open.bigmodel.cn/api/coding/paas/v4/chat/completions", "GLM_API_KEY", "glm-5.3"),
 }
 

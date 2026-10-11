@@ -1,18 +1,90 @@
 {
   "schema": "course-manifest-v0.1",
   "course_id": "envpsy-course-001",
-  "title": "环境心理学·互动课件（单课测试）",
+  "title": "环境心理学·系列课件（前置十章试产）",
   "version": "0.1",
   "chapters": [
     {
-      "chapter_id": "chapter-06",
-      "title": "第六章 空间行为",
+      "chapter_id": "chapter-00",
+      "title": "绪论",
       "lessons": [
         {
-          "lesson_id": "lesson-t1-personal-space",
-          "title": "看不见的气泡——个人空间与人际距离（6.1）",
-          "duration": 348.6,
-          "package": "course/chapter-06/lesson-t1-personal-space"
+          "lesson_id": "lesson-intro",
+          "title": "环境心理学是什么——环境·行为研究的开场白（绪论·龙小淳(知性积极女)）",
+          "duration": 198.5,
+          "package": "course/chapter-00/lesson-intro"
+        }
+      ]
+    },
+    {
+      "chapter_id": "chapter-01",
+      "title": "第一章 知觉研究及其设计应用",
+      "lessons": [
+        {
+          "lesson_id": "lesson-1-1-perception-chain",
+          "title": "感觉、知觉与认知——环境信息的加工流水线（1.1·龙小淳(知性积极女)）",
+          "duration": 399.4,
+          "package": "course/chapter-01/lesson-1-1-perception-chain"
+        },
+        {
+          "lesson_id": "lesson-1-2a-vision-gestalt",
+          "title": "看世界的三种方式——视知觉功能与格式塔组织（1.2①·龙小淳(知性积极女)）",
+          "duration": 438.7,
+          "package": "course/chapter-01/lesson-1-2a-vision-gestalt"
+        },
+        {
+          "lesson_id": "lesson-1-2b-illusion",
+          "title": "眼见未必为实——视错觉与设计（1.2②·龙小淳(知性积极女)）",
+          "duration": 424.3,
+          "package": "course/chapter-01/lesson-1-2b-illusion"
+        },
+        {
+          "lesson_id": "lesson-1-3-soundscape",
+          "title": "听建筑——听知觉、声景与环境设计（1.3·龙小淳(知性积极女)）",
+          "duration": 351.6,
+          "package": "course/chapter-01/lesson-1-3-soundscape"
+        },
+        {
+          "lesson_id": "lesson-1-4-other-senses",
+          "title": "鼻尖、手底、脚下——嗅觉触觉动觉与环境设计（1.4·龙小淳(知性积极女)）",
+          "duration": 324.9,
+          "package": "course/chapter-01/lesson-1-4-other-senses"
+        }
+      ]
+    },
+    {
+      "chapter_id": "chapter-02",
+      "title": "第二章 环境知觉",
+      "lessons": [
+        {
+          "lesson_id": "lesson-2-1-affordance",
+          "title": "环境的提供——生态知觉理论（2.1·龙小淳(知性积极女)）",
+          "duration": 402.5,
+          "package": "course/chapter-02/lesson-2-1-affordance"
+        },
+        {
+          "lesson_id": "lesson-2-2-complexity",
+          "title": "复杂性与适应——环境偏爱的倒 U 曲线（2.2+2.3·龙小淳(知性积极女)）",
+          "duration": 405.9,
+          "package": "course/chapter-02/lesson-2-2-complexity"
+        },
+        {
+          "lesson_id": "lesson-2-4-emotion",
+          "title": "情绪的坐标——环境刺激与情绪反应（2.4·龙小淳(知性积极女)）",
+          "duration": 376.5,
+          "package": "course/chapter-02/lesson-2-4-emotion"
+        }
+      ]
+    },
+    {
+      "chapter_id": "chapter-03",
+      "title": "第三章 环境认知",
+      "lessons": [
+        {
+          "lesson_id": "lesson-3-1-city-image",
+          "title": "城市意象五要素——在陌生城市里认路（3.1①·龙小淳(知性积极女)）",
+          "duration": 243.7,
+          "package": "course/chapter-03/lesson-3-1-city-image"
         }
       ]
     }

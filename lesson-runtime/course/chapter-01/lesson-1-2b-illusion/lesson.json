@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-01",
+  "lesson_id": "lesson-1-2b-illusion",
+  "title": "眼见未必为实——视错觉与设计（1.2②·龙小淳(知性积极女)）",
+  "duration": 424.3,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "似动三兄弟：自动/闪动/诱动",
+    "深圳 1999 与成都 2008 群体事件",
+    "平面构成错觉（吐鲁番宾馆/咖啡墙）",
+    "坡度错觉：缓坡看成平路（Hajnal 2016）",
+    "漂浮错觉与精神病院走廊",
+    "怪相错觉（Caputo 2010）与特罗勒效应",
+    "黑体字错觉：下划线 1/8-1/6 字高"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 28.3,
+      "type": "intro",
+      "topic": "深圳狂奔事件"
+    },
+    {
+      "start": 28.3,
+      "end": 136.7,
+      "type": "concept",
+      "topic": "似动错觉"
+    },
+    {
+      "start": 136.7,
+      "end": 191.0,
+      "type": "concept",
+      "topic": "平面构成与街头立体画"
+    },
+    {
+      "start": 191.0,
+      "end": 266.4,
+      "type": "application",
+      "topic": "坡度错觉"
+    },
+    {
+      "start": 266.4,
+      "end": 347.4,
+      "type": "application",
+      "topic": "漂浮与怪相错觉"
+    },
+    {
+      "start": 347.4,
+      "end": 403.4,
+      "type": "application",
+      "topic": "黑体字错觉与策略二分"
+    },
+    {
+      "start": 403.4,
+      "end": 424.3,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

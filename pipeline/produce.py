@@ -9,7 +9,7 @@
   render → qa → repair(≤N) → mux → final
 """
 from __future__ import annotations
-import argparse, json, re, subprocess, sys
+import argparse, json, os, re, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -36,7 +36,7 @@ def parse_storyboard(text: str) -> dict:
 
 
 def scene_json(sb: dict, title: str) -> dict:
-    return {"title": title, "voice": "zh-CN-XiaoxiaoNeural",
+    return {"title": title, "voice": os.environ.get("P103_VOICE", "cosy:cosyvoice-v2/longxiaochun_v2"),
             "bgm": {"file": "bgm/Wholesome.mp3", "gain": 0.13},
             "gap": 0.25, "tail": 1.5, "sentences": [{"text": s, "pause_after": 0.25} for s in sb["narration"]]}
 

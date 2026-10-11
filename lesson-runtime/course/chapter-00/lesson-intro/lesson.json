@@ -1,0 +1,48 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-00",
+  "lesson_id": "lesson-intro",
+  "title": "环境心理学是什么——环境·行为研究的开场白（绪论·龙小淳(知性积极女)）",
+  "duration": 198.5,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "环境心理学的定义与研究对象",
+    "环境—行为研究的特点：源于实际生活、跨学科",
+    "新研究动向：景观评价与偏爱、自然环境的积极影响"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 15.3,
+      "type": "intro",
+      "topic": "学科开场"
+    },
+    {
+      "start": 15.3,
+      "end": 100.6,
+      "type": "concept",
+      "topic": "环境心理学定义与特点"
+    },
+    {
+      "start": 100.6,
+      "end": 177.2,
+      "type": "concept",
+      "topic": "研究动向与领域"
+    },
+    {
+      "start": 177.2,
+      "end": 198.5,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

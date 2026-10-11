@@ -1,0 +1,56 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-03",
+  "lesson_id": "lesson-3-1-city-image",
+  "title": "城市意象五要素——在陌生城市里认路（3.1①·龙小淳(知性积极女)）",
+  "duration": 243.7,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "认知地图与城市意象",
+    "五要素：道路/边界/区域/节点/标志",
+    "波士顿/泽西城/洛杉矶调查",
+    "意象性与可读性",
+    "北京意象调查与应用"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 25.0,
+      "type": "intro",
+      "topic": "认路开场"
+    },
+    {
+      "start": 25.0,
+      "end": 111.8,
+      "type": "concept",
+      "topic": "五要素定义"
+    },
+    {
+      "start": 111.8,
+      "end": 175.0,
+      "type": "concept",
+      "topic": "三城调查与意象性"
+    },
+    {
+      "start": 175.0,
+      "end": 228.2,
+      "type": "application",
+      "topic": "北京意象与设计应用"
+    },
+    {
+      "start": 228.2,
+      "end": 243.7,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

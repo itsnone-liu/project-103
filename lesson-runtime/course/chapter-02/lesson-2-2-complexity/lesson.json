@@ -1,0 +1,65 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-02",
+  "lesson_id": "lesson-2-2-complexity",
+  "title": "复杂性与适应——环境偏爱的倒 U 曲线（2.2+2.3·龙小淳(知性积极女)）",
+  "duration": 405.9,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "对照刺激特性四件套（Berlyne）",
+    "兴趣单调增 vs 喜好倒 U（Wohlwill）",
+    "自然环境例外：越复杂越偏爱",
+    "芦苞祖庙：兴趣 ≠ 喜好",
+    "复杂组织三态：无组织/有组织/协同",
+    "适应水平理论（Wohlwill 1974）",
+    "信息超载与信息阙如：南京路/光谷 vs 群岛化",
+    "顺应与适应：同伴街/詹宁斯/雅莉玛"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 31.4,
+      "type": "intro",
+      "topic": "两座繁华两种反应"
+    },
+    {
+      "start": 31.4,
+      "end": 91.1,
+      "type": "concept",
+      "topic": "环境知觉特点"
+    },
+    {
+      "start": 91.1,
+      "end": 196.9,
+      "type": "concept",
+      "topic": "倒 U 曲线"
+    },
+    {
+      "start": 196.9,
+      "end": 259.9,
+      "type": "concept",
+      "topic": "时代漂移：圣家寺与凤凰中心"
+    },
+    {
+      "start": 259.9,
+      "end": 388.4,
+      "type": "application",
+      "topic": "适应水平：过度/不足/调节"
+    },
+    {
+      "start": 388.4,
+      "end": 405.9,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-01",
+  "lesson_id": "lesson-1-2a-vision-gestalt",
+  "title": "看世界的三种方式——视知觉功能与格式塔组织（1.2①·龙小淳(知性积极女)）",
+  "duration": 438.7,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "中央凹（2°圆锥·视平线下 10°）与视敏度",
+    "黄斑（12°-15°）与阅读",
+    "周围视觉：运动夸大与隧道/林荫道设计",
+    "点划式扫描与注视点（西湖 vs 东湖）",
+    "格式塔：图底之分与鲁宾两可图",
+    "群化四则：邻近/相似/连续/封闭",
+    "简化原则与良好完形"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 21.8,
+      "type": "intro",
+      "topic": "霍尔论中央凹"
+    },
+    {
+      "start": 21.8,
+      "end": 147.4,
+      "type": "concept",
+      "topic": "三种视觉功能"
+    },
+    {
+      "start": 147.4,
+      "end": 251.8,
+      "type": "concept",
+      "topic": "扫描规律"
+    },
+    {
+      "start": 251.8,
+      "end": 419.4,
+      "type": "concept",
+      "topic": "格式塔组织规律"
+    },
+    {
+      "start": 419.4,
+      "end": 438.7,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

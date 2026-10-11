@@ -1,0 +1,71 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-02",
+  "lesson_id": "lesson-2-1-affordance",
+  "title": "环境的提供——生态知觉理论（2.1·龙小淳(知性积极女)）",
+  "duration": 402.5,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "吉布森与直接知觉理论",
+    "视觉悬崖：90% 婴儿拒绝爬过（Gibson & Walk）",
+    "光阵列与质感梯度",
+    "提供（affordance）：环境的功用可能性",
+    "寓知觉于行动：TTC 与 Tau 理论",
+    "提供三分类：虚假/隐藏/可察觉（Gaver）",
+    "儿童生态知觉与设计：猫耳洞/卡他/沙坑",
+    "潜在功能：鸟栖现象与盆栽垃圾盆"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 27.0,
+      "type": "intro",
+      "topic": "海龟与小鱼"
+    },
+    {
+      "start": 27.0,
+      "end": 99.9,
+      "type": "concept",
+      "topic": "视觉悬崖"
+    },
+    {
+      "start": 99.9,
+      "end": 183.6,
+      "type": "concept",
+      "topic": "光阵列与提供"
+    },
+    {
+      "start": 183.6,
+      "end": 253.7,
+      "type": "concept",
+      "topic": "寓知觉于行动"
+    },
+    {
+      "start": 253.7,
+      "end": 301.2,
+      "type": "concept",
+      "topic": "提供的三种伪装"
+    },
+    {
+      "start": 301.2,
+      "end": 385.6,
+      "type": "application",
+      "topic": "儿童与环境设计"
+    },
+    {
+      "start": 385.6,
+      "end": 402.5,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-02",
+  "lesson_id": "lesson-2-4-emotion",
+  "title": "情绪的坐标——环境刺激与情绪反应（2.4·龙小淳(知性积极女)）",
+  "duration": 376.5,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "唤醒：网状结构与生理指标",
+    "SD 法与形容词维度",
+    "情绪三因子：快乐/控制/唤醒（Russell & Mehrabian）",
+    "多巴胺与脑啡肽：欲望与奖赏",
+    "控制感：心理对抗/习得性无助/疗养院实验",
+    "布克钟表匠与金字塔推论",
+    "环状模型与四维度",
+    "新天地：一平方公里的情绪地图",
+    "耶克斯-多德森倒 U 与设计匹配"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 26.0,
+      "type": "intro",
+      "topic": "新天地表情变化"
+    },
+    {
+      "start": 26.0,
+      "end": 88.1,
+      "type": "concept",
+      "topic": "维度来源：SD 法"
+    },
+    {
+      "start": 88.1,
+      "end": 201.4,
+      "type": "concept",
+      "topic": "情绪三因子"
+    },
+    {
+      "start": 201.4,
+      "end": 269.4,
+      "type": "concept",
+      "topic": "环状模型到四维度"
+    },
+    {
+      "start": 269.4,
+      "end": 319.6,
+      "type": "application",
+      "topic": "新天地情绪地图"
+    },
+    {
+      "start": 319.6,
+      "end": 361.3,
+      "type": "application",
+      "topic": "耶克斯-多德森与设计"
+    },
+    {
+      "start": 361.3,
+      "end": 376.5,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

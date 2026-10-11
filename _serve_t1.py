@@ -33,7 +33,67 @@ FILES = {
 }
 for _f in sorted((ROOT / "audio" / "tts-ab").glob("*.mp3")):
     FILES[f"/tts-{_f.name}"] = _f
+FILES["/cosy.mp4"] = ROOT / "runs" / "envpsy-t1-cosy" / "out" / "final_envpsy-t1-cosy.mp4"
+_cosy_label = {  # 试听页标签
+    "cosyvoice-v2_longshu_v2": "G-龙书·沉稳青年男(v2)",
+    "cosyvoice-v2_longxiaochun_v2": "H-龙小淳·知性积极女(v2)",
+    "cosyvoice-v2_longxiaocheng_v2": "I-龙小诚·磁性低音男(v2)",
+    "cosyvoice-v2_longtian_v2": "J-龙天·磁性理智男(v2)",
+    "cosyvoice-v2_longze_v2": "K-龙泽·温暖元气男(v2)",
+    "cosyvoice-v2_longbaizhi": "L-龙白芷·睿气旁白女(v2)",
+    "cosyvoice-v2_longwan_v2": "M-龙婉·积极知性女(v2)",
+    "cosyvoice-v3-plus_longanyang": "N-龙安洋·阳光大男孩(v3-plus)",
+}
+for _f in sorted((ROOT / "cache" / "cosy_voices").glob("*.mp3")):
+    _key = _f.stem
+    if _key in _cosy_label:
+        FILES[f"/cosy-{_key}.mp3"] = _f
 MIME = {".mp4": "video/mp4", ".mp3": "audio/mpeg", ".md": "text/plain; charset=utf-8", ".log": "text/plain; charset=utf-8"}
+
+# ---- 前十段（first10）批产 ----
+F10 = [
+    ("f10-00", "envpsy-intro-cosy", "绪论 · 环境心理学是什么", "换声重制"),
+    ("f10-01", "envpsy-11", "1.1 感觉、知觉与认知——加工流水线", "sol 新制"),
+    ("f10-02", "envpsy-12a", "1.2① 看世界的三种方式——视知觉功能与格式塔", "sol 新制"),
+    ("f10-03", "envpsy-12b", "1.2② 眼见未必为实——视错觉与设计", "sol 新制"),
+    ("f10-04", "envpsy-13", "1.3 听建筑——听知觉、声景与环境设计", "sol 新制"),
+    ("f10-05", "envpsy-14", "1.4 鼻尖、手底、脚下——嗅触动觉与环境设计", "sol 新制"),
+    ("f10-06", "envpsy-21", "2.1 环境的提供——生态知觉理论", "sol 新制"),
+    ("f10-07", "envpsy-22", "2.2+2.3 复杂性与适应——环境偏爱的倒U曲线", "sol 新制"),
+    ("f10-08", "envpsy-24", "2.4 情绪的坐标——环境刺激与情绪反应", "sol 新制"),
+    ("f10-09", "envpsy-31-cosy", "3.1① 城市意象五要素——凯文·林奇", "换声重制"),
+]
+for _k, _r, _t, _tag in F10:
+    FILES[f"/{_k}.mp4"] = ROOT / "runs" / _r / "out" / f"final_{_r}.mp4"
+
+F10_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>前十段 · 章节正片</title>
+<style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}
+h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
+.item{margin:26px 0}.item b{font-size:15px}.tag{color:#8fb;font-size:12px;border:1px solid #2a4;border-radius:4px;padding:1px 6px;margin:0 6px}
+video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}</style></head><body>
+<h1>《环境心理学》前十段正片 · 章节序</h1>
+<p class="meta">配音 CosyVoice v2 · 龙小淳(知性积极女)；新制 8 段＝sol(gpt-6.1-sol 高推理) storyboard→codegen→渲染；绪论/3.1① 为旧片换声重制。
+<br>互动课件版（带字幕/数据接口）在 <a href="http://100.84.28.40:8862/?p=course/course.json">Runtime 8862</a>。</p>
+{{ITEMS}}
+</body></html>"""
+
+
+def _f10_page():
+    import json as _json
+    rows = []
+    for _k, _r, _t, _tag in F10:
+        f = FILES[f"/{_k}.mp4"]
+        if not f.exists():
+            rows.append(f'<div class="item"><s><b>{_t}</b></s> <span class="tag">生产中…</span></div>')
+            continue
+        tm_p = ROOT / "audio" / f"timing_{_r}.json"
+        dur = ""
+        if tm_p.exists():
+            _d = _json.loads(tm_p.read_text(encoding="utf-8"))["total"]
+            dur = f'<span class="meta">{_d / 60:.1f} min</span>'
+        rows.append(f'<div class="item"><b>{_t}</b><span class="tag">{_tag}</span>{dur}'
+                    f'<video controls preload="metadata" src="/{_k}.mp4"></video></div>')
+    return F10_PAGE.replace("{{ITEMS}}", "".join(rows))
 PORT = 8861
 
 PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>T1 种子对比 · 个人空间与人际距离</title>
@@ -42,6 +102,7 @@ h1{font-size:20px}h2{font-size:15px;color:#8fb;margin-top:28px}a{color:#7fd}vide
 .meta{color:#9ab;font-size:13px;line-height:1.7}table{border-collapse:collapse;font-size:13px}
 td,th{border:1px solid #2a3540;padding:4px 10px;text-align:left}th{color:#8fb}</style></head><body>
 <h1>《看不见的气泡》T1 种子 · 两版对比</h1>
+<p class="meta"><a href="/first10.html">▶ 前十段正片批产（绪论→3.1，龙小淳配音，sol 新制 8 段+换声 2 段）</a></p>
 <table>
 <tr><th></th><th>v1 默认推理</th><th>hr 高推理</th></tr>
 <tr><td>时长</td><td>396.7s</td><td>348.6s（更贴近 5min 目标）</td></tr>
@@ -63,6 +124,12 @@ td,th{border:1px solid #2a3540;padding:4px 10px;text-align:left}th{color:#8fb}</
 <video controls preload="metadata" src="/hr-yunjian.mp4"></video>
 <p class="meta">347.5s · 42 句 · 与上方 hr 版同分镜同画面，仅旁白换为 zh-CN-YunjianNeural（云健）· QA PASS<br>
 供同事对比：<b>晓晓（hr 版）vs 云健（本版）</b>——结合 <a href="/tts.html">音色 A/B 页</a> 一起打分。男声候选：云健（纪录片）/ 云扬（新闻播报）。</p>
+<h2>配音对比——T1 种子 · CosyVoice 龙书版（百炼 cosyvoice-v2）</h2>
+<video controls preload="metadata" src="/cosy.mp4"></video>
+<p class="meta">311.7s · 42 句 · 同分镜同画面，旁白换为百炼 CosyVoice cosyvoice-v2 / longshu_v2（龙书·沉稳青年男）· AUDIT PASS<br>
+互动课件版（带问答/互动题）：<a href="http://199.68.217.229:8862/?p=course/chapter-06/lesson-t1-personal-space-cosy">Runtime 打开 CosyVoice 版</a> ·
+<a href="http://199.68.217.229:8862/?p=course/chapter-06/lesson-t1-personal-space">原晓晓版对照</a> ·
+更多音色见 <a href="/tts.html">A/B 页 G–N 组</a>（龙书/小淳/小诚/龙天/龙泽/白芷/龙婉/安洋）。成本：整课 1,623 字 ≈ ¥0.33。</p>
 <h2>T2 种子（案例解析）——成都与乐山茶馆</h2>
 <video controls preload="metadata" src="/t2.mp4"></video>
 <p class="meta">262.5s · 40 句 · sol effort=high · 零 repair · QA PASS · 账单 16,715 tok（storyboard 3,380 + codegen 13,335）<br>
@@ -98,7 +165,7 @@ h2{color:#4FD1C5}p{color:#9fb3c1;line-height:1.7}audio{width:100%;margin:6px 0 1
 </body></html>"""
 
 def _tts_page():
-    cards = "".join(
+    edge_cards = "".join(
         f'<div class="card"><b>{n}</b> — {desc}<br><audio controls preload="none" src="/tts-{n}.mp3"></audio></div>'
         for n, _v, _r, desc in [
             ("A-xiaoxiao-current", "", "", "现状：晓晓，标准女声"),
@@ -109,6 +176,20 @@ def _tts_page():
             ("F-xiaoxiao-slow", "", "", "晓晓降速 5%：检验语速的影响"),
         ]
     )
+    cosy_cards = "".join(
+        f'<div class="card"><b>{label}</b> — {desc}<br><audio controls preload="none" src="/cosy-{k}.mp3"></audio></div>'
+        for label, k, desc in [
+            ("G-longshu", "cosyvoice-v2_longshu_v2", "龙书·沉稳青年男(v2)——T1 CosyVoice 成片所用音色"),
+            ("H-longxiaochun", "cosyvoice-v2_longxiaochun_v2", "龙小淳·知性积极女(v2)"),
+            ("I-longxiaocheng", "cosyvoice-v2_longxiaocheng_v2", "龙小诚·磁性低音男(v2)"),
+            ("J-longtian", "cosyvoice-v2_longtian_v2", "龙天·磁性理智男(v2)"),
+            ("K-longze", "cosyvoice-v2_longze_v2", "龙泽·温暖元气男(v2)"),
+            ("L-longbaizhi", "cosyvoice-v2_longbaizhi", "龙白芷·睿气旁白女(v2)"),
+            ("M-longwan", "cosyvoice-v2_longwan_v2", "龙婉·积极知性女(v2)"),
+            ("N-longanyang", "cosyvoice-v3-plus_longanyang", "龙安洋·阳光大男孩(v3-plus·支持Instruct情感指令)"),
+        ] if (ROOT / "cache" / "cosy_voices" / f"{k}.mp3").exists()
+    )
+    cards = edge_cards + cosy_cards
     text = "我们每个人都有一个看不见的气泡，它跟着我们走，随我们坐。陌生人靠得太近，我们会不由自主地后退。一九六六年，人类第一次给这个现象起了名字：个人空间。"
     return (TTS_PAGE
             .replace("{{TEXT}}", text)
@@ -153,6 +234,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path in ("/", "/index.html"):
             body = PAGE.encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        if self.path == "/first10.html":
+            body = _f10_page().encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))

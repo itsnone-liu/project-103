@@ -1,0 +1,63 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-01",
+  "lesson_id": "lesson-1-4-other-senses",
+  "title": "鼻尖、手底、脚下——嗅觉触觉动觉与环境设计（1.4·龙小淳(知性积极女)）",
+  "duration": 324.9,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "嗅觉难表述（3M 广告）",
+    "园林香景与听香境界、禅机案例",
+    "气味偏爱实验：情感反应主导（Schloss 2015）",
+    "触觉：铺地即路标",
+    "动觉：汀步与步移景异",
+    "热觉与味觉：景不靓美食凑"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 22.4,
+      "type": "intro",
+      "topic": "3M 三排比"
+    },
+    {
+      "start": 22.4,
+      "end": 127.4,
+      "type": "concept",
+      "topic": "嗅觉：难说却难忘"
+    },
+    {
+      "start": 127.4,
+      "end": 185.3,
+      "type": "concept",
+      "topic": "触觉：质感是路标"
+    },
+    {
+      "start": 185.3,
+      "end": 258.4,
+      "type": "application",
+      "topic": "动觉：身体的镜头语言"
+    },
+    {
+      "start": 258.4,
+      "end": 308.7,
+      "type": "application",
+      "topic": "温度气流与味觉"
+    },
+    {
+      "start": 308.7,
+      "end": 324.9,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-06",
+  "lesson_id": "lesson-t1-personal-space-cosy",
+  "title": "看不见的气泡——个人空间与人际距离（6.1·CosyVoice·龙书(沉稳青年男)）",
+  "duration": 311.7,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "个人空间",
+    "Proxemics 空间接近学",
+    "止步距离法 D1/D2",
+    "霍尔四段距离",
+    "气泡来源的证据与边界",
+    "D/H 比值与设计应用"
+  ],
+  "timeline": [
+    {
+      "start": 0,
+      "end": 16.6,
+      "type": "intro",
+      "topic": "从鸟儿与西湖引入"
+    },
+    {
+      "start": 16.6,
+      "end": 85.1,
+      "type": "concept",
+      "topic": "个人空间与止步距离法"
+    },
+    {
+      "start": 85.1,
+      "end": 177.2,
+      "type": "concept",
+      "topic": "霍尔四段人际距离"
+    },
+    {
+      "start": 177.2,
+      "end": 237.3,
+      "type": "concept",
+      "topic": "气泡的来源证据"
+    },
+    {
+      "start": 237.3,
+      "end": 304.8,
+      "type": "application",
+      "topic": "个体差异与设计应用 D/H"
+    },
+    {
+      "start": 304.8,
+      "end": 311.7,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ]
+}
