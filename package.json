@@ -1,0 +1,8 @@
+{
+  "name": "p103-dev-tools",
+  "private": true,
+  "description": "103 根级开发工具（E2E 等）依赖，隔离于 harness monorepo",
+  "dependencies": {
+    "puppeteer-core": "^25.13.0"
+  }
+}

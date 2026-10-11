@@ -118,6 +118,28 @@ check('T10 摘要卡渲染（知识点+易错点 ≥8 条）', sumOk);
 const tlOk = await page.$$eval('#kp-list .tl-seg', els => els.length >= 5);
 check('T10 结构时间轴 ≥5 段且可点击 seek', tlOk);
 
+// ── T12: Phase AI1 课后问答（stub fetch → 零真实 token） ──
+await page.evaluate(() => {
+  window.fetch = (url, opts) => {
+    window.__qaReq = JSON.parse(opts.body);
+    return Promise.resolve({ ok: true, json: () => Promise.resolve({
+      answer: '区间中点只是近似划分依据 @01:33。', model: 'deepseek-v4.1-flash', elapsed_ms: 1234,
+      review_links: [{ timestamp: 120, label: '@ 02:00 我的疑问' }] }) });
+  };
+});
+await page.type('#qa-input', '为什么用中点划分？');
+await page.click('#qa-ask-btn');
+await page.waitForFunction(`document.querySelector('#qa-answer .a-body') && document.querySelector('#qa-answer .a-body').textContent.length > 0`, { timeout: 5000 });
+const qaReq = await page.evaluate(() => window.__qaReq);
+check('T12 请求体带 markers+answers+package（§20 无状态契约）',
+  qaReq.markers.length === 1 && qaReq.answers.length >= 2 && qaReq.package.includes('lesson-t1'), `markers=${qaReq.markers.length} answers=${qaReq.answers.length}`);
+check('T12 AI 回答渲染', await page.$eval('#qa-answer .a-body', el => el.textContent.includes('中点')));
+const seekState = await page.evaluate(() => {
+  document.querySelector('#qa-answer .rv-link').click();
+  return new Promise(r => setTimeout(() => r({ t: document.querySelector('#video').currentTime, paused: document.querySelector('#video').paused }), 400));
+});
+check('T12 回看链接点击 → seek 到疑问点并播放', Math.abs(seekState.t - 120) < 0.5 && !seekState.paused, `t=${seekState.t.toFixed(1)}`);
+
 check('T11 页面零 JS 异常', consoleErrors.length === 0, consoleErrors.slice(0, 2).join(';'));
 
 const fails = results.filter(r => !r.ok).length;

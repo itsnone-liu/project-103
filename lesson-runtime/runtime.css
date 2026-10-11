@@ -77,3 +77,10 @@ body{background:var(--bg);color:var(--ink);font:15px/1.7 system-ui,"Microsoft Ya
 #ask-modal{position:fixed;inset:0;background:rgba(6,10,15,.7);display:flex;align-items:center;justify-content:center;z-index:50}
 #ask-modal .card{width:min(480px,92vw);margin:0}
 #ask-modal textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px;font:14px/1.6 inherit;resize:vertical}
+
+/* ── Phase AI1 课后问答（真调用 /api/ask） ── */
+#qa-input{width:100%;min-height:64px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px;font:14px/1.6 inherit;resize:vertical;margin-top:10px;box-sizing:border-box}
+#qa-answer{margin-top:12px;border:1px dashed var(--line);border-radius:8px;padding:10px}
+#qa-answer .a-body{font-size:14px;line-height:1.7;margin-top:6px;word-break:break-word}
+#qa-answer .rv-link{color:var(--teal);cursor:pointer;margin-right:10px;text-decoration:underline}
+#qa-answer .rv-links{margin-top:8px;font-size:13px}

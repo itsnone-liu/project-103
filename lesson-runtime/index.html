@@ -57,6 +57,11 @@
     <div class="card" id="qa-card">
       <div class="card-tag gold">我的疑问 <b id="qa-count2">0</b></div>
       <div id="qa-list" class="dim">暂无。看视频时随时点左下角「我有疑问」，看完后在这里统一向 AI 提问。</div>
+      <textarea id="qa-input" placeholder="向课程 AI 提问…（自动带上你的疑问标记、答题记录和对应讲稿段落；Ctrl+Enter 发送）"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button id="qa-ask-btn" class="btn primary">问课程 AI</button>
+      </div>
+      <div id="qa-answer" class="hidden"></div>
       <button id="qa-preview-btn" class="btn ghost" style="margin-top:10px">预览将发给课后 AI 的上下文（Phase AI1 演示 · 不真正调用）</button>
       <pre id="qa-preview" class="hidden"></pre>
     </div>

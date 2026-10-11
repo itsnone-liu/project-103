@@ -36,6 +36,9 @@ async function init() {
   $("#lesson-title").textContent = lesson.title;
 
   video.src = `${PKG}/${lesson.video}`;
+  // §21 回看深链：?p=…&t=秒 打开即定位（课后 AI 回答里的回看链接用）
+  const t0 = parseFloat(qs.get("t"));
+  if (t0 > 0) video.addEventListener("loadedmetadata", () => { video.currentTime = t0; }, { once: true });
   // 字幕：原片画面已自带底部旁白面板，不再叠加 VTT 渲染（transcript.vtt 留在 Package 里供 AI1 上下文/平台字幕用）
 
   $("#video-meta").innerHTML =
@@ -43,7 +46,7 @@ async function init() {
     `<span>📝 ${lesson.knowledge_points.length} 个知识点</span><span class="dim">schema ${lesson.schema}</span>`;
 
   buildTimeline(); buildKP(); buildSummary(); renderAnswers(); renderMarkers();
-  wireCueCard(); wireAsk(); wireNav(); wireProgress();
+  wireCueCard(); wireAsk(); wireQA(); wireNav(); wireProgress();
   restoreProgress();
 }
 
@@ -171,7 +174,38 @@ function renderMarkers() {
   else $("#qa-list").innerHTML = `<span class="dim">暂无。看视频时随时点左下角「我有疑问」，看完后在这里统一向 AI 提问。</span>`;
 }
 
-/* ── Phase AI1 预览：展示后端将拼装的上下文（§20），本 MVP 不调用 LLM ── */
+/* ── Phase AI1 课后问答（真调用）：POST /api/ask → 同源反代（本地 8862 /api/ → 8863；公网汤圆 nginx 同路径）。
+ *    无状态：学生数据（markers/answers）全部随请求带给后端，后端不留任何会话。 ── */
+function wireQA() {
+  const btn = $("#qa-ask-btn"), out = $("#qa-answer"), input = $("#qa-input");
+  const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\n/g, "<br>");
+  const ask = async () => {
+    const question = input.value.trim();
+    if (!question) return toast("先输入问题");
+    btn.disabled = true; btn.textContent = "AI 思考中…（约 10–20 秒）";
+    out.classList.remove("hidden");
+    out.innerHTML = `<span class="dim">正在向课程 AI 提问…</span>`;
+    try {
+      const r = await fetch("/api/ask", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ package: PKG, question, markers, answers }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || `HTTP ${r.status}`);
+      const links = (d.review_links || []).map((l) => `<a class="rv-link" data-t="${l.timestamp}">${l.label}</a>`).join("");
+      out.innerHTML = `<div class="card-tag">课程 AI · ${d.model} · ${(d.elapsed_ms / 1000).toFixed(1)}s</div>` +
+        `<div class="a-body">${esc(d.answer)}</div>` +
+        (links ? `<div class="rv-links">回看：${links}</div>` : "");
+      out.querySelectorAll(".rv-link").forEach((a) => a.onclick = () => {
+        video.currentTime = +a.dataset.t; video.play(); window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    } catch (e) {
+      out.innerHTML = `<span style="color:var(--red)">提问失败：${esc(e.message)}</span>`;
+    } finally { btn.disabled = false; btn.textContent = "问课程 AI"; }
+  };
+  btn.onclick = ask;
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) ask(); });
+}
+
+/* ── Phase AI1 预览：展示后端将拼装的上下文（§20），不调用模型 ── */
 $("#qa-preview-btn").onclick = () => {
   const el = $("#qa-preview"); el.classList.toggle("hidden");
   if (el.classList.contains("hidden")) return;
