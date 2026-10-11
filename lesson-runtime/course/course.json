@@ -87,6 +87,24 @@
           "package": "course/chapter-03/lesson-3-1-city-image"
         }
       ]
+    },
+    {
+      "chapter_id": "chapter-06",
+      "title": "第六章 空间行为",
+      "lessons": [
+        {
+          "lesson_id": "lesson-t1-personal-space",
+          "title": "看不见的气泡——个人空间与人际距离（6.1）",
+          "duration": 348.6,
+          "package": "course/chapter-06/lesson-t1-personal-space"
+        },
+        {
+          "lesson_id": "lesson-t1-personal-space-cosy",
+          "title": "看不见的气泡——个人空间与人际距离（6.1·CosyVoice·龙书(沉稳青年男)）",
+          "duration": 311.7,
+          "package": "course/chapter-06/lesson-t1-personal-space-cosy"
+        }
+      ]
     }
   ]
 }

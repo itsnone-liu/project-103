@@ -332,7 +332,7 @@ def rebuild_course():
     old = {c["chapter_id"]: c for c in course["chapters"]}
     chapters = []
     for ch in CHAPTER_ORDER:
-        if ch.startswith("chapter-0") or ch == "chapter-03":
+        if ch in ("chapter-00", "chapter-01", "chapter-02", "chapter-03"):
             lessons = [l for l in LESSONS if l["chapter"] == ch]
             entries = []
             for l in lessons:
