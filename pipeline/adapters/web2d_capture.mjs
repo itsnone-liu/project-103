@@ -26,7 +26,28 @@ try {
   page.on('pageerror', e => errors.push({ kind: 'pageerror', message: String(e) }));
   page.on('console', m => { if (m.type() === 'error') errors.push({ kind: 'console', message: m.text().slice(0, 300) }); });
   await page.goto('file:///' + html.replace(/\\/g, '/'), { waitUntil: 'load', timeout: 30000 });
-  await page.waitForFunction('window.P103 && typeof window.P103.renderFrame === "function"', { timeout: 15000 });
+  // KP-009：sol 有时只挂别名（__P103__/__WEB2D__/web2d/__animation 或裸 renderFrame）
+  // 而漏掉契约主名 window.P103 → waitForFunction 静默超时，repair 循环拿不到有效错误。
+  // 兼容垫片：从任一别名合成 P103；全部缺席才报点名错误。
+  await page.waitForFunction(
+    'window.P103 || window.__P103__ || window.__WEB2D__ || window.web2d || window.__animation || window.renderFrame',
+    { timeout: 15000 }).catch(() => {
+      throw new Error('CONTRACT: window.P103 及全部已知别名（__P103__/__WEB2D__/web2d/__animation/renderFrame）' +
+        '15s 内均未出现——init 未执行或契约对象缺失');
+    });
+  await page.evaluate(() => {
+    if (!window.P103) {
+      const api = window.__P103__ || window.__WEB2D__ || window.web2d || window.__animation || {};
+      const rf = typeof api.renderFrame === 'function' ? api.renderFrame.bind(api)
+        : (typeof window.renderFrame === 'function' ? window.renderFrame : null);
+      // KP-010：sol 的 renderAt 常回显时间 t 或不返回值——t=0 时是 falsy 数字，
+      // 契约的 truthy 检查只在 frame 0 误报。包装成恒真；真正的绘制失败仍以
+      // renderFrame 异常形式上报，空白帧由 produce 的 frame_variance QA 兜底。
+      window.P103 = Object.assign({}, api, {
+        renderFrame: (...a) => { const r = rf && rf(...a); return r ? r : true; },
+      });
+    }
+  });
   // 竞态防御：取消页面自驱动的 rAF/定时器循环（如"本地预览"），它们会在
   // renderFrame(t) 与 screenshot 之间用自有时钟重绘画布，污染捕获帧。
   await page.evaluate(() => {

@@ -142,9 +142,12 @@ CHAPTER_ORDER = ["chapter-00", "chapter-01", "chapter-02", "chapter-03", "chapte
 
 
 def sh(cmd, timeout=None):
-    """跑子进程，返回 (rc, tail_output)。"""
+    """跑子进程，返回 (rc, tail_output)。PYTHONUTF8=1：子进程 stdout 走 UTF-8，
+    防止重定向管道下 GBK 控制台编码撞上 U+FFFD 直接 UnicodeEncodeError。"""
+    import os
+    env = {**os.environ, "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"}
     r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True,
-                       encoding="utf-8", errors="replace", timeout=timeout)
+                       encoding="utf-8", errors="replace", timeout=timeout, env=env)
     tail = ((r.stdout or "") + (r.stderr or ""))[-400:]
     return r.returncode, tail
 

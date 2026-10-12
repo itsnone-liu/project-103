@@ -62,16 +62,26 @@ F10 = [
     ("f10-07", "envpsy-22", "2.2+2.3 复杂性与适应——环境偏爱的倒U曲线", "sol 新制"),
     ("f10-08", "envpsy-24", "2.4 情绪的坐标——环境刺激与情绪反应", "sol 新制"),
     ("f10-09", "envpsy-31-cosy", "3.1① 城市意象五要素——凯文·林奇", "换声重制"),
+    ("f10-10", "envpsy-32", "3.2 城市意象的后续研究——从五要素到日常生活", "sol 新制"),
+    ("f10-11", "envpsy-33", "3.3 空间定向与场所命名——大脑里的GPS与街名的学问", "sol 新制"),
+    ("f10-12", "envpsy-41", "4.1 行为场景——巴克与人生大舞台", "sol 新制"),
+    ("f10-13", "envpsy-42", "4.2 场所感——空间如何变成『我的地方』", "sol 新制"),
+    ("f10-14", "envpsy-43", "4.3 场所依恋——为什么我们会爱上一个地方", "sol 新制"),
+    ("f10-15", "envpsy-51", "5.1 应激过程——从警报到成长的三级火箭", "sol 新制"),
+    ("f10-16", "envpsy-52", "5.2 灾变事件——信息、认知缺失与漫长的后效", "sol 新制"),
+    ("f10-17", "envpsy-53", "5.3 城市背景应激源——噪声、雾霾与靴子落地", "sol 新制"),
+    ("f10-18", "envpsy-54", "5.4 个人应激源——量表、敏感噪声与刮黑板的科学", "sol 新制"),
+    ("f10-19", "envpsy-62", "6.2 私密性——选择与控制的艺术", "sol 新制"),
 ]
 for _k, _r, _t, _tag in F10:
     FILES[f"/{_k}.mp4"] = ROOT / "runs" / _r / "out" / f"final_{_r}.mp4"
 
-F10_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>前十段 · 章节正片</title>
+F10_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>前二十段 · 章节正片</title>
 <style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}
 h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
 .item{margin:26px 0}.item b{font-size:15px}.tag{color:#8fb;font-size:12px;border:1px solid #2a4;border-radius:4px;padding:1px 6px;margin:0 6px}
 video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}</style></head><body>
-<h1>《环境心理学》前十段正片 · 章节序</h1>
+<h1>《环境心理学》前二十段正片 · 章节序</h1>
 <p class="meta">配音 CosyVoice v2 · 龙小淳(知性积极女)；新制 8 段＝sol(gpt-6.1-sol 高推理) storyboard→codegen→渲染；绪论/3.1① 为旧片换声重制。
 <br>互动课件版（带字幕/数据接口）在 <a href="http://100.84.28.40:8862/?p=course/course.json">Runtime 8862</a>。</p>
 {{ITEMS}}
@@ -102,7 +112,7 @@ h1{font-size:20px}h2{font-size:15px;color:#8fb;margin-top:28px}a{color:#7fd}vide
 .meta{color:#9ab;font-size:13px;line-height:1.7}table{border-collapse:collapse;font-size:13px}
 td,th{border:1px solid #2a3540;padding:4px 10px;text-align:left}th{color:#8fb}</style></head><body>
 <h1>《看不见的气泡》T1 种子 · 两版对比</h1>
-<p class="meta"><a href="/first10.html">▶ 前十段正片批产（绪论→3.1，龙小淳配音，sol 新制 8 段+换声 2 段）</a></p>
+<p class="meta"><a href="/first10.html">▶ 前二十段正片批产（绪论→6.2，龙小淳配音，sol 新制 18 段+换声 2 段）</a></p>
 <table>
 <tr><th></th><th>v1 默认推理</th><th>hr 高推理</th></tr>
 <tr><td>时长</td><td>396.7s</td><td>348.6s（更贴近 5min 目标）</td></tr>

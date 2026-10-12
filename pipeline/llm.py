@@ -33,7 +33,8 @@ def _key_for(key_env: str) -> str:
         return k
 
 
-def _post(url: str, key: str, payload: dict, timeout: int = 1800):
+def _post(url: str, key: str, payload: dict, timeout: int = 2700):
+    # 2026-10-12：sol 高峰期 codegen 实测逼近 1800s（41 课两次压线超时），提到 45min。
     req = urllib.request.Request(url, data=json.dumps(payload).encode(),
                                  headers={"Authorization": "Bearer " + key,
                                           "Content-Type": "application/json"})
