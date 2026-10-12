@@ -222,6 +222,13 @@ def finish_render(run):
     ) + "\n];"
     html2, n = re.subn(r"const STARTS\s*=\s*\[[\s\S]*?\];", new_block, html, count=1)
     if n == 0:
+        # 2026-10-12：sol 新片可能写成 const STARTS = Object.freeze([...]);
+        # 括号归属不同，单独处理（重配音路径才会走到这里；produce 内部重写更健壮）。
+        frozen = "const STARTS = Object.freeze(" + new_block[len("const STARTS = "):-1] + ");"
+        html2, n = re.subn(
+            r"const STARTS\s*=\s*Object\.freeze\(\s*\[[\s\S]*?\]\s*\)\s*;",
+            frozen, html, count=1)
+    if n == 0:
         # GLM 复刻版代码：const NS=[...仅起点...] + DUR=xxx
         ns_block = "const NS=[" + ",".join(f"{v:.3f}" for v in tm["starts"]) + "];"
         html2, n1 = re.subn(r"const NS\s*=\s*\[[\s\S]*?\];", ns_block, html, count=1)
