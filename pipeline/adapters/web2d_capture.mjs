@@ -48,6 +48,28 @@ try {
       });
     }
   });
+  // KP-011 帧号/秒语义探测：sol 有时把 renderFrame 生成成帧号语义（内部再 /FPS），
+  // 而捕获契约传秒——不桥接则全片内容被压到 1/FPS 时长，画面按 24 倍慢放
+  // （4.3/5.1 实况：转场出现在 STARTS[1]*24≈151s，其余时间静止）。
+  // 探针 raw(1)：返回 time≈1 → 秒语义（不桥接）；≈1/FPS → 帧语义（乘 FPS 桥接）。
+  await page.evaluate(() => {
+    const P = window.P103;
+    const fps = (P && Number(P.fps)) || 24;
+    const raw = P.renderFrame.bind(P);
+    let pr = NaN;
+    try {
+      const r = raw(1);
+      pr = r && typeof r === 'object' ? Number(r.time) : Number(r);
+    } catch (e) { pr = NaN; }
+    if (Number.isFinite(pr) && Math.abs(pr - 1) > 0.05
+        && Math.abs(pr - 1 / fps) < 0.02) {
+      window.P103.renderFrame = (t) => {
+        const r = raw(t * fps);
+        return r ? r : true;
+      };
+      window.__P103_FRAME_SEMANTICS__ = true;
+    }
+  });
   // 竞态防御：取消页面自驱动的 rAF/定时器循环（如"本地预览"），它们会在
   // renderFrame(t) 与 screenshot 之间用自有时钟重绘画布，污染捕获帧。
   await page.evaluate(() => {
