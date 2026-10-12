@@ -5,6 +5,7 @@ Range 206（视频 seek）。用法: python _serve_t1.py
 import http.server
 import re
 import socketserver
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -230,6 +231,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(length))
         self.send_header("Accept-Ranges", "bytes")
+        # 2026-10-12：成片会被同名替换（4.3/5.1 重制），必须带校验器且禁缓存，
+        # 否则浏览器/中间代理拿着旧 mp4 不知道更新（用户实测踩坑）。
+        mt = f.stat().st_mtime
+        etag = f'W/"{int(mt)}-{size}"'
+        lm = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mt))
+        self.send_header("Last-Modified", lm)
+        self.send_header("ETag", etag)
+        self.send_header("Cache-Control", "no-cache")
         self.end_headers()
         with f.open("rb") as fh:
             fh.seek(start if rng else 0)
@@ -277,10 +286,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
     def do_HEAD(self):
         f = FILES.get(self.path)
         if f and f.exists():
+            size = f.stat().st_size
+            mt = f.stat().st_mtime
             self.send_response(200)
             self.send_header("Content-Type", MIME.get(f.suffix, "application/octet-stream"))
-            self.send_header("Content-Length", str(f.stat().st_size))
+            self.send_header("Content-Length", str(size))
             self.send_header("Accept-Ranges", "bytes")
+            self.send_header("Last-Modified",
+                             time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mt)))
+            self.send_header("ETag", f'W/"{int(mt)}-{size}"')
+            self.send_header("Cache-Control", "no-cache")
             self.end_headers()
         else:
             self.send_response(404)
