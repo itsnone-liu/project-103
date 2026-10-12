@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-04",
+  "lesson_id": "lesson-4-1-behavior-settings",
+  "title": "行为场景——巴克与人生大舞台（4.1·龙小淳(知性积极女)）",
+  "duration": 374.4,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "勒温 B=f(P,E) 与巴克中西部现场站",
+    "行为场景定义与同步形态",
+    "场景四属性：整体/依赖/固定/边界",
+    "三组成：物质环境/参与人员/程式",
+    "后续探讨：背景因素、意义建构与广场舞进化",
+    "应用：场景复兴（兰亭蒲团）与管理",
+    "评价：生态心理学基石与长期沉寂"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 22.6,
+      "type": "intro",
+      "topic": "开场钩子"
+    },
+    {
+      "start": 22.6,
+      "end": 75.7,
+      "type": "concept",
+      "topic": "巴克与现场站"
+    },
+    {
+      "start": 75.7,
+      "end": 146.6,
+      "type": "concept",
+      "topic": "从儿童观察到定义"
+    },
+    {
+      "start": 146.6,
+      "end": 211.9,
+      "type": "concept",
+      "topic": "四属性与三组成"
+    },
+    {
+      "start": 211.9,
+      "end": 291.0,
+      "type": "application",
+      "topic": "场景会进化"
+    },
+    {
+      "start": 291.0,
+      "end": 356.2,
+      "type": "application",
+      "topic": "复兴与管理"
+    },
+    {
+      "start": 356.2,
+      "end": 374.4,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

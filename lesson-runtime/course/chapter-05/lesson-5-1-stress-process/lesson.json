@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-05",
+  "lesson_id": "lesson-5-1-stress-process",
+  "title": "应激过程——从警报到成长的三级火箭（5.1·龙小淳(知性积极女)）",
+  "duration": 436.6,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "塞利 GAS：警戒/抵抗/衰竭",
+    "应激源三分类",
+    "认知图式与控制感（桑枣中学/福岛）",
+    "行为反应：0.018 秒母亲与迁怒",
+    "应对策略：情绪应对 vs 问题应对",
+    "习得性无助及其边界",
+    "创伤后成长 PTG 与瑞典森林大火研究"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 30.4,
+      "type": "intro",
+      "topic": "开场钩子"
+    },
+    {
+      "start": 30.4,
+      "end": 117.9,
+      "type": "concept",
+      "topic": "三级警报 GAS"
+    },
+    {
+      "start": 117.9,
+      "end": 196.4,
+      "type": "concept",
+      "topic": "认知与控制感"
+    },
+    {
+      "start": 196.4,
+      "end": 267.4,
+      "type": "concept",
+      "topic": "行为反应与应对"
+    },
+    {
+      "start": 267.4,
+      "end": 310.0,
+      "type": "concept",
+      "topic": "习得性无助"
+    },
+    {
+      "start": 310.0,
+      "end": 415.6,
+      "type": "application",
+      "topic": "创伤后成长"
+    },
+    {
+      "start": 415.6,
+      "end": 436.6,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

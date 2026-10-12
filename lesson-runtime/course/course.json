@@ -1,7 +1,7 @@
 {
   "schema": "course-manifest-v0.1",
   "course_id": "envpsy-course-001",
-  "title": "环境心理学·系列课件（前置十章试产）",
+  "title": "环境心理学·系列课件（第一、二批共二十课试产）",
   "version": "0.1",
   "chapters": [
     {
@@ -85,6 +85,72 @@
           "title": "城市意象五要素——在陌生城市里认路（3.1①·龙小淳(知性积极女)）",
           "duration": 243.7,
           "package": "course/chapter-03/lesson-3-1-city-image"
+        },
+        {
+          "lesson_id": "lesson-3-2-image-followup",
+          "title": "城市意象的后续研究——从五要素到日常生活（3.2·龙小淳(知性积极女)）",
+          "duration": 352.7,
+          "package": "course/chapter-03/lesson-3-2-image-followup"
+        },
+        {
+          "lesson_id": "lesson-3-3-wayfinding-naming",
+          "title": "空间定向与场所命名——大脑里的 GPS 与街名的学问（3.3·龙小淳(知性积极女)）",
+          "duration": 407.7,
+          "package": "course/chapter-03/lesson-3-3-wayfinding-naming"
+        }
+      ]
+    },
+    {
+      "chapter_id": "chapter-04",
+      "title": "第四章 场景和场所研究",
+      "lessons": [
+        {
+          "lesson_id": "lesson-4-1-behavior-settings",
+          "title": "行为场景——巴克与人生大舞台（4.1·龙小淳(知性积极女)）",
+          "duration": 374.4,
+          "package": "course/chapter-04/lesson-4-1-behavior-settings"
+        },
+        {
+          "lesson_id": "lesson-4-2-sense-of-place",
+          "title": "场所感——空间如何变成『我的地方』（4.2·龙小淳(知性积极女)）",
+          "duration": 401.6,
+          "package": "course/chapter-04/lesson-4-2-sense-of-place"
+        },
+        {
+          "lesson_id": "lesson-4-3-place-attachment",
+          "title": "场所依恋——为什么我们会爱上一个地方（4.3·龙小淳(知性积极女)）",
+          "duration": 361.7,
+          "package": "course/chapter-04/lesson-4-3-place-attachment"
+        }
+      ]
+    },
+    {
+      "chapter_id": "chapter-05",
+      "title": "第五章 环境应激",
+      "lessons": [
+        {
+          "lesson_id": "lesson-5-1-stress-process",
+          "title": "应激过程——从警报到成长的三级火箭（5.1·龙小淳(知性积极女)）",
+          "duration": 436.6,
+          "package": "course/chapter-05/lesson-5-1-stress-process"
+        },
+        {
+          "lesson_id": "lesson-5-2-catastrophe",
+          "title": "灾变事件——信息、认知缺失与漫长的后效（5.2·龙小淳(知性积极女)）",
+          "duration": 369.8,
+          "package": "course/chapter-05/lesson-5-2-catastrophe"
+        },
+        {
+          "lesson_id": "lesson-5-3-background-stressors",
+          "title": "城市背景应激源——噪声、雾霾与靴子落地（5.3·龙小淳(知性积极女)）",
+          "duration": 439.0,
+          "package": "course/chapter-05/lesson-5-3-background-stressors"
+        },
+        {
+          "lesson_id": "lesson-5-4-personal-stressors",
+          "title": "个人应激源——量表、敏感噪声与刮黑板的科学（5.4·龙小淳(知性积极女)）",
+          "duration": 405.6,
+          "package": "course/chapter-05/lesson-5-4-personal-stressors"
         }
       ]
     },
@@ -92,6 +158,12 @@
       "chapter_id": "chapter-06",
       "title": "第六章 空间行为",
       "lessons": [
+        {
+          "lesson_id": "lesson-6-2-privacy",
+          "title": "私密性——选择与控制的艺术（6.2·龙小淳(知性积极女)）",
+          "duration": 433.6,
+          "package": "course/chapter-06/lesson-6-2-privacy"
+        },
         {
           "lesson_id": "lesson-t1-personal-space",
           "title": "看不见的气泡——个人空间与人际距离（6.1）",

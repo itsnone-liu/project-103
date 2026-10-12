@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-05",
+  "lesson_id": "lesson-5-2-catastrophe",
+  "title": "灾变事件——信息、认知缺失与漫长的后效（5.2·龙小淳(知性积极女)）",
+  "duration": 369.8,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "三类灾变与五个共同点",
+    "小道消息为何跑赢官方发布",
+    "松潘 1976 成功预报",
+    "认知缺失现象（汶川实录）",
+    "反应多样性：麻木到恍惚",
+    "后效差异：福岛野猪与切尔诺贝利静寂",
+    "认知偏差：可利用性法则与天灾人祸之别"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 21.3,
+      "type": "intro",
+      "topic": "开场钩子"
+    },
+    {
+      "start": 21.3,
+      "end": 62.5,
+      "type": "concept",
+      "topic": "分类与共性"
+    },
+    {
+      "start": 62.5,
+      "end": 153.9,
+      "type": "application",
+      "topic": "灾变信息的认知"
+    },
+    {
+      "start": 153.9,
+      "end": 220.6,
+      "type": "application",
+      "topic": "认知缺失与反应谱"
+    },
+    {
+      "start": 220.6,
+      "end": 303.9,
+      "type": "concept",
+      "topic": "后效的差异性"
+    },
+    {
+      "start": 303.9,
+      "end": 350.3,
+      "type": "concept",
+      "topic": "认知偏差三条"
+    },
+    {
+      "start": 350.3,
+      "end": 369.8,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

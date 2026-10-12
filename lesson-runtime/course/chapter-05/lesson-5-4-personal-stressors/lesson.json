@@ -1,0 +1,64 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-05",
+  "lesson_id": "lesson-5-4-personal-stressors",
+  "title": "个人应激源——量表、敏感噪声与刮黑板的科学（5.4·龙小淳(知性积极女)）",
+  "duration": 405.6,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "Holmes-Rahe 生活事件量表（38 项）",
+    "中国特色应激源清单",
+    "敏感噪声：无法适应的耳朵边",
+    "低频噪声：500Hz 以下穿透楼板",
+    "特异噪声四敏感与进化解释",
+    "杏仁核与刮黑板声音科学",
+    "缓解之道的批判：没有万灵药"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 22.6,
+      "type": "intro",
+      "topic": "稻草开场"
+    },
+    {
+      "start": 22.6,
+      "end": 113.2,
+      "type": "concept",
+      "topic": "生活事件量表"
+    },
+    {
+      "start": 113.2,
+      "end": 193.9,
+      "type": "application",
+      "topic": "敏感噪声"
+    },
+    {
+      "start": 193.9,
+      "end": 309.9,
+      "type": "concept",
+      "topic": "特异噪声四敏感"
+    },
+    {
+      "start": 309.9,
+      "end": 375.5,
+      "type": "application",
+      "topic": "缓解之道批判"
+    },
+    {
+      "start": 375.5,
+      "end": 405.6,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

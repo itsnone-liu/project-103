@@ -1,0 +1,63 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-04",
+  "lesson_id": "lesson-4-3-place-attachment",
+  "title": "场所依恋——为什么我们会爱上一个地方（4.3·龙小淳(知性积极女)）",
+  "duration": 361.7,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "3P 模型：人—过程—场所",
+    "依恋的阴影面与图式机制",
+    "尺度 U 形关系与华沙修正",
+    "三功能：安全/连续性/自我实现",
+    "哈洛恒河猴实验",
+    "吉庆街的拆与归：四铁与场景载体"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 29.8,
+      "type": "intro",
+      "topic": "情感与情绪之分"
+    },
+    {
+      "start": 29.8,
+      "end": 111.3,
+      "type": "concept",
+      "topic": "3P 模型"
+    },
+    {
+      "start": 111.3,
+      "end": 158.5,
+      "type": "concept",
+      "topic": "尺度 U 形"
+    },
+    {
+      "start": 158.5,
+      "end": 246.9,
+      "type": "concept",
+      "topic": "三种功能"
+    },
+    {
+      "start": 246.9,
+      "end": 343.1,
+      "type": "application",
+      "topic": "吉庆街的拆与归"
+    },
+    {
+      "start": 343.1,
+      "end": 361.7,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

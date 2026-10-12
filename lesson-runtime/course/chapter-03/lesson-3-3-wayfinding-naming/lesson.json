@@ -1,0 +1,63 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-03",
+  "lesson_id": "lesson-3-3-wayfinding-naming",
+  "title": "空间定向与场所命名——大脑里的 GPS 与街名的学问（3.3·龙小淳(知性积极女)）",
+  "duration": 407.7,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "位置细胞、边界细胞与网格细胞",
+    "定向策略三主因子（德国 4000 人调查）",
+    "定向系统的文化差异：网格/放射/八卦城",
+    "环境改变与定向混乱（环路高架）",
+    "场所命名四注意：好记/谐音/歧义/洋地名",
+    "地名是城市记忆与文化图式"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 21.5,
+      "type": "intro",
+      "topic": "开场钩子"
+    },
+    {
+      "start": 21.5,
+      "end": 103.1,
+      "type": "concept",
+      "topic": "大脑里的三类细胞"
+    },
+    {
+      "start": 103.1,
+      "end": 175.7,
+      "type": "concept",
+      "topic": "定向策略三因子"
+    },
+    {
+      "start": 175.7,
+      "end": 266.8,
+      "type": "application",
+      "topic": "定向的文化差异"
+    },
+    {
+      "start": 266.8,
+      "end": 392.1,
+      "type": "application",
+      "topic": "场所命名四注意"
+    },
+    {
+      "start": 392.1,
+      "end": 407.7,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

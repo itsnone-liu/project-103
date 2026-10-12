@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-06",
+  "lesson_id": "lesson-6-2-privacy",
+  "title": "私密性——选择与控制的艺术（6.2·龙小淳(知性积极女)）",
+  "duration": 433.6,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "奥尔特曼定义：选择性控制",
+    "ATM/AVM/TVM 人际距离实验",
+    "六种类型与五种心理作用",
+    "缺乏私密性的代价（淘大花园）",
+    "设计应用：视听控制/层次梯度/焦虑阈",
+    "赖特切内住宅挡墙",
+    "三文化焦虑阈对比"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 23.1,
+      "type": "intro",
+      "topic": "开场钩子"
+    },
+    {
+      "start": 23.1,
+      "end": 82.8,
+      "type": "concept",
+      "topic": "定义与证据"
+    },
+    {
+      "start": 82.8,
+      "end": 183.2,
+      "type": "concept",
+      "topic": "六类型五作用"
+    },
+    {
+      "start": 183.2,
+      "end": 239.6,
+      "type": "application",
+      "topic": "缺乏的代价"
+    },
+    {
+      "start": 239.6,
+      "end": 362.1,
+      "type": "application",
+      "topic": "设计应用三式"
+    },
+    {
+      "start": 362.1,
+      "end": 410.6,
+      "type": "application",
+      "topic": "注意事项"
+    },
+    {
+      "start": 410.6,
+      "end": 433.6,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}
