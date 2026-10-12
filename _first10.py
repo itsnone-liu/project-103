@@ -241,6 +241,14 @@ def finish_render(run):
         print(f"[qa] WARN not pass: {json.dumps(report.get('checks', {}), ensure_ascii=False)[:200]}", flush=True)
     final = wd / "out" / f"final_{run}.mp4"
     audio.cmd_mux(res["video"], str(timing_p), str(final))
+    # 2026-10-12 磁盘治理：mux 落地后清中间产物（frames ~1-2GB/课、narration wav
+    # ~70MB/课）。保留 final/无声 video.mp4/code/scene+timing json——足够重渲染
+    # 与重配音；真要重 mux 可从 final 提轨或重 TTS。失败不清（重试还依赖它们）。
+    try:
+        shutil.rmtree(wd / "out" / "frames", ignore_errors=True)
+        (ROOT / "audio" / f"narration_{run}.wav").unlink(missing_ok=True)
+    except Exception as e:  # noqa: BLE001
+        print(f"[cleanup] WARN {e}", flush=True)
     return True, f"final {final.name} {tm['total']:.1f}s"
 
 
