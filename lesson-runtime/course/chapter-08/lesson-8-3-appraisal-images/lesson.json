@@ -1,0 +1,76 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-08",
+  "lesson_id": "lesson-8-3-appraisal-images",
+  "title": "基于意象的场所外观评价——好恶的地图（8.3·龙小淳(知性积极女)）",
+  "duration": 413.3,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "评价意象：愉悦激动放松紧张",
+    "本能/认知/审美三类反应",
+    "图式理论：一致—不一致—偏爱曲线",
+    "纳萨正面属性七项",
+    "泰姬陵与身份象征",
+    "负面属性：气氛恐惧与陷阱景观",
+    "文化差异：障景先抑后扬与泄愤屋"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 21.1,
+      "type": "intro",
+      "topic": "开场钩子"
+    },
+    {
+      "start": 21.1,
+      "end": 92.6,
+      "type": "concept",
+      "topic": "三类反应"
+    },
+    {
+      "start": 92.6,
+      "end": 160.7,
+      "type": "concept",
+      "topic": "图式理论"
+    },
+    {
+      "start": 160.7,
+      "end": 234.7,
+      "type": "concept",
+      "topic": "正面属性"
+    },
+    {
+      "start": 234.7,
+      "end": 274.5,
+      "type": "application",
+      "topic": "泰姬陵"
+    },
+    {
+      "start": 274.5,
+      "end": 347.5,
+      "type": "concept",
+      "topic": "负面属性"
+    },
+    {
+      "start": 347.5,
+      "end": 394.9,
+      "type": "application",
+      "topic": "文化差异"
+    },
+    {
+      "start": 394.9,
+      "end": 413.3,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-08",
+  "lesson_id": "lesson-8-1-methods-theories",
+  "title": "研究方法和理论类别——从风景画到评价成图（8.1·龙小淳(知性积极女)）",
+  "duration": 387.1,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "landscape 词源：从风景画到心田",
+    "评价五模式：生态/形式美/心理生理/心理/现象学",
+    "专家三原理：框景/会聚/对比",
+    "德尔菲法与物质—知觉法",
+    "受众三法：改进SD/SBE/评价成图",
+    "襄樊评价地图：火车站为何最不受待见",
+    "理论三类别：进化/文化/折中"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 20.8,
+      "type": "intro",
+      "topic": "词源开场"
+    },
+    {
+      "start": 20.8,
+      "end": 86.8,
+      "type": "concept",
+      "topic": "五模式"
+    },
+    {
+      "start": 86.8,
+      "end": 166.1,
+      "type": "concept",
+      "topic": "专家三原理"
+    },
+    {
+      "start": 166.1,
+      "end": 237.7,
+      "type": "concept",
+      "topic": "受众三法"
+    },
+    {
+      "start": 237.7,
+      "end": 304.3,
+      "type": "application",
+      "topic": "评价成图实例"
+    },
+    {
+      "start": 304.3,
+      "end": 371.2,
+      "type": "concept",
+      "topic": "理论类别"
+    },
+    {
+      "start": 371.2,
+      "end": 387.1,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

@@ -1,0 +1,76 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-07",
+  "lesson_id": "lesson-7-1-evolution-in-nature",
+  "title": "在自然的孕育中进化——从大裂谷走出的我们（7.1·龙小淳(知性积极女)）",
+  "duration": 352.9,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "自然四分类：纯/开化/准/半自然",
+    "灾变推动进化：多巴火山与基因瓶颈",
+    "大裂谷的环境提供：领域与庇护所",
+    "探索行为：广泛与特殊（神农看/尝百草）",
+    "投掷、追逐与旧石器：有益性法则",
+    "狮首人身雕像：概念形成与认知飞跃",
+    "生态理性：有限理性与直觉遗存"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 18.9,
+      "type": "intro",
+      "topic": "感恩自然开场"
+    },
+    {
+      "start": 18.9,
+      "end": 64.2,
+      "type": "concept",
+      "topic": "四分类"
+    },
+    {
+      "start": 64.2,
+      "end": 121.7,
+      "type": "concept",
+      "topic": "灾变与进化"
+    },
+    {
+      "start": 121.7,
+      "end": 172.3,
+      "type": "concept",
+      "topic": "大裂谷提供"
+    },
+    {
+      "start": 172.3,
+      "end": 221.4,
+      "type": "concept",
+      "topic": "探索行为"
+    },
+    {
+      "start": 221.4,
+      "end": 271.2,
+      "type": "application",
+      "topic": "投掷与旧石器"
+    },
+    {
+      "start": 271.2,
+      "end": 336.6,
+      "type": "concept",
+      "topic": "认知与生态理性"
+    },
+    {
+      "start": 336.6,
+      "end": 352.9,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

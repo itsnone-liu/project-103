@@ -1,0 +1,76 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-07",
+  "lesson_id": "lesson-7-3-nature-today",
+  "title": "自然环境在当代的作用——从敬畏符号到康复环境（7.3·龙小淳(知性积极女)）",
+  "duration": 359.7,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "畏惧的蜕变：符号化与紫禁城层次",
+    "愉悦的印记：上树避难与鲜花果实",
+    "乌尔里希病房研究：窗景与康复",
+    "应激缓解理论 SRT",
+    "注意力恢复理论 ART 四属性",
+    "北京公园水体比率与耕读传家",
+    "感知流畅与分形自相似"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 25.6,
+      "type": "intro",
+      "topic": "开场钩子"
+    },
+    {
+      "start": 25.6,
+      "end": 81.1,
+      "type": "concept",
+      "topic": "畏惧蜕变"
+    },
+    {
+      "start": 81.1,
+      "end": 126.0,
+      "type": "concept",
+      "topic": "愉悦印记"
+    },
+    {
+      "start": 126.0,
+      "end": 184.0,
+      "type": "application",
+      "topic": "病房研究"
+    },
+    {
+      "start": 184.0,
+      "end": 247.0,
+      "type": "concept",
+      "topic": "ART四属性"
+    },
+    {
+      "start": 247.0,
+      "end": 292.5,
+      "type": "application",
+      "topic": "湖泊调查与耕读"
+    },
+    {
+      "start": 292.5,
+      "end": 343.9,
+      "type": "concept",
+      "topic": "感知流畅与分形"
+    },
+    {
+      "start": 343.9,
+      "end": 359.7,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

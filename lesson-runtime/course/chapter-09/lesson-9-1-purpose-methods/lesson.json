@@ -1,0 +1,76 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-09",
+  "lesson_id": "lesson-9-1-purpose-methods",
+  "title": "研究目的和方法——观察城市的五种姿势（9.1·龙小淳(知性积极女)）",
+  "duration": 399.5,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "研究目的：行为规律与异用现象",
+    "五W法及其简化",
+    "单一因素研究：行道树实验",
+    "行为观察四种：介入/旁观/隐蔽/漫游",
+    "行为痕迹推测：牛粪指路",
+    "参与性成图与网络地图",
+    "从里坊宵禁到中央公园"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 20.9,
+      "type": "intro",
+      "topic": "开场钩子"
+    },
+    {
+      "start": 20.9,
+      "end": 81.5,
+      "type": "concept",
+      "topic": "目的与异用"
+    },
+    {
+      "start": 81.5,
+      "end": 136.3,
+      "type": "concept",
+      "topic": "五W法"
+    },
+    {
+      "start": 136.3,
+      "end": 181.4,
+      "type": "concept",
+      "topic": "单一因素"
+    },
+    {
+      "start": 181.4,
+      "end": 275.3,
+      "type": "application",
+      "topic": "观察四法"
+    },
+    {
+      "start": 275.3,
+      "end": 337.6,
+      "type": "application",
+      "topic": "痕迹推测"
+    },
+    {
+      "start": 337.6,
+      "end": 387.0,
+      "type": "concept",
+      "topic": "参与性成图"
+    },
+    {
+      "start": 387.0,
+      "end": 399.5,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

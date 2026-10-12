@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-06",
+  "lesson_id": "lesson-6-3-territoriality",
+  "title": "领域性——占有与防卫的空间策略（6.3·龙小淳(知性积极女)）",
+  "duration": 416.2,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "阿尔托曼定义：占用+人格化+防卫",
+    "战俘营与日本灾民避难的领域本能",
+    "主要/次要/公共三类型",
+    "领域三功能：认知社会/控制感/安全防卫",
+    "纽曼能防卫空间四原则",
+    "306户被盗调查：领域标志与自然监视",
+    "城中村牌坊：我的领域我做主"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 33.5,
+      "type": "intro",
+      "topic": "战俘营的狐狸洞"
+    },
+    {
+      "start": 33.5,
+      "end": 99.9,
+      "type": "concept",
+      "topic": "定义与证据"
+    },
+    {
+      "start": 99.9,
+      "end": 189.7,
+      "type": "concept",
+      "topic": "三类型"
+    },
+    {
+      "start": 189.7,
+      "end": 261.7,
+      "type": "concept",
+      "topic": "三功能"
+    },
+    {
+      "start": 261.7,
+      "end": 343.2,
+      "type": "application",
+      "topic": "能防卫空间"
+    },
+    {
+      "start": 343.2,
+      "end": 399.8,
+      "type": "application",
+      "topic": "被盗调查与城中村"
+    },
+    {
+      "start": 399.8,
+      "end": 416.2,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

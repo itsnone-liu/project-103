@@ -1,0 +1,76 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-07",
+  "lesson_id": "lesson-7-2-emotional-origins",
+  "title": "人类基本情感反应的来源——敬畏、恐惧与愉悦（7.2·龙小淳(知性积极女)）",
+  "duration": 381.6,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "敬畏=惊讶+恐惧：山神水神与转湖三瓢",
+    "黑夜恐惧与第一夜效应（大脑值夜班）",
+    "人脸错视：FFA 0.165秒与猛兽的脸",
+    "满月恐惧：狮子袭击的月亮周期",
+    "蛇类检测理论：优势眼与婴儿ERP",
+    "前景—庇护所假设",
+    "疏林草原偏爱：五生物群落实验"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 26.0,
+      "type": "intro",
+      "topic": "敬畏开场"
+    },
+    {
+      "start": 26.0,
+      "end": 70.6,
+      "type": "concept",
+      "topic": "敬畏之心"
+    },
+    {
+      "start": 70.6,
+      "end": 131.3,
+      "type": "concept",
+      "topic": "黑夜与第一夜"
+    },
+    {
+      "start": 131.3,
+      "end": 204.4,
+      "type": "concept",
+      "topic": "人脸错视与满月"
+    },
+    {
+      "start": 204.4,
+      "end": 256.8,
+      "type": "concept",
+      "topic": "蛇虫恐惧"
+    },
+    {
+      "start": 256.8,
+      "end": 310.3,
+      "type": "concept",
+      "topic": "前景庇护所"
+    },
+    {
+      "start": 310.3,
+      "end": 360.9,
+      "type": "concept",
+      "topic": "疏林草原偏爱"
+    },
+    {
+      "start": 360.9,
+      "end": 381.6,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

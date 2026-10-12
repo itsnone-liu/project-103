@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-06",
+  "lesson_id": "lesson-6-4-density-crowding",
+  "title": "密度与拥挤感——老鼠乌托邦的崩溃与人类的两难（6.4·龙小淳(知性积极女)）",
+  "duration": 384.5,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "卡尔霍恩老鼠行为堕落实验",
+    "社会密度 vs 空间密度",
+    "短期实验：情绪/攻击/绩效三发现",
+    "监狱、宿舍与助人行为研究",
+    "密度—强度理论与工体国骂",
+    "拥挤感三解释：信息超载/行为约束/人员过剩",
+    "阿尔托曼模式：控制感是关键"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 25.4,
+      "type": "intro",
+      "topic": "老鼠乌托邦"
+    },
+    {
+      "start": 25.4,
+      "end": 82.3,
+      "type": "concept",
+      "topic": "两类密度"
+    },
+    {
+      "start": 82.3,
+      "end": 148.8,
+      "type": "application",
+      "topic": "短期实验三发现"
+    },
+    {
+      "start": 148.8,
+      "end": 227.1,
+      "type": "application",
+      "topic": "监狱宿舍与助人"
+    },
+    {
+      "start": 227.1,
+      "end": 293.9,
+      "type": "concept",
+      "topic": "密度强度与影响因素"
+    },
+    {
+      "start": 293.9,
+      "end": 368.1,
+      "type": "concept",
+      "topic": "三种理论解释"
+    },
+    {
+      "start": 368.1,
+      "end": 384.5,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

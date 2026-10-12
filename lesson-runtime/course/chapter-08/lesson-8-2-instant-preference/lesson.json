@@ -1,0 +1,76 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-08",
+  "lesson_id": "lesson-8-2-instant-preference",
+  "title": "影响即时景观偏爱的因素——四种属性与神秘性（8.2·龙小淳(知性积极女)）",
+  "duration": 382.5,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "四属性：连贯/易识别/复杂/神秘",
+    "卡普兰偏爱矩阵：理解×探索",
+    "神秘性：曲率与危险的两难",
+    "能见度与进出通道",
+    "转角效应：虚拟环境与桃花源",
+    "九属性构想",
+    "进化偏爱：对称、抽象与可畏异化"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 24.8,
+      "type": "intro",
+      "topic": "开场钩子"
+    },
+    {
+      "start": 24.8,
+      "end": 95.8,
+      "type": "concept",
+      "topic": "四属性"
+    },
+    {
+      "start": 95.8,
+      "end": 166.2,
+      "type": "concept",
+      "topic": "偏爱矩阵"
+    },
+    {
+      "start": 166.2,
+      "end": 220.7,
+      "type": "concept",
+      "topic": "神秘性研究"
+    },
+    {
+      "start": 220.7,
+      "end": 282.7,
+      "type": "application",
+      "topic": "转角与桃花源"
+    },
+    {
+      "start": 282.7,
+      "end": 327.2,
+      "type": "concept",
+      "topic": "九属性"
+    },
+    {
+      "start": 327.2,
+      "end": 369.6,
+      "type": "concept",
+      "topic": "进化偏爱"
+    },
+    {
+      "start": 369.6,
+      "end": 382.5,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

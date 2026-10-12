@@ -1,7 +1,7 @@
 {
   "schema": "course-manifest-v0.1",
   "course_id": "envpsy-course-001",
-  "title": "环境心理学·系列课件（第一、二批共二十课试产）",
+  "title": "环境心理学·系列课件（第一至三批共三十课试产）",
   "version": "0.1",
   "chapters": [
     {
@@ -165,6 +165,18 @@
           "package": "course/chapter-06/lesson-6-2-privacy"
         },
         {
+          "lesson_id": "lesson-6-3-territoriality",
+          "title": "领域性——占有与防卫的空间策略（6.3·龙小淳(知性积极女)）",
+          "duration": 416.2,
+          "package": "course/chapter-06/lesson-6-3-territoriality"
+        },
+        {
+          "lesson_id": "lesson-6-4-density-crowding",
+          "title": "密度与拥挤感——老鼠乌托邦的崩溃与人类的两难（6.4·龙小淳(知性积极女)）",
+          "duration": 384.5,
+          "package": "course/chapter-06/lesson-6-4-density-crowding"
+        },
+        {
           "lesson_id": "lesson-t1-personal-space",
           "title": "看不见的气泡——个人空间与人际距离（6.1）",
           "duration": 348.6,
@@ -175,6 +187,72 @@
           "title": "看不见的气泡——个人空间与人际距离（6.1·CosyVoice·龙书(沉稳青年男)）",
           "duration": 311.7,
           "package": "course/chapter-06/lesson-t1-personal-space-cosy"
+        }
+      ]
+    },
+    {
+      "chapter_id": "chapter-07",
+      "title": "第七章 感恩自然",
+      "lessons": [
+        {
+          "lesson_id": "lesson-7-1-evolution-in-nature",
+          "title": "在自然的孕育中进化——从大裂谷走出的我们（7.1·龙小淳(知性积极女)）",
+          "duration": 352.9,
+          "package": "course/chapter-07/lesson-7-1-evolution-in-nature"
+        },
+        {
+          "lesson_id": "lesson-7-2-emotional-origins",
+          "title": "人类基本情感反应的来源——敬畏、恐惧与愉悦（7.2·龙小淳(知性积极女)）",
+          "duration": 381.6,
+          "package": "course/chapter-07/lesson-7-2-emotional-origins"
+        },
+        {
+          "lesson_id": "lesson-7-3-nature-today",
+          "title": "自然环境在当代的作用——从敬畏符号到康复环境（7.3·龙小淳(知性积极女)）",
+          "duration": 359.7,
+          "package": "course/chapter-07/lesson-7-3-nature-today"
+        },
+        {
+          "lesson_id": "lesson-7-4-proenvironment",
+          "title": "亲环境行为——从价值信念到破窗治理（7.4·龙小淳(知性积极女)）",
+          "duration": 325.1,
+          "package": "course/chapter-07/lesson-7-4-proenvironment"
+        }
+      ]
+    },
+    {
+      "chapter_id": "chapter-08",
+      "title": "第八章 景观偏爱研究",
+      "lessons": [
+        {
+          "lesson_id": "lesson-8-1-methods-theories",
+          "title": "研究方法和理论类别——从风景画到评价成图（8.1·龙小淳(知性积极女)）",
+          "duration": 387.1,
+          "package": "course/chapter-08/lesson-8-1-methods-theories"
+        },
+        {
+          "lesson_id": "lesson-8-2-instant-preference",
+          "title": "影响即时景观偏爱的因素——四种属性与神秘性（8.2·龙小淳(知性积极女)）",
+          "duration": 382.5,
+          "package": "course/chapter-08/lesson-8-2-instant-preference"
+        },
+        {
+          "lesson_id": "lesson-8-3-appraisal-images",
+          "title": "基于意象的场所外观评价——好恶的地图（8.3·龙小淳(知性积极女)）",
+          "duration": 413.3,
+          "package": "course/chapter-08/lesson-8-3-appraisal-images"
+        }
+      ]
+    },
+    {
+      "chapter_id": "chapter-09",
+      "title": "第九章 外部公共空间活动研究",
+      "lessons": [
+        {
+          "lesson_id": "lesson-9-1-purpose-methods",
+          "title": "研究目的和方法——观察城市的五种姿势（9.1·龙小淳(知性积极女)）",
+          "duration": 399.5,
+          "package": "course/chapter-09/lesson-9-1-purpose-methods"
         }
       ]
     }

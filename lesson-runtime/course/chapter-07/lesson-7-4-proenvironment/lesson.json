@@ -1,0 +1,76 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-07",
+  "lesson_id": "lesson-7-4-proenvironment",
+  "title": "亲环境行为——从价值信念到破窗治理（7.4·龙小淳(知性积极女)）",
+  "duration": 325.1,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "定义与正名：与环保激进主义之别",
+    "VBN：价值—信念—规范三维度",
+    "表里不一：环境远视与知行不一",
+    "同情移情与好恶美丑（颜值保护）",
+    "社会规范：禁令性 vs 约定习惯",
+    "破窗假设与格罗宁根涂鸦实验",
+    "改变习惯：警告桩为何失效"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 19.3,
+      "type": "intro",
+      "topic": "开场钩子"
+    },
+    {
+      "start": 19.3,
+      "end": 61.8,
+      "type": "concept",
+      "topic": "定义正名"
+    },
+    {
+      "start": 61.8,
+      "end": 114.7,
+      "type": "concept",
+      "topic": "VBN理论"
+    },
+    {
+      "start": 114.7,
+      "end": 156.3,
+      "type": "concept",
+      "topic": "表里不一"
+    },
+    {
+      "start": 156.3,
+      "end": 198.9,
+      "type": "concept",
+      "topic": "好恶与物种保护"
+    },
+    {
+      "start": 198.9,
+      "end": 264.3,
+      "type": "application",
+      "topic": "破窗与杂乱蔓延"
+    },
+    {
+      "start": 264.3,
+      "end": 309.5,
+      "type": "application",
+      "topic": "改变习惯"
+    },
+    {
+      "start": 309.5,
+      "end": 325.1,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}
