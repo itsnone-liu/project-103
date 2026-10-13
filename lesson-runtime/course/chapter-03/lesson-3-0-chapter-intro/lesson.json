@@ -4,7 +4,7 @@
   "chapter_id": "chapter-03",
   "lesson_id": "lesson-3-0-chapter-intro",
   "title": "第三章 章绪论——环境认知：脑中的城市地图（章绪论·龙小淳(知性积极女)）",
-  "duration": 124.7,
+  "duration": 74.6,
   "video": "video.mp4",
   "transcript": "transcript.vtt",
   "script": "script.md",
@@ -17,25 +17,25 @@
   "timeline": [
     {
       "start": 0.0,
-      "end": 27.6,
+      "end": 14.6,
       "type": "intro",
       "topic": "立交迷宫"
     },
     {
-      "start": 27.6,
-      "end": 80.5,
+      "start": 14.6,
+      "end": 50.1,
       "type": "concept",
       "topic": "章地图三节点"
     },
     {
-      "start": 80.5,
-      "end": 109.8,
+      "start": 50.1,
+      "end": 66.4,
       "type": "application",
       "topic": "关键词与衔接"
     },
     {
-      "start": 109.8,
-      "end": 124.7,
+      "start": 66.4,
+      "end": 74.6,
       "type": "summary",
       "topic": "金句收束"
     }

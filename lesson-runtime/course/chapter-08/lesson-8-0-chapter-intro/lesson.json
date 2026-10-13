@@ -4,7 +4,7 @@
   "chapter_id": "chapter-08",
   "lesson_id": "lesson-8-0-chapter-intro",
   "title": "第八章 章绪论——景观偏爱：好恶的测量学（章绪论·龙小淳(知性积极女)）",
-  "duration": 75.1,
+  "duration": 81.1,
   "video": "video.mp4",
   "transcript": "transcript.vtt",
   "script": "script.md",
@@ -17,25 +17,25 @@
   "timeline": [
     {
       "start": 0.0,
-      "end": 14.4,
+      "end": 16.5,
       "type": "intro",
       "topic": "市价定价"
     },
     {
-      "start": 14.4,
-      "end": 47.7,
+      "start": 16.5,
+      "end": 53.7,
       "type": "concept",
       "topic": "章地图三节点"
     },
     {
-      "start": 47.7,
-      "end": 60.5,
+      "start": 53.7,
+      "end": 71.2,
       "type": "application",
       "topic": "关键词与衔接"
     },
     {
-      "start": 60.5,
-      "end": 75.1,
+      "start": 71.2,
+      "end": 81.1,
       "type": "summary",
       "topic": "金句收束"
     }

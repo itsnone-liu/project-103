@@ -4,7 +4,7 @@
   "chapter_id": "chapter-04",
   "lesson_id": "lesson-4-0-chapter-intro",
   "title": "第四章 章绪论——场景与场所：行为的舞台（章绪论·龙小淳(知性积极女)）",
-  "duration": 129.5,
+  "duration": 97.8,
   "video": "video.mp4",
   "transcript": "transcript.vtt",
   "script": "script.md",
@@ -17,25 +17,25 @@
   "timeline": [
     {
       "start": 0.0,
-      "end": 28.3,
+      "end": 17.6,
       "type": "intro",
       "topic": "一间屋子两种人生"
     },
     {
-      "start": 28.3,
-      "end": 86.9,
+      "start": 17.6,
+      "end": 64.1,
       "type": "concept",
       "topic": "章地图三节点"
     },
     {
-      "start": 86.9,
-      "end": 114.4,
+      "start": 64.1,
+      "end": 84.4,
       "type": "application",
       "topic": "关键词与衔接"
     },
     {
-      "start": 114.4,
-      "end": 129.5,
+      "start": 84.4,
+      "end": 97.8,
       "type": "summary",
       "topic": "金句收束"
     }

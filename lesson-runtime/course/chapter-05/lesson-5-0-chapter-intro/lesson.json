@@ -4,7 +4,7 @@
   "chapter_id": "chapter-05",
   "lesson_id": "lesson-5-0-chapter-intro",
   "title": "第五章 章绪论——环境应激：失衡的科学（章绪论·龙小淳(知性积极女)）",
-  "duration": 150.2,
+  "duration": 83.4,
   "video": "video.mp4",
   "transcript": "transcript.vtt",
   "script": "script.md",
@@ -17,25 +17,25 @@
   "timeline": [
     {
       "start": 0.0,
-      "end": 34.6,
+      "end": 18.5,
       "type": "intro",
       "topic": "塞利的发现"
     },
     {
-      "start": 34.6,
-      "end": 102.4,
+      "start": 18.5,
+      "end": 59.8,
       "type": "concept",
       "topic": "章地图四节点"
     },
     {
-      "start": 102.4,
-      "end": 133.0,
+      "start": 59.8,
+      "end": 74.9,
       "type": "application",
       "topic": "关键词与衔接"
     },
     {
-      "start": 133.0,
-      "end": 150.2,
+      "start": 74.9,
+      "end": 83.4,
       "type": "summary",
       "topic": "金句收束"
     }

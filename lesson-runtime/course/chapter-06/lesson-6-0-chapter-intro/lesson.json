@@ -4,7 +4,7 @@
   "chapter_id": "chapter-06",
   "lesson_id": "lesson-6-0-chapter-intro",
   "title": "第六章 章绪论——空间行为：距离的语法（章绪论·龙小淳(知性积极女)）",
-  "duration": 116.0,
+  "duration": 73.4,
   "video": "video.mp4",
   "transcript": "transcript.vtt",
   "script": "script.md",
@@ -17,25 +17,25 @@
   "timeline": [
     {
       "start": 0.0,
-      "end": 21.4,
+      "end": 11.9,
       "type": "intro",
       "topic": "电梯半步"
     },
     {
-      "start": 21.4,
-      "end": 74.1,
+      "start": 11.9,
+      "end": 47.7,
       "type": "concept",
       "topic": "章地图四节点"
     },
     {
-      "start": 74.1,
-      "end": 100.6,
+      "start": 47.7,
+      "end": 65.9,
       "type": "application",
       "topic": "关键词与衔接"
     },
     {
-      "start": 100.6,
-      "end": 116.0,
+      "start": 65.9,
+      "end": 73.4,
       "type": "summary",
       "topic": "金句收束"
     }

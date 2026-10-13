@@ -4,7 +4,7 @@
   "chapter_id": "chapter-07",
   "lesson_id": "lesson-7-0-chapter-intro",
   "title": "第七章 章绪论——感恩自然：天性的回响（章绪论·龙小淳(知性积极女)）",
-  "duration": 120.1,
+  "duration": 98.4,
   "video": "video.mp4",
   "transcript": "transcript.vtt",
   "script": "script.md",
@@ -17,25 +17,25 @@
   "timeline": [
     {
       "start": 0.0,
-      "end": 26.3,
+      "end": 20.0,
       "type": "intro",
       "topic": "统一口味之谜"
     },
     {
-      "start": 26.3,
-      "end": 79.1,
+      "start": 20.0,
+      "end": 65.2,
       "type": "concept",
       "topic": "章地图四节点"
     },
     {
-      "start": 79.1,
-      "end": 105.7,
+      "start": 65.2,
+      "end": 83.5,
       "type": "application",
       "topic": "关键词与衔接"
     },
     {
-      "start": 105.7,
-      "end": 120.1,
+      "start": 83.5,
+      "end": 98.4,
       "type": "summary",
       "topic": "金句收束"
     }
