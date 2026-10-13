@@ -1,4 +1,4 @@
-"""_serve_t1.py — T1 种子 v1/hr 双版对比页（Tailscale 100.84.28.40:8861）。
+﻿"""_serve_t1.py — T1 种子 v1/hr 双版对比页（Tailscale 100.84.28.40:8861）。
 
 Range 206（视频 seek）。用法: python _serve_t1.py
 """
@@ -344,7 +344,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
-        f = FILES.get(self.path)
+        f = FILES.get(self.path.split("?", 1)[0])
         if f and f.exists():
             self._send_file(f)
         else:
@@ -353,7 +353,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
 
     def do_HEAD(self):
-        f = FILES.get(self.path)
+        f = FILES.get(self.path.split("?", 1)[0])
         if f and f.exists():
             size = f.stat().st_size
             mt = f.stat().st_mtime
