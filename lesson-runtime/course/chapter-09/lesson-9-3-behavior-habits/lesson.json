@@ -1,0 +1,76 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-09",
+  "lesson_id": "lesson-9-3-behavior-habits",
+  "title": "外部空间中的行为习性——抄近路、人看人与出神（9.3·龙小淳(知性积极女)）",
+  "duration": 428.4,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "动作性三习性：抄近路/逆时针/依靠性",
+    "迪士尼草种：世界最佳园路设计",
+    "依靠性与前景—庇护、形胜智慧",
+    "看人也为人所看：张岱西湖七月半",
+    "围观五级参与与广义学习",
+    "凝思出神 being lost in thought",
+    "靠右通行史与归巢兜圈"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 23.4,
+      "type": "intro",
+      "topic": "三问开场"
+    },
+    {
+      "start": 23.4,
+      "end": 102.7,
+      "type": "concept",
+      "topic": "动作三习性"
+    },
+    {
+      "start": 102.7,
+      "end": 147.1,
+      "type": "application",
+      "topic": "迪士尼与依靠性设计"
+    },
+    {
+      "start": 147.1,
+      "end": 213.1,
+      "type": "concept",
+      "topic": "人看人与围观"
+    },
+    {
+      "start": 213.1,
+      "end": 274.4,
+      "type": "concept",
+      "topic": "安静与出神"
+    },
+    {
+      "start": 274.4,
+      "end": 332.5,
+      "type": "concept",
+      "topic": "认知性习性"
+    },
+    {
+      "start": 332.5,
+      "end": 408.4,
+      "type": "application",
+      "topic": "差异与设计启示"
+    },
+    {
+      "start": 408.4,
+      "end": 428.4,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

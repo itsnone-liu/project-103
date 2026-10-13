@@ -1,7 +1,7 @@
 {
   "schema": "course-manifest-v0.1",
   "course_id": "envpsy-course-001",
-  "title": "环境心理学·系列课件（第一至三批共三十课试产）",
+  "title": "环境心理学·系列课件（第一至四批共三十八课·全书完整版）",
   "version": "0.1",
   "chapters": [
     {
@@ -253,6 +253,48 @@
           "title": "研究目的和方法——观察城市的五种姿势（9.1·龙小淳(知性积极女)）",
           "duration": 399.5,
           "package": "course/chapter-09/lesson-9-1-purpose-methods"
+        },
+        {
+          "lesson_id": "lesson-9-2-research-overview",
+          "title": "研究内容概述——外部空间里的众生相（9.2·龙小淳(知性积极女)）",
+          "duration": 373.0,
+          "package": "course/chapter-09/lesson-9-2-research-overview"
+        },
+        {
+          "lesson_id": "lesson-9-3-behavior-habits",
+          "title": "外部空间中的行为习性——抄近路、人看人与出神（9.3·龙小淳(知性积极女)）",
+          "duration": 428.4,
+          "package": "course/chapter-09/lesson-9-3-behavior-habits"
+        },
+        {
+          "lesson_id": "lesson-9-4-survey-cases",
+          "title": "调查实例——深圳书城、成都茶馆与乐山个案（9.4·龙小淳(知性积极女)）",
+          "duration": 345.5,
+          "package": "course/chapter-09/lesson-9-4-survey-cases"
+        }
+      ]
+    },
+    {
+      "chapter_id": "chapter-10",
+      "title": "第十章 建筑环境与行为",
+      "lessons": [
+        {
+          "lesson_id": "lesson-10-1-general-applications",
+          "title": "建筑学中的一般应用——从决定论到或然论（10.1·龙小淳(知性积极女)）",
+          "duration": 393.2,
+          "package": "course/chapter-10/lesson-10-1-general-applications"
+        },
+        {
+          "lesson_id": "lesson-10-2-experience-research",
+          "title": "建筑体验研究——偏爱从哪里来（10.2·龙小淳(知性积极女)）",
+          "duration": 428.8,
+          "package": "course/chapter-10/lesson-10-2-experience-research"
+        },
+        {
+          "lesson_id": "lesson-10-3-cognition-research",
+          "title": "建筑认知研究——意象、寻址与隐喻（10.3·龙小淳(知性积极女)）",
+          "duration": 390.7,
+          "package": "course/chapter-10/lesson-10-3-cognition-research"
         }
       ]
     }

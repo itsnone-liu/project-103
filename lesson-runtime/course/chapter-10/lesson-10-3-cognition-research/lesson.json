@@ -1,0 +1,82 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-10",
+  "lesson_id": "lesson-10-3-cognition-research",
+  "title": "建筑认知研究——意象、寻址与隐喻（10.3·龙小淳(知性积极女)）",
+  "duration": 390.7,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "意象三来源：使用/可见性/形式",
+    "绰号建筑学与轮廓关键性",
+    "认知距离：信息贮存与努力假设",
+    "O'Neill 5×3：+13%/-50%/-62%",
+    "标志悖论：医院走廊与火灾 8%",
+    "隐喻：一塔湖图与天平地不平",
+    "金色便便等反例与全书结语"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 15.0,
+      "type": "intro",
+      "topic": "三问开场"
+    },
+    {
+      "start": 15.0,
+      "end": 67.9,
+      "type": "concept",
+      "topic": "意象三来源"
+    },
+    {
+      "start": 67.9,
+      "end": 101.1,
+      "type": "application",
+      "topic": "绰号建筑学"
+    },
+    {
+      "start": 101.1,
+      "end": 152.7,
+      "type": "concept",
+      "topic": "认知距离"
+    },
+    {
+      "start": 152.7,
+      "end": 210.7,
+      "type": "concept",
+      "topic": "易识别与标志"
+    },
+    {
+      "start": 210.7,
+      "end": 263.2,
+      "type": "concept",
+      "topic": "拓扑与定向建议"
+    },
+    {
+      "start": 263.2,
+      "end": 309.5,
+      "type": "concept",
+      "topic": "隐喻与象征"
+    },
+    {
+      "start": 309.5,
+      "end": 379.6,
+      "type": "application",
+      "topic": "收官与结语"
+    },
+    {
+      "start": 379.6,
+      "end": 390.7,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

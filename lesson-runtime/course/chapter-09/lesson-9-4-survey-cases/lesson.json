@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-09",
+  "lesson_id": "lesson-9-4-survey-cases",
+  "title": "调查实例——深圳书城、成都茶馆与乐山个案（9.4·龙小淳(知性积极女)）",
+  "duration": 345.5,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "深圳漫游观察：木圈座与文化摊贩",
+    "摊位成败：漂亮姐姐 vs 怪大叔",
+    "成都吃讲茶：茶馆五大功能",
+    "三位一体：喝茶麻将麻辣烫",
+    "乐山数据：茶馆数与人口成正比",
+    "分间布局/借景/生态联系三启示",
+    "方法阶梯：漫游→专题→系统调查"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 22.0,
+      "type": "intro",
+      "topic": "三城三法开场"
+    },
+    {
+      "start": 22.0,
+      "end": 100.0,
+      "type": "application",
+      "topic": "深圳书城乐园"
+    },
+    {
+      "start": 100.0,
+      "end": 164.0,
+      "type": "application",
+      "topic": "成都吃讲茶"
+    },
+    {
+      "start": 164.0,
+      "end": 233.9,
+      "type": "application",
+      "topic": "乐山系统调查"
+    },
+    {
+      "start": 233.9,
+      "end": 290.6,
+      "type": "concept",
+      "topic": "方法比较"
+    },
+    {
+      "start": 290.6,
+      "end": 332.4,
+      "type": "concept",
+      "topic": "结语与展望"
+    },
+    {
+      "start": 332.4,
+      "end": 345.5,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

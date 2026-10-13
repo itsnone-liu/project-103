@@ -1,0 +1,76 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-09",
+  "lesson_id": "lesson-9-2-research-overview",
+  "title": "研究内容概述——外部空间里的众生相（9.2·龙小淳(知性积极女)）",
+  "duration": 373.0,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "第三场所与《美国大城市的死与生》",
+    "阻力和一致性步行模式",
+    "城市规模与步速：都柏林 1.56 m/s",
+    "圣何塞双广场的文化表征与话语权",
+    "西特广场形状与 40 m²/人 生气感",
+    "怀特七元素：坐处为首",
+    "安全新解：踩点、灌木与智能照明"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 25.3,
+      "type": "intro",
+      "topic": "死与生开场"
+    },
+    {
+      "start": 25.3,
+      "end": 74.1,
+      "type": "concept",
+      "topic": "第三场所"
+    },
+    {
+      "start": 74.1,
+      "end": 132.0,
+      "type": "concept",
+      "topic": "步行法则"
+    },
+    {
+      "start": 132.0,
+      "end": 194.0,
+      "type": "application",
+      "topic": "圣何塞双广场"
+    },
+    {
+      "start": 194.0,
+      "end": 261.7,
+      "type": "concept",
+      "topic": "广场形状与生气感"
+    },
+    {
+      "start": 261.7,
+      "end": 315.1,
+      "type": "application",
+      "topic": "怀特七元素"
+    },
+    {
+      "start": 315.1,
+      "end": 360.1,
+      "type": "application",
+      "topic": "安全新解"
+    },
+    {
+      "start": 360.1,
+      "end": 373.0,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

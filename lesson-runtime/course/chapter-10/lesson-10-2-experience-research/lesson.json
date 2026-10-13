@@ -1,0 +1,76 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-10",
+  "lesson_id": "lesson-10-2-experience-research",
+  "title": "建筑体验研究——偏爱从哪里来（10.2·龙小淳(知性积极女)）",
+  "duration": 428.8,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "中国馆：四种红与长城形肌理",
+    "SD 法与多项分类任务",
+    "纳萨纵贯：落选者被评为更好",
+    "绿化/历史/色彩三因素",
+    "蓝领白领与最帅谷仓",
+    "玻璃幕墙联结体最讨喜",
+    "宽敞感手法清单与减拥挤三对策"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 25.0,
+      "type": "intro",
+      "topic": "偏爱之问"
+    },
+    {
+      "start": 25.0,
+      "end": 83.6,
+      "type": "application",
+      "topic": "中国馆视错觉"
+    },
+    {
+      "start": 83.6,
+      "end": 141.1,
+      "type": "concept",
+      "topic": "研究方法"
+    },
+    {
+      "start": 141.1,
+      "end": 190.1,
+      "type": "application",
+      "topic": "纳萨纵贯"
+    },
+    {
+      "start": 190.1,
+      "end": 272.7,
+      "type": "concept",
+      "topic": "三因素"
+    },
+    {
+      "start": 272.7,
+      "end": 330.1,
+      "type": "concept",
+      "topic": "群体差异"
+    },
+    {
+      "start": 330.1,
+      "end": 406.5,
+      "type": "concept",
+      "topic": "协调宽敞围合"
+    },
+    {
+      "start": 406.5,
+      "end": 428.8,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

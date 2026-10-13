@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-10",
+  "lesson_id": "lesson-10-1-general-applications",
+  "title": "建筑学中的一般应用——从决定论到或然论（10.1·龙小淳(知性积极女)）",
+  "duration": 393.2,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "建筑决定论三盲点",
+    "普鲁蒂-艾戈：形式追随失败",
+    "扬西解释：非正规空间与污名",
+    "可能论/或然论/过滤器对比",
+    "四合院改用与圆桌课室",
+    "温莎四柱：坚固的暗示",
+    "中国馆四红与长城肌理"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 28.9,
+      "type": "intro",
+      "topic": "决定人之问"
+    },
+    {
+      "start": 28.9,
+      "end": 118.5,
+      "type": "concept",
+      "topic": "决定论与艾戈悲剧"
+    },
+    {
+      "start": 118.5,
+      "end": 195.8,
+      "type": "concept",
+      "topic": "三论对比"
+    },
+    {
+      "start": 195.8,
+      "end": 245.7,
+      "type": "application",
+      "topic": "四合院与圆桌"
+    },
+    {
+      "start": 245.7,
+      "end": 322.8,
+      "type": "concept",
+      "topic": "功能泛化"
+    },
+    {
+      "start": 322.8,
+      "end": 372.8,
+      "type": "application",
+      "topic": "视错觉正用"
+    },
+    {
+      "start": 372.8,
+      "end": 393.2,
+      "type": "summary",
+      "topic": "小结"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}
