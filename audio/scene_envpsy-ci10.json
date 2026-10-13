@@ -1,0 +1,84 @@
+{
+  "title": "envpsy-ci10",
+  "voice": "cosy:cosyvoice-v2/longxiaochun_v2",
+  "bgm": {
+    "file": "bgm/Wholesome.mp3",
+    "gain": 0.13
+  },
+  "gap": 0.25,
+  "tail": 1.5,
+  "sentences": [
+    {
+      "text": "1972年，美国圣路易斯。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "爆破声里，一片住宅区倒下了。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "十几年前建成、被传为“获奖”的完美家园，为何成了必须炸掉的废墟？",
+      "pause_after": 0.25
+    },
+    {
+      "text": "建筑能决定人的行为吗？这一问，撑起最后一章。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "这一章，我们分三步走。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "第一节，建筑学中的一般应用：三种建筑观，经历百年校准。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "从建筑决定论、建筑可能论，到建筑或然论（architectural probabilism）。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "第二节，建筑体验研究：偏爱从哪里来，看绿化、历史、色彩和群体差异。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "第三节，建筑认知研究：什么建筑记得住、找得到路，又读得懂隐喻。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "末章再加一程，用全书结语，盘点人与环境怎样互相塑造。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "学完，带走三个关键词。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "或然论、建筑体验、易识别性。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "接着第九章，从户外空间走进建筑内部。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "再把全书的十件事，拼成一句话。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "环境塑造人，人也塑造环境。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "所以，别急着把人的行为归结于建筑。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "建筑给的不是答案，是概率与机会。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "下面进入第一节，建筑学中的一般应用。",
+      "pause_after": 0.25
+    }
+  ]
+}

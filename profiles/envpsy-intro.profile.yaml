@@ -1,0 +1,28 @@
+# 环境心理学 章绪论 production-profile（1-2 分钟章导览系列，2026-10-13）
+# 用法: python -m pipeline.produce <workdir> --topic <brief.md> --model sol --profile profiles/envpsy-intro.profile.yaml
+
+mode: PROJECT_ROUTE
+
+visual:
+  style: clean_vector
+  style_pack: null
+
+backend:
+  preferred: null
+  allowed:
+    - web_2d
+    - manim
+
+narration:
+  sentences: 14-18 句
+  duration: 约 75-105 秒（1-2 分钟）
+  note: 章绪论元层面导览：只讲"为什么学、学什么、怎么串"，严禁展开正文片的具体实验与数据。短句为主（每句 ≤22 字优先），节奏明快；四段式＝钩子/章地图/关键词衔接/金句收束。句数服从总时长目标，宁短勿长。
+
+storyboard:
+  pacing: fast
+  intro_max_seconds: 20
+
+knowledge:
+  use_project_cases: true
+  use_global_success_cases: false
+  use_failure_memory: true

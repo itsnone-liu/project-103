@@ -1,0 +1,84 @@
+{
+  "title": "envpsy-ci6",
+  "voice": "cosy:cosyvoice-v2/longxiaochun_v2",
+  "bgm": {
+    "file": "bgm/Wholesome.mp3",
+    "gain": 0.13
+  },
+  "gap": 0.25,
+  "tail": 1.5,
+  "sentences": [
+    {
+      "text": "电梯开门，一个陌生人走了进来。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "你往角落挪半步，又挪开视线。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "谁教你这样做的？其实没人教。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "这些默契，就是本章要拆解的空间语法。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "本章四步走，先看个人空间（personal space）。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "霍尔把它比作人体“泡泡”，距离会传递关系。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "亲密、个人、社交、公共，四档各有含义。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "再看私密性（privacy）：不是躲起来，而是选择、控制交往。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "接着是领域性（territoriality）：空间的占有与防卫。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "从课桌到国家，领域的尺度可以很不一样。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "最后看密度与拥挤感：人多，是物理事实。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "心里觉得挤，是心理体验，两者不能画等号。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "学完带走三个关键词：人际距离、私密性、领域。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "饭桌上的上座、办公室的隔间，都能用它们来理解。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "承接第五章，拥挤正是最日常的空间应激。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "通往第七章，从人与人的空间，转向人与自然的联结。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "距离不是冷漠，是社交的语法。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "下面进入第一节，个人空间和人际距离。",
+      "pause_after": 0.25
+    }
+  ]
+}

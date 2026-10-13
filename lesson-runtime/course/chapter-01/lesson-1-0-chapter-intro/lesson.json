@@ -1,0 +1,49 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-01",
+  "lesson_id": "lesson-1-0-chapter-intro",
+  "title": "第一章 章绪论——知觉：环境设计的入口（章绪论·龙小淳(知性积极女)）",
+  "duration": 121.5,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "钩子：同一个词四种人的四种答案",
+    "章地图：流水线→视觉→听觉→嗅触动觉",
+    "三关键词：感觉阈限/格式塔/多感官",
+    "金句：设计不是摆弄形式，而是编排感觉"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 28.0,
+      "type": "intro",
+      "topic": "四种答案"
+    },
+    {
+      "start": 28.0,
+      "end": 80.7,
+      "type": "concept",
+      "topic": "章地图四节点"
+    },
+    {
+      "start": 80.7,
+      "end": 106.6,
+      "type": "application",
+      "topic": "关键词与衔接"
+    },
+    {
+      "start": 106.6,
+      "end": 121.5,
+      "type": "summary",
+      "topic": "金句收束"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

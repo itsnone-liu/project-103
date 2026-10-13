@@ -1,0 +1,84 @@
+{
+  "title": "envpsy-ci4",
+  "voice": "cosy:cosyvoice-v2/longxiaochun_v2",
+  "bgm": {
+    "file": "bgm/Wholesome.mp3",
+    "gain": 0.13
+  },
+  "gap": 0.25,
+  "tail": 1.5,
+  "sentences": [
+    {
+      "text": "同一间屋子，白天是咖啡馆，晚上变酒吧。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "坐着的人、说话的音量，连灯光的意思都变了。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "房间一寸没动，到底什么变了？",
+      "pause_after": 0.25
+    },
+    {
+      "text": "心理学家的回答是：变的是场景，不是空间。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "这一章，我们分三步，看看舞台怎么搭。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "第一节，行为场景（behavior setting）。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "巴克发现，场所像舞台，行为像剧目。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "特定时间、特定舞台，上演特定剧目。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "第二节，场所感（sense of place），看地方的灵魂怎么养。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "为什么有的地方有灵魂，有的地方走过就想忘？",
+      "pause_after": 0.25
+    },
+    {
+      "text": "第三节，场所依恋（place attachment），看依恋怎么生。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "从老家的一棵树，到住了十年的小区，人为什么会爱上一个地方？",
+      "pause_after": 0.25
+    },
+    {
+      "text": "学完，带走三个关键词：行为场景、场所感、场所依恋。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "接着第三章，我们把脑中的地图，落到脚下。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "通往第五章：当场所失控或崩塌，应激登场。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "认识场所，也是读懂生活怎样发生。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "场所不是容器，是行为与意义的舞台。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "下面进入第一节，行为场景。",
+      "pause_after": 0.25
+    }
+  ]
+}

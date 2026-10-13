@@ -1,0 +1,49 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-10",
+  "lesson_id": "lesson-10-0-chapter-intro",
+  "title": "第十章 章绪论——建筑与行为：概率的学问（章绪论·龙小淳(知性积极女)）",
+  "duration": 74.8,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "钩子：1972 爆炸炸掉获奖住宅区",
+    "章地图：三种建筑观→体验→认知+全书结语",
+    "三关键词：或然论/建筑体验/易识别性",
+    "金句：建筑给的不是答案，是概率与机会"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 16.1,
+      "type": "intro",
+      "topic": "一声爆炸"
+    },
+    {
+      "start": 16.1,
+      "end": 53.5,
+      "type": "concept",
+      "topic": "章地图三节点+结语"
+    },
+    {
+      "start": 53.5,
+      "end": 67.1,
+      "type": "application",
+      "topic": "关键词与衔接"
+    },
+    {
+      "start": 67.1,
+      "end": 74.8,
+      "type": "summary",
+      "topic": "金句收束"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

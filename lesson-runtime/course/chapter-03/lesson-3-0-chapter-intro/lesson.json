@@ -1,0 +1,49 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-03",
+  "lesson_id": "lesson-3-0-chapter-intro",
+  "title": "第三章 章绪论——环境认知：脑中的城市地图（章绪论·龙小淳(知性积极女)）",
+  "duration": 124.7,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "钩子：黄桷湾立交 5 层 20 匝道（外部事实，2017）",
+    "章地图：城市意象→成图研究→寻址命名",
+    "三关键词：认知地图/五要素/易识别性",
+    "金句：城市不仅立在土地上，也活在人脑中"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 27.6,
+      "type": "intro",
+      "topic": "立交迷宫"
+    },
+    {
+      "start": 27.6,
+      "end": 80.5,
+      "type": "concept",
+      "topic": "章地图三节点"
+    },
+    {
+      "start": 80.5,
+      "end": 109.8,
+      "type": "application",
+      "topic": "关键词与衔接"
+    },
+    {
+      "start": 109.8,
+      "end": 124.7,
+      "type": "summary",
+      "topic": "金句收束"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

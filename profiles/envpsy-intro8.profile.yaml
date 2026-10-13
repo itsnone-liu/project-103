@@ -1,0 +1,29 @@
+# 环境心理学 章绪论 ci8 专用 profile（2026-10-13 三跑用）
+# 前两跑 66s/65.5s FAIL-DUR：TTS 实测语速 5.13 字/s，90s 需 ≥460 字而 sol 只写 336 字。
+# 本 profile 把字数下限写成硬约束。
+
+mode: PROJECT_ROUTE
+
+visual:
+  style: clean_vector
+  style_pack: null
+
+backend:
+  preferred: null
+  allowed:
+    - web_2d
+    - manim
+
+narration:
+  sentences: 19-22 句
+  duration: 约 95-115 秒
+  note: 硬性要求：旁白总字数（含标点）必须 ≥470 字，平均每句 ≥24 字，上限 26 字——低于字数下限视为不合格。TTS 实测语速 5.1 字/秒，字数不足必然导致时长不达标。内容策略：章地图每个节点写满两句预告（节点名+你将学到的具体问题），钩子段与关键词段各写满四句。仍为元层面导览，不展开正文片的具体实验与数据。
+
+storyboard:
+  pacing: fast
+  intro_max_seconds: 20
+
+knowledge:
+  use_project_cases: true
+  use_global_success_cases: false
+  use_failure_memory: true

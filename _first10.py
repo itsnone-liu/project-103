@@ -152,11 +152,11 @@ def sh(cmd, timeout=None):
     return r.returncode, tail
 
 
-def produce_new(run):
+def produce_new(run, profile="profiles/envpsy.profile.yaml"):
     topic = next((ROOT / "runs" / run).glob("topic-*.md"))
     cmd = [sys.executable, "_run_produce.py", f"runs/{run}",
            "--topic", str(topic), "--model", "sol", "--effort", "high",
-           "--profile", "profiles/envpsy.profile.yaml"]
+           "--profile", profile]
     for attempt in range(3):
         rc, tail = sh(cmd, timeout=7200)
         if rc == 0:

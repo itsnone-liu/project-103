@@ -1,0 +1,49 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-02",
+  "lesson_id": "lesson-2-0-chapter-intro",
+  "title": "第二章 章绪论——环境知觉：谁在点亮世界（章绪论·龙小淳(知性积极女)）",
+  "duration": 116.3,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "钩子：喂给大脑还是大脑点亮世界",
+    "章地图：提供→倒U→情绪坐标",
+    "三关键词：提供/复杂性倒U/唤醒",
+    "金句：人不是照相机，是求生的解释器"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 26.0,
+      "type": "intro",
+      "topic": "百年之争"
+    },
+    {
+      "start": 26.0,
+      "end": 77.9,
+      "type": "concept",
+      "topic": "章地图三节点"
+    },
+    {
+      "start": 77.9,
+      "end": 103.3,
+      "type": "application",
+      "topic": "关键词与衔接"
+    },
+    {
+      "start": 103.3,
+      "end": 116.3,
+      "type": "summary",
+      "topic": "金句收束"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

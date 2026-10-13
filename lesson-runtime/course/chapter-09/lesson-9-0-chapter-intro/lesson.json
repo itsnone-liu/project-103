@@ -1,0 +1,49 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-09",
+  "lesson_id": "lesson-9-0-chapter-intro",
+  "title": "第九章 章绪论——外部公共空间：街道的生命（章绪论·龙小淳(知性积极女)）",
+  "duration": 73.9,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "钩子：古希腊广场到今日街角",
+    "章地图：方法→内容→习性→实例",
+    "三关键词：第三场所/行为习性/生气感",
+    "金句：街道的生命在于活动，不在装饰"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 12.0,
+      "type": "intro",
+      "topic": "三画面两千年"
+    },
+    {
+      "start": 12.0,
+      "end": 47.5,
+      "type": "concept",
+      "topic": "章地图四节点"
+    },
+    {
+      "start": 47.5,
+      "end": 64.9,
+      "type": "application",
+      "topic": "关键词与衔接"
+    },
+    {
+      "start": 64.9,
+      "end": 73.9,
+      "type": "summary",
+      "topic": "金句收束"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

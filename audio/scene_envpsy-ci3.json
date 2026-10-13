@@ -1,0 +1,84 @@
+{
+  "title": "envpsy-ci3",
+  "voice": "cosy:cosyvoice-v2/longxiaochun_v2",
+  "bgm": {
+    "file": "bgm/Wholesome.mp3",
+    "gain": 0.13
+  },
+  "gap": 0.25,
+  "tail": 1.5,
+  "sentences": [
+    {
+      "text": "重庆黄桷湾立交，二〇一七年通车。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "五层、二十条匝道，被叫作“最复杂立交”。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "连导航都像犯晕，本地司机却轻车熟路。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "你脑中的城市地图，谁画的，准不准？",
+      "pause_after": 0.25
+    },
+    {
+      "text": "本章三步，认识认知地图（cognitive map）。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "三点一，城市意象：什么让城市记得住？",
+      "pause_after": 0.25
+    },
+    {
+      "text": "林奇的五要素，提供读城的线索。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "可意象性（imageability），关心能否记住、说出。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "三点二，意象的后续研究。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "画出居民脑中的地图，误差里有真实需求。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "三点三，寻址、指路与命名。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "认知距离为什么会失真？",
+      "pause_after": 0.25
+    },
+    {
+      "text": "一个好路名，又值多少分？",
+      "pause_after": 0.25
+    },
+    {
+      "text": "学完带走三个词：认知地图、五要素、易识别性。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "承接第二章，从即时知觉走向储存的记忆。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "再通往第四章，从脑中地图走到脚下的场所。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "城市不仅立在土地上，也活在人脑中。",
+      "pause_after": 0.25
+    },
+    {
+      "text": "下面进入第一节，城市意象研究。",
+      "pause_after": 0.25
+    }
+  ]
+}

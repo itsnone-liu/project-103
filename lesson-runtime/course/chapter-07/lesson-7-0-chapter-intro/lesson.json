@@ -1,0 +1,49 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-07",
+  "lesson_id": "lesson-7-0-chapter-intro",
+  "title": "第七章 章绪论——感恩自然：天性的回响（章绪论·龙小淳(知性积极女)）",
+  "duration": 120.1,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "钩子：全人类统一的自然口味",
+    "章地图：进化→情感→康复→行动",
+    "三关键词：进化遗存/注意力恢复/亲环境行为",
+    "金句：亲近自然不是情趣，是天性"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 26.3,
+      "type": "intro",
+      "topic": "统一口味之谜"
+    },
+    {
+      "start": 26.3,
+      "end": 79.1,
+      "type": "concept",
+      "topic": "章地图四节点"
+    },
+    {
+      "start": 79.1,
+      "end": 105.7,
+      "type": "application",
+      "topic": "关键词与衔接"
+    },
+    {
+      "start": 105.7,
+      "end": 120.1,
+      "type": "summary",
+      "topic": "金句收束"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

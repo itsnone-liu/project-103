@@ -1,7 +1,7 @@
 {
   "schema": "course-manifest-v0.1",
   "course_id": "envpsy-course-001",
-  "title": "环境心理学·系列课件（第一至四批共三十八课·全书完整版）",
+  "title": "环境心理学·系列课件（第一至五批：38 讲正文+10 章绪论·全书完整版）",
   "version": "0.1",
   "chapters": [
     {
@@ -20,6 +20,12 @@
       "chapter_id": "chapter-01",
       "title": "第一章 知觉研究及其设计应用",
       "lessons": [
+        {
+          "lesson_id": "lesson-1-0-chapter-intro",
+          "title": "第一章 章绪论——知觉：环境设计的入口（章绪论·龙小淳(知性积极女)）",
+          "duration": 121.5,
+          "package": "course/chapter-01/lesson-1-0-chapter-intro"
+        },
         {
           "lesson_id": "lesson-1-1-perception-chain",
           "title": "感觉、知觉与认知——环境信息的加工流水线（1.1·龙小淳(知性积极女)）",
@@ -57,6 +63,12 @@
       "title": "第二章 环境知觉",
       "lessons": [
         {
+          "lesson_id": "lesson-2-0-chapter-intro",
+          "title": "第二章 章绪论——环境知觉：谁在点亮世界（章绪论·龙小淳(知性积极女)）",
+          "duration": 116.3,
+          "package": "course/chapter-02/lesson-2-0-chapter-intro"
+        },
+        {
           "lesson_id": "lesson-2-1-affordance",
           "title": "环境的提供——生态知觉理论（2.1·龙小淳(知性积极女)）",
           "duration": 402.5,
@@ -80,6 +92,12 @@
       "chapter_id": "chapter-03",
       "title": "第三章 环境认知",
       "lessons": [
+        {
+          "lesson_id": "lesson-3-0-chapter-intro",
+          "title": "第三章 章绪论——环境认知：脑中的城市地图（章绪论·龙小淳(知性积极女)）",
+          "duration": 124.7,
+          "package": "course/chapter-03/lesson-3-0-chapter-intro"
+        },
         {
           "lesson_id": "lesson-3-1-city-image",
           "title": "城市意象五要素——在陌生城市里认路（3.1①·龙小淳(知性积极女)）",
@@ -105,6 +123,12 @@
       "title": "第四章 场景和场所研究",
       "lessons": [
         {
+          "lesson_id": "lesson-4-0-chapter-intro",
+          "title": "第四章 章绪论——场景与场所：行为的舞台（章绪论·龙小淳(知性积极女)）",
+          "duration": 129.5,
+          "package": "course/chapter-04/lesson-4-0-chapter-intro"
+        },
+        {
           "lesson_id": "lesson-4-1-behavior-settings",
           "title": "行为场景——巴克与人生大舞台（4.1·龙小淳(知性积极女)）",
           "duration": 374.4,
@@ -128,6 +152,12 @@
       "chapter_id": "chapter-05",
       "title": "第五章 环境应激",
       "lessons": [
+        {
+          "lesson_id": "lesson-5-0-chapter-intro",
+          "title": "第五章 章绪论——环境应激：失衡的科学（章绪论·龙小淳(知性积极女)）",
+          "duration": 150.2,
+          "package": "course/chapter-05/lesson-5-0-chapter-intro"
+        },
         {
           "lesson_id": "lesson-5-1-stress-process",
           "title": "应激过程——从警报到成长的三级火箭（5.1·龙小淳(知性积极女)）",
@@ -158,6 +188,12 @@
       "chapter_id": "chapter-06",
       "title": "第六章 空间行为",
       "lessons": [
+        {
+          "lesson_id": "lesson-6-0-chapter-intro",
+          "title": "第六章 章绪论——空间行为：距离的语法（章绪论·龙小淳(知性积极女)）",
+          "duration": 116.0,
+          "package": "course/chapter-06/lesson-6-0-chapter-intro"
+        },
         {
           "lesson_id": "lesson-6-2-privacy",
           "title": "私密性——选择与控制的艺术（6.2·龙小淳(知性积极女)）",
@@ -195,6 +231,12 @@
       "title": "第七章 感恩自然",
       "lessons": [
         {
+          "lesson_id": "lesson-7-0-chapter-intro",
+          "title": "第七章 章绪论——感恩自然：天性的回响（章绪论·龙小淳(知性积极女)）",
+          "duration": 120.1,
+          "package": "course/chapter-07/lesson-7-0-chapter-intro"
+        },
+        {
           "lesson_id": "lesson-7-1-evolution-in-nature",
           "title": "在自然的孕育中进化——从大裂谷走出的我们（7.1·龙小淳(知性积极女)）",
           "duration": 352.9,
@@ -225,6 +267,12 @@
       "title": "第八章 景观偏爱研究",
       "lessons": [
         {
+          "lesson_id": "lesson-8-0-chapter-intro",
+          "title": "第八章 章绪论——景观偏爱：好恶的测量学（章绪论·龙小淳(知性积极女)）",
+          "duration": 75.1,
+          "package": "course/chapter-08/lesson-8-0-chapter-intro"
+        },
+        {
           "lesson_id": "lesson-8-1-methods-theories",
           "title": "研究方法和理论类别——从风景画到评价成图（8.1·龙小淳(知性积极女)）",
           "duration": 387.1,
@@ -248,6 +296,12 @@
       "chapter_id": "chapter-09",
       "title": "第九章 外部公共空间活动研究",
       "lessons": [
+        {
+          "lesson_id": "lesson-9-0-chapter-intro",
+          "title": "第九章 章绪论——外部公共空间：街道的生命（章绪论·龙小淳(知性积极女)）",
+          "duration": 73.9,
+          "package": "course/chapter-09/lesson-9-0-chapter-intro"
+        },
         {
           "lesson_id": "lesson-9-1-purpose-methods",
           "title": "研究目的和方法——观察城市的五种姿势（9.1·龙小淳(知性积极女)）",
@@ -278,6 +332,12 @@
       "chapter_id": "chapter-10",
       "title": "第十章 建筑环境与行为",
       "lessons": [
+        {
+          "lesson_id": "lesson-10-0-chapter-intro",
+          "title": "第十章 章绪论——建筑与行为：概率的学问（章绪论·龙小淳(知性积极女)）",
+          "duration": 74.8,
+          "package": "course/chapter-10/lesson-10-0-chapter-intro"
+        },
         {
           "lesson_id": "lesson-10-1-general-applications",
           "title": "建筑学中的一般应用——从决定论到或然论（10.1·龙小淳(知性积极女)）",

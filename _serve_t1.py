@@ -93,6 +93,50 @@ F10 = [
 for _k, _r, _t, _tag in F10:
     FILES[f"/{_k}.mp4"] = ROOT / "runs" / _r / "out" / f"final_{_r}.mp4"
 
+INTROS = [
+    ("f10i-1", "envpsy-ci1", "第一章 知觉：环境设计的入口", "章绪论"),
+    ("f10i-2", "envpsy-ci2", "第二章 环境知觉：谁在点亮世界", "章绪论"),
+    ("f10i-3", "envpsy-ci3", "第三章 环境认知：脑中的城市地图", "章绪论"),
+    ("f10i-4", "envpsy-ci4", "第四章 场景与场所：行为的舞台", "章绪论"),
+    ("f10i-5", "envpsy-ci5", "第五章 环境应激：失衡的科学", "章绪论"),
+    ("f10i-6", "envpsy-ci6", "第六章 空间行为：距离的语法", "章绪论"),
+    ("f10i-7", "envpsy-ci7", "第七章 感恩自然：天性的回响", "章绪论"),
+    ("f10i-8", "envpsy-ci8", "第八章 景观偏爱：好恶的测量学", "章绪论"),
+    ("f10i-9", "envpsy-ci9", "第九章 外部公共空间：街道的生命", "章绪论"),
+    ("f10i-10", "envpsy-ci10", "第十章 建筑与行为：概率的学问", "章绪论"),
+]
+for _k, _r, _t, _tag in INTROS:
+    FILES[f"/{_k}.mp4"] = ROOT / "runs" / _r / "out" / f"final_{_r}.mp4"
+
+INTROS_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>章绪论十篇 · 每章 1-2 分钟</title>
+<style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}
+h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
+.item{margin:22px 0}.item b{font-size:15px}.tag{color:#fc8;font-size:12px;border:1px solid #a80;border-radius:4px;padding:1px 6px;margin:0 6px}
+video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}</style></head><body>
+<h1>《环境心理学》章绪论十篇 · 每章 1-2 分钟导览</h1>
+<p class="meta">元层面导览：只讲"为什么学、学什么、怎么串"，不与正文重复。配音 CosyVoice v2 · 龙小淳；sol(gpt-6.1-sol 高推理) 制作；时长门禁 ≥70s + 冻结扫描。
+<br><a href="/first10.html">▶ 三十八讲正文正片</a></p>
+{{ITEMS}}
+</body></html>"""
+
+
+def _intros_page():
+    import json as _json
+    rows = []
+    for _k, _r, _t, _tag in INTROS:
+        f = FILES[f"/{_k}.mp4"]
+        if not f.exists():
+            rows.append(f'<div class="item"><s><b>{_t}</b></s> <span class="tag">生产中…</span></div>')
+            continue
+        tm_p = ROOT / "audio" / f"timing_{_r}.json"
+        dur = ""
+        if tm_p.exists():
+            _d = _json.loads(tm_p.read_text(encoding="utf-8"))["total"]
+            dur = f'<span class="meta">{_d:.0f}s</span>'
+        rows.append(f'<div class="item"><b>{_t}</b><span class="tag">{_tag}</span>{dur}'
+                    f'<video controls preload="metadata" src="/{_k}.mp4"></video></div>')
+    return INTROS_PAGE.replace("{{ITEMS}}", "".join(rows))
+
 F10_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>前三十六段 · 章节正片</title>
 <style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}
 h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
@@ -129,7 +173,8 @@ h1{font-size:20px}h2{font-size:15px;color:#8fb;margin-top:28px}a{color:#7fd}vide
 .meta{color:#9ab;font-size:13px;line-height:1.7}table{border-collapse:collapse;font-size:13px}
 td,th{border:1px solid #2a3540;padding:4px 10px;text-align:left}th{color:#8fb}</style></head><body>
 <h1>《看不见的气泡》T1 种子 · 两版对比</h1>
-<p class="meta"><a href="/first10.html">▶ 前三十六段正片批产（绪论→10.3 全书收官，龙小淳配音，sol 新制 34 段+换声 2 段）</a></p>
+<p class="meta"><a href="/intros.html">▶ 章绪论十篇（每章 1-2 分钟导览，龙小淳配音）</a><br>
+<a href="/first10.html">▶ 前三十六段正片批产（绪论→10.3 全书收官，龙小淳配音，sol 新制 34 段+换声 2 段）</a></p>
 <table>
 <tr><th></th><th>v1 默认推理</th><th>hr 高推理</th></tr>
 <tr><td>时长</td><td>396.7s</td><td>348.6s（更贴近 5min 目标）</td></tr>
@@ -277,6 +322,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return
         if self.path == "/first10.html":
             body = _f10_page().encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        if self.path == "/intros.html":
+            body = _intros_page().encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))

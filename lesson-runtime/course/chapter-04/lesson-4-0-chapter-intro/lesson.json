@@ -1,0 +1,49 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-04",
+  "lesson_id": "lesson-4-0-chapter-intro",
+  "title": "第四章 章绪论——场景与场所：行为的舞台（章绪论·龙小淳(知性积极女)）",
+  "duration": 129.5,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "钩子：白天咖啡馆晚上酒吧",
+    "章地图：行为场景→场所感→场所依恋",
+    "三关键词：行为场景/场所感/场所依恋",
+    "金句：场所不是容器，是行为与意义的舞台"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 28.3,
+      "type": "intro",
+      "topic": "一间屋子两种人生"
+    },
+    {
+      "start": 28.3,
+      "end": 86.9,
+      "type": "concept",
+      "topic": "章地图三节点"
+    },
+    {
+      "start": 86.9,
+      "end": 114.4,
+      "type": "application",
+      "topic": "关键词与衔接"
+    },
+    {
+      "start": 114.4,
+      "end": 129.5,
+      "type": "summary",
+      "topic": "金句收束"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

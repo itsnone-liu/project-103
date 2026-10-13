@@ -1,0 +1,49 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-05",
+  "lesson_id": "lesson-5-0-chapter-intro",
+  "title": "第五章 章绪论——环境应激：失衡的科学（章绪论·龙小淳(知性积极女)）",
+  "duration": 150.2,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "钩子：1936 塞利手术台的一刀",
+    "章地图：过程→灾变→背景→个人",
+    "三关键词：应激源/适应水平/应对资源",
+    "金句：应激不是事件本身，是失衡的信号"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 34.6,
+      "type": "intro",
+      "topic": "塞利的发现"
+    },
+    {
+      "start": 34.6,
+      "end": 102.4,
+      "type": "concept",
+      "topic": "章地图四节点"
+    },
+    {
+      "start": 102.4,
+      "end": 133.0,
+      "type": "application",
+      "topic": "关键词与衔接"
+    },
+    {
+      "start": 133.0,
+      "end": 150.2,
+      "type": "summary",
+      "topic": "金句收束"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}
