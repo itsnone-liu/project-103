@@ -134,7 +134,7 @@ def _intros_page():
             _d = _json.loads(tm_p.read_text(encoding="utf-8"))["total"]
             dur = f'<span class="meta">{_d:.0f}s</span>'
         rows.append(f'<div class="item"><b>{_t}</b><span class="tag">{_tag}</span>{dur}'
-                    f'<video controls preload="metadata" src="/{_k}.mp4"></video></div>')
+                    f'<video controls preload="metadata" src="/{_k}.mp4?v=b5"></video></div>')
     return INTROS_PAGE.replace("{{ITEMS}}", "".join(rows))
 
 F10_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>前三十六段 · 章节正片</title>
