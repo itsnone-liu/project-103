@@ -120,10 +120,13 @@ def cmd_tts(scene_json):
         f = vdir / f"sent_{k:02d}.mp3"
         wav = vdir / f"sent_{k:02d}.wav"
         rate = 0; cap = s.get("rate_cap", 30)
-        if wav.exists() and wav.stat().st_size > 40000:   # 断点续跑：已合成句直接量时长
-            dur = dur_of(wav)
+        txt_f = vdir / f"sent_{k:02d}.txt"
+        if wav.exists() and wav.stat().st_size > 40000 and txt_f.exists() \
+                and txt_f.read_text(encoding="utf-8").strip() == s["text"]:
+            dur = dur_of(wav)  # 断点续跑：已合成句直接量时长（文本必须一致，防旧稿复用）
         else:
             dur = tts_sentence(s["text"], f, voice, 0)
+            txt_f.write_text(s["text"], encoding="utf-8")
         # 锚点 = 开口时刻: 说早了→垫拍等待; 说晚了(t>锚)→按 5% 阶梯加速语速
         anchor = s.get("anchor_start")
         if anchor is not None and t > anchor + 0.05:
