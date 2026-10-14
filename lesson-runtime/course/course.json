@@ -1,7 +1,7 @@
 {
   "schema": "course-manifest-v0.1",
   "course_id": "envpsy-course-001",
-  "title": "环境心理学·系列课件（第一至五批：38 讲正文+10 章绪论·全书完整版）",
+  "title": "环境心理学·系列课件（第一至六批：38 讲正文+10 章绪论+案例研究·完整版）",
   "version": "0.1",
   "chapters": [
     {
@@ -355,6 +355,18 @@
           "title": "建筑认知研究——意象、寻址与隐喻（10.3·龙小淳(知性积极女)）",
           "duration": 390.7,
           "package": "course/chapter-10/lesson-10-3-cognition-research"
+        }
+      ]
+    },
+    {
+      "chapter_id": "chapter-11",
+      "title": "第十一章 案例研究——理论的设计应用",
+      "lessons": [
+        {
+          "lesson_id": "lesson-11-1-case-times-square",
+          "title": "案例研究A——抢街：时代广场的人本改造（设计案例·龙小淳(知性积极女)）",
+          "duration": 719.1,
+          "package": "course/chapter-11/lesson-11-1-case-times-square"
         }
       ]
     }

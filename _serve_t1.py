@@ -108,6 +108,41 @@ INTROS = [
 for _k, _r, _t, _tag in INTROS:
     FILES[f"/{_k}.mp4"] = ROOT / "runs" / _r / "out" / f"final_{_r}.mp4"
 
+CASES = [
+    ("case-1", "envpsy-case1", "案例A 抢街：时代广场的人本改造", "设计案例·12min"),
+]
+for _k, _r, _t, _tag in CASES:
+    FILES[f"/{_k}.mp4"] = ROOT / "runs" / _r / "out" / f"final_{_r}.mp4"
+
+CASES_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>设计案例研究 · 论文框架教学片</title>
+<style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}
+h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
+.item{margin:22px 0}.item b{font-size:15px}.tag{color:#fc8;font-size:12px;border:1px solid #a80;border-radius:4px;padding:1px 6px;margin:0 6px}
+video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}</style></head><body>
+<h1>《环境心理学》设计案例研究 · 论文框架教学片</h1>
+<p class="meta">设计论文六段文体（问题→理论框架→诊断→设计策略→实证检验→结论）× 工程图纸视觉母语 × 纪录片叙事；全程代码确定性渲染，数字全部带来源。配音 CosyVoice v2 · 龙小淳；sol(gpt-6.1-sol 高推理) 制作；时长门禁 ≥570s + 冻结扫描。
+<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a></p>
+{{ITEMS}}
+</body></html>"""
+
+
+def _cases_page():
+    import json as _json
+    rows = []
+    for _k, _r, _t, _tag in CASES:
+        f = FILES[f"/{_k}.mp4"]
+        if not f.exists():
+            rows.append(f'<div class="item"><s><b>{_t}</b></s> <span class="tag">生产中…</span></div>')
+            continue
+        tm_p = ROOT / "audio" / f"timing_{_r}.json"
+        dur = ""
+        if tm_p.exists():
+            _d = _json.loads(tm_p.read_text(encoding="utf-8"))["total"]
+            dur = f'<span class="meta">{_d/60:.1f}min</span>'
+        rows.append(f'<div class="item"><b>{_t}</b><span class="tag">{_tag}</span>{dur}'
+                    f'<video controls preload="metadata" src="/{_k}.mp4?v=b6"></video></div>')
+    return CASES_PAGE.replace("{{ITEMS}}", "".join(rows))
+
 INTROS_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>章绪论十篇 · 每章 1-2 分钟</title>
 <style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}
 h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
@@ -173,7 +208,7 @@ h1{font-size:20px}h2{font-size:15px;color:#8fb;margin-top:28px}a{color:#7fd}vide
 .meta{color:#9ab;font-size:13px;line-height:1.7}table{border-collapse:collapse;font-size:13px}
 td,th{border:1px solid #2a3540;padding:4px 10px;text-align:left}th{color:#8fb}</style></head><body>
 <h1>《看不见的气泡》T1 种子 · 两版对比</h1>
-<p class="meta"><a href="/intros.html">▶ 章绪论十篇（每章 1-2 分钟导览，龙小淳配音）</a><br>
+<p class="meta"><a href="/intros.html">▶ 章绪论十篇（每章 1-2 分钟导览，龙小淳配音）</a><br><a href="/cases.html">▶ 设计案例研究（论文框架教学片）</a><br>
 <a href="/first10.html">▶ 前三十六段正片批产（绪论→10.3 全书收官，龙小淳配音，sol 新制 34 段+换声 2 段）</a></p>
 <table>
 <tr><th></th><th>v1 默认推理</th><th>hr 高推理</th></tr>
@@ -330,6 +365,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return
         if self.path == "/intros.html":
             body = _intros_page().encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        if self.path == "/cases.html":
+            body = _cases_page().encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))

@@ -1,0 +1,70 @@
+{
+  "schema": "lesson-manifest-v0.1",
+  "course_id": "envpsy-course-001",
+  "chapter_id": "chapter-11",
+  "lesson_id": "lesson-11-1-case-times-square",
+  "title": "案例研究A——抢街：时代广场的人本改造（设计案例·龙小淳(知性积极女)）",
+  "duration": 719.1,
+  "video": "video.mp4",
+  "transcript": "transcript.vtt",
+  "script": "script.md",
+  "knowledge_points": [
+    "问题：4500万人年访客的广场却无人驻留",
+    "理论框架：怀特/盖尔观察法·感觉超载与倒U·密度≠拥挤",
+    "诊断：2008四病灶（零驻留/超载/高密度高拥挤/几何死结）",
+    "策略：72小时油漆+折叠椅试点；椅子=控制感·涂装=领域提示·禁车=负荷削减",
+    "检验：NYC DOT数据（车内伤↓63%/行人伤↓35%/走车道↓80%/步行↑11%/支持率74%）",
+    "永久化：Snøhetta公共空间翻倍·黑花岗岩光影·集会台阶",
+    "结论：证据先行·轻量可逆试验·人本非零和"
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 65.3,
+      "type": "intro",
+      "topic": "世界十字路口的悖论"
+    },
+    {
+      "start": 65.3,
+      "end": 156.7,
+      "type": "concept",
+      "topic": "三个理论透镜"
+    },
+    {
+      "start": 156.7,
+      "end": 253.0,
+      "type": "diagnosis",
+      "topic": "2008四病灶"
+    },
+    {
+      "start": 253.0,
+      "end": 378.9,
+      "type": "strategy",
+      "topic": "油漆与折叠椅"
+    },
+    {
+      "start": 378.9,
+      "end": 563.8,
+      "type": "evidence",
+      "topic": "数据与永久化"
+    },
+    {
+      "start": 563.8,
+      "end": 663.7,
+      "type": "conclusion",
+      "topic": "三条结论"
+    },
+    {
+      "start": 663.7,
+      "end": 719.1,
+      "type": "outro",
+      "topic": "作业与预告"
+    }
+  ],
+  "tts": {
+    "engine": "cosyvoice-v2",
+    "voice": "longxiaochun_v2"
+  },
+  "produced_by": "sol",
+  "interactions": "interactions.json"
+}

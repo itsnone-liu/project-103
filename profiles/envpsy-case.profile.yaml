@@ -1,0 +1,30 @@
+# 环境心理学 案例批 profile（2026-10-13 用户批准案例 A 方案）
+# 案例片 = 设计论文文体 × 图纸视觉母语 × 纪录片叙事（无真人镜头）。
+# 10 分钟档：600s 需 ≥3060 字；本 profile 把字数下限写成硬约束（批5教训）。
+
+mode: PROJECT_ROUTE
+
+visual:
+  style: clean_vector
+  style_pack: blueprint_drawing  # 图纸母语：总平面/轴测/流线/红线——由 brief 参数锚点具体化
+  style_note: 视觉底盘用建筑图纸语言（平面简图/轴测/流线箭头/红线范围），图纸简笔风格；数据段用霓虹掉落信息图与图纸底形成反差；结论段轴测收束。全程代码渲染，禁用真人实拍素材。
+
+backend:
+  preferred: null
+  allowed:
+    - web_2d
+    - manim
+
+narration:
+  sentences: 44-52 句
+  duration: 约 570-660 秒（目标 600）
+  note: 硬性要求：旁白总字数（含标点）必须 ≥3000 字，平均每句 22-26 字——低于字数下限视为不合格。TTS 实测语速 5.1 字/秒，字数不足必然导致时长不达标。文体=设计论文六段（问题→理论框架→诊断→设计策略→实证检验→结论）但讲述要生动：可设问、悬念、拟人，所有数字必须带来源角标（NYC DOT 2010 报告/Snøhetta 官方稿/brief 标注来源），不得虚构数据。
+
+storyboard:
+  pacing: documentary  # 纪录片叙事节奏：每幕一个叙事任务，幕内先画面后揭底
+  intro_max_seconds: 60
+
+knowledge:
+  use_project_cases: true
+  use_global_success_cases: false
+  use_failure_memory: true
