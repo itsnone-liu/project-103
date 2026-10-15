@@ -75,3 +75,43 @@
 - **副产物**：会话内 agent 写码自带全项目记忆（用户否决理由、历轮 VLM 评审教训、风格纪律），冷启动 API 调用塞不下这些上下文——质量与稳定双收益
 - **来源**：capital3 全程实证（2026-10-06，提交 a133525）
 
+# KP-011 · ffmpeg 报"滤镜语法错误"先查构建能力：Remotion 自带的是裁剪版
+
+- **栈**：合成/调色层（pad/eq/subtitles/libass 全链路）
+- **症状**：`pad=1280:720:...` 连续报 `No option name near '...'` / `Filter not found`；按滤镜语法三次返工全失败
+- **机理**：Remotion compositor 自带 ffmpeg（`node_modules/@remotion/compositor-win32-x64-msvc/ffmpeg.exe`，n7.1）是 `--disable-filters` 构建，只有 scale/format——报错文案像语法错，实为滤镜根本不存在
+- **规避**：遇到滤镜报错先 `ffmpeg -filters` 验证构建能力再改语法。本机全功能版：`D:\ComfyUI_windows_portable\...\tonyhub\ffmpeg\bin\ffmpeg.exe`（pad/eq/noise/subtitles/libass 齐）；ffprobe 用 Remotion 目录的即可
+- **来源**：Case C 渲染，2026-10-15
+
+# KP-012 · Canvas 卡片与字幕禁止同义叠加；QA 必须多时间点抽帧
+
+- **栈**：合成层 + VLM 审片
+- **症状**：证据卡段落底部悬浮一行以"："开头、末尾截断的重复结论（"：树景组住院更短…不能证明窗景"），看起来像卡片排版错误
+- **机理**：build_timeline 给卡片场景叠加了 43 字长字幕，内容与卡内要点同义；字幕区超出画面底被裁，残行视觉上污染卡片页脚——两层互不知情
+- **规避**：①卡片已呈现的信息一律不再叠加同义字幕，字幕只放卡上没有的内容（如来源引文），长度 ≤25 字；②QA 不能单帧放行——本例首帧审过 PASS，六时间点抽帧（30/35/38/42/46/48s）才暴露
+- **来源**：Case C 三轮重渲实证，2026-10-15
+
+# KP-013 · RunningHub API 陷阱集：计费口径 / 804 语义 / 任务可挽回
+
+- **栈**：RunningHub WebAPI（820/821/103 共用）
+- **计费口径**：task_outputs 返回的每个输出行（mp4+zip 伴随文件）都带 consumeCoins——**按 taskId 去重取一次**，直接求和翻倍。账户 remainCoins 余额 ≠ 项目成本（可能含无关任务），台账以任务级输出元数据为准
+- **804 语义**：task_outputs 在任务运行中返回 `[804] APIKEY_TASK_IS_RUNNING`——先 poll task_status 到 SUCCESS 再取 outputs
+- **任务可挽回**：脚本在任务创建**之后**崩（如记账 KeyError）不会杀 RH 任务——手动 poll status/outputs 恢复，勿重建任务重复扣币
+- **来源**：Case C（213/400 币全链路核算 + P01_A 崩溃挽回），2026-10-15
+
+# KP-014 · H3 人物视频生产纪律：参考图、身份门、音轨替换
+
+- **栈**：MiniMaxH3 Ref2VA + 文生图参考 + CosyVoice
+- **参考图生成**：带图/复杂负向的提示词会跑偏（老年脸、无关 UI 截图）；**纯文字提示词**一次出合格中年华人候选（Case C 15 币 2 张可用）
+- **身份锚定**：选定候选锁为 canonical（记 SHA256），全部镜头共用单参考图；SFace 相似度抽帧验证（Case C 0.8268/0.8925，同人阈 0.363，镜头门中位 ≥0.60）
+- **音轨纪律**：H3 生成音轨一律弃用；旁白/台词全部 CosyVoice 重配（角色台词标注"虚构情景台词"）
+- **已知偏差**：VLM 对生成帧的年龄判断偏老约 5-10 岁 vs 用户指定年龄——按身份一致性放行前，若用户对年龄敏感需提前说明或预留 ReActor 修复预算
+- **来源**：Case C 全程，2026-10-15
+
+# KP-015 · PowerShell ConvertTo-Json 写文件带 UTF-16 BOM
+
+- **栈**：工具链（Windows 环境 JSON 台账）
+- **症状**：`ConvertTo-Json | Out-File` 写的 usage.json 后续 `python -m json.tool` 报 `Unexpected UTF-8 BOM`（UTF-16 编码+BOM）
+- **规避**：JSON 台账统一用 python `json.dumps(..., ensure_ascii=False)` + `encoding='utf-8'` 写；读取方用 `utf-8-sig` 兜底
+- **来源**：Case C 成本台账事故，2026-10-15
+
