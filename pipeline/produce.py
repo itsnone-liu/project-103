@@ -156,6 +156,8 @@ def main() -> int:
         steps = prompts.decision_prompts(topic, sb_path.read_text(encoding="utf-8"), prof, blind=args.blind_sample)
         plan_free, _ = llm.call(args.model, steps[0], think="on", effort=args.effort)
         (wd / "decision_stepA.md").write_text(plan_free, encoding="utf-8")
+        steps = prompts.decision_prompts(topic, sb_path.read_text(encoding="utf-8"), prof,
+                                        blind=args.blind_sample, visual_plan=plan_free)
         if args.blind_sample:
             decision = {"backend": "CUSTOM", "blind_sample": True, "reason": plan_free[:400],
                         "alternative": None, "risk": None, "why_not": {}}
@@ -177,7 +179,10 @@ def main() -> int:
         code = code_path.read_text(encoding="utf-8"); log("codegen: 复用", code_path.name)
     else:
         log(f"codegen ({backend}): 生成中…")
-        code, meta = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="low", effort=args.effort)
+        visual_plan = (wd / "decision_stepA.md").read_text(encoding="utf-8") if (wd / "decision_stepA.md").exists() else ""
+        code, meta = llm.call(args.model, prompts.codegen_prompt(
+            decision, sb_path.read_text(encoding="utf-8"), timing, prof,
+            topic=topic, visual_plan=visual_plan, include_visual_context=True), think="low", effort=args.effort)
         m = re.search(r"```(?:\w+)?\n(.*?)```", code, re.S)
         code = (m.group(1) if m else code).strip()
         if len(code) < 200:
@@ -197,7 +202,12 @@ def main() -> int:
             backend, decision["backend"] = "web_2d", "WEB_2D"
             if not (wd / "code" / "index.html").exists():
                 log("codegen: 回退 web_2d 重新生成…")
-                code, _ = llm.call(args.model, prompts.codegen_prompt(decision, sb_path.read_text(encoding="utf-8"), timing, prof), think="low", effort=args.effort)
+                code, _ = llm.call(args.model, prompts.codegen_prompt(
+                    decision, sb_path.read_text(encoding="utf-8"), timing, prof,
+                    topic=topic,
+                    visual_plan=(wd / "decision_stepA.md").read_text(encoding="utf-8")
+                    if (wd / "decision_stepA.md").exists() else "",
+                    include_visual_context=True), think="low", effort=args.effort)
                 m = re.search(r"```(?:\w+)?\n(.*?)```", code, re.S)
                 (wd / "code" / "index.html").write_text((m.group(1) if m else code).strip(), encoding="utf-8")
 

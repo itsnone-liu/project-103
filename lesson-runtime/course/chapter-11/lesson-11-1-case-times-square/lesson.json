@@ -4,7 +4,7 @@
   "chapter_id": "chapter-11",
   "lesson_id": "lesson-11-1-case-times-square",
   "title": "案例研究A——抢街：时代广场的人本改造（设计案例·龙小淳(知性积极女)）",
-  "duration": 719.1,
+  "duration": 601.2,
   "video": "video.mp4",
   "transcript": "transcript.vtt",
   "script": "script.md",
@@ -20,43 +20,43 @@
   "timeline": [
     {
       "start": 0.0,
-      "end": 65.3,
+      "end": 54.2,
       "type": "intro",
       "topic": "世界十字路口的悖论"
     },
     {
-      "start": 65.3,
-      "end": 156.7,
+      "start": 54.2,
+      "end": 146.1,
       "type": "concept",
       "topic": "三个理论透镜"
     },
     {
-      "start": 156.7,
-      "end": 253.0,
+      "start": 146.1,
+      "end": 227.2,
       "type": "diagnosis",
       "topic": "2008四病灶"
     },
     {
-      "start": 253.0,
-      "end": 378.9,
+      "start": 227.2,
+      "end": 339.0,
       "type": "strategy",
       "topic": "油漆与折叠椅"
     },
     {
-      "start": 378.9,
-      "end": 563.8,
+      "start": 339.0,
+      "end": 461.8,
       "type": "evidence",
       "topic": "数据与永久化"
     },
     {
-      "start": 563.8,
-      "end": 663.7,
+      "start": 461.8,
+      "end": 550.9,
       "type": "conclusion",
       "topic": "三条结论"
     },
     {
-      "start": 663.7,
-      "end": 719.1,
+      "start": 550.9,
+      "end": 601.2,
       "type": "outro",
       "topic": "作业与预告"
     }

@@ -31,9 +31,9 @@ def storyboard_prompt(topic: str, profile: dict) -> list[dict]:
     """分镜=内容+旁白+数学，渲染器中立。视觉设计留给 decide/codegen 阶段。
     旁白规格可由 profile["narration"] 覆盖（sentences/duration/note），
     缺省 8-12 句 / 20-35 秒（envpsy 5 分钟长片走 profile 覆盖）。"""
+    # Storyboard 阶段只写内容/旁白/数学，不把任意 style_pack 误称为“手绘”。
+    # 视觉规范在 codegen 阶段由原始 brief、决策方案与 profile.visual 显式注入。
     pk = ""
-    if (profile.get("visual") or {}).get("style_pack"):
-        pk = "\n风格要求：本项目指定手绘风格包（细节在后续代码阶段提供）。\n"
     nar = profile.get("narration") or {}
     sentences = nar.get("sentences", "8-12 句")
     duration = nar.get("duration", "约 20-35 秒")
@@ -51,13 +51,20 @@ def storyboard_prompt(topic: str, profile: dict) -> list[dict]:
 约束：数学必须自洽（Parameters 里的数值经得起重算）；旁白句即 TTS 单位；不要描述任何视觉/动画实现细节。{pk}{note}"""}]
 
 
-def decision_prompts(topic: str, storyboard: str, profile: dict, blind: bool = False) -> list[list[dict]]:
-    """两步决策（附录补丁1）：步A 无菜单自由作答（先独立判断再看锚），步B 菜单匹配+逐项 why-not。
-    blind=True（菜单盲测采样）时只走步A，且步A输出即最终决定。"""
-    step_a = [{"role": "user", "content": f"""你是视频技术总监。以下是教学视频分镜（内容+旁白+数学），请规划**视觉与渲染技术方案**。
+def decision_prompts(topic: str, storyboard: str, profile: dict, blind: bool = False,
+                     visual_plan: str = "") -> list[list[dict]]:
+    """两步决策：A从brief+分镜+项目视觉约束独立规划；B收到A的明确文本后做后端选择。"""
+    style_note = (profile.get("visual") or {}).get("style_note", "")
+    step_a = [{"role": "user", "content": f"""你是视频技术总监。基于原始brief、教学分镜和项目视觉约束，规划视觉与渲染方案。
 
-分镜：
+原始brief：
+{topic}
+
+分镜（内容+旁白+数学）：
 {storyboard}
+
+项目视觉约束：
+{style_note or '无项目指定，按内容自主设计。'}
 
 先回答（自由作答，不受任何选项限制）：
 1. 这个内容最适合的视觉语言是什么？（风格、质感、信息层级）
@@ -68,7 +75,10 @@ def decision_prompts(topic: str, storyboard: str, profile: dict, blind: bool = F
         return [step_a]
     allowed = profile.get("backend", {}).get("allowed", list(BACKENDS))
     why_not = {k: "<一行理由>" for k in allowed}
-    step_b = [{"role": "user", "content": f"""基于上面的自由规划，从可用后端中做出正式选择。
+    step_b = [{"role": "user", "content": f"""以下是步A刚生成的自由视觉规划（真实文本，非隐含对话上下文）：
+{visual_plan or '（尚无自由规划文本）'}
+
+基于这份规划，从可用后端中做出正式选择。
 
 可用后端：
 {menu_text(profile)}
@@ -91,15 +101,34 @@ CUSTOM 时额外字段 "nomination": {{"tech": "<技术名>", "env_check": "<环
     return [step_a, step_b]
 
 
-def codegen_prompt(decision: dict, storyboard: str, timing: dict, profile: dict) -> list[dict]:
-    """自主代码生成。注入=生产契约+后端契约+该栈坑文档+timing(n+1)。无 Pattern、无美学预设。
-    hand-drown 风格包按 profile 注入其 API 文档。"""
+def codegen_prompt(decision: dict, storyboard: str, timing: dict, profile: dict,
+                   topic: str = "", visual_plan: str = "",
+                   include_visual_context: bool = False) -> list[dict]:
+    """自主代码生成。默认保持旧路径；仅显式 include_visual_context 时注入原始brief/设计方案/profile视觉契约。"""
     backend = decision["backend"].lower()
     b = BACKENDS[backend]
+    visual = profile.get("visual") or {}
+    style_pack = visual.get("style_pack")
+    style_note = visual.get("style_note", "")
     pack = ""
-    if (profile.get("visual") or {}).get("style_pack") == "hand-drawn":
+    if style_pack == "hand-drawn":
         pat = (ROOT / "styles" / "hand-drawn" / "PATTERNS.md").read_text(encoding="utf-8")
-        pack = f"\n## 风格包 API（项目指定手绘风格，可用可不用，无实现义务之外的限制）\n{pat[:6000]}\n"
+        pack = f"\n## 风格包规范（显式启用 hand-drawn）\n{pat[:6000]}\n"
+    elif style_pack:
+        pack = f"\n## 项目显式视觉风格包：{style_pack}\n此名称本身不是API；请按下方项目视觉规范实现，不要虚构不存在的库。\n"
+    visual_context = ""
+    if include_visual_context:
+        visual_context = f"""
+## 原始教学/视觉 brief（旁白不是视觉分镜）
+{topic or '（未提供原始brief）'}
+
+## 技术总监视觉方案
+{visual_plan or '（无额外自由规划文本）'}
+
+## 项目视觉硬约束（profile.visual.style_note）
+{style_note or '（项目未指定视觉硬约束，按内容自主设计）'}
+{pack}
+"""
     starts = timing["starts"] + [timing["total"]]          # KP-002：n+1，含 tEnd
     api_notes = ""
     if backend == "manim":                                  # 硬事实：API 签名卡（反幻觉）
@@ -109,6 +138,7 @@ def codegen_prompt(decision: dict, storyboard: str, timing: dict, profile: dict)
 
 ## 分镜（内容/旁白/数学——数学量必须原样使用，可机器审计）
 {storyboard}
+{visual_context}
 
 ## 旁白物理时钟（TTS 实测；n+1 项=句起点+终点，最后一项是 tEnd，不是句子）
 narr_starts = {json.dumps(starts)}
@@ -121,7 +151,7 @@ total = {timing['total']} 秒
 {b['contract']}
 
 ## 该栈已知坑（避坑用，不限制设计）
-{_pitfalls(b['pitfall_tags'])}{api_notes}{pack}
+{_pitfalls(b['pitfall_tags'])}{api_notes}
 
 ## 输出要求
 只输出一个代码块，内容为一个完整可运行文件（{ 'index.html（自包含，无网络依赖）' if backend == 'web_2d' else 'scene.py' }），不要解释。

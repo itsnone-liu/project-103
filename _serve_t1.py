@@ -1,4 +1,4 @@
-﻿"""_serve_t1.py — T1 种子 v1/hr 双版对比页（Tailscale 100.84.28.40:8861）。
+"""_serve_t1.py — T1 种子 v1/hr 双版对比页（Tailscale 100.84.28.40:8861）。
 
 Range 206（视频 seek）。用法: python _serve_t1.py
 """
@@ -18,6 +18,12 @@ FILES = {
     "/t2.mp4": T2 / "out" / "final_envpsy-t2-94.mp4",
     "/t3.mp4": ROOT / "runs" / "envpsy-t3-intro" / "out" / "final_envpsy-t3-intro.mp4",
     "/t4.mp4": ROOT / "runs" / "envpsy-t4-91" / "out" / "final_envpsy-t4-91.mp4",
+    "/case-spike.mp4": ROOT / "runs" / "urban-doc-style-spike" / "C_times_square" / "out" / "video.mp4",
+    "/case-spike-sheet.jpg": ROOT / "runs" / "urban-doc-style-spike" / "C_times_square" / "out" / "storyboard_24.jpg",
+    "/case-spike-c2.mp4": ROOT / "runs" / "urban-doc-style-spike" / "C2_times_square" / "out" / "video.mp4",
+    "/case-spike-c2-sheet.jpg": ROOT / "runs" / "urban-doc-style-spike" / "C2_times_square" / "out" / "storyboard_24.jpg",
+    "/urban-spike-a.mp4": ROOT / "runs" / "urban-doc-style-spike" / "A_legacy" / "out" / "video.mp4",
+    "/urban-spike-b.mp4": ROOT / "runs" / "urban-doc-style-spike" / "B_explicit" / "out" / "video.mp4",
     "/glm.mp4": ROOT / "runs" / "envpsy-glm-t1-31" / "out" / "final_envpsy-glm-t1-31.mp4",
     "/hr-yunjian.mp4": ROOT / "runs" / "envpsy-t1-61-hr-yj" / "out" / "final_envpsy-t1-61-hr-yj.mp4",
     "/v1-storyboard.md": V1 / "storyboard.md",
@@ -49,7 +55,7 @@ for _f in sorted((ROOT / "cache" / "cosy_voices").glob("*.mp3")):
     _key = _f.stem
     if _key in _cosy_label:
         FILES[f"/cosy-{_key}.mp3"] = _f
-MIME = {".mp4": "video/mp4", ".mp3": "audio/mpeg", ".md": "text/plain; charset=utf-8", ".log": "text/plain; charset=utf-8"}
+MIME = {".mp4": "video/mp4", ".mp3": "audio/mpeg", ".md": "text/plain; charset=utf-8", ".log": "text/plain; charset=utf-8", ".jpg": "image/jpeg"}
 
 # ---- 前十段（first10）批产 ----
 F10 = [
@@ -114,6 +120,78 @@ CASES = [
 for _k, _r, _t, _tag in CASES:
     FILES[f"/{_k}.mp4"] = ROOT / "runs" / _r / "out" / f"final_{_r}.mp4"
 
+# ---- 案例 v2 验收（2026-10-14：口语化旁白 + 中段一句一世界） ----
+V2 = ROOT / "runs" / "envpsy-case1-v2"
+FILES["/case-1-v2-stream.mp4"] = V2 / "out" / "final_stream_1080p.mp4"
+FILES["/case-1-v2.mp4"] = V2 / "out" / "final_envpsy-case1-v2.mp4"
+FILES["/case-1-v2-sheet.jpg"] = V2 / "out" / "contact_sheet_48.jpg"
+FILES["/case-1-v2-cue-index.md"] = V2 / "out" / "cue_index.md"
+FILES["/case-1-v2-preview-mid.mp4"] = V2 / "out" / "preview_mid_cue17-24.mp4"
+FILES["/case-1-v2-preview-evidence.mp4"] = V2 / "out" / "preview_evidence_cue33-35.mp4"
+FILES["/case-1-full-v1.mp4"] = ROOT / "runs" / "envpsy-case1-full" / "out" / "final_envpsy-case1-full.mp4"
+
+# ---- 案例 B《隔间》（2026-10-15：E组透视设计图语法） ----
+C2 = ROOT / "runs" / "envpsy-case2-cubicle"
+FILES["/case-2-stream.mp4"] = C2 / "out" / "final_stream_1080p.mp4"
+FILES["/case-2.mp4"] = C2 / "out" / "final_envpsy-case2-cubicle.mp4"
+FILES["/case-2-sheet.jpg"] = C2 / "out" / "contact_sheet_39.jpg"
+FILES["/case-2-cue-index.md"] = C2 / "out" / "cue_index.md"
+FILES["/case-2-preview-explode.mp4"] = C2 / "out" / "preview_explode_cue13-18.mp4"
+FILES["/case-2-preview-strip.mp4"] = C2 / "out" / "preview_strip_grid_cue23-26.mp4"
+FILES["/case-2-preview-evidence.mp4"] = C2 / "out" / "preview_evidence_cue27-32.mp4"
+
+CASE2_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>案例B《隔间》· 验收页</title>
+<style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}
+h1{font-size:20px}h2{font-size:15px;color:#8fb;margin-top:30px}a{color:#7fd}video,img{width:100%;border-radius:8px;background:#000;margin:8px 0 6px}
+.meta{color:#9ab;font-size:13px;line-height:1.7}.tag{color:#fc8;font-size:12px;border:1px solid #a80;border-radius:4px;padding:1px 6px;margin:0 6px}</style></head><body>
+<h1>案例B《隔间：Action Office 的理想与异化》· 验收页 <span class="tag">定稿</span><span class="tag">透视设计图语法</span></h1>
+<p class="meta">07:07 · 39 句 · 旁白 2219 字 · TTS 全自然语速 · 对齐审计 PASS · 10249 帧零错误<br>
+主打你点的三件事：①设计图展示（透视旋转/爆炸分解/制图标注）②不做卡片布局（一句一世界）③按内容针对性变化的动画（六幕各持语法）</p>
+<h2>▶ 正片（流播版 1080p，已验证含音轨）</h2>
+<video controls preload="metadata" src="/case-2-stream.mp4?v=case2-v1"></video>
+<p class="meta">原画质版（crf17）：<a href="/case-2.mp4?v=case2-v1">final_envpsy-case2-cubicle.mp4</a>（132MB）</p>
+<h2>E组语法实拍段（spike 验证后进正片）</h2>
+<p class="meta">▸ 爆炸分解+制图标注（cue13-18，53s）：AO II 部件悬浮标注 → 站桌升起带尺寸线 → 半高屏视线剧场（坐挡/站越）<br>
+▸ 自由度剥离+网格复制（cue23-26，34s）：站桌锁平/搁架脱落/倾角拉直/褪灰，一格到一座楼<br>
+▸ 证据钟摆（cue27-32，74s）：约70% 指数条 + 四荡钟摆机</p>
+<video controls preload="none" src="/case-2-preview-explode.mp4"></video>
+<video controls preload="none" src="/case-2-preview-strip.mp4"></video>
+<video controls preload="none" src="/case-2-preview-evidence.mp4"></video>
+<h2>快审材料</h2>
+<p class="meta">▸ 39 句联系表 · <a href="/case-2-cue-index.md">逐句时间戳索引</a>（报 cue 号定点补渲）</p>
+<img src="/case-2-sheet.jpg" loading="lazy">
+<p class="meta">数字口径：1964/1968/4年间隔、1962 税务规程（Rev. Proc. 62-21）、约70% 面对面降幅（Bernstein &amp; Turban 2018，两家《财富》500 强）、《呆伯特》1989；Propst 晚年批评用安全转述；无来源数字一律不出现。</p>
+</body></html>"""
+
+CASE_V2_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>案例A v2 · 验收页</title>
+<style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}
+h1{font-size:20px}h2{font-size:15px;color:#8fb;margin-top:30px}a{color:#7fd}video,img{width:100%;border-radius:8px;background:#000;margin:8px 0 6px}
+.meta{color:#9ab;font-size:13px;line-height:1.7}.tag{color:#fc8;font-size:12px;border:1px solid #a80;border-radius:4px;padding:1px 6px;margin:0 6px}
+.fix{border-left:3px solid #2a4;padding-left:12px}</style></head><body>
+<h1>案例A《抢街：时代广场的人本改造》v2 · 验收页 <span class="tag">定稿</span><span class="tag">口语化旁白</span><span class="tag">中段一句一世界</span></h1>
+<p class="meta">11:01 · 48 句 · 旁白 3564 字（v1 3060）· TTS 全自然语速 · 对齐审计 PASS · 15871 帧零错误<br>
+按你 2026-10-14 反馈三处修复 ↓（v1 对照片在页底）</p>
+<h2>▶ 正片（流播版 1080p·2.0Mbps，适合中继带宽）</h2>
+<video controls preload="metadata" src="/case-1-v2-stream.mp4?v=v2b-final"></video>
+<p class="meta">原画质版（4.5Mbps，下载观看更佳）：<a href="/case-1-v2.mp4?v=v2b-final">final_envpsy-case1-v2.mp4</a>（343MB）· 已修复开场瑕疵：改后画面百老汇对角车道不再有车穿过右侧休息区</p>
+<h2>修复① 中段不再"一张底图画圈"（原 1:24–6:25）</h2>
+<p class="meta fix">第 7–31 句每句一个专属视觉世界：决策墙三卡 / 道具特写 / 挡风玻璃 POV / 路牌翻面 / 三沙漏+怀表 / 四色诉求牌落桌 / 三镜片工具箱 / 一天多时段剧场 / 过载减层主观剧 / 追光椅 / 同格双填 / 三扇门杠杆 / 待检命题卡 / 双机位同法对照……全段零圈线箭头、零字母角标，来源一律自然写法（"来源：NYC DOT 2010 评估"）。</p>
+<h2>修复② 旁白口语化（无 B/T 等书面标记）</h2>
+<p class="meta fix">48 句全部重写："先看…换算一下：改造前算一百，改造后是三十七""第一…第二…"式连接；〔B〕〔T〕标记从语音与画面根除（text/sources 字段级分离）。时长 10:01→11:01。</p>
+<h2>修复③ 表达方式扩容</h2>
+<p class="meta fix">城市化纪录片采样分析建库（大同/城市梦/Whyte 1980/Urbanized/人的尺度 五卡）；三种新语法先经短样片实证再进正片。</p>
+<h2>快审材料</h2>
+<p class="meta">▸ 96 秒中段样段（cue17-24，直接听新语气）<br>▸ 42 秒数字证据段（cue33-35）<br>▸ 48 句联系表（一眼扫全部世界）<br>▸ <a href="/case-1-v2-cue-index.md">逐句时间戳索引</a>（按秒定位任意一句）</p>
+<video controls preload="none" src="/case-1-v2-preview-mid.mp4"></video>
+<video controls preload="none" src="/case-1-v2-preview-evidence.mp4"></video>
+<img src="/case-1-v2-sheet.jpg" loading="lazy">
+<h2>v1 对照（你已验收的版本，10:01）</h2>
+<video controls preload="none" src="/case-1-full-v1.mp4"></video>
+<p class="meta">验收口径：通过 → 归档为动画纪录片式模板 v2 代表作；点状修改 → 报 cue 号（见逐句索引），定点补渲不重跑全片。已知注记：cue21/22 的"经过/停留计数器"并入多时段剧场（语义成立；要计数器可定点补）。</p>
+</body></html>"""
+
+SPIKE_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>Sol 城市视觉短样</title><style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}video,img{width:100%;margin:8px 0 22px}.meta{color:#9ab;line-height:1.7}h1,h2{color:#bce}</style></head><body><h1>Sol代码视频能力短样·旧/新上下文对照</h1><p class="meta">A/B同题用于验证视觉指令影响；C/C2为时代广场短样。均为原型，不是完整课程片。</p><h2>A · 城市化主题旧上下文</h2><video controls preload="metadata" src="/urban-spike-a.mp4"></video><h2>B · 城市化主题完整视觉指令</h2><video controls preload="metadata" src="/urban-spike-b.mp4"></video><h2>C · 时代广场首轮</h2><video controls preload="metadata" src="/case-spike.mp4"></video><img src="/case-spike-sheet.jpg"><h2>C2 · 多样混合构图迭代</h2><video controls preload="metadata" src="/case-spike-c2.mp4"></video><img src="/case-spike-c2-sheet.jpg"><p><a href="/spike-evaluation.md">制作与评估记录</a></p></body></html>"""
+
 CASES_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>设计案例研究 · 论文框架教学片</title>
 <style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}
 h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
@@ -121,7 +199,7 @@ h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
 video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}</style></head><body>
 <h1>《环境心理学》设计案例研究 · 论文框架教学片</h1>
 <p class="meta">设计论文六段文体（问题→理论框架→诊断→设计策略→实证检验→结论）× 工程图纸视觉母语 × 纪录片叙事；全程代码确定性渲染，数字全部带来源。配音 CosyVoice v2 · 龙小淳；sol(gpt-6.1-sol 高推理) 制作；时长门禁 ≥570s + 冻结扫描。
-<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a></p>
+<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a> · <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a> · <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a></p>
 {{ITEMS}}
 </body></html>"""
 
@@ -209,6 +287,8 @@ h1{font-size:20px}h2{font-size:15px;color:#8fb;margin-top:28px}a{color:#7fd}vide
 td,th{border:1px solid #2a3540;padding:4px 10px;text-align:left}th{color:#8fb}</style></head><body>
 <h1>《看不见的气泡》T1 种子 · 两版对比</h1>
 <p class="meta"><a href="/intros.html">▶ 章绪论十篇（每章 1-2 分钟导览，龙小淳配音）</a><br><a href="/cases.html">▶ 设计案例研究（论文框架教学片）</a><br>
+<a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a><br>
+<a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a><br>
 <a href="/first10.html">▶ 前三十六段正片批产（绪论→10.3 全书收官，龙小淳配音，sol 新制 34 段+换声 2 段）</a></p>
 <table>
 <tr><th></th><th>v1 默认推理</th><th>hr 高推理</th></tr>
@@ -371,6 +451,30 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
+        if self.path == "/spikes.html":
+            body = SPIKE_PAGE.encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        if self.path == "/case-v2.html":
+            body = CASE_V2_PAGE.encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        if self.path == "/case-2.html":
+            body = CASE2_PAGE.encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if self.path == "/cases.html":
             body = _cases_page().encode("utf-8")
             self.send_response(200)
@@ -388,6 +492,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(body)
             return
         f = FILES.get(self.path.split("?", 1)[0])
+        if self.path.split("?", 1)[0] == "/spike-evaluation.md":
+            f = ROOT / "runs" / "urban-doc-style-spike" / "EVALUATION.md"
         if f and f.exists():
             self._send_file(f)
         else:

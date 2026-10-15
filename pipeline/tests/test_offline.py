@@ -42,7 +42,10 @@ def main() -> int:
     steps = prompts.decision_prompts("测试主题", "## Narration\n1. 测试", p)
     t("两步决策", len(steps) == 2)
     t("步A无菜单锚", "WEB_2D" not in steps[0][0]["content"] and "可用后端" not in steps[0][0]["content"])
+    t("步A含原始brief", "测试主题" in steps[0][0]["content"])
     t("步B含 why_not", "why_not" in steps[1][0]["content"])
+    steps_with_plan = prompts.decision_prompts("原brief", "分镜", p, visual_plan="全屏漫游方案")
+    t("步B含步A实际文本", "全屏漫游方案" in steps_with_plan[1][0]["content"])
     blind = prompts.decision_prompts("t", "s", p, blind=True)
     t("盲测单步", len(blind) == 1)
     cg = prompts.codegen_prompt({"backend": "WEB_2D", "reason": "t"}, "sb",
@@ -51,6 +54,16 @@ def main() -> int:
     t("五关契约注入", "逐帧确定性" in cg)
     t("无 Pattern 默认注入", "markAngle" not in cg and "PATTERNS" not in cg)
     t("无美学预设", "手绘" not in cg)
+    rich = prompts.codegen_prompt(
+        {"backend": "WEB_2D", "reason": "t"}, "sb",
+        {"starts": [0.0, 1.0], "total": 1.0},
+        {"visual": {"style_pack": "cinematic_layout_system", "style_note": "禁止固定卡片布局"}},
+        topic="# 原始brief\\n全屏城市插画", visual_plan="技术总监：长镜头漫游",
+        include_visual_context=True) [0]["content"]
+    t("原始brief进入codegen", "全屏城市插画" in rich)
+    t("决策视觉方案进入codegen", "长镜头漫游" in rich)
+    t("profile style_note进入codegen", "禁止固定卡片布局" in rich)
+    t("显式风格包名称注入", "cinematic_layout_system" in rich)
     hp = prompts._pitfalls(["web_2d", "generic"])
     t("坑文档检索非空", len(hp) > 50 and "KP-" in hp)
 
