@@ -53,3 +53,6 @@ base-compare/diag-probe/
 .git_disabled/
 audio/voice/
 case-d/*/node_modules/
+
+# standalone public repo for the online-practice pilot plan
+interactive-practice-pilot/
