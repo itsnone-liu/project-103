@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 440" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="920" height="440" fill="#ffffff"/>
+  <text x="460" y="30" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图10-1 收纳随行为分布：U90各房间三层频率（教学示例）</text>
+  <!-- room rows: name + three frequency bands -->
+  <g font-size="14" font-weight="bold" fill="#333" text-anchor="end">
+    <text x="150" y="92">玄关</text><text x="150" y="148">餐厨</text><text x="150" y="204">客厅</text>
+    <text x="150" y="260">卧室</text><text x="150" y="316">儿童房</text><text x="150" y="372">老人房/卫浴</text>
+  </g>
+  <!-- daily band (green) -->
+  <g font-size="11.5" fill="#fff" text-anchor="middle">
+    <rect x="160" y="72" width="200" height="34" rx="8" fill="#2e8b57"/><text x="260" y="94">每日：鞋·钥匙·包</text>
+    <rect x="160" y="128" width="200" height="34" rx="8" fill="#2e8b57"/><text x="260" y="150">每日：餐具·常用小家电</text>
+    <rect x="160" y="184" width="200" height="34" rx="8" fill="#2e8b57"/><text x="260" y="206">每日：玩具在用·遥控</text>
+    <rect x="160" y="240" width="200" height="34" rx="8" fill="#2e8b57"/><text x="260" y="262">每日：当季衣物</text>
+    <rect x="160" y="296" width="200" height="34" rx="8" fill="#2e8b57"/><text x="260" y="318">每日：玩具·在读书</text>
+    <rect x="160" y="352" width="200" height="34" rx="8" fill="#2e8b57"/><text x="260" y="374">每日：洗漱·药品</text>
+  </g>
+  <!-- weekly band (amber) -->
+  <g font-size="11.5" fill="#fff" text-anchor="middle">
+    <rect x="372" y="72" width="190" height="34" rx="8" fill="#d8a86a"/><text x="467" y="94">每周：客用拖鞋</text>
+    <rect x="372" y="128" width="190" height="34" rx="8" fill="#d8a86a"/><text x="467" y="150">每周：食品储备</text>
+    <rect x="372" y="184" width="190" height="34" rx="8" fill="#d8a86a"/><text x="467" y="206">每周：拼图·画材</text>
+    <rect x="372" y="240" width="190" height="34" rx="8" fill="#d8a86a"/><text x="467" y="262">每周：被褥整理</text>
+    <rect x="372" y="296" width="190" height="34" rx="8" fill="#d8a86a"/><text x="467" y="318">每周：手工材料</text>
+    <rect x="372" y="352" width="190" height="34" rx="8" fill="#d8a86a"/><text x="467" y="374">每周：清洁用品</text>
+  </g>
+  <!-- seasonal band (blue) -->
+  <g font-size="11.5" fill="#fff" text-anchor="middle">
+    <rect x="574" y="72" width="180" height="34" rx="8" fill="#7aa7cc"/><text x="664" y="94">季节：换季鞋</text>
+    <rect x="574" y="128" width="180" height="34" rx="8" fill="#7aa7cc"/><text x="664" y="150">季节：火锅·年货</text>
+    <rect x="574" y="184" width="180" height="34" rx="8" fill="#7aa7cc"/><text x="664" y="206">季节：节日装饰</text>
+    <rect x="574" y="240" width="180" height="34" rx="8" fill="#7aa7cc"/><text x="664" y="262">季节：换季衣物被褥</text>
+    <rect x="574" y="296" width="180" height="34" rx="8" fill="#7aa7cc"/><text x="664" y="318">季节：旧玩具流转</text>
+    <rect x="574" y="352" width="180" height="34" rx="8" fill="#7aa7cc"/><text x="664" y="374">季节：备用护理</text>
+  </g>
+  <!-- frequency height axis -->
+  <g font-size="12" fill="#555">
+    <text x="260" y="62" text-anchor="middle" fill="#2e8b57">每日：站立易取带0.6–1.6m</text>
+    <text x="467" y="62" text-anchor="middle" fill="#b07a2a">每周：弯腰/踮脚可及</text>
+    <text x="664" y="62" text-anchor="middle" fill="#3a6ea5">季节：高处＋安全取放</text>
+  </g>
+  <!-- danger note -->
+  <rect x="160" y="410" width="594" height="24" rx="8" fill="#fdeeee" stroke="#d0021b" stroke-width="1.2"/>
+  <text x="457" y="427" text-anchor="middle" font-size="12" fill="#d0021b">危险清洁剂/药品：与儿童可达区分开，上加锁（须核验产品与标准）</text>
+</svg>

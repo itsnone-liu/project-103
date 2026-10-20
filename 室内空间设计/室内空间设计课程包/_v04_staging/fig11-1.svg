@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 460" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="920" height="460" fill="#ffffff"/>
+  <text x="460" y="30" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图11-1 图纸分层：同一平面，四张图各答一个问题（教学示意）</text>
+  <!-- base plan shared -->
+  <g transform="translate(60,70)">
+    <text x="100" y="20" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#5c4f33">① 家具布置层</text>
+    <text x="100" y="38" font-size="11" fill="#888" text-anchor="middle">答：桌子在哪、通道多宽</text>
+    <rect x="0" y="50" width="200" height="260" fill="#fafafa" stroke="#1a1a1a" stroke-width="2.5"/>
+    <rect x="60" y="90" width="80" height="46" fill="#f2ede2" stroke="#8a7a55" stroke-width="1.8"/>
+    <text x="100" y="118" text-anchor="middle" font-size="10.5" fill="#5c4f33">餐桌</text>
+    <rect x="40" y="200" width="120" height="56" rx="8" fill="#dce8f5" stroke="#3a6ea5" stroke-width="1.8"/>
+    <text x="100" y="232" text-anchor="middle" font-size="10.5" fill="#1a3c5e">沙发</text>
+    <rect x="150" y="60" width="44" height="24" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.4"/>
+    <text x="172" y="98" text-anchor="middle" font-size="9.5" fill="#1a3c5e">餐边柜</text>
+  </g>
+  <g transform="translate(290,70)">
+    <text x="100" y="20" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#2e8b57">② 地面材料层</text>
+    <text x="100" y="38" font-size="11" fill="#888" text-anchor="middle">答：哪好清洁、哪要脚感</text>
+    <rect x="0" y="50" width="200" height="130" fill="#eee7d8" stroke="#8a7a55" stroke-width="2"/>
+    <rect x="0" y="180" width="200" height="130" fill="#e3e6ea" stroke="#3a6ea5" stroke-width="2"/>
+    <line x1="0" y1="180" x2="200" y2="180" stroke="#555" stroke-width="2"/>
+    <text x="100" y="120" text-anchor="middle" font-size="10.5" fill="#5c4f33">客厅：木纹（脚感/吸声）</text>
+    <text x="100" y="250" text-anchor="middle" font-size="10.5" fill="#1a3c5e">餐区：哑光砖（易清洁）＋收口条</text>
+  </g>
+  <g transform="translate(520,70)">
+    <text x="100" y="20" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#b07a2a">③ 顶面灯具层</text>
+    <text x="100" y="38" font-size="11" fill="#888" text-anchor="middle">答：灯在哪、回路怎么分</text>
+    <rect x="0" y="50" width="200" height="260" fill="#fafafa" stroke="#1a1a1a" stroke-width="2.5"/>
+    <circle cx="100" cy="110" r="13" fill="#ffd9a0" stroke="#b8860b" stroke-width="2"/>
+    <text x="100" y="145" text-anchor="middle" font-size="10" fill="#8a5a00">餐桌吊灯（回路②晚餐）</text>
+    <rect x="14" y="60" width="172" height="7" rx="3" fill="#cfe3f5"/>
+    <rect x="14" y="293" width="172" height="7" rx="3" fill="#cfe3f5"/>
+    <text x="100" y="200" text-anchor="middle" font-size="10" fill="#3a6ea5">周边灯带（回路①环境）</text>
+    <circle cx="160" cy="240" r="8" fill="#e8d5ff" stroke="#9a8ac2" stroke-width="1.6"/>
+    <text x="118" y="270" font-size="10" fill="#5f4a9e">展示射灯（回路③）</text>
+  </g>
+  <g transform="translate(750,70)">
+    <text x="80" y="20" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#5f4a9e">④ 插座定位层</text>
+    <text x="80" y="38" font-size="11" fill="#888" text-anchor="middle">答：电位够不够、在哪</text>
+    <rect x="0" y="50" width="160" height="260" fill="#fafafa" stroke="#1a1a1a" stroke-width="2.5"/>
+    <g fill="#d0021b">
+      <rect x="150" y="70" width="10" height="16"/><rect x="150" y="110" width="10" height="16"/>
+      <rect x="150" y="150" width="10" height="16"/><rect x="150" y="190" width="10" height="16"/>
+    </g>
+    <g font-size="9.5" fill="#a0212b" text-anchor="end">
+      <text x="146" y="80">餐边柜小家电带×2</text>
+      <text x="146" y="120">台灯/备课位</text>
+      <text x="146" y="160">沙发边·落地灯</text>
+      <text x="146" y="200">电视墙</text>
+    </g>
+    <text x="80" y="250" text-anchor="middle" font-size="10" fill="#555">电位与家具版本绑定：</text>
+    <text x="80" y="266" text-anchor="middle" font-size="10" fill="#555">家具挪位→插座重审</text>
+  </g>
+  <text x="460" y="420" text-anchor="middle" font-size="12.5" fill="#333">一张"漂亮的综合平面"什么都能看、什么都看不清；分层之后，每张图回答一个问题、接受一种检验。</text>
+  <text x="460" y="442" text-anchor="middle" font-size="12" fill="#888">版本一致性检查：①定桌位→③按桌位布灯→④按柜位布电位；任何一层改动，其余层同步复核。</text>
+</svg>
