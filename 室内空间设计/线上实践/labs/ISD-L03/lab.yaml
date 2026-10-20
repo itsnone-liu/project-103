@@ -1,0 +1,166 @@
+id: ISD-L03
+title: 居住需求档案与气泡图任务书
+level: A            # 单文件网页，无后端、无外部依赖
+version: 0.1.0
+textbook_anchor:
+  - 第2章 需求档案与任务书（访谈→功能清单→任务书）
+  - 第4.2节 邻接五档（+2必须紧邻/+1宜紧邻/0中性/−1宜分离/−2必须分离）
+  - 住宅贯穿案例 沈家四口（住宅贯穿案例与户型库 v0.1 §1.5/§1.6）
+upstream: [ISD-L04]  # 导出的任务书可作为 L04 前置输入（bubbles/edges 契约向后兼容 isd-design-v1）
+outcome: 成果① 任务书（气泡图版）：功能主张+证据+时段+失效条件
+
+pedagogy:
+  core_idea: >
+    图不是输入给模型的约束，而是学生自己的推理记录：主张（边档位）+证据（来源标签）+时段（占用表）。
+    引擎只做白盒逻辑检查（面积/时段/张力/区带/完整性/对表），永不生成平面、永不合成总分。
+  discipline:
+    - 一切阈值为教学常用值/课堂讨论工具，非国家标准，页面明示。
+    - 三层反馈分列：观察（客观测量）/规则建议（前缀"教学常用值·讨论工具"）/教师判断（静态提示）。
+    - "检查只摆冲突，不替你裁决"。
+
+# ---------------- 冻结数据 ----------------
+scene:
+  family: 沈家四口（U90青枫里2栋1单元401，~89㎡三居室）
+  members: [祖母(近70), 沈先生(居家办公), 沈太太(中学教师), 女儿(情境A 7岁/情境B 12岁)]
+  scenarios:
+    A_现状: 女儿7岁；祖母尚未常住但每年长住数月；办公已上升。
+    B_五年后: 祖母常住需照护；女儿12岁需独立学习空间；先生办公/视讯进一步增加。
+
+interview_points:  # 需求档案原始要点（覆盖检查的锚）
+  - {id: ip1,  text: "祖母夜起频繁，卫生间要近", source: 访谈, need: [bubble:sleep_elder, edge:sleep_elder+2bath_pub]}
+  - {id: ip2,  text: "祖母21点就寝、晨起早", source: 访谈, need: [bubble:sleep_elder]}
+  - {id: ip3,  text: "祖母白天爱看电视、午后茶歇", source: 访谈, need: [bubble:tv_eld, bubble:care_elder]}
+  - {id: ip4,  text: "先生每晚20–22视讯，需安静稳定工位", source: 访谈, need: [bubble:work_office, edge:work_office-2tv_eld]}
+  - {id: ip5,  text: "先生周六白天加班", source: 访谈, need: [bubble:work_office]}
+  - {id: ip6,  text: "太太周末烘焙，烤炉食材需台面", source: 访谈, need: [bubble:bake]}
+  - {id: ip7,  text: "太太晚间19–21备课批作业", source: 访谈, need: [bubble:work_prep]}
+  - {id: ip8,  text: "全家18–19晚餐是一天主要共处", source: 观察, need: [bubble:meal_dinner]}
+  - {id: ip9,  text: "女儿每日课后学习近2小时，五年后需独立学习角", source: 访谈, need: [bubble:study_child]}
+  - {id: ip10, text: "女儿周末邀同学来玩", source: 访谈, need: [bubble:play]}
+  - {id: ip11, text: "洗衣晾晒现状在北阳台，冬冷夏热有抱怨", source: 观察, need: [bubble:laundry]}
+  - {id: ip12, text: "大件储物（行李箱/换季）常年无处放", source: 访谈, need: [bubble:storage_bulk]}
+  - {id: ip13, text: "周末常有祖辈访客15–17", source: 访谈, need: [bubble:guest]}
+  - {id: ip14, text: "主卫/公卫分用可减少早高峰排队", source: 课程假设, need: [edge:sleep_master+2bath_main, edge:sleep_elder+1bath_pub]}
+
+bubbles:  # 功能气泡目录（面积=教学权重㎡；时段=小时[起,止]+日别；zone=分区主张）
+  - {id: sleep_elder,  name: 老人睡眠,    area: 5.5, zone: 私, slots: [study],            periods: [[21,6.5]],            day: 每日,   scenario: B}
+  - {id: care_elder,   name: 祖母茶歇照护, area: 1.5, zone: 公, slots: [living, storage],  periods: [[9,11],[14,16]],     day: 每日,   scenario: B}
+  - {id: sleep_master, name: 夫妻睡眠,    area: 8.0, zone: 私, slots: [master],           periods: [[22,7]],             day: 每日}
+  - {id: sleep_child,  name: 女儿睡眠,    area: 5.0, zone: 私, slots: [child],            periods: [[20.5,7]],           day: 每日}
+  - {id: work_office,  name: 先生办公视讯, area: 4.0, zone: 私, slots: [study],            periods: [[9,12],[14,18],[20,22]], day: 工作日}
+  - {id: work_office_w,name: 先生周六加班, area: 4.0, zone: 私, slots: [study],            periods: [[14,19]],            day: 周六}
+  - {id: work_prep,    name: 太太备课,    area: 2.5, zone: 半私, slots: [dining],          periods: [[19,21]],            day: 每日}
+  - {id: bake,         name: 烘焙,        area: 1.5, zone: 家务, slots: [kitchen, dining], periods: [[10,12]],            day: 周六}
+  - {id: cook,         name: 烹饪备餐,    area: 3.0, zone: 家务, slots: [kitchen],         periods: [[11.5,12.5],[17.5,18.5]], day: 每日}
+  - {id: meal_break,   name: 早餐,        area: 2.0, zone: 公, slots: [kitchen, dining],   periods: [[7,7.5]],            day: 每日}
+  - {id: meal_dinner,  name: 全家晚餐,    area: 3.5, zone: 公, slots: [dining],            periods: [[18,19]],            day: 每日}
+  - {id: tv_eld,       name: 电视共处,    area: 2.5, zone: 公, slots: [living],            periods: [[13,14],[19,21]],   day: 每日}
+  - {id: guest,        name: 访客接待,    area: 3.0, zone: 公, slots: [living],            periods: [[15,17]],            day: 周六}
+  - {id: play,         name: 女儿游戏会友, area: 2.5, zone: 公, slots: [living],           periods: [[15,16]],            day: 每日}
+  - {id: study_child,  name: 女儿学习,    area: 2.0, zone: 半私, slots: [child, storage],  periods: [[16.5,17.5],[19,20]], day: 每日}
+  - {id: laundry,      name: 洗衣晾晒,    area: 2.0, zone: 家务, slots: [balcony_n, kitchen, storage], periods: [[9,10]], day: 周六}
+  - {id: storage_bulk, name: 大件储物,    area: 4.0, zone: 家务, slots: [storage],         periods: []}
+  - {id: bath_main,    name: 主卫,        area: 3.8, zone: 私, slots: [bath_main_slot],    periods: [[6.9,7.3]],          day: 每日, fixed: true}
+  - {id: bath_pub,     name: 公卫,        area: 4.4, zone: 共用, slots: [bath_pub_slot],   periods: [[7.1,7.6]],          day: 每日, fixed: true}
+
+room_slots:  # 容量=冻结平面房间面积（教学口径，含开放过渡带标注）
+  - {id: kitchen,      name: 厨房,       capacity: 6.3,  zone: 家务}
+  - {id: dining,       name: 餐区西厅(开放), capacity: 9.5, zone: 公}
+  - {id: living,       name: 客餐厅核心,  capacity: 29.8, zone: 公}
+  - {id: entry,        name: 玄关,       capacity: 3.0,  zone: 过渡}
+  - {id: study,        name: 书房,       capacity: 8.7,  zone: 私}
+  - {id: master,       name: 主卧,       capacity: 13.9, zone: 私}
+  - {id: child,        name: 儿童房,     capacity: 9.6,  zone: 私}
+  - {id: storage,      name: 储物家政区(开放), capacity: 6.1, zone: 家务}
+  - {id: balcony_n,    name: 北阳台,     capacity: 2.0,  zone: 家务}
+  - {id: bath_main_slot, name: 主卫(套内), capacity: 3.8, zone: 私}
+  - {id: bath_pub_slot,  name: 公卫,     capacity: 4.4,  zone: 共用}
+
+relation_levels:  # 冻结平面邻接事实（对表用）；level 越高越近
+  same_room: 5        # 同格（同一房间槽）
+  open_adjacent: 4    # 开放相通（无墙）
+  door_adjacent: 4    # 门邻（有门直通）
+  corridor_near: 3    # 隔走廊可达、近
+  adjustable_wall: 3  # 非承重可变隔墙（可开洞协商）
+  fixed_wall: 2       # 固定隔墙（开洞代价高）
+  far: 1              # 跨区远
+  slot_relations:
+    - [kitchen, dining, open_adjacent]
+    - [kitchen, balcony_n, door_adjacent]
+    - [kitchen, entry, fixed_wall]
+    - [kitchen, living, corridor_near]
+    - [dining, living, open_adjacent]
+    - [dining, entry, corridor_near]
+    - [dining, master, fixed_wall]
+    - [living, study, door_adjacent]
+    - [living, master, door_adjacent]
+    - [living, child, corridor_near]
+    - [living, storage, corridor_near]
+    - [living, bath_pub_slot, corridor_near]
+    - [entry, bath_pub_slot, fixed_wall]
+    - [study, bath_pub_slot, corridor_near]
+    - [study, child, far]
+    - [master, bath_main_slot, same_room]
+    - [child, bath_pub_slot, corridor_near]
+    - [child, storage, adjustable_wall]
+    - [storage, bath_pub_slot, far]
+    - [master, kitchen, far]
+    - [master, child, far]
+    - [study, kitchen, far]
+
+claim_vs_actual:  # 主张档位 对 平面可达等级（对表判据）
+  "+2": {need: 4, label: 必须紧邻}
+  "+1": {need: 3, label: 宜紧邻}
+  "0":  {need: 0, label: 中性}
+  "-1": {need: -1, label: 宜分离, max: 2}
+  "-2": {need: -1, label: 必须分离, max: 1}
+
+current_fill_A:  # 关卡1 现状装填（情境A；bath 两槽固定已装）
+  kitchen: [cook, meal_break]
+  dining: [meal_dinner, work_prep]
+  living: [tv_eld, guest, play]
+  child: [sleep_child, study_child]
+  master: [sleep_master]
+  study: [work_office, work_office_w]
+  balcony_n: [laundry]
+  storage: [storage_bulk]
+  entry: []
+
+current_edges_A:  # 现状关系主张（可编辑；示例性最小集）
+  - {a: meal_dinner, b: cook, v: "+2", evidence: 观察}
+  - {a: work_prep, b: meal_dinner, v: "0", evidence: 观察}
+  - {a: sleep_master, b: bath_main, v: "+2", evidence: 课程假设}
+  - {a: sleep_child, b: study_child, v: "+1", evidence: 访谈}
+  - {a: play, b: tv_eld, v: "+1", evidence: 访谈}
+  - {a: work_office, b: tv_eld, v: "-1", evidence: 访谈}
+
+scenario_B_additions:  # 情境B 切换时新增（进入气泡托盘，由学生安置）
+  bubbles: [sleep_elder, care_elder]
+  edges: [{a: sleep_elder, b: bath_pub, v: "+2", evidence: 访谈}]
+
+checks:  # 纯函数引擎（全部确定性）
+  area_overload: 槽内气泡面积和 > 容量×1.05（教学假设阈值）→ 列出槽/占用率
+  time_conflict: 同槽两气泡时段重叠（跨午夜按 21–24+0–6.5 处理；日别不同不算）→ 列出气泡对+重叠段
+  triangle_tension: 三边 |档位差|≥4 且含两正一负 → 列出三角
+  zone_mismatch: 气泡 zone 与槽 zone 冲突（私↔公/家务=红；半私↔家务=黄）→ 列出
+  coverage: 访谈要点 need 列表逐条核对（气泡已装填 或 需求边存在）→ 未覆盖清单
+  table_check: 每条边按 claim_vs_actual 对 slot_relations 判 满足/部分(差1级)/不满足(差≥2级)/无法对照(端点未装填)
+  scenario_delta: 情境A→B 重算，报告新增的冲突/超载/未覆盖（祖母相关）
+
+selftest:  # 8 项（不得改断言迁就实现）
+  1: 现状A装填无面积超载；时段冲突恰好1对（play↔guest 15–16 周六，同槽不同活动）
+  2: 情境B把 sleep_elder 装入 study → study 超载(9.5>9.14)且时段冲突(sleep_elder×work_office 21–22)
+  3: 三角张力构造 A+2B,B+2C,A−2C → 检出
+  4: sleep_master 拖入 living → 区带冲突检出
+  5: 删除 laundry → ip11 未覆盖
+  6: 对表：work_office+2cook 不满足(差3级)；sleep_master+2bath_main 满足(same_room)；sleep_elder+2bath_pub 部分满足(走廊3级vs需4级)
+  7: 同 state 两次 evaluate JSON 全等
+  8: 导出→导入→evaluate 等价
+
+coverage_rule: >
+  逐条核对 need 列表：气泡已装填 或 需求边已存在 = 覆盖；need 引用当前情境不存在的气泡/边 = 留待情境B（不算遗漏）；
+  其余未满足 = 未覆盖（黄色清单）。ip 覆盖当且仅当其全部 need 项就绪。
+
+unlock_challenge: 情境A、B 两版气泡图均已保存 且 两段失效条件各≥20字 → 解锁"任务书导出"（双情境完整图+证据+检查报告+失效条件，无总分）
+
+assets_style: 教材制图风；气泡=椭圆+名称+面积权重；边=五档色(+2深绿/+1浅绿/0灰/−1橙/−2红)+证据小签；槽=U90平面缩略格子按区分带着色；全中文 Microsoft YaHei ≥12px；一切教学假设标注"教学常用值·讨论工具，非国家标准"

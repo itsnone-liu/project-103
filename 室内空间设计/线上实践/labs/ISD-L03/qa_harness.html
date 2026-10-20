@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>QA harness — ISD-L03</title>
+</head>
+<body>
+<p>QA harness for bubble_lab.html</p>
+<iframe id="lab" src="bubble_lab.html" style="width:1920px;height:1080px;border:0"></iframe>
+<pre id="qa_result">PENDING</pre>
+<script>
+(async () => {
+  const out = { steps: [], errors: [] };
+  const log = (k, v) => { out.steps.push([k, v]); };
+  try {
+    const frame = document.getElementById('lab');
+    const win = frame.contentWindow;
+    if (typeof win.__LAB_READY__ === 'undefined')
+      await new Promise(r => { frame.onload = r; setTimeout(r, 4000); });
+    for (let i = 0; i < 60 && !win.__LAB_READY__; i++)
+      await new Promise(r => setTimeout(r, 200));
+    log('ready', !!win.__LAB_READY__);
+    log('consoleErrors', win.__LAB_CONSOLE_ERRORS__ || []);
+    if (typeof win.__LAB_SET_LEVEL__ === 'function') { win.__LAB_SET_LEVEL__(2); log('setLevel', 2); }
+    if (typeof win.__LAB_SELFTEST__ === 'function') {
+      const r = win.__LAB_SELFTEST__();
+      out.selftest = r;
+      log('selftest', (r && r.failed && r.failed.length === 0) ? 'PASS' : 'FAIL');
+    } else { out.selftest = null; log('selftest', 'API missing'); out.errors.push('no selftest API'); }
+    if (typeof win.__LAB_LOAD_BASELINE__ === 'function' && typeof win.__LAB_EVALUATE__ === 'function') {
+      win.__LAB_LOAD_BASELINE__('A');
+      const evA = win.__LAB_EVALUATE__();
+      out.evaluateA = {
+        overloads: evA.checks && evA.checks.area_overload && evA.checks.area_overload.length,
+        timeConflicts: evA.checks && evA.checks.time_conflict && evA.checks.time_conflict.length,
+        uncovered: evA.checks && evA.checks.coverage && evA.checks.coverage.filter(c => c.status === '未覆盖').length
+      };
+      log('baselineA_timeConflicts_1', out.evaluateA.timeConflicts === 1);
+      log('baselineA_overloads_0', out.evaluateA.overloads === 0);
+      win.__LAB_SET_SCENARIO__('B');
+      const evB = win.__LAB_EVALUATE__();
+      out.evaluateB = {
+        overloads: evB.checks && evB.checks.area_overload && evB.checks.area_overload.length,
+        timeConflicts: evB.checks && evB.checks.time_conflict && evB.checks.time_conflict.length,
+        deltaNew: evB.checks && evB.checks.scenario_delta && evB.checks.scenario_delta.newCount
+      };
+      log('scenarioB_applied', true);
+      const a = JSON.stringify(win.__LAB_EVALUATE__());
+      const b = JSON.stringify(win.__LAB_EVALUATE__());
+      log('determinism', a === b);
+    } else log('baseline APIs', 'missing');
+  } catch (e) { out.errors.push(String(e && e.stack || e)); }
+  document.getElementById('qa_result').textContent = 'QA_RESULT_JSON:' + JSON.stringify(out);
+})();
+</script>
+</body>
+</html>
