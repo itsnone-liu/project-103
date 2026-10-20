@@ -1,0 +1,24 @@
+{
+ "calls": [
+  {
+   "purpose": "kitchen_lab.html v1 generation",
+   "model": "gpt-6.1-sol",
+   "effort": "high",
+   "secs": 388.1,
+   "usage": {
+    "prompt_tokens": 4207,
+    "completion_tokens": 22921,
+    "total_tokens": 27128,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 3453
+    }
+   },
+   "finish": "stop",
+   "response_chars": 58817,
+   "exact_tokens": true
+  }
+ ]
+}

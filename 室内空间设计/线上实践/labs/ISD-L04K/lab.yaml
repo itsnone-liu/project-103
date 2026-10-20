@@ -1,0 +1,61 @@
+lab_id: ISD-L04K
+version: 0.1.0
+name: 厨房工作站与折返计数（U90厨房布局实验）
+textbook_anchor: 《室内空间设计》读本 v0.4 第7章（图7-1 折返计数法；7.2节工作站与工作三角；7.5节一字型/L型例题）
+delivery_level: A（独立网页，静态服务器/本地文件可开，无后端依赖）
+
+scene:
+  # 教学假设：U90厨房净尺寸 2.8m × 2.25m（教材7.5节例题），西北角，北窗，北接生活阳台
+  unit: m
+  origin: northwest            # x向东，y向南（任务书§8坐标契约）
+  width_m: 2.8
+  depth_m: 2.25
+  fixed_items:                 # 固定项（不可拖动，教材设定）
+    - {id: flue,    type: 烟道,     wall: west, y_m: 0.15, w_m: 0.6, h_m: 0.6, note: 灶台宜就近（教学假设，未给角坐标）}
+    - {id: drain,   type: 排水立管, wall: west, y_m: 1.4, w_m: 0.2, h_m: 0.2, note: 水槽宜就近 }
+    - {id: balcony, type: 阳台门,   wall: north, x_m: 1.9, w_m: 0.75, note: 通行开口 }
+
+student_actions: [add_station, drag, snap_to_wall, save_version, compare_AB, export, run_task_simulation]
+teaching_hypotheses:           # 全部为教学常用值（课堂推理值），非国家标准条文
+  work_triangle:
+    leg_min_m: 1.2
+    leg_max_m: 2.7
+    total_min_m: 4.0
+    total_max_m: 6.6
+    note: 入门检查工具，不是设计目标（教材7.2）
+  aisle_min_m: 1.0             # 台前通道教学常用值（一字型1.0–1.2）
+  errand_task:                 # 折返计数任务卡（教学示例，源自图7-1：甲=6次，乙=2次）
+    name: 四菜一汤·晚餐备餐
+    mode_rule:                 # 关键：执行策略由冰箱到操作链的距离决定（这正是教学点）
+      one_trip_max_m: 1.0      # 冰箱使用中心到最近操作台（水槽/备餐）端点距离≤1.0m → 一次取齐模式
+      else: 分批处理模式        # >1.0m → 分批拎（3个往返），教材图7-1甲
+    seq_one_trip:  [fridge, sink, prep, stove, trash]      # 一次取齐：单趟走完（链排好=2次移动）
+    seq_batches:   [fridge, sink, prep, fridge, sink, prep, fridge, sink, prep, stove, trash]  # 分批：3趟往返
+    chain_rule:                # 连续作业链（教材7.2"相邻工作站共享边界"）
+      def: sink/prep/stove 同墙且首尾间隙≤0.05m 视为一条连续作业链
+      effect: 链内相邻步进（如清洗→切配）不记移动次数也不计距离（转身即达）；链断裂则逐段计数
+    hands_full_legs: [每趟 fridge→链 首段, stove→trash]   # 拎着食材/垃圾的移动段
+    rule: 按选定序列逐步走；相邻两步站点不同记1次移动并累加直线距离；同站连续不记
+    expected: 基线A(冰箱对侧)=6次移动；基线B(冰箱贴链)=2次移动（须与图7-1一致，作为自检断言）
+  baseline_A: 冰箱放在对侧（初始坏布局，预期折返≈6，对应图7-1甲）
+  baseline_B: 冰箱与操作区同侧（预期折返≈2，对应图7-1乙）
+
+auto_checks:                   # 确定性（同输入同输出，任务书§9A）
+  - work_triangle_legs_m       # 三边长列表
+  - work_triangle_total_m
+  - errand_move_count          # 折返次数
+  - errand_walk_distance_m
+  - collision_pair_count
+  - out_of_room_count
+  - aisle_min_clearance_m
+heuristic_feedback:            # 规则建议层（标注"教学常用值"字样，不得称规范）
+  - 三角边/总长是否在教学区间
+  - 通道净距是否低于教学常用值
+  - 折返次数相对基线的改善幅度
+human_review:                  # 教师判断层（占位，不自动评分）
+  - 多人协作可能性
+  - 中餐烹饪习惯与烟道关系
+  - 方案讲述的取舍依据
+exports: [project_json, plan_png, comparison_report]
+
+assets_style: 教材图7-1/7-2制图风格——白底、2–3px黑线框、家具俯视符号（台面双线边、灶台双圆、水槽椭圆+龙头点、冰箱对角线标注）、路径暖橙虚线带箭头、字号≥12px中文（Microsoft YaHei）
