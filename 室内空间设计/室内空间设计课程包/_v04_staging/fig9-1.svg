@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 400" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="920" height="400" fill="#ffffff"/>
+  <text x="460" y="30" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图9-1 材料多属性矩阵：三种地面候选×七项属性（教学示例）</text>
+  <!-- header row -->
+  <g font-size="12.5" fill="#555" text-anchor="middle">
+    <text x="200" y="70">耐刮（餐椅挪动）</text><text x="290" y="70">耐水（湿区邻接）</text>
+    <text x="380" y="70">脚感（赤脚）</text><text x="470" y="70">吸声（楼下）</text>
+    <text x="560" y="70">易清洁</text><text x="650" y="70">造价</text><text x="740" y="70">局部更换</text>
+  </g>
+  <g stroke="#ddd" stroke-width="1">
+    <line x1="150" y1="78" x2="790" y2="78"/>
+    <line x1="150" y1="128" x2="790" y2="128"/><line x1="150" y1="186" x2="790" y2="186"/>
+    <line x1="150" y1="244" x2="790" y2="244"/>
+  </g>
+  <!-- rows -->
+  <g font-size="13.5" font-weight="bold" text-anchor="end">
+    <text x="135" y="160" fill="#8a5a00">浅色木纹</text>
+    <text x="135" y="218" fill="#3a6ea5">哑光砖</text>
+    <text x="135" y="276" fill="#2e8b57">复合地板</text>
+  </g>
+  <!-- marks: check/cross/triangle -->
+  <g font-size="17" text-anchor="middle">
+    <text x="200" y="162" fill="#d0021b">△</text><text x="290" y="162" fill="#d0021b">✗</text><text x="380" y="162" fill="#2e8b57">✓</text>
+    <text x="470" y="162" fill="#2e8b57">✓</text><text x="560" y="162" fill="#d0021b">△</text><text x="650" y="162" fill="#d0021b">✗</text><text x="740" y="162" fill="#d0021b">△</text>
+    <text x="200" y="220" fill="#2e8b57">✓</text><text x="290" y="220" fill="#2e8b57">✓</text><text x="380" y="220" fill="#d0021b">✗</text>
+    <text x="470" y="220" fill="#d0021b">✗</text><text x="560" y="220" fill="#2e8b57">✓</text><text x="650" y="220" fill="#d0021b">△</text><text x="740" y="220" fill="#2e8b57">✓</text>
+    <text x="200" y="278" fill="#2e8b57">✓</text><text x="290" y="278" fill="#d0021b">△</text><text x="380" y="278" fill="#2e8b57">✓</text>
+    <text x="470" y="278" fill="#2e8b57">✓</text><text x="560" y="278" fill="#d0021b">△</text><text x="650" y="278" fill="#2e8b57">✓</text><text x="740" y="278" fill="#2e8b57">✓</text>
+  </g>
+  <g font-size="12" fill="#888" text-anchor="start">
+    <text x="810" y="162">偏科生：美但娇气</text>
+    <text x="810" y="220">厨卫型选手</text>
+    <text x="810" y="278">均衡型选手</text>
+  </g>
+  <!-- verdict box -->
+  <rect x="150" y="300" width="640" height="56" rx="10" fill="#f7f7f7" stroke="#ddd" stroke-width="1.5"/>
+  <text x="470" y="324" text-anchor="middle" font-size="13" fill="#333">按房间行为定权重：客餐厅看重耐刮吸声→复合地板；厨房餐区看重耐水易清洁→哑光砖；</text>
+  <text x="470" y="344" text-anchor="middle" font-size="13" fill="#333">卧室看重脚感→木纹/复合；✓合格 △看条件 ✗不适合（示例评级，正式选型以产品检测为准）</text>
+  <text x="460" y="388" text-anchor="middle" font-size="12.5" fill="#888">矩阵的意义：结论随行为权重而变，没有"最好的材料"，只有"对这个房间最合适的材料"。</text>
+</svg>
