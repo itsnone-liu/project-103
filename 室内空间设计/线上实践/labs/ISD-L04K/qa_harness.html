@@ -14,7 +14,7 @@
   const log = (k, v) => { out.steps.push([k, v]); };
   try {
     const frame = document.getElementById('lab');
-    const win = frame.contentWindow, doc = frame.contentDocument;
+    const win = frame.contentWindow;
     // wait for lab boot (event-driven first, short poll fallback)
     if (typeof win.__LAB_READY__ === 'undefined') {
       await new Promise(r => { frame.onload = r; setTimeout(r, 4000); });
@@ -38,6 +38,17 @@
       out.selftest = r;
       log('selftest', (r && r.failed && r.failed.length === 0) ? 'PASS' : 'FAIL');
     } else { out.selftest = null; log('selftest', 'API missing'); out.errors.push('no selftest API'); }
+    // Load a feasible solution layout, verify that the real UI unlocks the challenge.
+    if (typeof win.__LAB_LOAD_BASELINE__ === 'function') {
+      win.__LAB_LOAD_BASELINE__('B');
+      const challenge = win.document.getElementById('challenge');
+      log('challengeEnabled', !!challenge && !challenge.disabled);
+      log('goalStateText', win.document.getElementById('goalState')?.textContent || 'missing');
+      log('challengeText', challenge?.textContent || 'missing');
+      log('triangleLegsOK', win.__LAB_EVALUATE__?.().workTriangle.legsOK ?? 'no-eval');
+      if (challenge && !challenge.disabled) challenge.click();
+      log('challengeActive', !!challenge && challenge.classList.contains('active'));
+    }
     // scene snapshot determinism: evaluate twice, compare
     if (typeof win.__LAB_EVALUATE__ === 'function') {
       const a = JSON.stringify(win.__LAB_EVALUATE__());

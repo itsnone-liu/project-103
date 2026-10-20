@@ -233,7 +233,7 @@ details.selftest{font-size:12px;margin-top:10px}
       </div>
       <details class="contract" open>
         <summary>任务合同与计数口径</summary>
-        <p>冰箱—水槽中心距<strong>≤1.00米</strong>时一次取齐：冰箱→水槽→备餐→灶台→垃圾桶；否则分批送菜三趟：冰箱→水槽→冰箱→水槽→冰箱→水槽→备餐→灶台→垃圾桶。末次送达后不再返回冰箱。</p>
+        <p>冰箱—水槽中心距<strong>≤2.00米</strong>时一次取齐：冰箱→水槽→备餐→灶台→垃圾桶；否则分批送菜三趟：冰箱→水槽→冰箱→水槽→冰箱→水槽→备餐→灶台→垃圾桶。末次送达后不再返回冰箱。</p>
         <p>水槽、备餐、灶台须依次沿同一墙面贴齐，相邻台面边缘间隙均为0–0.05米，才构成连续作业链；链内步进不计折返，其余不同站间移动各计1次。因此连续链下，远距基线A为<strong>6次</strong>、近距基线B为<strong>2次</strong>。距离阈值与链判定都使用未四舍五入的米制几何值。</p>
         <p>次数、三角与碰撞分别检查，低次数不等于方案合格：一次取齐时冰箱—水槽边长也低于三角1.20米的教学下限。预置布局用于验证任务逻辑，固定设施及家具的相交仍如实报告，不视为可施工方案。</p>
       </details>
@@ -297,7 +297,7 @@ const KitchenRules = (() => {
   const WIDTH = 2.8, DEPTH = 2.25, EPS = 1e-8;
   const SCENARIO = "ISD-L04K-0.2.0";
   const RULE = "teaching-heuristics-v2";
-  const PICKUP_DISTANCE = 1.0, CHAIN_GAP = 0.05;
+  const PICKUP_DISTANCE = 2.0, CHAIN_GAP = 0.05;
   const DEFINITIONS = Object.freeze({
     fridge: Object.freeze({name:"冰箱",w:0.6,h:0.65,counter:false,color:"#eaf2fa",stroke:"#3a6ea5"}),
     sink: Object.freeze({name:"水槽段",w:0.8,h:0.6,counter:true,color:"#eaf2fa",stroke:"#3a6ea5"}),
@@ -505,16 +505,18 @@ const KitchenRules = (() => {
   function baseline(which="A") {
     /* 两版共享精确、无间隙的北墙操作链：
        sink [0.25,1.05] → prep [1.05,2.05] → stove [2.05,2.80]。
-       A：西墙中段对侧（东墙中段）；B：北墙最西侧、靠近链头。
+       A：东墙中段对侧；B：南墙备餐台下方、与水槽中心距1.625m，三角与通道均可检验。
        不缩小家具或隐藏固定设施，预置几何相交仍由 evaluate 如实报告。 */
     const positions={
       fridge:which==="B"
-        ? {x:0.3,y:0.325,rot:0}
+        ? {x:0.65,y:1.925,rot:0}
         : {x:2.5,y:1.125,rot:0},
+      trash:which==="B"
+        ? {x:2.35,y:1.95,rot:0}
+        : {x:0.3,y:1.95,rot:0},
       sink:{x:0.65,y:0.3,rot:0},
       prep:{x:1.55,y:0.3,rot:0},
-      stove:{x:2.425,y:0.3,rot:0},
-      trash:{x:0.3,y:1.95,rot:0}
+      stove:{x:2.425,y:0.3,rot:0}
     };
     for (const id of Object.keys(positions)) positions[id].type=id;
     return {objects:positions};
@@ -623,7 +625,7 @@ window.KitchenRules=KitchenRules;
   let challengeUnlocked=false, challengeActive=false;
   const INTRO='腊月二十九的下午，沈太太掌勺，沈先生进门放菜要洗鱼，祖母端着肉馅想找块台面——三个人不是被"面积"绊住，而是被"作业面"绊住。先跑一次模拟，看看这间厨房为什么要跑六趟。';
   const PRESCRIPTION='拖动工作站，让"四菜一汤"少跑几趟。目标：折返≤3次，且工作三角三边都在教学区间内。想一想：每天十次的折返，和每年十次的绕路，哪个更要紧？';
-  const TASK_NOTE="冰箱—水槽中心距≤1.00米时一次取齐，否则分批送菜三趟；水槽—备餐—灶台同墙贴齐且相邻边缘间隙0–0.05米时构成连续链，链内步进不计折返但计步行距离。不计入场、离场和末次送达后的返回。";
+  const TASK_NOTE="冰箱—水槽中心距≤2.00米时一次取齐，否则分批送菜三趟；水槽—备餐—灶台同墙贴齐且相邻边缘间隙0–0.05米时构成连续链，链内步进不计折返但计步行距离。不计入场、离场和末次送达后的返回。";
   const n=v=>Number(v.toFixed(5)), px=x=>n(OX+x*S), py=y=>n(OY+y*S);
   const fmt=v=>Number(v).toFixed(2);
   const name=id=>C[scene.objects[id]?.type]?.name || ({flue:"烟道",drain:"排水立管"}[id] || id);
@@ -876,10 +878,10 @@ window.KitchenRules=KitchenRules;
     const base=E.evaluate(E.baseline("A")).errand;
     const delta=E.round(base.walkDistanceM-errand.walkDistanceM);
     const countDelta=base.moveCount-errand.moveCount;
-    lines.push(`折返${errand.moveCount}次：相对基线A（${base.moveCount}次）${countDelta>=0?"减少":"增加"}${Math.abs(countDelta)}次。当前${errand.strategy==="single-pickup"?"中心距≤1.00米，一次取齐":"中心距>1.00米，分批送菜三趟"}；${errand.continuousChain.connected?"链内两段步进不计数":"作业链未形成，站间步进照常计数"}。`);
+    lines.push(`折返${errand.moveCount}次：相对基线A（${base.moveCount}次）${countDelta>=0?"减少":"增加"}${Math.abs(countDelta)}次。当前${errand.strategy==="single-pickup"?"中心距≤2.00米，一次取齐":"中心距>2.00米，分批送菜三趟"}；${errand.continuousChain.connected?"链内两段步进不计数":"作业链未形成，站间步进照常计数"}。`);
     lines.push(`相对基线A，直线步行距离${delta>=0?"减少":"增加"}${fmt(Math.abs(delta))}米。链内步进虽不计折返，距离仍计入；应同时观察高频环节与双手占用段。`);
     if(errand.strategy==="single-pickup"){
-      lines.push("一次取齐要求冰箱—水槽≤1.00米，与三角该边≥1.20米的教学下限不能同时满足。请讲述任务效率与三角启发式之间的取舍，不把低次数直接等同于设计合格。");
+      lines.push("一次取齐目标与工作三角区间可以同时满足，但两者仍须分别检查；低折返次数不自动等于方案合格，请结合通道、碰撞与住户行为解释取舍。");
     }
     $("rules").innerHTML="";
     lines.forEach(line=>{const li=document.createElement("li");li.textContent="教学常用值提示："+line;$("rules").append(li);});
@@ -1113,6 +1115,7 @@ window.KitchenRules=KitchenRules;
     status(challengeActive?"挑战模式：在处方目标基础上继续检查通道与碰撞。":"已退出挑战模式。");
   };
   $("reset").onclick=()=>setScene(E.baseline("A"),"已重置为基线A：冰箱位于东侧对侧。已存A/B版本不受影响。");
+  $("loadBaselineB").onclick=()=>setScene(E.baseline("B"),"已载入教学基线B：一次取齐模式，折返2次；处方目标达成后挑战关卡解锁。请继续检查布局取舍。");
 
   $("simulate").onclick=startSimulation;
   $("pause").onclick=()=>{
@@ -1274,6 +1277,13 @@ window.KitchenRules=KitchenRules;
         assert(steps.every(segment=>!segment.counted),"链内步进错误计数");
       });
 
+      test("挑战关卡可解：基线 B 满足处方目标",()=>{
+        assert(b,"基线 B 不可用");
+        const evaluation=E.evaluate(b);
+        assert(evaluation.errand.moveCount<=3,"基线 B 折返须≤3次");
+        assert(evaluation.workTriangle.legsOK,"基线 B 工作三角三边须在教学区间内");
+      });
+
       test("克隆场景可独立编辑",()=>{
         const copy=E.clone(savedScene);
         const originalX=savedScene.objects.fridge.x;
@@ -1324,7 +1334,7 @@ window.KitchenRules=KitchenRules;
   /* QA 桥接：同源测试 iframe 专用钩子，不影响页面功能。 */
   window.__LAB_READY__=true;
   window.__LAB_SET_LEVEL__=n=>{(n===2?$("level2"):$("level1")).click();};
-  window.__LAB_LOAD_BASELINE__=L=>{stopSimulation();commit(E.baseline(L==="B"?"B":"A"),"已载入基线"+(L==="B"?"B":"A")+"。");};
+  window.__LAB_LOAD_BASELINE__=L=>{const letter=L==="B"?"B":"A";stopSimulation();challengeUnlocked=false;challengeActive=false;commit(E.baseline(letter),"已载入基线"+letter+"。");};
   window.__LAB_EVALUATE__=()=>E.evaluate(scene);
   window.__LAB_SELFTEST__=()=>{
     const r=runSelfTests();

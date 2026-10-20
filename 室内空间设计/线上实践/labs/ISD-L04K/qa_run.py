@@ -8,7 +8,7 @@ Steps:
 Exit code 0 iff selftest passed, determinism true, no console errors.
 """
 from __future__ import annotations
-import http.server, json, re, socketserver, subprocess, sys, threading
+import http.server, json, re, socketserver, subprocess, sys, threading, uuid
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -26,7 +26,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 def shot(url: str, out: str, w=1440, h=900, budget=9000):
     subprocess.run([CHROME, '--headless', '--disable-gpu', '--no-first-run',
-                    '--hide-scrollbars', f'--user-data-dir={HERE}/.qa_profile',
+                    '--hide-scrollbars', f'--user-data-dir={HERE}/.qa_profile-shot-{uuid.uuid4().hex}',
                     f'--virtual-time-budget={budget}', f'--screenshot={out}',
                     f'--window-size={w},{h}', url],
                    capture_output=True, timeout=120)
@@ -34,7 +34,7 @@ def shot(url: str, out: str, w=1440, h=900, budget=9000):
 
 def dump(url: str, budget=45000) -> str:
     r = subprocess.run([CHROME, '--headless', '--disable-gpu', '--no-first-run',
-                        '--hide-scrollbars', f'--user-data-dir={HERE}/.qa_profile2',
+                        '--hide-scrollbars', f'--user-data-dir={HERE}/.qa_profile-dump-{uuid.uuid4().hex}',
                         f'--virtual-time-budget={budget}', '--dump-dom', url],
                        capture_output=True, timeout=180, text=True,
                        encoding='utf-8', errors='replace')
@@ -42,6 +42,8 @@ def dump(url: str, budget=45000) -> str:
 
 
 def main() -> int:
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
     with socketserver.TCPServer(('127.0.0.1', PORT), Handler) as srv:
         t = threading.Thread(target=srv.serve_forever, daemon=True)
         t.start()
@@ -67,6 +69,8 @@ def main() -> int:
     st = data.get('selftest') or {}
     steps = dict(data.get('steps', []))
     ok = (steps.get('selftest') == 'PASS'
+          and steps.get('challengeEnabled') is True
+          and steps.get('challengeActive') is True
           and steps.get('determinism') is True
           and not data.get('errors')
           and not (steps.get('consoleErrors')))
