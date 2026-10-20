@@ -1,0 +1,970 @@
+,.045,.045,'#9b8870','metal',1,false,'balcony-rail');
+    for(let x=b.x0+.06;x<=b.x1;x+=.3) {
+      box(b.id+'-post-'+x.toFixed(2),x,.42,edge,.025,.84,.025,'#a79882','metal');
+    }
+  });
+  model.zones.forEach((f,i)=>{
+    box('zone-'+i,(f.x0+f.x1)/2,.012+i*.0003,(f.z0+f.z1)/2,
+      f.x1-f.x0,.016,f.z1-f.z0,f.color,'zone',.48,false,'zone');
+  });
+  function wall(w,h,t,color,opacity,tag) {
+    const door=model.doors.find(d=>d.id===w.door);
+    if(!door) {
+      line(w.id,w.a,w.b,h/2,h,t,color,opacity,w.near,tag);
+      return;
+    }
+    const horizontal=door.axis==='x';
+    const low=Math.min(horizontal?w.a[0]:w.a[1],horizontal?w.b[0]:w.b[1]);
+    const high=Math.max(horizontal?w.a[0]:w.a[1],horizontal?w.b[0]:w.b[1]);
+    const point=v=>horizontal?[v,door.line]:[door.line,v];
+    if(door.a>low) line(w.id+'-a',point(low),point(door.a),h/2,h,t,color,opacity,w.near,tag);
+    if(door.b<high) line(w.id+'-b',point(door.b),point(high),h/2,h,t,color,opacity,w.near,tag);
+    /* The slot is genuinely empty, including in the shared software geometry. */
+    const frameHeight=Math.min(h,door.height);
+    [door.a,door.b].forEach((v,i)=>{
+      const p=point(v);
+      box(door.id+'-jamb-'+i,p[0],frameHeight/2,p[1],.045,frameHeight,.045,
+        '#725744','wood',1,false,'door-frame');
+    });
+    line(door.id+'-header',point(door.a),point(door.b),frameHeight,.045,.045,
+      '#725744',1,false,'door-frame');
+  }
+  model.exteriorWalls.forEach(w=>wall(w,2.8,.18,'#eae5da',1,'exterior'));
+  model.interiorWalls.forEach(w=>wall(w,1.7,.10,'#f1eee6',.8,'interior'));
+  model.shearWalls.forEach(w=>{
+    wall(w,w.height,w.thickness,'#ac7168',1,'shear');
+  });
+  /* Window glass is a schematic surface, not a boolean opening claim. */
+  [
+    {id:'window-kitchen',x:1.35,z:.102,w:1.7,d:.026},
+    {id:'window-study',x:7.85,z:.102,w:2.1,d:.026},
+    {id:'window-west',x:.102,z:8.45,w:.026,d:1.9}
+  ].forEach(w=>{
+    box(w.id,w.x,1.65,w.z,w.w,.9,w.d,'#9bc5ca','glass',.54,false,'window');
+    box(w.id+'-top',w.x,2.12,w.z,w.w,.045,w.d+.015,'#677d7d','metal');
+    box(w.id+'-bottom',w.x,1.18,w.z,w.w,.045,w.d+.015,'#677d7d','metal');
+    const alongX=w.w>w.d;
+    [-1,0,1].forEach((s,i)=>{
+      box(w.id+'-frame-'+i,w.x+(alongX?s*w.w/2:0),1.65,
+        w.z+(alongX?0:s*w.d/2),.035,.96,.035,'#677d7d','metal');
+    });
+  });
+  model.furniture.forEach((f,index)=>{
+    const prefix='furniture-'+index;
+    const color=C[f.kind] || C.wood;
+    box(prefix,f.x,f.h/2+.025,f.z,f.w,f.h,f.d,color,f.kind,1,false,'furniture');
+    if(f.detail==='bed') {
+      box(prefix+'-mattress',f.x,f.h+.105,f.z,f.w-.07,.18,f.d-.06,
+        '#eeeade','fabric',1,false,'mattress');
+      box(prefix+'-blanket',f.x,f.h+.207,f.z+.26,f.w-.085,.035,f.d*.58,
+        index===4?'#b5b6a0':'#acb9bf','fabric',1,false,'bed-detail');
+      const pillows=f.w>1.5?2:1;
+      for(let i=0;i<pillows;i++) {
+        box(prefix+'-pillow-'+i,f.x+(i-(pillows-1)/2)*.75,
+          f.h+.235,f.z-f.d/2+.3,pillows===2?.62:.75,.12,.37,
+          '#faf6e9','fabric',1,false,'pillow');
+      }
+      box(prefix+'-headboard',f.x,.52,f.z-f.d/2,f.w,.99,.085,
+        '#9c8c77','wood',1,false,'bed-detail');
+    }
+    if(f.detail==='sofa') {
+      box(prefix+'-back',f.x,.84,f.z+.37,f.w, .47,.19,
+        '#748574','fabric',1,false,'sofa-back');
+      [-1,1].forEach((s,i)=>{
+        box(prefix+'-arm-'+i,f.x+s*(f.w/2-.09),.63,f.z,.18,.42,f.d,
+          '#748574','fabric',1,false,'sofa-arm');
+      });
+      [-.7,0,.7].forEach((dx,i)=>{
+        box(prefix+'-cushion-'+i,f.x+dx,.79,f.z-.07,.66,.09,.64,
+          '#a0aa93','fabric',1,false,'sofa-detail');
+      });
+    }
+    if(f.detail==='kitchen') {
+      box(prefix+'-countertop',f.x,f.h+.055,f.z,f.w+.04,.06,f.d+.03,
+        '#ddd9ce','stone',1,false,'kitchen-detail');
+      ring(prefix+'-hob-1',f.x-.48,f.h+.092,f.z,.115,.071,'#404a47','hob');
+      ring(prefix+'-hob-2',f.x-.19,f.h+.092,f.z,.09,.054,'#404a47','hob');
+      ring(prefix+'-sink',f.x+.48,f.h+.094,f.z,.18,.13,'#8eaaa9','sink');
+      box(prefix+'-sink-bottom',f.x+.48,f.h+.085,f.z,.23,.008,.23,
+        '#778f90','metal',1,false,'kitchen-detail');
+      box(prefix+'-tap',f.x+.48,f.h+.18,f.z-.2,.025,.21,.025,
+        '#bcc9c5','metal',1,false,'kitchen-detail');
+    }
+    if(f.detail==='basin') {
+      ring(prefix+'-basin',f.x,f.h+.055,f.z,.19,.13,'#f8f8ed','basin');
+      box(prefix+'-tap',f.x,f.h+.13,f.z-.16,.025,.17,.025,
+        '#9faeaa','metal',1,false,'basin-detail');
+    }
+    if(f.detail==='shelf') {
+      for(let k=0;k<4;k++) {
+        box(prefix+'-shelf-'+k,f.x,.3+k*.4,f.z-.185,f.w-.1,.035,.045,
+          '#68573f','wood',1,false,'shelf-detail');
+        for(let j=0;j<5;j++) {
+          box(prefix+'-book-'+k+'-'+j,f.x-.46+j*.19,.43+k*.4,f.z-.195,
+            .12,.22+(j%2)*.08,.065,['#b6b7a0','#798e91','#bd9874'][j%3],
+            'fabric',1,false,'shelf-detail');
+        }
+      }
+    }
+    if(f.detail==='tv') {
+      box(prefix+'-screen',f.x,.94,f.z+.05,1.24,.7,.055,
+        '#354446','metal',1,false,'tv-detail');
+      box(prefix+'-stand',f.x,.61,f.z+.05,.09,.22,.09,
+        '#46504c','metal',1,false,'tv-detail');
+    }
+  });
+  model.chairPoints.forEach((p,i)=>{
+    box('dining-chair-'+i,p[0],.47,p[1],.44,.13,.44,
+      '#8f9b87','fabric',1,false,'dining-chair');
+    const dx=p[0]-1.7,dz=p[1]-3.7;
+    const backX=Math.abs(dx)>Math.abs(dz)?Math.sign(dx)*.2:0;
+    const backZ=backX?0:Math.sign(dz)*.2;
+    box('dining-chair-back-'+i,p[0]+backX,.74,p[1]+backZ,
+      backX?.055:.44,.47,backX?.44:.055,'#8f9b87','fabric',1,false,'chair-detail');
+    [-1,1].forEach(s=>{
+      box('dining-chair-leg-'+i+'-'+s,p[0]+s*.15,.23,p[1],
+        .035,.46,.32,'#806d53','wood',1,false,'chair-detail');
+    });
+  });
+  return out;
+}
+
+const geometry=buildGeometry(MODEL);
+let hideNear=true, showLabels=true, tier='basic';
+let dirty=true, enhanced=null, loading=false, desiredEnhanced=!offline;
+let resourceMessage=offline?'offline=1：强制离线，未请求任何供应商脚本':'尚未加载';
+let lastFailure='', fallbackBusy=false;
+const cameraState={target:[5.5,0,5.1],theta:0,phi:1,radius:20};
+let viewWidth=1000,viewHeight=650,pixelRatio=1,drawnFaceCount=0;
+let currentPreset=0;
+let basicFaces=[];
+
+function setStatus(text) { if($('status')) $('status').textContent=text; }
+function setText(id,text) { if($(id)) $(id).textContent=text; }
+function setCameraPreset(index) {
+  const preset=MODEL.presets[index];
+  if(!preset) return;
+  currentPreset=index;
+  cameraState.target=preset.target.slice();
+  const d=sub(preset.position,preset.target);
+  cameraState.radius=clamp(Math.hypot(...d),5,38);
+  cameraState.theta=Math.atan2(d[0],d[2]);
+  cameraState.phi=clamp(Math.acos(d[1]/Math.hypot(...d)),.012,Math.PI/2-.025);
+  if(enhanced) applySharedCamera();
+  dirty=true;
+  updatePresetUI();
+}
+function eyePosition(state) {
+  const s=state || cameraState;
+  const r=s.radius,sp=Math.sin(s.phi);
+  return [s.target[0]+r*sp*Math.sin(s.theta),s.target[1]+r*Math.cos(s.phi),
+    s.target[2]+r*sp*Math.cos(s.theta)];
+}
+function cameraBasis(state) {
+  const s=state || cameraState,eye=eyePosition(s);
+  const forward=norm(sub(s.target,eye));
+  const right=norm(cross(forward,[0,1,0]));
+  const up=norm(cross(right,forward));
+  return {eye:eye,forward:forward,right:right,up:up};
+}
+function project(point,basis,width,height) {
+  const delta=sub(point,basis.eye),depth=dot(delta,basis.forward);
+  if(depth<=.08) return null;
+  const focal=height/(2*Math.tan(42*Math.PI/360));
+  return {x:width/2+dot(delta,basis.right)*focal/depth,
+    y:height/2-dot(delta,basis.up)*focal/depth,depth:depth};
+}
+function makeFaces(items,includeNear) {
+  const faces=[];
+  function face(vertices,normal,item) {
+    const center=[0,0,0];
+    vertices.forEach(v=>{center[0]+=v[0];center[1]+=v[1];center[2]+=v[2];});
+    center[0]/=vertices.length;center[1]/=vertices.length;center[2]/=vertices.length;
+    faces.push({vertices:vertices,normal:normal,center:center,item:item});
+  }
+  items.forEach(item=>{
+    if(!includeNear && item.near) return;
+    if(item.type==='ring') {
+      for(let k=0;k<24;k++) {
+        const a=k/24*Math.PI*2,b=(k+1)/24*Math.PI*2;
+        face([
+          [item.x+Math.cos(a)*item.r,item.y,item.z+Math.sin(a)*item.r],
+          [item.x+Math.cos(b)*item.r,item.y,item.z+Math.sin(b)*item.r],
+          [item.x+Math.cos(b)*item.inner,item.y,item.z+Math.sin(b)*item.inner],
+          [item.x+Math.cos(a)*item.inner,item.y,item.z+Math.sin(a)*item.inner]
+        ],[0,1,0],item);
+      }
+      return;
+    }
+    const x0=item.x-item.w/2,x1=item.x+item.w/2;
+    const y0=item.y-item.h/2,y1=item.y+item.h/2;
+    const z0=item.z-item.d/2,z1=item.z+item.d/2;
+    face([[x0,y1,z0],[x0,y1,z1],[x1,y1,z1],[x1,y1,z0]],[0,1,0],item);
+    face([[x0,y0,z0],[x1,y0,z0],[x1,y0,z1],[x0,y0,z1]],[0,-1,0],item);
+    face([[x0,y0,z0],[x0,y1,z0],[x1,y1,z0],[x1,y0,z0]],[0,0,-1],item);
+    face([[x1,y0,z1],[x1,y1,z1],[x0,y1,z1],[x0,y0,z1]],[0,0,1],item);
+    face([[x0,y0,z1],[x0,y1,z1],[x0,y1,z0],[x0,y0,z0]],[-1,0,0],item);
+    face([[x1,y0,z0],[x1,y1,z0],[x1,y1,z1],[x1,y0,z1]],[1,0,0],item);
+  });
+  return faces;
+}
+function rebuildBasicFaces() { basicFaces=makeFaces(geometry,!hideNear);dirty=true; }
+function shade(hex,amount,alpha) {
+  const n=parseInt(hex.slice(1),16);
+  const r=clamp(Math.round(((n>>16)&255)*amount),0,255);
+  const g=clamp(Math.round(((n>>8)&255)*amount),0,255);
+  const b=clamp(Math.round((n&255)*amount),0,255);
+  return 'rgba('+r+','+g+','+b+','+alpha+')';
+}
+function labelPoints() {
+  return MODEL.zones.map(z=>({name:z.name,p:[(z.x0+z.x1)/2,.10,(z.z0+z.z1)/2],color:'#35433d'}))
+    .concat([
+      {name:'剪力墙 · 不可随意改造',p:[3.6,2.24,8.3],color:'#963e38'},
+      {name:'剪力墙',p:[5.3,2.24,3],color:'#963e38'}
+    ]);
+}
+function renderBasic() {
+  if(!ctx || !viewWidth || !viewHeight) return false;
+  ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+  const bg=ctx.createLinearGradient(0,0,0,viewHeight);
+  bg.addColorStop(0,'#f1f1eb');bg.addColorStop(1,'#e2ded3');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,viewWidth,viewHeight);
+  const basis=cameraBasis();
+  const sorted=[];
+  basicFaces.forEach(face=>{
+    if(dot(face.normal,sub(basis.eye,face.center))<=0) return;
+    const points=face.vertices.map(p=>project(p,basis,viewWidth,viewHeight));
+    if(points.some(p=>!p)) return;
+    if(points.every(p=>p.x<0)||points.every(p=>p.x>viewWidth)||
+       points.every(p=>p.y<0)||points.every(p=>p.y>viewHeight)) return;
+    sorted.push({face:face,points:points,depth:dot(sub(face.center,basis.eye),basis.forward)});
+  });
+  sorted.sort((a,b)=>b.depth-a.depth);
+  const light=norm([-3,8,5]);
+  sorted.forEach(entry=>{
+    const f=entry.face,it=f.item;
+    const brightness=.69+Math.max(0,dot(f.normal,light))*.34;
+    ctx.beginPath();
+    entry.points.forEach((p,i)=>{if(i===0) ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);});
+    ctx.closePath();
+    ctx.fillStyle=shade(it.color,brightness,it.opacity);
+    ctx.fill();
+    if(it.type==='box' && it.tag!=='zone' && it.h>.03) {
+      ctx.lineWidth=it.tag==='shear'?1:.45;
+      ctx.strokeStyle=it.tag==='shear'?'rgba(112,47,43,.55)':'rgba(62,65,55,.15)';
+      ctx.stroke();
+    }
+  });
+  if(showLabels) {
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    labelPoints().forEach(label=>{
+      const p=project(label.p,basis,viewWidth,viewHeight);
+      if(!p || p.x<10 || p.x>viewWidth-10 || p.y<12 || p.y>viewHeight-12) return;
+      ctx.font=label.color==='#963e38'?'bold 11px sans-serif':'12px sans-serif';
+      const width=ctx.measureText(label.name).width+12;
+      ctx.fillStyle='rgba(250,248,240,.87)';
+      ctx.fillRect(p.x-width/2,p.y-10,width,20);
+      ctx.fillStyle=label.color;ctx.fillText(label.name,p.x,p.y);
+    });
+  }
+  ctx.textAlign='left';ctx.font='11px sans-serif';ctx.fillStyle='#697166';
+  ctx.fillText('U90 / 实时体块透视 · 非照片级',14,viewHeight-14);
+  drawnFaceCount=sorted.length;
+  window.__LAB_READY__=true;
+  return true;
+}
+
+/* Bind the existing controls by semantic text as well as common IDs. */
+let tierButton=null, wallButton=null, labelButton=null;
+let presetSelect=null;
+const presetButtons=[];
+function findButton(ids,pattern) {
+  for(const id of ids) if($(id)) return $(id);
+  return Array.from(document.querySelectorAll('button')).find(b=>pattern.test(b.textContent)) || null;
+}
+function makeButton(text,id) {
+  let toolbar=$('runtimeControls');
+  if(!toolbar) {
+    toolbar=document.createElement('div');toolbar.id='runtimeControls';
+    toolbar.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin:10px 0';
+    stage.parentNode.insertBefore(toolbar,stage);
+  }
+  const b=document.createElement('button');b.type='button';b.id=id;b.textContent=text;
+  toolbar.appendChild(b);return b;
+}
+function updatePresetUI() {
+  presetButtons.forEach(pair=>{
+    const on=pair.index===currentPreset;
+    pair.button.setAttribute('aria-pressed',String(on));
+    pair.button.classList.toggle('active',on);
+  });
+  if(presetSelect) presetSelect.value=String(currentPreset);
+}
+function updateInfo() {
+  const enhancedNow=tier==='enhanced';
+  const tierText=enhancedNow?'增强档·本机/8861 静态资源':'基础档·离线体块透视';
+  window.__LAB_TIER__=tier;
+  setText('techTier',tierText);
+  ['tierBadge','tierLabel','tierState','modeBadge'].forEach(id=>setText(id,tierText));
+  setText('resourceState',resourceMessage);
+  setText('lightingState',enhancedNow?
+    'RoomEnvironment / PMREM · PBR 程序材质 · ACES / sRGB · 柔和阴影；无 HDRI / 木纹 / glTF':
+    'Canvas 2D · 三向面明暗；无外部资源、无 HDRI');
+  setText('geometryState',geometry.length+' 个共享构件'+
+    (enhancedNow?' · '+(enhanced?enhanced.renderer.info.render.calls:0)+' draw calls':
+      ' · '+drawnFaceCount+' 个可见面'));
+  setText('cameraState','42° 透视 · 当前 '+cameraState.radius.toFixed(1)+' m · 范围 5–38 m');
+  if(tierButton) {
+    tierButton.textContent='切换基础/增强';
+    tierButton.title=offline?'offline=1 强制基础档；移除查询参数后可加载增强档':
+      loading?'资源加载中；点击可取消自动切换':
+      (enhancedNow?'切换到基础档（镜头保持）':'尝试增强档（镜头保持）');
+    tierButton.setAttribute('aria-pressed',String(enhancedNow));
+  }
+  if(wallButton) {
+    if(wallButton.type==='checkbox') wallButton.checked=!hideNear;
+    else wallButton.textContent=hideNear?'外墙：剖切（显示全部）':'外墙：完整（隐藏近景）';
+    wallButton.setAttribute('aria-pressed',String(!hideNear));
+  }
+  const compass=$('compass');
+  if(compass) {
+    compass.style.transform='rotate('+(-cameraState.theta*180/Math.PI)+'deg)';
+    compass.title='北向指示 · x 东 / z 南';
+  }
+}
+function setupUI() {
+  const legend=$('legend');
+  if(legend) {
+    legend.textContent='';
+    MODEL.zones.forEach(zone=>{
+      const item=document.createElement('div');
+      item.style.cssText='display:flex;align-items:center;gap:7px;margin:5px 0';
+      const dotNode=document.createElement('span');
+      dotNode.style.cssText='display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid #0001;background:'+zone.color;
+      item.appendChild(dotNode);item.appendChild(document.createTextNode(zone.name));
+      legend.appendChild(item);
+    });
+  }
+  tierButton=findButton(['tierToggle','toggleTier','tierBtn','modeToggle','btnTier'],/切换.*(?:基础|增强)|(?:基础|增强).*切换/);
+  if(!tierButton) tierButton=makeButton('切换基础/增强','runtimeTier');
+  tierButton.disabled=false;
+  tierButton.addEventListener('click',()=>{
+    if(offline) {
+      setStatus('offline=1 已强制基础档；没有请求外部资源。移除 URL 中 offline=1 后再尝试增强档。');
+      return;
+    }
+    if(tier==='enhanced') {
+      desiredEnhanced=false;activateBasic('已切换基础档；镜头、缩放和外墙设置保持一致。');return;
+    }
+    if(loading) {
+      desiredEnhanced=!desiredEnhanced;
+      setStatus(desiredEnhanced?'继续加载，成功后切换增强档。基础档仍可操作。':
+        '已取消自动切换；加载完成后仍留在基础档。');
+      return;
+    }
+    desiredEnhanced=true;
+    if(enhanced) activateEnhanced();
+    else startEnhancedLoader();
+  });
+  wallButton=findButton(['wallToggle','toggleWalls','wallsBtn','btnWalls'],/外墙|近景墙|剖切/);
+  if(!wallButton) {
+    wallButton=document.querySelector('input[type="checkbox"][id*="wall" i]');
+  }
+  if(!wallButton) wallButton=makeButton('外墙：剖切（显示全部）','runtimeWalls');
+  wallButton.disabled=false;
+  wallButton.addEventListener(wallButton.type==='checkbox'?'change':'click',()=>{
+    hideNear=wallButton.type==='checkbox'?!wallButton.checked:!hideNear;
+    geometryVisibilityChanged();updateInfo();
+  });
+  labelButton=findButton(['labelToggle','toggleLabels','labelsBtn'],/标签|房间名/);
+  if(labelButton) {
+    labelButton.addEventListener('click',()=>{
+      showLabels=!showLabels;
+      if(enhanced) enhanced.labels.forEach(s=>{s.visible=showLabels;});
+      labelButton.setAttribute('aria-pressed',String(showLabels));dirty=true;
+    });
+  }
+  const reset=findButton(['resetView','resetBtn','btnReset','reset'],/重置/);
+  (reset || makeButton('重置镜头','runtimeReset')).addEventListener('click',()=>{
+    setCameraPreset(0);
+    setStatus('已重置为全户轴测；两档共用镜头。');
+  });
+  const exportButton=findButton(['exportPNG','exportBtn','btnExport','exportPng','downloadPNG'],/PNG|导出|下载图片/i);
+  (exportButton || makeButton('PNG 导出','runtimeExport')).addEventListener('click',exportPNG);
+  const testButton=findButton(['selftestBtn','selfTestBtn','runTests','selftest','testBtn','btnTest'],/自检/);
+  (testButton || makeButton('开始自检','runtimeSelftest')).addEventListener('click',()=>window.__LAB_SELFTEST__());
+  const allButtons=Array.from(document.querySelectorAll('button'));
+  MODEL.presets.forEach((p,index)=>{
+    let b=allButtons.find(button=>button.textContent.trim()===p.name ||
+      button.getAttribute('data-preset')===String(index));
+    if(!b) b=allButtons.find(button=>{
+      const text=button.textContent.trim();
+      return text.length<22 && text.indexOf(p.name)!==-1;
+    });
+    if(b) {
+      presetButtons.push({button:b,index:index});
+      b.disabled=false;
+      b.addEventListener('click',()=>{setCameraPreset(index);setStatus('观察视点：'+p.name+'。这是轨道观察，不是穿墙漫游。');});
+    }
+  });
+  presetSelect=$('viewPreset') || $('presetSelect') || $('preset') ||
+    Array.from(document.querySelectorAll('select')).find(s=>
+      Array.from(s.options).some(o=>/全户|轴测|顶视/.test(o.textContent)));
+  if(presetSelect && presetSelect.tagName==='SELECT') {
+    presetSelect.textContent='';
+    MODEL.presets.forEach((p,index)=>{
+      const option=document.createElement('option');option.value=String(index);option.textContent=p.name;
+      presetSelect.appendChild(option);
+    });
+    presetSelect.addEventListener('change',()=>setCameraPreset(Number(presetSelect.value)));
+  } else {
+    presetSelect=null;
+    if(presetButtons.length<5) MODEL.presets.forEach((p,index)=>{
+      if(presetButtons.some(pair=>pair.index===index)) return;
+      const b=makeButton(p.name,'runtimePreset'+index);
+      presetButtons.push({button:b,index:index});
+      b.addEventListener('click',()=>setCameraPreset(index));
+    });
+  }
+  updatePresetUI();
+}
+function geometryVisibilityChanged() {
+  rebuildBasicFaces();
+  if(enhanced) enhanced.meshes.forEach(mesh=>{
+    mesh.visible=!(hideNear && mesh.userData.near);
+  });
+  dirty=true;
+}
+function exportPNG() {
+  try {
+    let canvas;
+    if(tier==='enhanced' && enhanced) {
+      enhanced.renderer.render(enhanced.scene,enhanced.camera);
+      canvas=enhanced.renderer.domElement;
+    } else {renderBasic();canvas=basicCanvas;}
+    const url=canvas.toDataURL('image/png');
+    if(!url || url==='data:,') throw new Error('画布没有可导出内容');
+    const a=document.createElement('a');
+    a.href=url;a.download='U90-'+tier+'-'+new Date().toISOString().replace(/[:.]/g,'-')+'.png';
+    document.body.appendChild(a);a.click();a.remove();
+    setStatus('已导出当前 '+(tier==='enhanced'?'增强':'基础')+' 档 PNG。图像为实时建筑表现预演，不是照片级静帧。');
+  } catch(error) {
+    recordError(error);setStatus('PNG 导出失败：'+error.message+'；请尝试基础档导出。');
+  }
+}
+function resize() {
+  const rect=stage.getBoundingClientRect();
+  viewWidth=Math.max(1,Math.round(rect.width || stage.clientWidth || 1000));
+  viewHeight=Math.max(1,Math.round(rect.height || stage.clientHeight || 650));
+  pixelRatio=Math.min(window.devicePixelRatio || 1,2);
+  const width=Math.round(viewWidth*pixelRatio),height=Math.round(viewHeight*pixelRatio);
+  if(basicCanvas.width!==width || basicCanvas.height!==height) {
+    basicCanvas.width=width;basicCanvas.height=height;
+  }
+  basicCanvas.style.width='100%';basicCanvas.style.height='100%';
+  if(enhanced) {
+    enhanced.renderer.setPixelRatio(pixelRatio);
+    enhanced.renderer.setSize(viewWidth,viewHeight,false);
+    enhanced.camera.aspect=viewWidth/viewHeight;
+    enhanced.camera.updateProjectionMatrix();
+  }
+  dirty=true;
+}
+basicCanvas.style.touchAction='none';
+let pointer=null;
+basicCanvas.addEventListener('pointerdown',event=>{
+  if(tier!=='basic' || event.button>0) return;
+  pointer={id:event.pointerId,x:event.clientX,y:event.clientY};
+  try {basicCanvas.setPointerCapture(event.pointerId);} catch(ignore) {}
+  basicCanvas.style.cursor='grabbing';event.preventDefault();
+});
+basicCanvas.addEventListener('pointermove',event=>{
+  if(!pointer || event.pointerId!==pointer.id || tier!=='basic') return;
+  cameraState.theta-=(event.clientX-pointer.x)*.007;
+  cameraState.phi=clamp(cameraState.phi-(event.clientY-pointer.y)*.006,.012,Math.PI/2-.025);
+  pointer.x=event.clientX;pointer.y=event.clientY;
+  currentPreset=-1;updatePresetUI();dirty=true;
+});
+function releasePointer(event) {
+  if(!pointer || event.pointerId!==pointer.id) return;
+  try {basicCanvas.releasePointerCapture(event.pointerId);} catch(ignore) {}
+  pointer=null;basicCanvas.style.cursor='grab';
+}
+basicCanvas.addEventListener('pointerup',releasePointer);
+basicCanvas.addEventListener('pointercancel',releasePointer);
+basicCanvas.addEventListener('wheel',event=>{
+  if(tier!=='basic') return;
+  event.preventDefault();
+  const delta=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?viewHeight:1);
+  cameraState.radius=clamp(cameraState.radius*Math.exp(clamp(delta,-300,300)*.0015),5,38);
+  dirty=true;
+},{passive:false});
+basicCanvas.addEventListener('contextmenu',event=>event.preventDefault());
+basicCanvas.style.cursor='grab';
+basicCanvas.setAttribute('aria-label','U90 全户型三维基础透视；拖动旋转，滚轮缩放');
+basicCanvas.setAttribute('role','img');
+
+/* Both engines read and write this same orbit state. */
+function applySharedCamera() {
+  if(!enhanced) return;
+  const eye=eyePosition();
+  enhanced.controls.target.set(...cameraState.target);
+  enhanced.camera.position.set(...eye);
+  enhanced.camera.lookAt(...cameraState.target);
+  enhanced.controls.update();
+  dirty=true;
+}
+function readEnhancedCamera() {
+  if(!enhanced) return;
+  const target=enhanced.controls.target;
+  cameraState.target=[target.x,target.y,target.z];
+  const p=enhanced.camera.position;
+  const delta=[p.x-target.x,p.y-target.y,p.z-target.z];
+  const distance=Math.hypot(...delta);
+  cameraState.radius=clamp(distance,5,38);
+  cameraState.theta=Math.atan2(delta[0],delta[2]);
+  cameraState.phi=clamp(Math.acos(clamp(delta[1]/(distance || 1),-1,1)),.012,Math.PI/2-.025);
+}
+function activateBasic(message) {
+  if(tier==='enhanced' && enhanced) readEnhancedCamera();
+  tier='basic';
+  basicCanvas.style.display='block';
+  if(enhanced) {
+    enhanced.controls.enabled=false;
+    enhanced.renderer.domElement.style.display='none';
+  }
+  dirty=true;renderBasic();updateInfo();
+  if(message) setStatus(message);
+}
+function activateEnhanced() {
+  if(offline || !enhanced) return;
+  try {
+    applySharedCamera();
+    enhanced.renderer.render(enhanced.scene,enhanced.camera);
+    if(enhanced.renderer.getContext().isContextLost()) throw new Error('WebGL 上下文已丢失');
+    tier='enhanced';
+    enhanced.controls.enabled=true;
+    enhanced.renderer.domElement.style.display='block';
+    basicCanvas.style.display='none';
+    window.__LAB_READY__=true;dirty=true;
+    updateInfo();
+    setStatus('增强档已实际启用：RoomEnvironment 程序环境 + PBR 程序材质 / 柔和阴影。未加载 HDRI、木纹贴图或真实 glTF 家具；不是照片级静帧。');
+  } catch(error) {failEnhanced('增强档绘制失败：'+error.message,error);}
+}
+function disposeEnhanced() {
+  if(!enhanced) return;
+  const old=enhanced;enhanced=null;
+  try {old.controls.dispose();} catch(ignore) {}
+  try {
+    const geos=new Set(),mats=new Set();
+    old.scene.traverse(object=>{
+      if(object.geometry) geos.add(object.geometry);
+      if(object.material) (Array.isArray(object.material)?object.material:[object.material]).forEach(m=>mats.add(m));
+    });
+    geos.forEach(g=>g.dispose());
+    mats.forEach(m=>{if(m.map) m.map.dispose();m.dispose();});
+    if(old.environment) old.environment.dispose();
+    old.renderer.dispose();
+  } catch(ignore) {}
+  old.renderer.domElement.remove();
+}
+function failEnhanced(reason,error) {
+  if(fallbackBusy) return;
+  fallbackBusy=true;
+  try {
+    if(error) recordError(error);
+    lastFailure=reason;loading=false;desiredEnhanced=false;
+    resourceMessage='增强不可用：'+reason;
+    activateBasic('已自动回退基础档：'+reason+'。仍可旋转、缩放、切换视点与导出 PNG。');
+    disposeEnhanced();
+    updateInfo();
+  } finally {fallbackBusy=false;}
+}
+emergencyHandler=function(reason) {
+  if(tier==='enhanced' || loading) failEnhanced('运行异常：'+String(reason).slice(0,220));
+  else {
+    dirty=true;
+    setStatus('已捕获运行异常，保持基础画面：'+String(reason).slice(0,180));
+  }
+};
+
+function makeEnhancedLabel(THREE,label) {
+  const canvas=document.createElement('canvas');
+  canvas.width=512;canvas.height=80;
+  const c=canvas.getContext('2d');
+  c.clearRect(0,0,512,80);
+  c.font='bold 30px sans-serif';
+  const width=Math.min(508,c.measureText(label.name).width+36);
+  c.fillStyle='rgba(250,248,240,.9)';c.fillRect((512-width)/2,8,width,64);
+  c.textAlign='center';c.textBaseline='middle';c.fillStyle=label.color;
+  c.fillText(label.name,256,40);
+  const texture=new THREE.CanvasTexture(canvas);
+  texture.encoding=THREE.sRGBEncoding;
+  const material=new THREE.SpriteMaterial({map:texture,transparent:true,depthTest:false,depthWrite:false});
+  material.toneMapped=false;
+  const sprite=new THREE.Sprite(material);
+  sprite.position.set(...label.p);sprite.position.y+=.12;
+  sprite.scale.set(3.05,.477,1);sprite.renderOrder=1000;sprite.visible=showLabels;
+  return sprite;
+}
+function initEnhanced() {
+  const THREE=window.THREE;
+  if(!THREE || String(THREE.REVISION)!=='147') throw new Error('需要固定版本 THREE r147');
+  if(typeof THREE.OrbitControls!=='function') throw new Error('legacy OrbitControls 未注册');
+  if(typeof THREE.RoomEnvironment!=='function') throw new Error('RoomEnvironment 未注册');
+  let renderer=null,controls=null,scene=null,environment=null,pmrem=null,room=null;
+  try {
+    renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});
+    if(!renderer.getContext() || renderer.getContext().isContextLost()) throw new Error('WebGL 上下文不可用');
+    renderer.setPixelRatio(pixelRatio);renderer.setSize(viewWidth,viewHeight,false);
+    renderer.physicallyCorrectLights=true;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure=1.1;
+    renderer.outputEncoding=THREE.sRGBEncoding;
+    renderer.shadowMap.enabled=true;
+    renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.setClearColor('#ebe9df',1);
+    const canvas=renderer.domElement;
+    canvas.id='enhancedCanvas';
+    canvas.setAttribute('aria-label','U90 全户型增强 WebGL 建筑预演；拖动旋转，滚轮缩放');
+    canvas.setAttribute('role','img');
+    canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;display:none;touch-action:none;z-index:1';
+    basicCanvas.parentNode.insertBefore(canvas,basicCanvas);
+    canvas.addEventListener('webglcontextlost',event=>{
+      event.preventDefault();
+      failEnhanced('WebGL 上下文丢失；请重新点击切换按钮尝试恢复');
+    },false);
+    scene=new THREE.Scene();
+    scene.background=new THREE.Color('#ebe9df');
+    pmrem=new THREE.PMREMGenerator(renderer);
+    pmrem.compileCubemapShader();
+    room=new THREE.RoomEnvironment();
+    environment=pmrem.fromScene(room,.04);
+    scene.environment=environment.texture;
+    room.traverse(o=>{
+      if(o.geometry) o.geometry.dispose();
+      if(o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose());
+    });
+    room=null;pmrem.dispose();pmrem=null;
+    const camera=new THREE.PerspectiveCamera(42,viewWidth/viewHeight,.08,150);
+    camera.up.set(0,1,0);
+    controls=new THREE.OrbitControls(camera,canvas);
+    controls.enableDamping=false;
+    controls.enablePan=false;
+    controls.minDistance=5;controls.maxDistance=38;
+    controls.minPolarAngle=.012;controls.maxPolarAngle=Math.PI/2-.025;
+    controls.rotateSpeed=.8;controls.zoomSpeed=.8;controls.enabled=false;
+    scene.add(new THREE.HemisphereLight(0xf3f5ef,0xa69b82,1.5));
+    const sun=new THREE.DirectionalLight(0xfff0d7,3.1);
+    sun.position.set(-3,17,8);sun.target.position.set(5.5,0,5.1);
+    sun.castShadow=true;
+    sun.shadow.mapSize.set(2048,2048);
+    sun.shadow.camera.left=-12;sun.shadow.camera.right=12;
+    sun.shadow.camera.top=12;sun.shadow.camera.bottom=-12;
+    sun.shadow.camera.near=.5;sun.shadow.camera.far=45;
+    sun.shadow.normalBias=.035;sun.shadow.bias=-.00018;sun.shadow.radius=3;
+    scene.add(sun);scene.add(sun.target);
+    const fill=new THREE.DirectionalLight(0xdde8ef,.65);
+    fill.position.set(15,10,-5);scene.add(fill);
+    const materials=new Map(),meshes=[];
+    geometry.forEach(item=>{
+      const key=[item.color,item.kind,item.opacity].join('|');
+      let material=materials.get(key);
+      if(!material) {
+        const metallic=item.kind==='metal',glass=item.kind==='glass';
+        material=new THREE.MeshStandardMaterial({
+          color:item.color,
+          roughness:metallic?.32:glass?.2:item.kind==='fabric'?.94:item.kind==='ceramic'?.29:.73,
+          metalness:metallic?.68:0,
+          transparent:item.opacity<1,
+          opacity:item.opacity,
+          depthWrite:item.opacity>=1,
+          side:THREE.DoubleSide,
+          envMapIntensity:glass?.65:metallic?1:.8
+        });
+        material.polygonOffset=item.tag==='zone';
+        material.polygonOffsetFactor=-1;
+        material.polygonOffsetUnits=-1;
+        materials.set(key,material);
+      }
+      let mesh;
+      if(item.type==='ring') {
+        const shape=new THREE.RingGeometry(item.inner,item.r,24);
+        shape.rotateX(-Math.PI/2);
+        mesh=new THREE.Mesh(shape,material);
+      } else mesh=new THREE.Mesh(new THREE.BoxGeometry(item.w,item.h,item.d),material);
+      mesh.name=item.id;mesh.position.set(item.x,item.y,item.z);
+      mesh.castShadow=item.opacity>.7 && item.tag!=='zone' && item.tag!=='floor';
+      mesh.receiveShadow=item.type==='box';
+      mesh.userData.near=item.near;
+      mesh.visible=!(hideNear && item.near);
+      if(item.tag==='zone') mesh.renderOrder=1;
+      scene.add(mesh);meshes.push(mesh);
+      if(item.tag==='shear') {
+        const edge=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry),
+          new THREE.LineBasicMaterial({color:0x8a4943,transparent:true,opacity:.65}));
+        mesh.add(edge);
+      }
+    });
+    const labels=labelPoints().map(label=>makeEnhancedLabel(THREE,label));
+    labels.forEach(label=>scene.add(label));
+    enhanced={renderer:renderer,scene:scene,camera:camera,controls:controls,
+      environment:environment,meshes:meshes,labels:labels};
+    controls.addEventListener('change',()=>{
+      if(tier==='enhanced') {
+        readEnhancedCamera();currentPreset=-1;updatePresetUI();
+      }
+      dirty=true;
+    });
+    applySharedCamera();
+    renderer.render(scene,camera);
+    if(renderer.getContext().isContextLost()) throw new Error('首帧 WebGL 上下文丢失');
+    return enhanced;
+  } catch(error) {
+    if(enhanced && enhanced.renderer===renderer) disposeEnhanced();
+    else {
+      try {if(controls) controls.dispose();} catch(ignore) {}
+      try {if(environment) environment.dispose();if(pmrem) pmrem.dispose();} catch(ignore) {}
+      if(scene) {
+        try {
+          scene.traverse(o=>{
+            if(o.geometry) o.geometry.dispose();
+            if(o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{
+              if(m.map) m.map.dispose();m.dispose();
+            });
+          });
+        } catch(ignore) {}
+      }
+      if(renderer) {
+        try {renderer.dispose();renderer.domElement.remove();} catch(ignore) {}
+      }
+    }
+    throw error;
+  }
+}
+
+/* Progressive fixed-version legacy loading: never evaluate controls before THREE. */
+let loadGeneration=0;
+function loadScript(src,validate) {
+  return new Promise((resolve,reject)=>{
+    const script=document.createElement('script');
+    let complete=false;
+    const timer=setTimeout(()=>finish(new Error('资源加载超时（6 秒）：'+src)),6000);
+    function finish(error) {
+      if(complete) return;
+      complete=true;clearTimeout(timer);
+      script.onload=null;script.onerror=null;
+      if(error) {script.remove();reject(error);} else resolve();
+    }
+    script.src=src;script.async=false;
+    script.onload=function() {
+      try {
+        if(!validate()) throw new Error('资源已响应但接口或版本不符：'+src);
+        finish();
+      } catch(error) {finish(error);}
+    };
+    script.onerror=function() {finish(new Error('无法加载同源静态资源：'+src));};
+    document.head.appendChild(script);
+  });
+}
+async function startEnhancedLoader() {
+  if(offline) {
+    desiredEnhanced=false;activateBasic('offline=1：强制基础档，不请求供应商脚本。');return;
+  }
+  if(loading) return;
+  loading=true;lastFailure='';
+  const generation=++loadGeneration;
+  const steps=[
+    {file:'three.min.js',name:'THREE r147 UMD',
+      valid:()=>!!window.THREE && String(window.THREE.REVISION)==='147'},
+    {file:'OrbitControls.js',name:'legacy OrbitControls',
+      valid:()=>!!window.THREE && typeof window.THREE.OrbitControls==='function'},
+    {file:'RoomEnvironment.js',name:'RoomEnvironment',
+      valid:()=>!!window.THREE && typeof window.THREE.RoomEnvironment==='function'}
+  ];
+  try {
+    for(let i=0;i<steps.length;i++) {
+      const step=steps[i];
+      resourceMessage='加载 '+(i+1)+'/3：'+step.name+' · '+vendorBase+step.file;
+      setStatus('基础档可继续操作。'+resourceMessage+'（每项最多等待 6 秒）');
+      updateInfo();
+      if(!step.valid()) await loadScript(vendorBase+step.file,step.valid);
+      if(generation!==loadGeneration || !loading) return;
+    }
+    resourceMessage='3/3 固定版本脚本已验证；正在初始化 WebGL / PMREM';
+    updateInfo();setStatus(resourceMessage+'；基础画面保持可见。');
+    await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
+    if(generation!==loadGeneration || !loading) return;
+    initEnhanced();
+    loading=false;
+    resourceMessage='THREE r147 + legacy OrbitControls + RoomEnvironment · '+vendorBase+' · 已实际初始化';
+    if(desiredEnhanced) activateEnhanced();
+    else {
+      activateBasic('增强资源已就绪；按“切换基础/增强”启用。当前仍为基础档。');
+    }
+    updateInfo();
+  } catch(error) {
+    if(generation!==loadGeneration) return;
+    failEnhanced(error.message);
+  }
+}
+
+/* Exactly six public QA assertions, independent of vendor success. */
+function hashGeometry(items) {
+  const text=JSON.stringify(items);
+  let hash=2166136261;
+  for(let i=0;i<text.length;i++) {
+    hash^=text.charCodeAt(i);hash=Math.imul(hash,16777619);
+  }
+  return (hash>>>0).toString(16);
+}
+function canvasHasImage(canvas) {
+  if(!canvas || canvas.width<2 || canvas.height<2) return false;
+  const sample=document.createElement('canvas');sample.width=64;sample.height=48;
+  const c=sample.getContext('2d',{willReadFrequently:true});
+  c.drawImage(canvas,0,0,64,48);
+  const data=c.getImageData(0,0,64,48).data,colors=new Set();
+  let opaque=0;
+  for(let i=0;i<data.length;i+=4) {
+    if(data[i+3]) opaque++;
+    colors.add((data[i]>>3)+','+(data[i+1]>>3)+','+(data[i+2]>>3));
+  }
+  return opaque>100 && colors.size>8;
+}
+window.__LAB_SELFTEST__=function() {
+  const tests=[
+    {name:'两片 L 型地板 / 两道剪力墙',run:()=>{
+      const floors=geometry.filter(g=>g.tag==='floor');
+      return Object.isFrozen(MODEL) && Object.isFrozen(MODEL.floors) &&
+        floors.length===2 &&
+        MODEL.floors[0].x1===9.6 && MODEL.floors[0].z1===4.1 &&
+        MODEL.floors[1].x1===11 && MODEL.floors[1].z0===4.1 &&
+        !MODEL.floors.some(f=>10>f.x0 && 10<f.x1 && 2>f.z0 && 2<f.z1) &&
+        MODEL.shearWalls.length===2 &&
+        MODEL.shearWalls.every(w=>geometry.some(g=>g.id.indexOf(w.id)===0 && g.tag==='shear' && g.h===2.1));
+    }},
+    {name:'15 件家具 / 床、沙发、六椅与厨房细节',run:()=>{
+      const count=tag=>geometry.filter(g=>g.tag===tag).length;
+      return MODEL.furniture.length===15 && count('furniture')===15 &&
+        count('mattress')===2 && count('pillow')===3 &&
+        count('sofa-back')===1 && count('sofa-arm')===2 &&
+        count('dining-chair')===6 && count('hob')===2 && count('sink')===1 &&
+        MODEL.furniture.every((f,i)=>geometry.some(g=>
+          g.id==='furniture-'+i && g.x===f.x && g.z===f.z && g.h===f.h &&
+          Math.abs(g.y-(f.h/2+.025))<1e-9));
+    }},
+    {name:'五个共享相机预设',run:()=>MODEL.presets.length===5 &&
+      MODEL.presets.every(p=>p.target.length===3 && p.position.length===3 &&
+        p.position.concat(p.target).every(Number.isFinite))},
+    {name:'基础档面构建与有效透视投影',run:()=>{
+      const faces=makeFaces(buildGeometry(MODEL),false);
+      const state={target:[5.5,0,5.1],theta:.635,phi:.86,radius:21};
+      const basis=cameraBasis(state);
+      let valid=0;
+      faces.forEach(face=>{
+        const p=project(face.center,basis,1000,650);
+        if(p && Number.isFinite(p.x) && Number.isFinite(p.y) && p.depth>0) valid++;
+      });
+      return faces.length>150 && valid>faces.length*.9;
+    }},
+    {name:'同 MODEL 重复构建哈希一致',run:()=>{
+      const a=buildGeometry(MODEL),b=buildGeometry(MODEL);
+      return a.length===geometry.length && hashGeometry(a)===hashGeometry(b) &&
+        hashGeometry(a)===hashGeometry(geometry);
+    }},
+    {name:'当前档 canvas 存在且非空',run:()=>{
+      let canvas=basicCanvas;
+      if(tier==='enhanced') {
+        if(!enhanced) return false;
+        enhanced.renderer.render(enhanced.scene,enhanced.camera);
+        canvas=enhanced.renderer.domElement;
+      } else renderBasic();
+      return window.__LAB_TIER__===tier && canvas.isConnected && canvasHasImage(canvas);
+    }}
+  ];
+  let passed=0,failed=0;
+  const details=[];
+  tests.forEach(test=>{
+    try {
+      if(test.run()) {passed++;details.push('✓ '+test.name);}
+      else {failed++;details.push('✗ '+test.name);}
+    } catch(error) {failed++;details.push('✗ '+test.name+'：'+error.message);}
+  });
+  const result={passed:passed,failed:failed,total:6};
+  const output=$('selfResult');
+  if(output) {
+    output.textContent='自检：'+passed+'/6 通过'+(failed?'，'+failed+' 项失败':' · 全部通过');
+    output.title=details.join('\n');
+    output.style.color=failed?'#a34335':'#3f7051';
+    let report=$('selftestDetails');
+    if(!report) {
+      report=document.createElement('details');report.id='selftestDetails';
+      const summary=document.createElement('summary');summary.textContent='六项自检明细';
+      report.appendChild(summary);output.parentNode.insertBefore(report,output.nextSibling);
+    }
+    while(report.children.length>1) report.lastChild.remove();
+    const list=document.createElement('div');
+    list.style.cssText='white-space:pre-line;padding:8px 0;font-size:12px';
+    list.textContent=details.join('\n');report.appendChild(list);
+    report.open=failed>0;
+  }
+  return result;
+};
+
+let lastStats=0;
+function frame(time) {
+  requestAnimationFrame(frame);
+  try {
+    if(tier==='enhanced' && enhanced) {
+      if(dirty) {
+        enhanced.renderer.render(enhanced.scene,enhanced.camera);
+        if(enhanced.renderer.getContext().isContextLost()) {
+          failEnhanced('WebGL 上下文已丢失');return;
+        }
+        window.__LAB_READY__=true;dirty=false;
+      }
+    } else if(dirty) {renderBasic();dirty=false;}
+    if(time-lastStats>700) {updateInfo();lastStats=time;}
+  } catch(error) {
+    if(tier==='enhanced' || loading) failEnhanced('帧绘制错误：'+error.message,error);
+    else {
+      recordError(error);
+      setStatus('基础画面绘制异常：'+error.message+'。请重置镜头或重新打开本页。');
+      dirty=false;
+    }
+  }
+}
+try {
+  setupUI();
+  if(getComputedStyle(stage).position==='static') stage.style.position='relative';
+  if(stage.getBoundingClientRect().height<200) stage.style.height='650px';
+  basicCanvas.style.position='absolute';basicCanvas.style.inset='0';
+  setCameraPreset(0);rebuildBasicFaces();resize();
+  renderBasic();dirty=false;
+  resourceMessage=offline?'offline=1：强制基础档 · 零供应商请求':
+    '基础画面已就绪；准备顺序检测同源增强资源';
+  updateInfo();
+  setStatus(offline?
+    '基础档·离线体块透视。offline=1 已强制基础档，无需任何外部资源。拖动旋转，滚轮缩放。':
+    '基础档首帧已就绪。增强资源顺序检测中；所有基础交互与导出已可用。');
+  window.addEventListener('resize',resize);
+  if(typeof ResizeObserver==='function') {
+    const observer=new ResizeObserver(()=>resize());observer.observe(stage);
+  }
+  requestAnimationFrame(frame);
+  if(!offline) setTimeout(()=>startEnhancedLoader(),80);
+} catch(error) {
+  recordError(error);
+  try {
+    activateBasic('初始化已降级：'+error.message);
+    resize();rebuildBasicFaces();renderBasic();
+    requestAnimationFrame(frame);
+  } catch(finalError) {
+    recordError(finalError);
+    setStatus('无法创建绘图画布：'+finalError.message+'。请在支持 Canvas 2D 的浏览器中打开本页。');
+  }
+}
+})();
+</script>
+</body>
+</html>

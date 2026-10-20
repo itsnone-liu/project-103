@@ -1,0 +1,1299 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>ISD-L06 · U90 渲染层双档预演</title>
+<style>
+:root{--ink:#283731;--muted:#657269;--line:#d8ddd4;--paper:#f7f7f1;--green:#315d4e;--red:#9c5149}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.65 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+button,select{font:inherit}
+button{border:1px solid #bec9be;border-radius:7px;padding:8px 13px;background:#fff;color:var(--ink);cursor:pointer;min-height:39px;transition:background .15s}
+button:hover{background:#e9eee5}
+button:focus-visible,canvas:focus-visible{outline:3px solid #c38d43;outline-offset:3px}
+button.primary{background:var(--green);border-color:var(--green);color:#fff;font-weight:650}
+button.primary:hover{background:#244b3d}
+button[aria-pressed=true]:not(.primary){background:#e1eadc;border-color:#6d8a71}
+.page{max-width:1760px;margin:auto;padding:27px 28px 24px}
+header{display:flex;justify-content:space-between;gap:25px;align-items:flex-start;margin-bottom:19px}
+.eyebrow{color:#6e7c70;font-size:12px;font-weight:700;letter-spacing:2px}
+h1{font-size:clamp(22px,2.6vw,34px);line-height:1.25;margin:6px 0 12px;font-weight:680;letter-spacing:-.6px}
+h1 span{font-weight:400;color:#7a847a;font-size:.65em}
+.intro p{margin:3px 0;color:#5b685e;max-width:1080px}
+.stamp{flex:none;border:1px solid #bdc9b9;border-radius:8px;padding:10px 15px;color:#54705b;font-size:12px;letter-spacing:1px;text-align:right;background:#eef2e7}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;padding:13px;background:#e9ede4;border:1px solid var(--line);border-bottom:0;border-radius:11px 11px 0 0}
+.presets{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.toolbar .divider{height:25px;border-left:1px solid #cbd3c5;margin:0 4px}
+.toolbar .spacer{flex:1}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 249px;border:1px solid var(--line);background:#eeece5;border-radius:0 0 11px 11px;overflow:hidden}
+.stage{position:relative;min-width:0;height:650px;overflow:hidden;isolation:isolate}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.stage canvas.hidden{display:none}
+.labels{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.label{position:absolute;left:0;top:0;white-space:nowrap;transform:translate(-50%,-50%);font-size:11px;line-height:1.3;color:#3c4e41;background:#ffffffe0;border:1px solid #cbd1c1;padding:3px 7px;border-radius:4px;box-shadow:0 1px 4px #29382b0a}
+.label.shear{color:#8d3f38;border-color:#c78d82;background:#fff2e9e8;font-weight:650}
+.viewport-head{position:absolute;z-index:3;left:18px;right:18px;top:15px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;pointer-events:none}
+.badge{display:inline-block;border-radius:5px;background:#ffffffed;border:1px solid #d4d9cc;padding:7px 11px;font-weight:650;box-shadow:0 2px 8px #33462a08}
+.badge.enhanced{color:#2b6049;background:#f0faeaf2;border-color:#adc6a5}
+.live-note{font-size:11px;color:#687267;background:#f8f8f0dc;border-radius:5px;padding:5px 8px;max-width:250px;text-align:right}
+.viewport-foot{position:absolute;bottom:14px;left:18px;right:18px;z-index:3;display:flex;justify-content:space-between;align-items:end;gap:12px;pointer-events:none;font-size:12px;color:#5d685a}
+.hint{background:#f9f9f0e8;padding:6px 10px;border:1px solid #d7dcce;border-radius:5px}
+.compass{width:51px;height:51px;border:1px solid #c9d1c0;border-radius:50%;background:#fafbf3df;display:flex;align-items:center;justify-content:center;flex:none;color:#42624d;font-weight:700}
+aside{border-left:1px solid var(--line);background:#f8f9f3;padding:19px 18px}
+aside h2{font-size:13px;margin:0 0 12px;letter-spacing:.5px}
+aside h3{font-size:12px;margin:19px 0 8px;color:#62715e}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 6px;font-size:12px}
+.legend span{display:flex;align-items:center;gap:6px}
+.swatch{width:11px;height:11px;flex:none;border:1px solid #00000016;border-radius:3px}
+.materials{font-size:12px;color:#65715f}
+.materials p{margin:5px 0}
+.tech{margin:0;font-size:12px}
+.tech dt{color:#7b8578;margin-top:9px}
+.tech dd{margin:1px 0 0;overflow-wrap:anywhere}
+.warning{margin:15px 0 0;padding:9px;border-left:3px solid #ad7562;background:#f1e9de;color:#805a4c;font-size:11px}
+.statusbar{padding:11px 3px 6px;display:flex;gap:12px;justify-content:space-between;font-size:12px;align-items:flex-start}
+#status{flex:1;color:#5a6b5d}
+#selfResult{white-space:normal;color:#576b57}
+.comparison{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px}
+.compare{border:1px solid var(--line);background:#fffefa;padding:16px 18px;border-radius:9px}
+.compare h2{font-size:14px;margin:0 0 6px}
+.compare p{margin:0;color:#657061;font-size:13px}
+.compare .tag{font-size:10px;letter-spacing:1px;border:1px solid #cbd6c4;padding:2px 5px;border-radius:4px;margin-right:7px;color:#5f775c}
+footer{font-size:11px;color:#7c8579;margin-top:15px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+a{color:#42664e}
+@media(max-width:1340px){
+.workspace{grid-template-columns:1fr}
+aside{border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1.15fr 1fr 1.1fr;gap:24px;padding:18px}
+aside h3{margin-top:0}.warning{margin-top:10px}
+}
+@media(max-width:760px){
+.page{padding:17px 12px}header{display:block}.stamp{display:none}
+.toolbar{padding:10px;gap:7px}.toolbar .divider{display:none}.toolbar .spacer{display:none}
+.presets{width:100%;gap:5px}.presets button{font-size:12px;padding:6px 9px}
+button{padding:7px 10px;font-size:12px}.stage{height:650px}
+aside{grid-template-columns:1fr 1fr;gap:18px}aside .tech-block{grid-column:1/-1}
+.tech{display:grid;grid-template-columns:100px 1fr;gap:5px}.tech dt{margin:0}
+.comparison{grid-template-columns:1fr;gap:10px}.live-note{display:none}
+.viewport-head,.viewport-foot{left:11px;right:11px}.hint{max-width:83%;font-size:11px}
+.statusbar{flex-direction:column;gap:5px}
+}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
+</style>
+</head>
+<body>
+<main class="page">
+<header>
+  <div class="intro">
+    <div class="eyebrow">ISD / L06 · RENDERING LAB PREVIEW</div>
+    <h1>U90 全户型 · 双档建筑预演 <span>01 / 交互质量验证</span></h1>
+    <p>这是实时建筑表现预演，<strong>不是照片级静帧</strong>，也不是 L06 教学实验正式版；用于判断全户型的旋转、缩放与空间表达。</p>
+    <p>基础档完全离线；增强档仅在固定版本供应商脚本与 WebGL 实际可用后启用，采用 RoomEnvironment 程序环境照明、PBR 程序材质与柔和阴影。</p>
+    <p>尚未加入 HDRI、木纹贴图或真实 glTF 家具；当前门窗及家具均为教学级示意，不作为施工或结构改造依据。</p>
+  </div>
+  <div class="stamp">U90 / L04 冻结假设<br>米制 · 北上 / 东右<br>ORBIT, NOT WALKTHROUGH</div>
+</header>
+
+<div class="toolbar" aria-label="预演控制">
+  <button id="tierButton" class="primary">切换基础/增强</button>
+  <span class="divider"></span>
+  <div class="presets" id="presets" aria-label="照相机预设"></div>
+  <span class="spacer"></span>
+  <button id="wallsButton" aria-pressed="false">外墙：剖切</button>
+  <button id="labelsButton" aria-pressed="true">房间标注</button>
+  <button id="zoomIn" title="拉近">＋</button>
+  <button id="zoomOut" title="拉远">－</button>
+  <button id="resetButton">重置</button>
+  <button id="exportButton">导出 PNG</button>
+  <button id="testButton">开始自检</button>
+</div>
+
+<div class="workspace">
+  <section class="stage" id="stage" aria-label="可交互 U90 三维预览">
+    <canvas id="basicCanvas" tabindex="0" aria-label="基础档三维预览，拖动旋转，滚轮缩放，方向键也可旋转"></canvas>
+    <div class="labels" id="labels"></div>
+    <div class="viewport-head">
+      <span class="badge" id="tierBadge">基础档·离线体块透视</span>
+      <span class="live-note">L 型两片地板 · 层高 2.8 m<br>默认保留北 / 西外墙</span>
+    </div>
+    <div class="viewport-foot">
+      <span class="hint">拖动旋转 · 滚轮 / 双指缩放 · 红灰墙为剪力墙<br>仅观察视角，不提供穿墙漫游</span>
+      <span class="compass" id="compass" title="北向指示">↑ N</span>
+    </div>
+  </section>
+  <aside>
+    <div>
+      <h2>功能分区 / 半透明地面</h2>
+      <div class="legend" id="legend"></div>
+      <div class="warning">剪力墙为显著红灰色。门槽与竖框只作示意；承重墙上的冻结门槽不代表允许改造或通过施工审查。</div>
+    </div>
+    <div class="materials">
+      <h3>材料与观察方式</h3>
+      <p>暖白围护墙 / 白色低内墙</p>
+      <p>木色盒体 / 织物色块 / 浅色床垫</p>
+      <p>内墙高 1.7 m，透明度 0.8；剪力墙高 2.1 m，厚 0.25 m。</p>
+      <p>剖切模式隐藏东、南及阶线近景外墙，保留地板边界；门槽分段建模，不以实墙冒充可穿行空间。</p>
+    </div>
+    <div class="tech-block">
+      <h3>实时技术信息</h3>
+      <dl class="tech">
+        <dt>当前渲染档</dt><dd id="techTier">基础档·离线体块透视</dd>
+        <dt>供应商资源</dt><dd id="resourceState">等待检测；基础画面先行</dd>
+        <dt>几何 / 绘制</dt><dd id="geometryState">正在构建冻结模型</dd>
+        <dt>镜头参数</dt><dd id="cameraState">42° 透视 · 距离 5–38 m</dd>
+        <dt>增强照明</dt><dd id="lightingState">基础档：面明暗，无 HDRI</dd>
+      </dl>
+    </div>
+  </aside>
+</div>
+
+<div class="statusbar">
+  <div id="status" role="status" aria-live="polite">基础画面初始化中。</div>
+  <div id="selfResult" role="status" aria-live="polite">自检：尚未运行</div>
+</div>
+
+<div class="comparison">
+  <section class="compare">
+    <h2><span class="tag">A / BASIC</span>基础档 · 可离线审阅空间</h2>
+    <p>自写 Canvas 2D 透视投影，按面中心深度排序，采用朝向明暗与半透明色面。无需库或贴图；复杂遮挡与透明面排序属于教学级近似，不具备真实反射及光线追踪。</p>
+  </section>
+  <section class="compare">
+    <h2><span class="tag">B / ENHANCED</span>增强档 · 程序化实时表现</h2>
+    <p>同一 MODEL、42° 镜头、相同预设与缩放范围；Three.js r147 实际 WebGL 渲染，RoomEnvironment + PMREM、物理正确灯光、ACES / sRGB 与柔和阴影。提升材质及接触关系，但依然不是照片级。</p>
+  </section>
+</div>
+<footer>
+  <span>ISD-L06 · U90 非比例拼合教学假设（参照 L04） · 原点 NW，x 东 / z 南 / y 上</span>
+  <span><a href="?offline=1">QA：强制离线基础档</a> · PNG 导出当前镜头（不含界面标注）</span>
+</footer>
+</main>
+
+<script>
+(function () {
+'use strict';
+
+/* Error hooks precede all application and vendor initialization. */
+window.__LAB_READY__ = false;
+window.__LAB_TIER__ = 'basic';
+window.__LAB_CONSOLE_ERRORS__ = [];
+var emergencyHandler = null;
+function recordError(value) {
+  var text = value && value.message ? value.message : String(value);
+  window.__LAB_CONSOLE_ERRORS__.push(text);
+  if (window.__LAB_CONSOLE_ERRORS__.length > 100) window.__LAB_CONSOLE_ERRORS__.shift();
+}
+window.addEventListener('error', function (event) {
+  if (!event.message && event.target !== window) return;
+  recordError(event.error || event.message || '未知运行异常');
+  if (emergencyHandler) emergencyHandler(event.message || '脚本运行异常');
+});
+window.addEventListener('unhandledrejection', function (event) {
+  recordError(event.reason || '未处理的 Promise 异常');
+  if (emergencyHandler) emergencyHandler(String(event.reason || '异步运行异常'));
+  event.preventDefault();
+});
+var originalConsoleError = console.error;
+console.error = function () {
+  var args = Array.prototype.slice.call(arguments);
+  recordError(args.map(function (a) { return a && a.message ? a.message : String(a); }).join(' '));
+  originalConsoleError.apply(console, args);
+};
+
+function deepFreeze(object) {
+  Object.keys(object).forEach(function (key) {
+    if (object[key] && typeof object[key] === 'object') deepFreeze(object[key]);
+  });
+  return Object.freeze(object);
+}
+const MODEL = deepFreeze({
+  unit:'m',
+  coordinates:'NW origin; x east, y up, z south',
+  storeyHeight:2.8,
+  floors:[
+    {id:'floor-north',x0:0,x1:9.6,z0:0,z1:4.1},
+    {id:'floor-south',x0:0,x1:11,z0:4.1,z1:10.1}
+  ],
+  balconies:[
+    {id:'balcony-north',x0:1,x1:2.2,z0:-1.2,z1:0},
+    {id:'balcony-south',x0:3.3,x1:6.3,z0:10.1,z1:11.5}
+  ],
+  zones:[
+    {name:'厨房',x0:0,x1:2.8,z0:0,z1:2.25,color:'#d8bd86'},
+    {name:'玄关',x0:2.8,x1:4.3,z0:0,z1:2,color:'#cdbd9d'},
+    {name:'公卫',x0:4.3,x1:6.3,z0:0,z1:2.2,color:'#91b7b4'},
+    {name:'书房',x0:6.5,x1:9.4,z0:0,z1:3,color:'#a5b6c6'},
+    {name:'餐区',x0:0,x1:3.6,z0:2.25,z1:4.9,color:'#d2b58d'},
+    {name:'客厅',x0:3.6,x1:7.8,z0:3,z1:10.1,color:'#b9c79f'},
+    {name:'主卧',x0:0,x1:3.6,z0:6.25,z1:10.1,color:'#c4ada3'},
+    {name:'主卫',x0:1.7,x1:3.6,z0:6.25,z1:8.25,color:'#91b4b1'},
+    {name:'储物',x0:7.8,x1:11,z0:5.2,z1:7.1,color:'#bcb69d'},
+    {name:'儿童房',x0:7.8,x1:11,z0:7.1,z1:10.1,color:'#c1c69b'}
+  ],
+  exteriorWalls:[
+    {id:'outer-west',a:[0,0],b:[0,10.1],near:false},
+    {id:'outer-north',a:[0,0],b:[9.6,0],near:false},
+    {id:'outer-northeast',a:[9.6,0],b:[9.6,4.1],near:true},
+    {id:'outer-step',a:[9.6,4.1],b:[11,4.1],near:true},
+    {id:'outer-east',a:[11,4.1],b:[11,10.1],near:true},
+    {id:'outer-south',a:[11,10.1],b:[0,10.1],near:true}
+  ],
+  interiorWalls:[
+    {id:'kitchen-east',a:[2.8,0],b:[2.8,2.25]},
+    {id:'kitchen-south',a:[0,2.25],b:[2.8,2.25],door:'d_kitchen'},
+    {id:'entry-east',a:[4.3,0],b:[4.3,2]},
+    {id:'bath2-east',a:[6.3,0],b:[6.3,2.2]},
+    {id:'bath2-south',a:[4.3,2.2],b:[6.3,2.2],door:'d_bath2'},
+    {id:'study-west',a:[6.5,0],b:[6.5,3]},
+    {id:'study-east',a:[9.4,0],b:[9.4,3]},
+    {id:'master-north',a:[0,6.25],b:[3.6,6.25]},
+    {id:'child-north',a:[7.8,7.1],b:[11,7.1],door:'d_child'},
+    {id:'storage-north',a:[7.8,5.2],b:[11,5.2]}
+  ],
+  shearWalls:[
+    {id:'shear-master',a:[3.6,6.25],b:[3.6,10.1],door:'d_master',height:2.1,thickness:.25},
+    {id:'shear-study',a:[4.3,3],b:[9.4,3],door:'d_study',height:2.1,thickness:.25}
+  ],
+  doors:[
+    {id:'d_kitchen',axis:'x',line:2.25,a:1.2,b:2.1,height:1.7},
+    {id:'d_bath2',axis:'x',line:2.2,a:4.6,b:5.3,height:1.7},
+    {id:'d_study',axis:'x',line:3,a:6.8,b:7.6,height:2.1},
+    {id:'d_child',axis:'x',line:7.1,a:8,b:8.75,height:1.7},
+    {id:'d_master',axis:'z',line:3.6,a:6.6,b:7.4,height:2.1}
+  ],
+  furniture:[
+    {name:'餐桌',x:1.7,z:3.7,w:1.6,d:.9,h:.75,kind:'wood',detail:'dining'},
+    {name:'沙发',x:4.9,z:8.6,w:2.4,d:.95,h:.75,kind:'fabric',detail:'sofa'},
+    {name:'茶几',x:5.7,z:7.4,w:1,d:.6,h:.42,kind:'wood'},
+    {name:'电视柜',x:7,z:8.6,w:1.6,d:.4,h:.5,kind:'wood',detail:'tv'},
+    {name:'主卧床',x:1.5,z:9.05,w:1.8,d:2,h:.52,kind:'bed',detail:'bed'},
+    {name:'儿童床',x:10.3,z:8.5,w:1.2,d:2,h:.52,kind:'bed',detail:'bed'},
+    {name:'书房桌',x:7.6,z:.5,w:1.6,d:.7,h:.75,kind:'wood'},
+    {name:'书架',x:7.2,z:2.8,w:1.2,d:.35,h:1.8,kind:'wood',detail:'shelf'},
+    {name:'书房椅',x:8.6,z:1.5,w:.55,d:.55,h:.8,kind:'fabric'},
+    {name:'储物柜A',x:8.7,z:5.6,w:1.6,d:.6,h:2.1,kind:'wood'},
+    {name:'储物柜B',x:10.2,z:5.6,w:1.2,d:.6,h:2.1,kind:'wood'},
+    {name:'厨房台面',x:1.4,z:.3,w:1.7,d:.6,h:.9,kind:'wood',detail:'kitchen'},
+    {name:'冰箱',x:2.5,z:1.9,w:.6,d:.65,h:1.9,kind:'metal'},
+    {name:'主卫盆台',x:2.1,z:7.9,w:.6,d:.45,h:.85,kind:'ceramic',detail:'basin'},
+    {name:'公卫盆台',x:4.6,z:1.85,w:.6,d:.5,h:.85,kind:'ceramic',detail:'basin'}
+  ],
+  chairPoints:[[1.15,2.95],[2.25,2.95],[1.15,4.45],[2.25,4.45],[.55,3.7],[2.85,3.7]],
+  presets:[
+    {name:'全户轴测',target:[5.5,0,5.1],position:[15,14,18]},
+    {name:'客餐厅局部',target:[4.8,.3,6.8],position:[11.5,10,14.2]},
+    {name:'玄关进门',target:[3.55,.6,1.2],position:[6.6,6.8,7.8]},
+    {name:'儿童区',target:[9.2,.3,8.2],position:[15,9.5,14.8]},
+    {name:'顶视平面',target:[5.5,0,5.1],position:[5.5,23,5.16]}
+  ]
+});
+window.__LAB_MODEL__ = MODEL;
+
+const $ = function (id) { return document.getElementById(id); };
+const stage = $('stage'), basicCanvas = $('basicCanvas');
+const ctx = basicCanvas.getContext('2d', {alpha:false});
+const offline = new URLSearchParams(location.search).get('offline') === '1';
+const vendorBase = location.protocol === 'file:' ? 'vendor/' : '/isd-l06-vendor/';
+const C = {wood:'#b28d61',fabric:'#839183',bed:'#a79784',metal:'#bcc4c1',ceramic:'#e8eeea'};
+const cross = (a,b) => [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const sub = (a,b) => [a[0]-b[0],a[1]-b[1],a[2]-b[2]];
+const dot = (a,b) => a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+function norm(a) { const n=Math.hypot(a[0],a[1],a[2]) || 1; return a.map(v=>v/n); }
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+
+/* All visible architectural geometry is compiled here, for BOTH renderers. */
+function buildGeometry(model) {
+  const out = [];
+  function box(id,x,y,z,w,h,d,color,kind,opacity,near,tag) {
+    out.push({id:id,type:'box',x:x,y:y,z:z,w:w,h:h,d:d,color:color,
+      kind:kind || 'plaster',opacity:opacity === undefined ? 1 : opacity,
+      near:!!near,tag:tag || ''});
+  }
+  function ring(id,x,y,z,r,inner,color,tag) {
+    out.push({id:id,type:'ring',x:x,y:y,z:z,r:r,inner:inner,h:.022,
+      color:color,kind:'metal',opacity:1,near:false,tag:tag || ''});
+  }
+  function line(id,a,b,y,h,t,color,opacity,near,tag) {
+    box(id,(a[0]+b[0])/2,y,(a[1]+b[1])/2,
+      Math.abs(b[0]-a[0]) || t,h,Math.abs(b[1]-a[1]) || t,
+      color,'plaster',opacity,near,tag);
+  }
+  model.floors.forEach(f=>{
+    box(f.id,(f.x0+f.x1)/2,-.09,(f.z0+f.z1)/2,f.x1-f.x0,.18,f.z1-f.z0,'#e1dcd0','stone',1,false,'floor');
+  });
+  model.balconies.forEach(b=>{
+    box(b.id,(b.x0+b.x1)/2,-.045,(b.z0+b.z1)/2,b.x1-b.x0,.09,b.z1-b.z0,'#b89b70','wood',1,false,'balcony');
+    for(let x=b.x0+.16;x<b.x1;x+=.2) {
+      box(b.id+'-slat-'+x.toFixed(2),x,.005,(b.z0+b.z1)/2,.009,.01,b.z1-b.z0,'#907450','wood');
+    }
+    const edge=b.z0<0?b.z0:b.z1;
+    box(b.id+'-rail',(b.x0+b.x1)/2,.84,edge,b.x1-b.x0,.045,.045,'#9b8870','metal',1,false,'balcony-rail');
+    for(let x=b.x0+.06;x<=b.x1;x+=.3) {
+      box(b.id+'-post-'+x.toFixed(2),x,.42,edge,.025,.84,.025,'#a79882','metal');
+    }
+  });
+  model.zones.forEach((f,i)=>{
+    box('zone-'+i,(f.x0+f.x1)/2,.012+i*.0003,(f.z0+f.z1)/2,
+      f.x1-f.x0,.016,f.z1-f.z0,f.color,'zone',.48,false,'zone');
+  });
+  function wall(w,h,t,color,opacity,tag) {
+    const door=model.doors.find(d=>d.id===w.door);
+    if(!door) {
+      line(w.id,w.a,w.b,h/2,h,t,color,opacity,w.near,tag);
+      return;
+    }
+    const horizontal=door.axis==='x';
+    const low=Math.min(horizontal?w.a[0]:w.a[1],horizontal?w.b[0]:w.b[1]);
+    const high=Math.max(horizontal?w.a[0]:w.a[1],horizontal?w.b[0]:w.b[1]);
+    const point=v=>horizontal?[v,door.line]:[door.line,v];
+    if(door.a>low) line(w.id+'-a',point(low),point(door.a),h/2,h,t,color,opacity,w.near,tag);
+    if(door.b<high) line(w.id+'-b',point(door.b),point(high),h/2,h,t,color,opacity,w.near,tag);
+    /* The slot is genuinely empty, including in the shared software geometry. */
+    const frameHeight=Math.min(h,door.height);
+    [door.a,door.b].forEach((v,i)=>{
+      const p=point(v);
+      box(door.id+'-jamb-'+i,p[0],frameHeight/2,p[1],.045,frameHeight,.045,
+        '#725744','wood',1,false,'door-frame');
+    });
+    line(door.id+'-header',point(door.a),point(door.b),frameHeight,.045,.045,
+      '#725744',1,false,'door-frame');
+  }
+  model.exteriorWalls.forEach(w=>wall(w,2.8,.18,'#eae5da',1,'exterior'));
+  model.interiorWalls.forEach(w=>wall(w,1.7,.10,'#f1eee6',.8,'interior'));
+  model.shearWalls.forEach(w=>{
+    wall(w,w.height,w.thickness,'#ac7168',1,'shear');
+  });
+  /* Window glass is a schematic surface, not a boolean opening claim. */
+  [
+    {id:'window-kitchen',x:1.35,z:.102,w:1.7,d:.026},
+    {id:'window-study',x:7.85,z:.102,w:2.1,d:.026},
+    {id:'window-west',x:.102,z:8.45,w:.026,d:1.9}
+  ].forEach(w=>{
+    box(w.id,w.x,1.65,w.z,w.w,.9,w.d,'#9bc5ca','glass',.54,false,'window');
+    box(w.id+'-top',w.x,2.12,w.z,w.w,.045,w.d+.015,'#677d7d','metal');
+    box(w.id+'-bottom',w.x,1.18,w.z,w.w,.045,w.d+.015,'#677d7d','metal');
+    const alongX=w.w>w.d;
+    [-1,0,1].forEach((s,i)=>{
+      box(w.id+'-frame-'+i,w.x+(alongX?s*w.w/2:0),1.65,
+        w.z+(alongX?0:s*w.d/2),.035,.96,.035,'#677d7d','metal');
+    });
+  });
+  model.furniture.forEach((f,index)=>{
+    const prefix='furniture-'+index;
+    const color=C[f.kind] || C.wood;
+    box(prefix,f.x,f.h/2+.025,f.z,f.w,f.h,f.d,color,f.kind,1,false,'furniture');
+    if(f.detail==='bed') {
+      box(prefix+'-mattress',f.x,f.h+.105,f.z,f.w-.07,.18,f.d-.06,
+        '#eeeade','fabric',1,false,'mattress');
+      box(prefix+'-blanket',f.x,f.h+.207,f.z+.26,f.w-.085,.035,f.d*.58,
+        index===4?'#b5b6a0':'#acb9bf','fabric',1,false,'bed-detail');
+      const pillows=f.w>1.5?2:1;
+      for(let i=0;i<pillows;i++) {
+        box(prefix+'-pillow-'+i,f.x+(i-(pillows-1)/2)*.75,
+          f.h+.235,f.z-f.d/2+.3,pillows===2?.62:.75,.12,.37,
+          '#faf6e9','fabric',1,false,'pillow');
+      }
+      box(prefix+'-headboard',f.x,.52,f.z-f.d/2,f.w,.99,.085,
+        '#9c8c77','wood',1,false,'bed-detail');
+    }
+    if(f.detail==='sofa') {
+      box(prefix+'-back',f.x,.84,f.z+.37,f.w, .47,.19,
+        '#748574','fabric',1,false,'sofa-back');
+      [-1,1].forEach((s,i)=>{
+        box(prefix+'-arm-'+i,f.x+s*(f.w/2-.09),.63,f.z,.18,.42,f.d,
+          '#748574','fabric',1,false,'sofa-arm');
+      });
+      [-.7,0,.7].forEach((dx,i)=>{
+        box(prefix+'-cushion-'+i,f.x+dx,.79,f.z-.07,.66,.09,.64,
+          '#a0aa93','fabric',1,false,'sofa-detail');
+      });
+    }
+    if(f.detail==='kitchen') {
+      box(prefix+'-countertop',f.x,f.h+.055,f.z,f.w+.04,.06,f.d+.03,
+        '#ddd9ce','stone',1,false,'kitchen-detail');
+      ring(prefix+'-hob-1',f.x-.48,f.h+.092,f.z,.115,.071,'#404a47','hob');
+      ring(prefix+'-hob-2',f.x-.19,f.h+.092,f.z,.09,.054,'#404a47','hob');
+      ring(prefix+'-sink',f.x+.48,f.h+.094,f.z,.18,.13,'#8eaaa9','sink');
+      box(prefix+'-sink-bottom',f.x+.48,f.h+.085,f.z,.23,.008,.23,
+        '#778f90','metal',1,false,'kitchen-detail');
+      box(prefix+'-tap',f.x+.48,f.h+.18,f.z-.2,.025,.21,.025,
+        '#bcc9c5','metal',1,false,'kitchen-detail');
+    }
+    if(f.detail==='basin') {
+      ring(prefix+'-basin',f.x,f.h+.055,f.z,.19,.13,'#f8f8ed','basin');
+      box(prefix+'-tap',f.x,f.h+.13,f.z-.16,.025,.17,.025,
+        '#9faeaa','metal',1,false,'basin-detail');
+    }
+    if(f.detail==='shelf') {
+      for(let k=0;k<4;k++) {
+        box(prefix+'-shelf-'+k,f.x,.3+k*.4,f.z-.185,f.w-.1,.035,.045,
+          '#68573f','wood',1,false,'shelf-detail');
+        for(let j=0;j<5;j++) {
+          box(prefix+'-book-'+k+'-'+j,f.x-.46+j*.19,.43+k*.4,f.z-.195,
+            .12,.22+(j%2)*.08,.065,['#b6b7a0','#798e91','#bd9874'][j%3],
+            'fabric',1,false,'shelf-detail');
+        }
+      }
+    }
+    if(f.detail==='tv') {
+      box(prefix+'-screen',f.x,.94,f.z+.05,1.24,.7,.055,
+        '#354446','metal',1,false,'tv-detail');
+      box(prefix+'-stand',f.x,.61,f.z+.05,.09,.22,.09,
+        '#46504c','metal',1,false,'tv-detail');
+    }
+  });
+  model.chairPoints.forEach((p,i)=>{
+    box('dining-chair-'+i,p[0],.47,p[1],.44,.13,.44,
+      '#8f9b87','fabric',1,false,'dining-chair');
+    const dx=p[0]-1.7,dz=p[1]-3.7;
+    const backX=Math.abs(dx)>Math.abs(dz)?Math.sign(dx)*.2:0;
+    const backZ=backX?0:Math.sign(dz)*.2;
+    box('dining-chair-back-'+i,p[0]+backX,.74,p[1]+backZ,
+      backX?.055:.44,.47,backX?.44:.055,'#8f9b87','fabric',1,false,'chair-detail');
+    [-1,1].forEach(s=>{
+      box('dining-chair-leg-'+i+'-'+s,p[0]+s*.15,.23,p[1],
+        .035,.46,.32,'#806d53','wood',1,false,'chair-detail');
+    });
+  });
+  return out;
+}
+
+const geometry=buildGeometry(MODEL);
+let hideNear=true, showLabels=true, tier='basic';
+let dirty=true, enhanced=null, loading=false, desiredEnhanced=!offline;
+let resourceMessage=offline?'offline=1：强制离线，未请求任何供应商脚本':'尚未加载';
+let lastFailure='', fallbackBusy=false;
+const cameraState={target:[5.5,0,5.1],theta:0,phi:1,radius:20};
+let viewWidth=1000,viewHeight=650,pixelRatio=1,drawnFaceCount=0;
+let currentPreset=0;
+let basicFaces=[];
+
+function setStatus(text) { if($('status')) $('status').textContent=text; }
+function setText(id,text) { if($(id)) $(id).textContent=text; }
+function setCameraPreset(index) {
+  const preset=MODEL.presets[index];
+  if(!preset) return;
+  currentPreset=index;
+  cameraState.target=preset.target.slice();
+  const d=sub(preset.position,preset.target);
+  cameraState.radius=clamp(Math.hypot(...d),5,38);
+  cameraState.theta=Math.atan2(d[0],d[2]);
+  cameraState.phi=clamp(Math.acos(d[1]/Math.hypot(...d)),.012,Math.PI/2-.025);
+  if(enhanced) applySharedCamera();
+  dirty=true;
+  updatePresetUI();
+}
+function eyePosition(state) {
+  const s=state || cameraState;
+  const r=s.radius,sp=Math.sin(s.phi);
+  return [s.target[0]+r*sp*Math.sin(s.theta),s.target[1]+r*Math.cos(s.phi),
+    s.target[2]+r*sp*Math.cos(s.theta)];
+}
+function cameraBasis(state) {
+  const s=state || cameraState,eye=eyePosition(s);
+  const forward=norm(sub(s.target,eye));
+  const right=norm(cross(forward,[0,1,0]));
+  const up=norm(cross(right,forward));
+  return {eye:eye,forward:forward,right:right,up:up};
+}
+function project(point,basis,width,height) {
+  const delta=sub(point,basis.eye),depth=dot(delta,basis.forward);
+  if(depth<=.08) return null;
+  const focal=height/(2*Math.tan(42*Math.PI/360));
+  return {x:width/2+dot(delta,basis.right)*focal/depth,
+    y:height/2-dot(delta,basis.up)*focal/depth,depth:depth};
+}
+function makeFaces(items,includeNear) {
+  const faces=[];
+  function face(vertices,normal,item) {
+    const center=[0,0,0];
+    vertices.forEach(v=>{center[0]+=v[0];center[1]+=v[1];center[2]+=v[2];});
+    center[0]/=vertices.length;center[1]/=vertices.length;center[2]/=vertices.length;
+    faces.push({vertices:vertices,normal:normal,center:center,item:item});
+  }
+  items.forEach(item=>{
+    if(!includeNear && item.near) return;
+    if(item.type==='ring') {
+      for(let k=0;k<24;k++) {
+        const a=k/24*Math.PI*2,b=(k+1)/24*Math.PI*2;
+        face([
+          [item.x+Math.cos(a)*item.r,item.y,item.z+Math.sin(a)*item.r],
+          [item.x+Math.cos(b)*item.r,item.y,item.z+Math.sin(b)*item.r],
+          [item.x+Math.cos(b)*item.inner,item.y,item.z+Math.sin(b)*item.inner],
+          [item.x+Math.cos(a)*item.inner,item.y,item.z+Math.sin(a)*item.inner]
+        ],[0,1,0],item);
+      }
+      return;
+    }
+    const x0=item.x-item.w/2,x1=item.x+item.w/2;
+    const y0=item.y-item.h/2,y1=item.y+item.h/2;
+    const z0=item.z-item.d/2,z1=item.z+item.d/2;
+    face([[x0,y1,z0],[x0,y1,z1],[x1,y1,z1],[x1,y1,z0]],[0,1,0],item);
+    face([[x0,y0,z0],[x1,y0,z0],[x1,y0,z1],[x0,y0,z1]],[0,-1,0],item);
+    face([[x0,y0,z0],[x0,y1,z0],[x1,y1,z0],[x1,y0,z0]],[0,0,-1],item);
+    face([[x1,y0,z1],[x1,y1,z1],[x0,y1,z1],[x0,y0,z1]],[0,0,1],item);
+    face([[x0,y0,z1],[x0,y1,z1],[x0,y1,z0],[x0,y0,z0]],[-1,0,0],item);
+    face([[x1,y0,z0],[x1,y1,z0],[x1,y1,z1],[x1,y0,z1]],[1,0,0],item);
+  });
+  return faces;
+}
+function rebuildBasicFaces() { basicFaces=makeFaces(geometry,!hideNear);dirty=true; }
+function shade(hex,amount,alpha) {
+  const n=parseInt(hex.slice(1),16);
+  const r=clamp(Math.round(((n>>16)&255)*amount),0,255);
+  const g=clamp(Math.round(((n>>8)&255)*amount),0,255);
+  const b=clamp(Math.round((n&255)*amount),0,255);
+  return 'rgba('+r+','+g+','+b+','+alpha+')';
+}
+function labelPoints() {
+  return MODEL.zones.map(z=>({name:z.name,p:[(z.x0+z.x1)/2,.10,(z.z0+z.z1)/2],color:'#35433d'}))
+    .concat([
+      {name:'剪力墙 · 不可随意改造',p:[3.6,2.24,8.3],color:'#963e38'},
+      {name:'剪力墙',p:[5.3,2.24,3],color:'#963e38'}
+    ]);
+}
+function renderBasic() {
+  if(!ctx || !viewWidth || !viewHeight) return false;
+  ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+  const bg=ctx.createLinearGradient(0,0,0,viewHeight);
+  bg.addColorStop(0,'#f1f1eb');bg.addColorStop(1,'#e2ded3');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,viewWidth,viewHeight);
+  const basis=cameraBasis();
+  const sorted=[];
+  basicFaces.forEach(face=>{
+    if(dot(face.normal,sub(basis.eye,face.center))<=0) return;
+    const points=face.vertices.map(p=>project(p,basis,viewWidth,viewHeight));
+    if(points.some(p=>!p)) return;
+    if(points.every(p=>p.x<0)||points.every(p=>p.x>viewWidth)||
+       points.every(p=>p.y<0)||points.every(p=>p.y>viewHeight)) return;
+    sorted.push({face:face,points:points,depth:dot(sub(face.center,basis.eye),basis.forward)});
+  });
+  sorted.sort((a,b)=>b.depth-a.depth);
+  const light=norm([-3,8,5]);
+  sorted.forEach(entry=>{
+    const f=entry.face,it=f.item;
+    const brightness=.69+Math.max(0,dot(f.normal,light))*.34;
+    ctx.beginPath();
+    entry.points.forEach((p,i)=>{if(i===0) ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);});
+    ctx.closePath();
+    ctx.fillStyle=shade(it.color,brightness,it.opacity);
+    ctx.fill();
+    if(it.type==='box' && it.tag!=='zone' && it.h>.03) {
+      ctx.lineWidth=it.tag==='shear'?1:.45;
+      ctx.strokeStyle=it.tag==='shear'?'rgba(112,47,43,.55)':'rgba(62,65,55,.15)';
+      ctx.stroke();
+    }
+  });
+  if(showLabels) {
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    labelPoints().forEach(label=>{
+      const p=project(label.p,basis,viewWidth,viewHeight);
+      if(!p || p.x<10 || p.x>viewWidth-10 || p.y<12 || p.y>viewHeight-12) return;
+      ctx.font=label.color==='#963e38'?'bold 11px sans-serif':'12px sans-serif';
+      const width=ctx.measureText(label.name).width+12;
+      ctx.fillStyle='rgba(250,248,240,.87)';
+      ctx.fillRect(p.x-width/2,p.y-10,width,20);
+      ctx.fillStyle=label.color;ctx.fillText(label.name,p.x,p.y);
+    });
+  }
+  ctx.textAlign='left';ctx.font='11px sans-serif';ctx.fillStyle='#697166';
+  ctx.fillText('U90 / 实时体块透视 · 非照片级',14,viewHeight-14);
+  drawnFaceCount=sorted.length;
+  window.__LAB_READY__=true;
+  return true;
+}
+
+/* Bind the existing controls by semantic text as well as common IDs. */
+let tierButton=null, wallButton=null, labelButton=null;
+let presetSelect=null;
+const presetButtons=[];
+function findButton(ids,pattern) {
+  for(const id of ids) if($(id)) return $(id);
+  return Array.from(document.querySelectorAll('button')).find(b=>pattern.test(b.textContent)) || null;
+}
+function makeButton(text,id) {
+  let toolbar=$('runtimeControls');
+  if(!toolbar) {
+    toolbar=document.createElement('div');toolbar.id='runtimeControls';
+    toolbar.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin:10px 0';
+    stage.parentNode.insertBefore(toolbar,stage);
+  }
+  const b=document.createElement('button');b.type='button';b.id=id;b.textContent=text;
+  toolbar.appendChild(b);return b;
+}
+function updatePresetUI() {
+  presetButtons.forEach(pair=>{
+    const on=pair.index===currentPreset;
+    pair.button.setAttribute('aria-pressed',String(on));
+    pair.button.classList.toggle('active',on);
+  });
+  if(presetSelect) presetSelect.value=String(currentPreset);
+}
+function updateInfo() {
+  const enhancedNow=tier==='enhanced';
+  const tierText=enhancedNow?'增强档·本机/8861 静态资源':'基础档·离线体块透视';
+  window.__LAB_TIER__=tier;
+  setText('techTier',tierText);
+  ['tierBadge','tierLabel','tierState','modeBadge'].forEach(id=>setText(id,tierText));
+  setText('resourceState',resourceMessage);
+  setText('lightingState',enhancedNow?
+    'RoomEnvironment / PMREM · PBR 程序材质 · ACES / sRGB · 柔和阴影；无 HDRI / 木纹 / glTF':
+    'Canvas 2D · 三向面明暗；无外部资源、无 HDRI');
+  setText('geometryState',geometry.length+' 个共享构件'+
+    (enhancedNow?' · '+(enhanced?enhanced.renderer.info.render.calls:0)+' draw calls':
+      ' · '+drawnFaceCount+' 个可见面'));
+  setText('cameraState','42° 透视 · 当前 '+cameraState.radius.toFixed(1)+' m · 范围 5–38 m');
+  if(tierButton) {
+    tierButton.textContent='切换基础/增强';
+    tierButton.title=offline?'offline=1 强制基础档；移除查询参数后可加载增强档':
+      loading?'资源加载中；点击可取消自动切换':
+      (enhancedNow?'切换到基础档（镜头保持）':'尝试增强档（镜头保持）');
+    tierButton.setAttribute('aria-pressed',String(enhancedNow));
+  }
+  if(wallButton) {
+    if(wallButton.type==='checkbox') wallButton.checked=!hideNear;
+    else wallButton.textContent=hideNear?'外墙：剖切（显示全部）':'外墙：完整（隐藏近景）';
+    wallButton.setAttribute('aria-pressed',String(!hideNear));
+  }
+  const compass=$('compass');
+  if(compass) {
+    compass.style.transform='rotate('+(-cameraState.theta*180/Math.PI)+'deg)';
+    compass.title='北向指示 · x 东 / z 南';
+  }
+}
+function setupUI() {
+  const legend=$('legend');
+  if(legend) {
+    legend.textContent='';
+    MODEL.zones.forEach(zone=>{
+      const item=document.createElement('div');
+      item.style.cssText='display:flex;align-items:center;gap:7px;margin:5px 0';
+      const dotNode=document.createElement('span');
+      dotNode.style.cssText='display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid #0001;background:'+zone.color;
+      item.appendChild(dotNode);item.appendChild(document.createTextNode(zone.name));
+      legend.appendChild(item);
+    });
+  }
+  tierButton=findButton(['tierToggle','toggleTier','tierBtn','modeToggle','btnTier'],/切换.*(?:基础|增强)|(?:基础|增强).*切换/);
+  if(!tierButton) tierButton=makeButton('切换基础/增强','runtimeTier');
+  tierButton.disabled=false;
+  tierButton.addEventListener('click',()=>{
+    if(offline) {
+      setStatus('offline=1 已强制基础档；没有请求外部资源。移除 URL 中 offline=1 后再尝试增强档。');
+      return;
+    }
+    if(tier==='enhanced') {
+      desiredEnhanced=false;activateBasic('已切换基础档；镜头、缩放和外墙设置保持一致。');return;
+    }
+    if(loading) {
+      desiredEnhanced=!desiredEnhanced;
+      setStatus(desiredEnhanced?'继续加载，成功后切换增强档。基础档仍可操作。':
+        '已取消自动切换；加载完成后仍留在基础档。');
+      return;
+    }
+    desiredEnhanced=true;
+    if(enhanced) activateEnhanced();
+    else startEnhancedLoader();
+  });
+  wallButton=findButton(['wallToggle','toggleWalls','wallsBtn','btnWalls'],/外墙|近景墙|剖切/);
+  if(!wallButton) {
+    wallButton=document.querySelector('input[type="checkbox"][id*="wall" i]');
+  }
+  if(!wallButton) wallButton=makeButton('外墙：剖切（显示全部）','runtimeWalls');
+  wallButton.disabled=false;
+  wallButton.addEventListener(wallButton.type==='checkbox'?'change':'click',()=>{
+    hideNear=wallButton.type==='checkbox'?!wallButton.checked:!hideNear;
+    geometryVisibilityChanged();updateInfo();
+  });
+  labelButton=findButton(['labelToggle','toggleLabels','labelsBtn'],/标签|房间名/);
+  if(labelButton) {
+    labelButton.addEventListener('click',()=>{
+      showLabels=!showLabels;
+      if(enhanced) enhanced.labels.forEach(s=>{s.visible=showLabels;});
+      labelButton.setAttribute('aria-pressed',String(showLabels));dirty=true;
+    });
+  }
+  const reset=findButton(['resetView','resetBtn','btnReset','reset'],/重置/);
+  (reset || makeButton('重置镜头','runtimeReset')).addEventListener('click',()=>{
+    setCameraPreset(0);
+    setStatus('已重置为全户轴测；两档共用镜头。');
+  });
+  const exportButton=findButton(['exportPNG','exportBtn','btnExport','exportPng','downloadPNG'],/PNG|导出|下载图片/i);
+  (exportButton || makeButton('PNG 导出','runtimeExport')).addEventListener('click',exportPNG);
+  const testButton=findButton(['selftestBtn','selfTestBtn','runTests','selftest','testBtn','btnTest'],/自检/);
+  (testButton || makeButton('开始自检','runtimeSelftest')).addEventListener('click',()=>window.__LAB_SELFTEST__());
+  const allButtons=Array.from(document.querySelectorAll('button'));
+  MODEL.presets.forEach((p,index)=>{
+    let b=allButtons.find(button=>button.textContent.trim()===p.name ||
+      button.getAttribute('data-preset')===String(index));
+    if(!b) b=allButtons.find(button=>{
+      const text=button.textContent.trim();
+      return text.length<22 && text.indexOf(p.name)!==-1;
+    });
+    if(b) {
+      presetButtons.push({button:b,index:index});
+      b.disabled=false;
+      b.addEventListener('click',()=>{setCameraPreset(index);setStatus('观察视点：'+p.name+'。这是轨道观察，不是穿墙漫游。');});
+    }
+  });
+  presetSelect=$('viewPreset') || $('presetSelect') || $('preset') ||
+    Array.from(document.querySelectorAll('select')).find(s=>
+      Array.from(s.options).some(o=>/全户|轴测|顶视/.test(o.textContent)));
+  if(presetSelect && presetSelect.tagName==='SELECT') {
+    presetSelect.textContent='';
+    MODEL.presets.forEach((p,index)=>{
+      const option=document.createElement('option');option.value=String(index);option.textContent=p.name;
+      presetSelect.appendChild(option);
+    });
+    presetSelect.addEventListener('change',()=>setCameraPreset(Number(presetSelect.value)));
+  } else {
+    presetSelect=null;
+    if(presetButtons.length<5) MODEL.presets.forEach((p,index)=>{
+      if(presetButtons.some(pair=>pair.index===index)) return;
+      const b=makeButton(p.name,'runtimePreset'+index);
+      presetButtons.push({button:b,index:index});
+      b.addEventListener('click',()=>setCameraPreset(index));
+    });
+  }
+  updatePresetUI();
+}
+function geometryVisibilityChanged() {
+  rebuildBasicFaces();
+  if(enhanced) enhanced.meshes.forEach(mesh=>{
+    mesh.visible=!(hideNear && mesh.userData.near);
+  });
+  dirty=true;
+}
+function exportPNG() {
+  try {
+    let canvas;
+    if(tier==='enhanced' && enhanced) {
+      enhanced.renderer.render(enhanced.scene,enhanced.camera);
+      canvas=enhanced.renderer.domElement;
+    } else {renderBasic();canvas=basicCanvas;}
+    const url=canvas.toDataURL('image/png');
+    if(!url || url==='data:,') throw new Error('画布没有可导出内容');
+    const a=document.createElement('a');
+    a.href=url;a.download='U90-'+tier+'-'+new Date().toISOString().replace(/[:.]/g,'-')+'.png';
+    document.body.appendChild(a);a.click();a.remove();
+    setStatus('已导出当前 '+(tier==='enhanced'?'增强':'基础')+' 档 PNG。图像为实时建筑表现预演，不是照片级静帧。');
+  } catch(error) {
+    recordError(error);setStatus('PNG 导出失败：'+error.message+'；请尝试基础档导出。');
+  }
+}
+function resize() {
+  const rect=stage.getBoundingClientRect();
+  viewWidth=Math.max(1,Math.round(rect.width || stage.clientWidth || 1000));
+  viewHeight=Math.max(1,Math.round(rect.height || stage.clientHeight || 650));
+  pixelRatio=Math.min(window.devicePixelRatio || 1,2);
+  const width=Math.round(viewWidth*pixelRatio),height=Math.round(viewHeight*pixelRatio);
+  if(basicCanvas.width!==width || basicCanvas.height!==height) {
+    basicCanvas.width=width;basicCanvas.height=height;
+  }
+  basicCanvas.style.width='100%';basicCanvas.style.height='100%';
+  if(enhanced) {
+    enhanced.renderer.setPixelRatio(pixelRatio);
+    enhanced.renderer.setSize(viewWidth,viewHeight,false);
+    enhanced.camera.aspect=viewWidth/viewHeight;
+    enhanced.camera.updateProjectionMatrix();
+  }
+  dirty=true;
+}
+basicCanvas.style.touchAction='none';
+let pointer=null;
+basicCanvas.addEventListener('pointerdown',event=>{
+  if(tier!=='basic' || event.button>0) return;
+  pointer={id:event.pointerId,x:event.clientX,y:event.clientY};
+  try {basicCanvas.setPointerCapture(event.pointerId);} catch(ignore) {}
+  basicCanvas.style.cursor='grabbing';event.preventDefault();
+});
+basicCanvas.addEventListener('pointermove',event=>{
+  if(!pointer || event.pointerId!==pointer.id || tier!=='basic') return;
+  cameraState.theta-=(event.clientX-pointer.x)*.007;
+  cameraState.phi=clamp(cameraState.phi-(event.clientY-pointer.y)*.006,.012,Math.PI/2-.025);
+  pointer.x=event.clientX;pointer.y=event.clientY;
+  currentPreset=-1;updatePresetUI();dirty=true;
+});
+function releasePointer(event) {
+  if(!pointer || event.pointerId!==pointer.id) return;
+  try {basicCanvas.releasePointerCapture(event.pointerId);} catch(ignore) {}
+  pointer=null;basicCanvas.style.cursor='grab';
+}
+basicCanvas.addEventListener('pointerup',releasePointer);
+basicCanvas.addEventListener('pointercancel',releasePointer);
+basicCanvas.addEventListener('wheel',event=>{
+  if(tier!=='basic') return;
+  event.preventDefault();
+  const delta=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?viewHeight:1);
+  cameraState.radius=clamp(cameraState.radius*Math.exp(clamp(delta,-300,300)*.0015),5,38);
+  dirty=true;
+},{passive:false});
+basicCanvas.addEventListener('contextmenu',event=>event.preventDefault());
+basicCanvas.style.cursor='grab';
+basicCanvas.setAttribute('aria-label','U90 全户型三维基础透视；拖动旋转，滚轮缩放');
+basicCanvas.setAttribute('role','img');
+
+/* Both engines read and write this same orbit state. */
+function applySharedCamera() {
+  if(!enhanced) return;
+  const eye=eyePosition();
+  enhanced.controls.target.set(...cameraState.target);
+  enhanced.camera.position.set(...eye);
+  enhanced.camera.lookAt(...cameraState.target);
+  enhanced.controls.update();
+  dirty=true;
+}
+function readEnhancedCamera() {
+  if(!enhanced) return;
+  const target=enhanced.controls.target;
+  cameraState.target=[target.x,target.y,target.z];
+  const p=enhanced.camera.position;
+  const delta=[p.x-target.x,p.y-target.y,p.z-target.z];
+  const distance=Math.hypot(...delta);
+  cameraState.radius=clamp(distance,5,38);
+  cameraState.theta=Math.atan2(delta[0],delta[2]);
+  cameraState.phi=clamp(Math.acos(clamp(delta[1]/(distance || 1),-1,1)),.012,Math.PI/2-.025);
+}
+function activateBasic(message) {
+  if(tier==='enhanced' && enhanced) readEnhancedCamera();
+  tier='basic';
+  basicCanvas.style.display='block';
+  if(enhanced) {
+    enhanced.controls.enabled=false;
+    enhanced.renderer.domElement.style.display='none';
+  }
+  dirty=true;renderBasic();updateInfo();
+  if(message) setStatus(message);
+}
+function activateEnhanced() {
+  if(offline || !enhanced) return;
+  try {
+    applySharedCamera();
+    enhanced.renderer.render(enhanced.scene,enhanced.camera);
+    if(enhanced.renderer.getContext().isContextLost()) throw new Error('WebGL 上下文已丢失');
+    tier='enhanced';
+    enhanced.controls.enabled=true;
+    enhanced.renderer.domElement.style.display='block';
+    basicCanvas.style.display='none';
+    window.__LAB_READY__=true;dirty=true;
+    updateInfo();
+    setStatus('增强档已实际启用：RoomEnvironment 程序环境 + PBR 程序材质 / 柔和阴影。未加载 HDRI、木纹贴图或真实 glTF 家具；不是照片级静帧。');
+  } catch(error) {failEnhanced('增强档绘制失败：'+error.message,error);}
+}
+function disposeEnhanced() {
+  if(!enhanced) return;
+  const old=enhanced;enhanced=null;
+  try {old.controls.dispose();} catch(ignore) {}
+  try {
+    const geos=new Set(),mats=new Set();
+    old.scene.traverse(object=>{
+      if(object.geometry) geos.add(object.geometry);
+      if(object.material) (Array.isArray(object.material)?object.material:[object.material]).forEach(m=>mats.add(m));
+    });
+    geos.forEach(g=>g.dispose());
+    mats.forEach(m=>{if(m.map) m.map.dispose();m.dispose();});
+    if(old.environment) old.environment.dispose();
+    old.renderer.dispose();
+  } catch(ignore) {}
+  old.renderer.domElement.remove();
+}
+function failEnhanced(reason,error) {
+  if(fallbackBusy) return;
+  fallbackBusy=true;
+  try {
+    if(error) recordError(error);
+    lastFailure=reason;loading=false;desiredEnhanced=false;
+    resourceMessage='增强不可用：'+reason;
+    activateBasic('已自动回退基础档：'+reason+'。仍可旋转、缩放、切换视点与导出 PNG。');
+    disposeEnhanced();
+    updateInfo();
+  } finally {fallbackBusy=false;}
+}
+emergencyHandler=function(reason) {
+  if(tier==='enhanced' || loading) failEnhanced('运行异常：'+String(reason).slice(0,220));
+  else {
+    dirty=true;
+    setStatus('已捕获运行异常，保持基础画面：'+String(reason).slice(0,180));
+  }
+};
+
+function makeEnhancedLabel(THREE,label) {
+  const canvas=document.createElement('canvas');
+  canvas.width=512;canvas.height=80;
+  const c=canvas.getContext('2d');
+  c.clearRect(0,0,512,80);
+  c.font='bold 30px sans-serif';
+  const width=Math.min(508,c.measureText(label.name).width+36);
+  c.fillStyle='rgba(250,248,240,.9)';c.fillRect((512-width)/2,8,width,64);
+  c.textAlign='center';c.textBaseline='middle';c.fillStyle=label.color;
+  c.fillText(label.name,256,40);
+  const texture=new THREE.CanvasTexture(canvas);
+  texture.encoding=THREE.sRGBEncoding;
+  const material=new THREE.SpriteMaterial({map:texture,transparent:true,depthTest:false,depthWrite:false});
+  material.toneMapped=false;
+  const sprite=new THREE.Sprite(material);
+  sprite.position.set(...label.p);sprite.position.y+=.12;
+  sprite.scale.set(3.05,.477,1);sprite.renderOrder=1000;sprite.visible=showLabels;
+  return sprite;
+}
+function initEnhanced() {
+  const THREE=window.THREE;
+  if(!THREE || String(THREE.REVISION)!=='147') throw new Error('需要固定版本 THREE r147');
+  if(typeof THREE.OrbitControls!=='function') throw new Error('legacy OrbitControls 未注册');
+  if(typeof THREE.RoomEnvironment!=='function') throw new Error('RoomEnvironment 未注册');
+  let renderer=null,controls=null,scene=null,environment=null,pmrem=null,room=null;
+  try {
+    renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});
+    if(!renderer.getContext() || renderer.getContext().isContextLost()) throw new Error('WebGL 上下文不可用');
+    renderer.setPixelRatio(pixelRatio);renderer.setSize(viewWidth,viewHeight,false);
+    renderer.physicallyCorrectLights=true;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure=1.1;
+    renderer.outputEncoding=THREE.sRGBEncoding;
+    renderer.shadowMap.enabled=true;
+    renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.setClearColor('#ebe9df',1);
+    const canvas=renderer.domElement;
+    canvas.id='enhancedCanvas';
+    canvas.setAttribute('aria-label','U90 全户型增强 WebGL 建筑预演；拖动旋转，滚轮缩放');
+    canvas.setAttribute('role','img');
+    canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;display:none;touch-action:none;z-index:1';
+    basicCanvas.parentNode.insertBefore(canvas,basicCanvas);
+    canvas.addEventListener('webglcontextlost',event=>{
+      event.preventDefault();
+      failEnhanced('WebGL 上下文丢失；请重新点击切换按钮尝试恢复');
+    },false);
+    scene=new THREE.Scene();
+    scene.background=new THREE.Color('#ebe9df');
+    pmrem=new THREE.PMREMGenerator(renderer);
+    pmrem.compileCubemapShader();
+    room=new THREE.RoomEnvironment();
+    environment=pmrem.fromScene(room,.04);
+    scene.environment=environment.texture;
+    room.traverse(o=>{
+      if(o.geometry) o.geometry.dispose();
+      if(o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose());
+    });
+    room=null;pmrem.dispose();pmrem=null;
+    const camera=new THREE.PerspectiveCamera(42,viewWidth/viewHeight,.08,150);
+    camera.up.set(0,1,0);
+    controls=new THREE.OrbitControls(camera,canvas);
+    controls.enableDamping=false;
+    controls.enablePan=false;
+    controls.minDistance=5;controls.maxDistance=38;
+    controls.minPolarAngle=.012;controls.maxPolarAngle=Math.PI/2-.025;
+    controls.rotateSpeed=.8;controls.zoomSpeed=.8;controls.enabled=false;
+    scene.add(new THREE.HemisphereLight(0xf3f5ef,0xa69b82,1.5));
+    const sun=new THREE.DirectionalLight(0xfff0d7,3.1);
+    sun.position.set(-3,17,8);sun.target.position.set(5.5,0,5.1);
+    sun.castShadow=true;
+    sun.shadow.mapSize.set(2048,2048);
+    sun.shadow.camera.left=-12;sun.shadow.camera.right=12;
+    sun.shadow.camera.top=12;sun.shadow.camera.bottom=-12;
+    sun.shadow.camera.near=.5;sun.shadow.camera.far=45;
+    sun.shadow.normalBias=.035;sun.shadow.bias=-.00018;sun.shadow.radius=3;
+    scene.add(sun);scene.add(sun.target);
+    const fill=new THREE.DirectionalLight(0xdde8ef,.65);
+    fill.position.set(15,10,-5);scene.add(fill);
+    const materials=new Map(),meshes=[];
+    geometry.forEach(item=>{
+      const key=[item.color,item.kind,item.opacity].join('|');
+      let material=materials.get(key);
+      if(!material) {
+        const metallic=item.kind==='metal',glass=item.kind==='glass';
+        material=new THREE.MeshStandardMaterial({
+          color:item.color,
+          roughness:metallic?.32:glass?.2:item.kind==='fabric'?.94:item.kind==='ceramic'?.29:.73,
+          metalness:metallic?.68:0,
+          transparent:item.opacity<1,
+          opacity:item.opacity,
+          depthWrite:item.opacity>=1,
+          side:THREE.DoubleSide,
+          envMapIntensity:glass?.65:metallic?1:.8
+        });
+        material.polygonOffset=item.tag==='zone';
+        material.polygonOffsetFactor=-1;
+        material.polygonOffsetUnits=-1;
+        materials.set(key,material);
+      }
+      let mesh;
+      if(item.type==='ring') {
+        const shape=new THREE.RingGeometry(item.inner,item.r,24);
+        shape.rotateX(-Math.PI/2);
+        mesh=new THREE.Mesh(shape,material);
+      } else mesh=new THREE.Mesh(new THREE.BoxGeometry(item.w,item.h,item.d),material);
+      mesh.name=item.id;mesh.position.set(item.x,item.y,item.z);
+      mesh.castShadow=item.opacity>.7 && item.tag!=='zone' && item.tag!=='floor';
+      mesh.receiveShadow=item.type==='box';
+      mesh.userData.near=item.near;
+      mesh.visible=!(hideNear && item.near);
+      if(item.tag==='zone') mesh.renderOrder=1;
+      scene.add(mesh);meshes.push(mesh);
+      if(item.tag==='shear') {
+        const edge=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry),
+          new THREE.LineBasicMaterial({color:0x8a4943,transparent:true,opacity:.65}));
+        mesh.add(edge);
+      }
+    });
+    const labels=labelPoints().map(label=>makeEnhancedLabel(THREE,label));
+    labels.forEach(label=>scene.add(label));
+    enhanced={renderer:renderer,scene:scene,camera:camera,controls:controls,
+      environment:environment,meshes:meshes,labels:labels};
+    controls.addEventListener('change',()=>{
+      if(tier==='enhanced') {
+        readEnhancedCamera();currentPreset=-1;updatePresetUI();
+      }
+      dirty=true;
+    });
+    applySharedCamera();
+    renderer.render(scene,camera);
+    if(renderer.getContext().isContextLost()) throw new Error('首帧 WebGL 上下文丢失');
+    return enhanced;
+  } catch(error) {
+    if(enhanced && enhanced.renderer===renderer) disposeEnhanced();
+    else {
+      try {if(controls) controls.dispose();} catch(ignore) {}
+      try {if(environment) environment.dispose();if(pmrem) pmrem.dispose();} catch(ignore) {}
+      if(scene) {
+        try {
+          scene.traverse(o=>{
+            if(o.geometry) o.geometry.dispose();
+            if(o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{
+              if(m.map) m.map.dispose();m.dispose();
+            });
+          });
+        } catch(ignore) {}
+      }
+      if(renderer) {
+        try {renderer.dispose();renderer.domElement.remove();} catch(ignore) {}
+      }
+    }
+    throw error;
+  }
+}
+
+/* Progressive fixed-version legacy loading: never evaluate controls before THREE. */
+let loadGeneration=0;
+function loadScript(src,validate) {
+  return new Promise((resolve,reject)=>{
+    const script=document.createElement('script');
+    let complete=false;
+    const timer=setTimeout(()=>finish(new Error('资源加载超时（6 秒）：'+src)),6000);
+    function finish(error) {
+      if(complete) return;
+      complete=true;clearTimeout(timer);
+      script.onload=null;script.onerror=null;
+      if(error) {script.remove();reject(error);} else resolve();
+    }
+    script.src=src;script.async=false;
+    script.onload=function() {
+      try {
+        if(!validate()) throw new Error('资源已响应但接口或版本不符：'+src);
+        finish();
+      } catch(error) {finish(error);}
+    };
+    script.onerror=function() {finish(new Error('无法加载同源静态资源：'+src));};
+    document.head.appendChild(script);
+  });
+}
+async function startEnhancedLoader() {
+  if(offline) {
+    desiredEnhanced=false;activateBasic('offline=1：强制基础档，不请求供应商脚本。');return;
+  }
+  if(loading) return;
+  loading=true;lastFailure='';
+  const generation=++loadGeneration;
+  const steps=[
+    {file:'three.min.js',name:'THREE r147 UMD',
+      valid:()=>!!window.THREE && String(window.THREE.REVISION)==='147'},
+    {file:'OrbitControls.js',name:'legacy OrbitControls',
+      valid:()=>!!window.THREE && typeof window.THREE.OrbitControls==='function'},
+    {file:'RoomEnvironment.js',name:'RoomEnvironment',
+      valid:()=>!!window.THREE && typeof window.THREE.RoomEnvironment==='function'}
+  ];
+  try {
+    for(let i=0;i<steps.length;i++) {
+      const step=steps[i];
+      resourceMessage='加载 '+(i+1)+'/3：'+step.name+' · '+vendorBase+step.file;
+      setStatus('基础档可继续操作。'+resourceMessage+'（每项最多等待 6 秒）');
+      updateInfo();
+      if(!step.valid()) await loadScript(vendorBase+step.file,step.valid);
+      if(generation!==loadGeneration || !loading) return;
+    }
+    resourceMessage='3/3 固定版本脚本已验证；正在初始化 WebGL / PMREM';
+    updateInfo();setStatus(resourceMessage+'；基础画面保持可见。');
+    if(generation!==loadGeneration || !loading) return;
+    initEnhanced();
+    loading=false;
+    resourceMessage='THREE r147 + legacy OrbitControls + RoomEnvironment · '+vendorBase+' · 已实际初始化';
+    if(desiredEnhanced) activateEnhanced();
+    else {
+      activateBasic('增强资源已就绪；按“切换基础/增强”启用。当前仍为基础档。');
+    }
+    updateInfo();
+  } catch(error) {
+    if(generation!==loadGeneration) return;
+    failEnhanced(error.message);
+  }
+}
+
+/* Exactly six public QA assertions, independent of vendor success. */
+function hashGeometry(items) {
+  const text=JSON.stringify(items);
+  let hash=2166136261;
+  for(let i=0;i<text.length;i++) {
+    hash^=text.charCodeAt(i);hash=Math.imul(hash,16777619);
+  }
+  return (hash>>>0).toString(16);
+}
+function canvasHasImage(canvas) {
+  if(!canvas || canvas.width<2 || canvas.height<2) return false;
+  const sample=document.createElement('canvas');sample.width=64;sample.height=48;
+  const c=sample.getContext('2d',{willReadFrequently:true});
+  c.drawImage(canvas,0,0,64,48);
+  const data=c.getImageData(0,0,64,48).data,colors=new Set();
+  let opaque=0;
+  for(let i=0;i<data.length;i+=4) {
+    if(data[i+3]) opaque++;
+    colors.add((data[i]>>3)+','+(data[i+1]>>3)+','+(data[i+2]>>3));
+  }
+  return opaque>100 && colors.size>8;
+}
+window.__LAB_SELFTEST__=function() {
+  const tests=[
+    {name:'两片 L 型地板 / 两道剪力墙',run:()=>{
+      const floors=geometry.filter(g=>g.tag==='floor');
+      return Object.isFrozen(MODEL) && Object.isFrozen(MODEL.floors) &&
+        floors.length===2 &&
+        MODEL.floors[0].x1===9.6 && MODEL.floors[0].z1===4.1 &&
+        MODEL.floors[1].x1===11 && MODEL.floors[1].z0===4.1 &&
+        !MODEL.floors.some(f=>10>f.x0 && 10<f.x1 && 2>f.z0 && 2<f.z1) &&
+        MODEL.shearWalls.length===2 &&
+        MODEL.shearWalls.every(w=>geometry.some(g=>g.id.indexOf(w.id)===0 && g.tag==='shear' && g.h===2.1));
+    }},
+    {name:'15 件家具 / 床、沙发、六椅与厨房细节',run:()=>{
+      const count=tag=>geometry.filter(g=>g.tag===tag).length;
+      return MODEL.furniture.length===15 && count('furniture')===15 &&
+        count('mattress')===2 && count('pillow')===3 &&
+        count('sofa-back')===1 && count('sofa-arm')===2 &&
+        count('dining-chair')===6 && count('hob')===2 && count('sink')===1 &&
+        MODEL.furniture.every((f,i)=>geometry.some(g=>
+          g.id==='furniture-'+i && g.x===f.x && g.z===f.z && g.h===f.h &&
+          Math.abs(g.y-(f.h/2+.025))<1e-9));
+    }},
+    {name:'五个共享相机预设',run:()=>MODEL.presets.length===5 &&
+      MODEL.presets.every(p=>p.target.length===3 && p.position.length===3 &&
+        p.position.concat(p.target).every(Number.isFinite))},
+    {name:'基础档面构建与有效透视投影',run:()=>{
+      const faces=makeFaces(buildGeometry(MODEL),false);
+      const state={target:[5.5,0,5.1],theta:.635,phi:.86,radius:21};
+      const basis=cameraBasis(state);
+      let valid=0;
+      faces.forEach(face=>{
+        const p=project(face.center,basis,1000,650);
+        if(p && Number.isFinite(p.x) && Number.isFinite(p.y) && p.depth>0) valid++;
+      });
+      return faces.length>150 && valid>faces.length*.9;
+    }},
+    {name:'同 MODEL 重复构建哈希一致',run:()=>{
+      const a=buildGeometry(MODEL),b=buildGeometry(MODEL);
+      return a.length===geometry.length && hashGeometry(a)===hashGeometry(b) &&
+        hashGeometry(a)===hashGeometry(geometry);
+    }},
+    {name:'当前档 canvas 存在且非空',run:()=>{
+      let canvas=basicCanvas;
+      if(tier==='enhanced') {
+        if(!enhanced) return false;
+        enhanced.renderer.render(enhanced.scene,enhanced.camera);
+        canvas=enhanced.renderer.domElement;
+      } else renderBasic();
+      return window.__LAB_TIER__===tier && canvas.isConnected && canvasHasImage(canvas);
+    }}
+  ];
+  let passed=0,failed=0;
+  const details=[];
+  tests.forEach(test=>{
+    try {
+      if(test.run()) {passed++;details.push('✓ '+test.name);}
+      else {failed++;details.push('✗ '+test.name);}
+    } catch(error) {failed++;details.push('✗ '+test.name+'：'+error.message);}
+  });
+  const result={passed:passed,failed:failed,total:6};
+  const output=$('selfResult');
+  if(output) {
+    output.textContent='自检：'+passed+'/6 通过'+(failed?'，'+failed+' 项失败':' · 全部通过');
+    output.title=details.join('\n');
+    output.style.color=failed?'#a34335':'#3f7051';
+    let report=$('selftestDetails');
+    if(!report) {
+      report=document.createElement('details');report.id='selftestDetails';
+      const summary=document.createElement('summary');summary.textContent='六项自检明细';
+      report.appendChild(summary);output.parentNode.insertBefore(report,output.nextSibling);
+    }
+    while(report.children.length>1) report.lastChild.remove();
+    const list=document.createElement('div');
+    list.style.cssText='white-space:pre-line;padding:8px 0;font-size:12px';
+    list.textContent=details.join('\n');report.appendChild(list);
+    report.open=failed>0;
+  }
+  return result;
+};
+
+let lastStats=0;
+function frame(time) {
+  requestAnimationFrame(frame);
+  try {
+    if(tier==='enhanced' && enhanced) {
+      if(dirty) {
+        enhanced.renderer.render(enhanced.scene,enhanced.camera);
+        if(enhanced.renderer.getContext().isContextLost()) {
+          failEnhanced('WebGL 上下文已丢失');return;
+        }
+        window.__LAB_READY__=true;dirty=false;
+      }
+    } else if(dirty) {renderBasic();dirty=false;}
+    if(time-lastStats>700) {updateInfo();lastStats=time;}
+  } catch(error) {
+    if(tier==='enhanced' || loading) failEnhanced('帧绘制错误：'+error.message,error);
+    else {
+      recordError(error);
+      setStatus('基础画面绘制异常：'+error.message+'。请重置镜头或重新打开本页。');
+      dirty=false;
+    }
+  }
+}
+try {
+  setupUI();
+  if(getComputedStyle(stage).position==='static') stage.style.position='relative';
+  if(stage.getBoundingClientRect().height<200) stage.style.height='650px';
+  basicCanvas.style.position='absolute';basicCanvas.style.inset='0';
+  setCameraPreset(0);rebuildBasicFaces();resize();
+  renderBasic();dirty=false;
+  resourceMessage=offline?'offline=1：强制基础档 · 零供应商请求':
+    '基础画面已就绪；准备顺序检测同源增强资源';
+  updateInfo();
+  setStatus(offline?
+    '基础档·离线体块透视。offline=1 已强制基础档，无需任何外部资源。拖动旋转，滚轮缩放。':
+    '基础档首帧已就绪。增强资源顺序检测中；所有基础交互与导出已可用。');
+  window.addEventListener('resize',resize);
+  if(typeof ResizeObserver==='function') {
+    const observer=new ResizeObserver(()=>resize());observer.observe(stage);
+  }
+  requestAnimationFrame(frame);
+  if(!offline) setTimeout(()=>startEnhancedLoader(),80);
+} catch(error) {
+  recordError(error);
+  try {
+    activateBasic('初始化已降级：'+error.message);
+    resize();rebuildBasicFaces();renderBasic();
+    requestAnimationFrame(frame);
+  } catch(finalError) {
+    recordError(finalError);
+    setStatus('无法创建绘图画布：'+finalError.message+'。请在支持 Canvas 2D 的浏览器中打开本页。');
+  }
+}
+})();
+</script>
+</body>
+</html>

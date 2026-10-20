@@ -55,7 +55,7 @@ for _f in sorted((ROOT / "cache" / "cosy_voices").glob("*.mp3")):
     _key = _f.stem
     if _key in _cosy_label:
         FILES[f"/cosy-{_key}.mp3"] = _f
-MIME = {".mp4": "video/mp4", ".mp3": "audio/mpeg", ".md": "text/plain; charset=utf-8", ".log": "text/plain; charset=utf-8", ".jpg": "image/jpeg", ".html": "text/html; charset=utf-8", ".png": "image/png"}
+MIME = {".mp4": "video/mp4", ".mp3": "audio/mpeg", ".md": "text/plain; charset=utf-8", ".log": "text/plain; charset=utf-8", ".jpg": "image/jpeg", ".html": "text/html; charset=utf-8", ".png": "image/png", ".js": "text/javascript; charset=utf-8"}
 
 # ---- 103 教材线上实践（ISD-L04K 厨房实验 / ISD-L04 全户型实验） ----
 LAB = ROOT / "室内空间设计" / "线上实践" / "labs" / "ISD-L04K"
@@ -67,6 +67,10 @@ FILES["/isd-l04-qa.png"] = LAB4 / "qa_initial.png"
 LAB3 = ROOT / "室内空间设计" / "线上实践" / "labs" / "ISD-L03"
 FILES["/isd-l03.html"] = LAB3 / "bubble_lab.html"
 FILES["/isd-l03-qa.png"] = LAB3 / "qa_initial.png"
+LAB6 = ROOT / "室内空间设计" / "线上实践" / "labs" / "ISD-L06"
+FILES["/isd-l06-preview.html"] = LAB6 / "render_preview.html"
+for _asset in ("three.min.js", "OrbitControls.js", "RoomEnvironment.js"):
+    FILES[f"/isd-l06-vendor/{_asset}"] = LAB6 / "vendor" / _asset
 
 # ---- 前十段（first10）批产 ----
 F10 = [
@@ -210,7 +214,7 @@ h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
 video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}</style></head><body>
 <h1>《环境心理学》设计案例研究 · 论文框架教学片</h1>
 <p class="meta">设计论文六段文体（问题→理论框架→诊断→设计策略→实证检验→结论）× 工程图纸视觉母语 × 纪录片叙事；全程代码确定性渲染，数字全部带来源。配音 CosyVoice v2 · 龙小淳；sol(gpt-6.1-sol 高推理) 制作；时长门禁 ≥570s + 冻结扫描。
-<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a> · <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a> · <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a> · <a href="/isd-l03.html" style="color:#8f8">🎮 需求档案与气泡图任务书实验（ISD-L03·成果①）</a> · <a href="/isd-l04.html" style="color:#8f8">🎮 U90全户型功能组织实验（ISD-L04·成果②）</a> · <a href="/isd-l04k.html" style="color:#8f8">🎮 厨房折返计数实验（ISD-L04K）</a> · <a href="/labs.html" style="color:#8f8">📋 线上实践实验目录（12章规划）</a></p>
+<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a> · <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a> · <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a> · <a href="/isd-l03.html" style="color:#8f8">🎮 需求档案与气泡图任务书实验（ISD-L03·成果①）</a> · <a href="/isd-l06-preview.html" style="color:#8ff">🧊 U90双档3D渲染预演（L06渲染层）</a> · <a href="/isd-l04.html" style="color:#8f8">🎮 U90全户型功能组织实验（ISD-L04·成果②）</a> · <a href="/isd-l04k.html" style="color:#8f8">🎮 厨房折返计数实验（ISD-L04K）</a> · <a href="/labs.html" style="color:#8f8">📋 线上实践实验目录（12章规划）</a></p>
 {{ITEMS}}
 </body></html>"""
 
@@ -252,6 +256,7 @@ LABS = [
     ("L04", "U90全户型功能组织与动线冲突", "第4章", "online"),
     ("L04K", "厨房工作三角与折返计数", "第7章", "online"),
     ("L05", "动线与通达：起终点与障碍路径", "第4章", "规划中"),
+    ("L06P", "U90 双档3D渲染预演（L06渲染层）", "第5–6章", "preview"),
     ("L06", "空间围合与视线分析", "第5–6章", "规划中"),
     ("L07", "采光与照明四场景切换", "第8章", "规划中"),
     ("L08", "材料色彩七属性对比", "第9章", "规划中"),
@@ -293,6 +298,12 @@ def _labs_page():
             featured.append(f'<div class="item"><b><a href="{_url}">🎮 {_name}</a></b>'
                             f'<span class="tag">✅ 已上线</span><span class="meta"> · {_ch} · '
                             f'{LAB_FEATURED.get(_id, "")}</span></div>')
+        elif _status == "preview":
+            _url = "/isd-l06-preview.html"
+            rows.append(f'<tr><td><b>{_id}</b></td><td><a href="{_url}">{_name}</a></td>'
+                        f'<td>{_ch}</td><td><span class="tag">🧪 可体验</span></td></tr>')
+            featured.append(f'<div class="item"><b><a href="{_url}">🧊 {_name}</a></b>'
+                            f'<span class="tag">双档预演</span><span class="meta"> · Canvas离线兜底 / Three.js PBR增强；同一U90场景可旋转、缩放、切换五个视点并导出PNG。</span></div>')
         else:
             rows.append(f'<tr><td>{_id}</td><td>{_name}</td><td>{_ch}</td>'
                         f'<td><span class="tag todo">规划中</span></td></tr>')

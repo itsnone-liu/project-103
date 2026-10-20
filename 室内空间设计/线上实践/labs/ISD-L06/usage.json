@@ -1,0 +1,37 @@
+{
+  "calls": [
+    {
+      "purpose": "L06 render preview v1",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "secs": 4031.0,
+      "response_chars": 16855,
+      "finish": "stop",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "html_chars": 0
+    },
+    {
+      "purpose": "L06 render preview continuation",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "secs": 1525.5,
+      "response_chars": 40748,
+      "finish": "stop",
+      "usage": {
+        "prompt_tokens": 6548,
+        "completion_tokens": 13336,
+        "total_tokens": 19884,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1256
+        }
+      }
+    }
+  ]
+}

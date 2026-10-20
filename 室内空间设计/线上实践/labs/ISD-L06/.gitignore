@@ -1,0 +1,5 @@
+.qa_profile-*
+qa_dom_*.txt
+qa_result.json
+sol_raw.txt
+_check.js
