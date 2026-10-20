@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 380" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="920" height="380" fill="#ffffff"/>
+  <text x="460" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图6-2 主卧3.6米验算与衣帽区"1.7米的数学"（教学常用值）</text>
+  <!-- left: 3.6m allocation bar -->
+  <text x="230" y="72" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">3.6米面宽的分配</text>
+  <rect x="50" y="110" width="100" height="70" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="2"/>
+  <text x="100" y="140" text-anchor="middle" font-size="12" fill="#1a3c5e">通行0.9m</text>
+  <text x="100" y="158" text-anchor="middle" font-size="11" fill="#1a3c5e">＋床头柜</text>
+  <rect x="150" y="110" width="160" height="70" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2.4"/>
+  <rect x="166" y="118" width="128" height="54" rx="6" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.6"/>
+  <rect x="170" y="122" width="52" height="26" rx="5" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.2"/>
+  <rect x="228" y="122" width="52" height="26" rx="5" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.2"/>
+  <text x="230" y="172" text-anchor="middle" font-size="12.5" fill="#1a3c5e">双人床1.8m</text>
+  <rect x="310" y="110" width="100" height="70" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="2"/>
+  <text x="360" y="140" text-anchor="middle" font-size="12" fill="#1a3c5e">通行0.9m</text>
+  <text x="360" y="158" text-anchor="middle" font-size="11" fill="#1a3c5e">＋床头柜</text>
+  <!-- dimension line -->
+  <line x1="50" y1="200" x2="410" y2="200" stroke="#555" stroke-width="1.4"/>
+  <line x1="50" y1="193" x2="50" y2="207" stroke="#555" stroke-width="1.4"/>
+  <line x1="410" y1="193" x2="410" y2="207" stroke="#555" stroke-width="1.4"/>
+  <text x="230" y="224" text-anchor="middle" font-size="12.5" fill="#555">面宽3.6m＝0.9＋1.8＋0.9 ✓ 刚好成立</text>
+  <text x="230" y="262" text-anchor="middle" font-size="12" fill="#888">警惕"套间错觉"：13.9㎡还含衣帽区，</text>
+  <text x="230" y="280" text-anchor="middle" font-size="12" fill="#888">北端接主卫3.8㎡（固定项），睡眠区比直觉小</text>
+  <!-- right: wardrobe math -->
+  <text x="690" y="72" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">衣帽区：1.7米够"步入"吗？</text>
+  <!-- two-sided wardrobe -->
+  <rect x="520" y="100" width="34" height="120" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="2"/>
+  <rect x="656" y="100" width="34" height="120" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="2"/>
+  <rect x="554" y="100" width="102" height="120" fill="#fdeeee" stroke="#d0021b" stroke-width="1.6" stroke-dasharray="6,4"/>
+  <text x="605" y="145" text-anchor="middle" font-size="12" fill="#d0021b">中间通道</text>
+  <text x="605" y="163" text-anchor="middle" font-size="12" fill="#d0021b">仅0.2m ✗</text>
+  <g font-size="11.5" fill="#1a3c5e">
+    <text x="537" y="240" text-anchor="middle">柜0.6</text>
+    <text x="605" y="240" text-anchor="middle">0.9起步</text>
+    <text x="673" y="240" text-anchor="middle">柜0.6</text>
+  </g>
+  <text x="690" y="278" text-anchor="middle" font-size="12.5" fill="#555">0.6＋0.9＋0.6＝2.1米起步，1.7米名不副实</text>
+  <text x="690" y="300" text-anchor="middle" font-size="12.5" fill="#2e8b57">✓ 单排衣柜一字排开更划算</text>
+  <text x="460" y="362" text-anchor="middle" font-size="12.5" fill="#888">走入式衣帽间＝用面积换容量与仪式感；这笔账只跟面积预算有关。</text>
+</svg>

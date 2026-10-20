@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 400" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="920" height="400" fill="#ffffff"/>
+  <text x="460" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图6-1 私密梯度与两条设计线（教学示意）</text>
+  <!-- left: gradient axis -->
+  <text x="220" y="70" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">空间分级：公共性逐级滤除</text>
+  <line x1="60" y1="200" x2="400" y2="200" stroke="#1a1a1a" stroke-width="2.5"/>
+  <g stroke="#999" stroke-width="1.4">
+    <line x1="80" y1="194" x2="80" y2="206"/><line x1="170" y1="194" x2="170" y2="206"/>
+    <line x1="260" y1="194" x2="260" y2="206"/><line x1="350" y1="194" x2="350" y2="206"/>
+  </g>
+  <g font-size="12.5" fill="#555" text-anchor="middle">
+    <text x="80" y="226">入户门</text><text x="170" y="226">玄关/走道</text>
+    <text x="260" y="226">客厅/书房</text><text x="350" y="226">卧室→床位</text>
+  </g>
+  <rect x="60" y="180" width="34" height="16" fill="#e07b5f" opacity="0.85" rx="3"/>
+  <rect x="120" y="180" width="34" height="16" fill="#d8a86a" opacity="0.85" rx="3"/>
+  <rect x="230" y="180" width="34" height="16" fill="#7cb98a" opacity="0.85" rx="3"/>
+  <rect x="330" y="180" width="34" height="16" fill="#3a6ea5" opacity="0.9" rx="3"/>
+  <text x="80" y="172" text-anchor="middle" font-size="12" fill="#a5472e">公共</text>
+  <text x="347" y="172" text-anchor="middle" font-size="12" fill="#1a3c5e">私密</text>
+  <text x="220" y="262" text-anchor="middle" font-size="12" fill="#888">公卫靠门与视线设计达到最高等级</text>
+  <text x="220" y="282" text-anchor="middle" font-size="12" fill="#888">——等级不只看深浅，还看界面质量</text>
+  <!-- right: two lines -->
+  <text x="680" y="70" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">同一隔墙：视觉线 vs 听觉线</text>
+  <!-- visual: frosted glass -->
+  <rect x="530" y="100" width="130" height="70" fill="#eef4f8" stroke="#7aa7cc" stroke-width="2" stroke-dasharray="8,4"/>
+  <circle cx="570" cy="135" r="8" fill="#9a8ac2"/>
+  <line x1="600" y1="118" x2="640" y2="152" stroke="#9a8ac2" stroke-width="1.6" stroke-dasharray="3,3"/>
+  <line x1="600" y1="152" x2="640" y2="118" stroke="#9a8ac2" stroke-width="1.6" stroke-dasharray="3,3"/>
+  <text x="595" y="188" text-anchor="middle" font-size="12.5" fill="#3a6ea5">磨砂玻璃：视觉✓（视线被挡）</text>
+  <!-- audio through -->
+  <rect x="700" y="100" width="130" height="70" fill="#f2ede2" stroke="#8a7a55" stroke-width="2"/>
+  <circle cx="740" cy="135" r="8" fill="#e07b5f"/>
+  <path d="M 752 127 q 10 8 0 16 q 12 -8 22 0 q -10 -8 0 -16" fill="none" stroke="#e07b5f" stroke-width="2.4"/>
+  <text x="765" y="188" text-anchor="middle" font-size="12.5" fill="#b07a2a">轻质隔墙：听觉✗（声穿缝隙）</text>
+  <text x="680" y="228" text-anchor="middle" font-size="12.5" fill="#d0021b">隔声遵从短板效应：</text>
+  <text x="680" y="248" text-anchor="middle" font-size="12.5" fill="#d0021b">实砌墙再好，门缝一大全墙白做</text>
+  <g stroke="#d0021b" stroke-width="2">
+    <line x1="560" y1="270" x2="580" y2="270"/>
+    <line x1="560" y1="270" x2="560" y2="290"/>
+    <line x1="580" y1="270" x2="580" y2="250"/>
+    <line x1="600" y1="270" x2="620" y2="270"/>
+    <line x1="600" y1="270" x2="600" y2="250"/>
+    <line x1="620" y1="270" x2="620" y2="290"/>
+  </g>
+  <text x="700" y="275" font-size="12" fill="#555">门缝＝木桶最短的板</text>
+  <text x="460" y="380" text-anchor="middle" font-size="12.5" fill="#888">视觉私密用知觉分隔（挡视线不必挡存在）；听觉私密只能物理分隔（质量、密封、距离）。</text>
+</svg>

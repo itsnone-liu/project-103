@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 420" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="920" height="420" fill="#ffffff"/>
+  <text x="460" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图7-1 折返计数法：冰箱换边，六次变两次（教学示例）</text>
+  <!-- Panel A: fridge opposite -->
+  <g transform="translate(60,70)">
+    <text x="190" y="20" text-anchor="middle" font-size="15" font-weight="bold" fill="#b04a4a">甲：冰箱在对侧——往返6次</text>
+    <rect x="0" y="40" width="380" height="240" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
+    <!-- counter along top -->
+    <rect x="20" y="52" width="340" height="40" fill="#f2ede2" stroke="#8a7a55" stroke-width="1.8"/>
+    <text x="100" y="77" text-anchor="middle" font-size="11.5" fill="#5c4f33">水槽</text>
+    <text x="230" y="77" text-anchor="middle" font-size="11.5" fill="#5c4f33">备餐台面</text>
+    <text x="330" y="77" text-anchor="middle" font-size="11.5" fill="#5c4f33">灶台</text>
+    <!-- fridge bottom-left -->
+    <rect x="20" y="180" width="52" height="60" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2"/>
+    <text x="46" y="215" text-anchor="middle" font-size="11" fill="#1a3c5e">冰箱</text>
+    <!-- zigzag path -->
+    <path d="M 46 210 L 120 100 L 46 210 L 210 100 L 46 210 L 300 100" fill="none" stroke="#e07b00" stroke-width="2.6" stroke-dasharray="7,5"/>
+    <g fill="#e07b00"><circle cx="46" cy="210" r="5"/><circle cx="120" cy="100" r="5"/><circle cx="210" cy="100" r="5"/><circle cx="300" cy="100" r="5"/></g>
+    <text x="190" y="310" text-anchor="middle" font-size="12" fill="#555">取菜→洗→回取→切→再回取→烧</text>
+  </g>
+  <!-- Panel B: fridge same side -->
+  <g transform="translate(480,70)">
+    <text x="190" y="20" text-anchor="middle" font-size="15" font-weight="bold" fill="#2e8b57">乙：冰箱在同侧——往返2次</text>
+    <rect x="0" y="40" width="380" height="240" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
+    <rect x="20" y="52" width="340" height="40" fill="#f2ede2" stroke="#8a7a55" stroke-width="1.8"/>
+    <text x="190" y="77" text-anchor="middle" font-size="11.5" fill="#5c4f33">备餐台面</text>
+    <!-- fridge top-left next to counter -->
+    <rect x="20" y="52" width="52" height="40" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2"/>
+    <text x="46" y="77" text-anchor="middle" font-size="11" fill="#1a3c5e">冰箱</text>
+    <text x="300" y="77" text-anchor="middle" font-size="11.5" fill="#5c4f33">灶台</text>
+    <path d="M 46 100 L 240 96 L 340 96" fill="none" stroke="#2e8b57" stroke-width="2.6" stroke-dasharray="7,5"/>
+    <g fill="#2e8ac2"><circle cx="46" cy="100" r="5"/></g>
+    <g fill="#2e8b57"><circle cx="240" cy="96" r="5"/><circle cx="340" cy="96" r="5"/></g>
+    <text x="190" y="310" text-anchor="middle" font-size="12" fill="#555">一条连续作业线：拿→洗→切→烧</text>
+  </g>
+  <text x="460" y="386" text-anchor="middle" font-size="12.5" fill="#888">消除高频环节间的障碍＞总步数最少；再数一数"双手被占用"的操作（拎菜开门）。</text>
+</svg>

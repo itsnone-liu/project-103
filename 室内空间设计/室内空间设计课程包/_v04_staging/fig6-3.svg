@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 360" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="920" height="360" fill="#2b2b33"/>
+  <text x="460" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#f5f5f5">图6-3 夜间起身：一条跟随的光路（教学示意）</text>
+  <!-- dim room outlines -->
+  <rect x="60" y="90" width="220" height="180" fill="#3a3a44" stroke="#666" stroke-width="2"/>
+  <text x="170" y="112" text-anchor="middle" font-size="13" fill="#ccc">老人房</text>
+  <rect x="280" y="150" width="150" height="60" fill="#33333d" stroke="#666" stroke-width="2"/>
+  <text x="355" y="185" text-anchor="middle" font-size="12" fill="#aaa">走道</text>
+  <rect x="430" y="90" width="180" height="180" fill="#3a3a44" stroke="#666" stroke-width="2"/>
+  <text x="520" y="112" text-anchor="middle" font-size="13" fill="#ccc">公共卫生间</text>
+  <!-- bed -->
+  <rect x="80" y="150" width="56" height="100" rx="6" fill="#4a5568" stroke="#7a8aa5" stroke-width="1.6"/>
+  <rect x="84" y="154" width="26" height="30" rx="4" fill="#5a6a85" stroke="#7a8aa5" stroke-width="1"/>
+  <text x="108" y="205" text-anchor="middle" font-size="11" fill="#aab">床</text>
+  <!-- toilet -->
+  <ellipse cx="560" cy="150" rx="18" ry="24" fill="#4a5568" stroke="#7a8aa5" stroke-width="1.6"/>
+  <rect x="550" y="118" width="20" height="14" rx="3" fill="#4a5568" stroke="#7a8aa5" stroke-width="1.6"/>
+  <text x="560" y="196" text-anchor="middle" font-size="11" fill="#aab">如厕位</text>
+  <!-- light path: 5 warm dots -->
+  <g>
+    <circle cx="100" cy="200" r="9" fill="#ffd27a" opacity="0.95"/>
+    <circle cx="140" cy="200" r="7" fill="#ffd27a" opacity="0.8"/>
+    <circle cx="268" cy="180" r="7" fill="#ffd27a" opacity="0.8"/>
+    <circle cx="355" cy="180" r="7" fill="#ffd27a" opacity="0.8"/>
+    <circle cx="442" cy="180" r="7" fill="#ffd27a" opacity="0.8"/>
+    <circle cx="540" cy="160" r="9" fill="#ffd27a" opacity="0.95"/>
+  </g>
+  <path d="M 100 200 L 268 180 L 442 180 L 546 164" fill="none" stroke="#ffd27a" stroke-width="2.6" stroke-dasharray="4,6" opacity="0.75"/>
+  <!-- labels -->
+  <g font-size="11.5" fill="#ffd27a">
+    <text x="118" y="238">①床边脚灯</text>
+    <text x="172" y="132">②房门内侧手边</text>
+    <text x="355" y="140" text-anchor="middle">③走道感应(低位)</text>
+    <text x="470" y="132">④卫门内手边</text>
+    <text x="588" y="130">⑤如厕位</text>
+  </g>
+  <!-- ceiling lamp comparison -->
+  <g>
+    <rect x="680" y="80" width="210" height="190" rx="10" fill="#33333d" stroke="#555" stroke-width="1.6"/>
+    <line x1="785" y1="92" x2="785" y2="120" stroke="#888" stroke-width="1.6"/>
+    <path d="M 760 120 L 810 120 L 800 140 L 770 140 z" fill="#e8e2c8" stroke="#aaa" stroke-width="1.2"/>
+    <ellipse cx="785" cy="185" rx="70" ry="52" fill="#fff8dd" opacity="0.16"/>
+    <rect x="745" y="155" width="40" height="30" fill="#4a5568" stroke="#7a8aa5" stroke-width="1.2"/>
+    <text x="785" y="236" text-anchor="middle" font-size="11.5" fill="#ff9a8a">走道常明灯：</text>
+    <text x="785" y="254" text-anchor="middle" font-size="11.5" fill="#ff9a8a">照进两间卧室，惊醒睡眠</text>
+    <text x="785" y="105" text-anchor="middle" font-size="11" fill="#aaa">对比方案</text>
+  </g>
+  <text x="460" y="330" text-anchor="middle" font-size="12.5" fill="#ccc">光路要点：低位（0.3–0.4m）·感应·分段跟随·暖色；每个开关都在动作发生的手边（数值教学常用值）。</text>
+</svg>

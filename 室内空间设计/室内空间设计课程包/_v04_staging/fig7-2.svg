@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="900" height="500" fill="#ffffff"/>
+  <text x="450" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图7-2 U90公卫：干湿分离＋适老化（2.0×2.2m·教学假设）</text>
+  <!-- room 2.0x2.2 at 130px/m -> 260x286, origin 90,80 -->
+  <rect x="90" y="80" width="260" height="286" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
+  <!-- door on west wall -->
+  <rect x="86" y="300" width="8" height="50" fill="#2b2b2b"/>
+  <path d="M 90 350 A 50 50 0 0 1 140 300" fill="none" stroke="#999" stroke-width="1.4" stroke-dasharray="5,4"/>
+  <text x="70" y="330" text-anchor="end" font-size="11.5" fill="#555">门≥0.80m</text>
+  <!-- dry zone: basin near door -->
+  <text x="200" y="310" text-anchor="middle" font-size="12" fill="#2e8b57">干区</text>
+  <rect x="160" y="316" width="90" height="42" rx="4" fill="#e8f4ea" stroke="#2e8b57" stroke-width="2"/>
+  <ellipse cx="205" cy="337" rx="26" ry="13" fill="#f2faf3" stroke="#2e8b57" stroke-width="1.4"/>
+  <text x="205" y="342" text-anchor="middle" font-size="10.5" fill="#2e8b57">盥洗台</text>
+  <!-- shower glass divider -->
+  <line x1="90" y1="230" x2="350" y2="230" stroke="#7aa7cc" stroke-width="2.4" stroke-dasharray="9,5"/>
+  <text x="330" y="222" text-anchor="end" font-size="11" fill="#3a6ea5">隔断</text>
+  <!-- slope arrows to floor drain -->
+  <circle cx="230" cy="270" r="5" fill="#7aa7cc"/>
+  <text x="242" y="274" font-size="10.5" fill="#3a6ea5">地漏·找坡1%–1.5%</text>
+  <!-- wet zone: toilet + shower -->
+  <text x="220" y="104" text-anchor="middle" font-size="12" fill="#3a6ea5">湿区</text>
+  <!-- toilet -->
+  <rect x="270" y="120" width="22" height="18" rx="3" fill="#e8f1fa" stroke="#3a6ea5" stroke-width="1.8"/>
+  <ellipse cx="281" cy="162" rx="20" ry="26" fill="#e8f1fa" stroke="#3a6ea5" stroke-width="1.8"/>
+  <text x="281" y="204" text-anchor="middle" font-size="10.5" fill="#1a3c5e">坐便(加高座面)</text>
+  <!-- shower corner -->
+  <rect x="100" y="96" width="90" height="120" fill="#eef4f8" stroke="#7aa7cc" stroke-width="1.8"/>
+  <circle cx="145" cy="156" r="6" fill="#7aa7cc"/>
+  <path d="M 132 148 L 158 148 M 145 135 L 145 165" stroke="#7aa7cc" stroke-width="1.2"/>
+  <text x="145" y="228" text-anchor="middle" font-size="10.5" fill="#3a6ea5">淋浴0.9×0.9m＋折叠凳</text>
+  <!-- grab bars -->
+  <line x1="242" y1="130" x2="242" y2="180" stroke="#e07b00" stroke-width="5"/>
+  <line x1="150" y1="252" x2="196" y2="252" stroke="#e07b00" stroke-width="5"/>
+  <!-- notes right -->
+  <g font-size="12.5" fill="#555">
+    <text x="420" y="110" font-weight="bold" fill="#e07b00" font-size="13">橙色＝扶手预埋（墙内衬板）</text>
+    <text x="436" y="134">·坐便侧墙水平扶手（离地约0.70m）</text>
+    <text x="436" y="158">·淋浴区L形扶手</text>
+    <text x="420" y="196" font-weight="bold" fill="#2e8b57" font-size="13">祖母的从容</text>
+    <text x="436" y="220">·近门盥洗：洗手漱口不进湿区</text>
+    <text x="436" y="244">·加高座面0.42–0.45m好起身</text>
+    <text x="436" y="268">·折叠淋浴凳，坐姿洗浴</text>
+    <text x="420" y="306" font-weight="bold" fill="#3a6ea5" font-size="13">安全清单</text>
+    <text x="436" y="330">·防滑面材（等级须核验）</text>
+    <text x="436" y="354">·整体找坡替代挡水条（无高差）</text>
+    <text x="436" y="378">·低位感应夜灯（门外路径接图6-3）</text>
+    <text x="436" y="402">·等电位端子不得拆（专业检测）</text>
+  </g>
+  <text x="450" y="478" text-anchor="middle" font-size="12" fill="#888">干湿分离把"祖母的从容"与"高峰分流"同时解决；全部尺寸为教学常用值，门洞与墙体改动须核验。</text>
+</svg>
