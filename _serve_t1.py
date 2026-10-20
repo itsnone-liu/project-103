@@ -57,10 +57,13 @@ for _f in sorted((ROOT / "cache" / "cosy_voices").glob("*.mp3")):
         FILES[f"/cosy-{_key}.mp3"] = _f
 MIME = {".mp4": "video/mp4", ".mp3": "audio/mpeg", ".md": "text/plain; charset=utf-8", ".log": "text/plain; charset=utf-8", ".jpg": "image/jpeg", ".html": "text/html; charset=utf-8", ".png": "image/png"}
 
-# ---- 103 教材线上实践（ISD-L04K 厨房实验） ----
+# ---- 103 教材线上实践（ISD-L04K 厨房实验 / ISD-L04 全户型实验） ----
 LAB = ROOT / "室内空间设计" / "线上实践" / "labs" / "ISD-L04K"
 FILES["/isd-l04k.html"] = LAB / "kitchen_lab.html"
 FILES["/isd-l04k-qa.png"] = LAB / "qa_initial.png"
+LAB4 = ROOT / "室内空间设计" / "线上实践" / "labs" / "ISD-L04"
+FILES["/isd-l04.html"] = LAB4 / "unit_lab.html"
+FILES["/isd-l04-qa.png"] = LAB4 / "qa_initial.png"
 
 # ---- 前十段（first10）批产 ----
 F10 = [
@@ -204,7 +207,7 @@ h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
 video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}</style></head><body>
 <h1>《环境心理学》设计案例研究 · 论文框架教学片</h1>
 <p class="meta">设计论文六段文体（问题→理论框架→诊断→设计策略→实证检验→结论）× 工程图纸视觉母语 × 纪录片叙事；全程代码确定性渲染，数字全部带来源。配音 CosyVoice v2 · 龙小淳；sol(gpt-6.1-sol 高推理) 制作；时长门禁 ≥570s + 冻结扫描。
-<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a> · <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a> · <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a> · <a href="/isd-l04k.html" style="color:#8f8">🎮 教材线上实践·厨房折返计数实验（ISD-L04K）</a> · <a href="/labs.html" style="color:#8f8">📋 线上实践实验目录（12章规划）</a></p>
+<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a> · <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a> · <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a> · <a href="/isd-l04.html" style="color:#8f8">🎮 教材线上实践·U90全户型功能组织实验（ISD-L04·复杂设计任务）</a> · <a href="/isd-l04k.html" style="color:#8f8">🎮 厨房折返计数实验（ISD-L04K）</a> · <a href="/labs.html" style="color:#8f8">📋 线上实践实验目录（12章规划）</a></p>
 {{ITEMS}}
 </body></html>"""
 
@@ -243,7 +246,7 @@ LABS = [
     ("L01", "观察与问题标注：居住摩擦证据图", "第1–2章", "规划中"),
     ("L02", "人体尺度与动作包络叠加", "第3章", "规划中"),
     ("L03", "居住需求档案与任务书编制", "第2章", "规划中"),
-    ("L04", "功能分区与动线（U90户型）", "第4章", "规划中"),
+    ("L04", "U90全户型功能组织与动线冲突", "第4章", "online"),
     ("L04K", "厨房工作三角与折返计数", "第7章", "online"),
     ("L05", "动线与通达：起终点与障碍路径", "第4章", "规划中"),
     ("L06", "空间围合与视线分析", "第5–6章", "规划中"),
@@ -270,6 +273,12 @@ th{color:#8fb}.tag{color:#8fb;font-size:12px;border:1px solid #2a4;border-radius
 </body></html>"""
 
 
+LAB_FEATURED = {
+    "L04": "固定约束下重组功能（书房三模式/储物四模式/门位槽位/家具拖拽）→ 邻接矩阵7条+四动线交叉+早高峰四口离散事件模拟+时段冲突 → A/B对比与失效条件（成果②）",
+    "L04K": "拖拽工作站→模拟四菜一汤→折返计数（基线6次→优化2次，对应教材图7-1）",
+}
+
+
 def _labs_page():
     rows, featured = [], []
     for _id, _name, _ch, _status in LABS:
@@ -279,7 +288,7 @@ def _labs_page():
                         f'<td>{_ch}</td><td><span class="tag">✅ 可玩</span></td></tr>')
             featured.append(f'<div class="item"><b><a href="{_url}">🎮 {_name}</a></b>'
                             f'<span class="tag">✅ 已上线</span><span class="meta"> · {_ch} · '
-                            f'拖拽工作站→模拟四菜一汤→折返计数（基线6次→优化2次，对应教材图7-1）</span></div>')
+                            f'{LAB_FEATURED.get(_id, "")}</span></div>')
         else:
             rows.append(f'<tr><td>{_id}</td><td>{_name}</td><td>{_ch}</td>'
                         f'<td><span class="tag todo">规划中</span></td></tr>')

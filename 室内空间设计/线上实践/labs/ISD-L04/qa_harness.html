@@ -35,19 +35,22 @@
       win.__LAB_LOAD_BASELINE__('A');
       const evA = win.__LAB_EVALUATE__();
       out.evaluateA = {
-        folds: evA.schedule && evA.schedule.bedFolds,
+        folds: evA.facts && evA.facts.bed_fold_count_per_day,
         schedulePairs: evA.schedule && evA.schedule.pairs,
-        nightM: evA.routes && evA.routes.night && evA.routes.night.lengthM,
-        morningConflicts: evA.morning && evA.morning.conflictCount
+        nightM: evA.facts && evA.facts.night_path_m,
+        morningConflicts: evA.facts && evA.facts.morning_conflict_count,
+        collisions: evA.facts && evA.facts.collision_pair_count,
+        outOfRoom: evA.facts && evA.facts.out_of_room_count
       };
+      log('baselineA_clean', out.evaluateA.collisions === 0 && out.evaluateA.outOfRoom === 0);
       log('baselineA_loaded', true);
       win.__LAB_LOAD_BASELINE__('B');
       const evB = win.__LAB_EVALUATE__();
       out.evaluateB = {
-        folds: evB.schedule && evB.schedule.bedFolds,
+        folds: evB.facts && evB.facts.bed_fold_count_per_day,
         schedulePairs: evB.schedule && evB.schedule.pairs,
-        nightM: evB.routes && evB.routes.night && evB.routes.night.lengthM,
-        morningConflicts: evB.morning && evB.morning.conflictCount
+        nightM: evB.facts && evB.facts.night_path_m,
+        morningConflicts: evB.facts && evB.facts.morning_conflict_count
       };
       log('baselineB_loaded', true);
       log('nightB_lt_A', (out.evaluateB.nightM ?? Infinity) < (out.evaluateA.nightM ?? -1));

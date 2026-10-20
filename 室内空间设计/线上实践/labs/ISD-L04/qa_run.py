@@ -70,6 +70,7 @@ def main() -> int:
           and st.get('passed') == 8 and not st.get('failed')
           and steps.get('baselineA_loaded') is True
           and steps.get('baselineB_loaded') is True
+          and steps.get('baselineA_clean') is True
           and steps.get('nightB_lt_A') is True
           and steps.get('determinism') is True
           and not errors)

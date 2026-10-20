@@ -1,0 +1,24 @@
+{
+ "calls": [
+  {
+   "purpose": "unit_lab.html v1 generation",
+   "model": "gpt-6.1-sol",
+   "effort": "high",
+   "secs": 384.8,
+   "usage": {
+    "prompt_tokens": 10547,
+    "completion_tokens": 25439,
+    "total_tokens": 35986,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 3797
+    }
+   },
+   "finish": "stop",
+   "response_chars": 55444,
+   "exact_tokens": true
+  }
+ ]
+}
