@@ -152,6 +152,7 @@ details.selftest{font-size:12px;margin-top:10px}
 <nav class="topbar" aria-label="实验关卡">
   <button id="level1" class="pill active">关卡1 · 诊断</button>
   <button id="level2" class="pill">关卡2 · 处方</button>
+  <button id="loadBaselineB" class="small primary">查看可解锁示例B</button>
   <button id="challenge" class="pill" disabled>挑战模式 · 待解锁</button>
   <button id="reset" class="small">重置为基线A</button>
   <span class="level-note">先观察，再调整，最后讲述取舍；不生成综合评分。</span>
@@ -234,8 +235,8 @@ details.selftest{font-size:12px;margin-top:10px}
       <details class="contract" open>
         <summary>任务合同与计数口径</summary>
         <p>冰箱—水槽中心距<strong>≤2.00米</strong>时一次取齐：冰箱→水槽→备餐→灶台→垃圾桶；否则分批送菜三趟：冰箱→水槽→冰箱→水槽→冰箱→水槽→备餐→灶台→垃圾桶。末次送达后不再返回冰箱。</p>
-        <p>水槽、备餐、灶台须依次沿同一墙面贴齐，相邻台面边缘间隙均为0–0.05米，才构成连续作业链；链内步进不计折返，其余不同站间移动各计1次。因此连续链下，远距基线A为<strong>6次</strong>、近距基线B为<strong>2次</strong>。距离阈值与链判定都使用未四舍五入的米制几何值。</p>
-        <p>次数、三角与碰撞分别检查，低次数不等于方案合格：一次取齐时冰箱—水槽边长也低于三角1.20米的教学下限。预置布局用于验证任务逻辑，固定设施及家具的相交仍如实报告，不视为可施工方案。</p>
+        <p>这里的「折返次数」不是物体数量，也不是总走路段数，而是任务序列中的计数移动数：水槽、备餐、灶台须依次沿同一墙面贴齐，相邻台面边缘间隙均为0–0.05米，才构成连续作业链；链内两段仍计入步行距离，但不计为折返，其余跨站移动各计1次。因此5个工作站并不等于5次折返：基线B有4段任务移动，其中2段是连续链内步进，计数结果为<strong>2次</strong>；远距基线A因分批取菜增加往返，计<strong>6次</strong>。距离阈值与链判定使用未四舍五入的米制几何值。</p>
+        <p>次数、三角与碰撞分别检查，低次数不等于方案合格。基线B用来演示处方目标解锁；预置烟道/水槽几何关系和通道测量仍须独立审查，不视为可施工方案。</p>
       </details>
     </section>
 
@@ -269,7 +270,7 @@ details.selftest{font-size:12px;margin-top:10px}
         <div><button id="saveB">存为B版</button><button id="loadB" class="small" disabled>载入B版</button></div>
       </div>
       <div id="comparison"></div>
-      <div class="button-row"><button id="loadBaselineB" class="small">查看教学基线B</button></div>
+      <p class="smalltext muted">快速体验处方关卡，可使用顶栏「查看可解锁示例B」加载预置布局。</p>
       <div class="export-grid">
         <button id="exportProject">导出工程（JSON）</button>
         <button id="importProject">导入工程（JSON）</button>
