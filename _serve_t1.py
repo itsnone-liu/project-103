@@ -204,7 +204,7 @@ h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
 video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}</style></head><body>
 <h1>《环境心理学》设计案例研究 · 论文框架教学片</h1>
 <p class="meta">设计论文六段文体（问题→理论框架→诊断→设计策略→实证检验→结论）× 工程图纸视觉母语 × 纪录片叙事；全程代码确定性渲染，数字全部带来源。配音 CosyVoice v2 · 龙小淳；sol(gpt-6.1-sol 高推理) 制作；时长门禁 ≥570s + 冻结扫描。
-<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a> · <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a> · <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a> · <a href="/isd-l04k.html" style="color:#8f8">🎮 教材线上实践·厨房折返计数实验（ISD-L04K）</a></p>
+<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a> · <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a> · <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a> · <a href="/isd-l04k.html" style="color:#8f8">🎮 教材线上实践·厨房折返计数实验（ISD-L04K）</a> · <a href="/labs.html" style="color:#8f8">📋 线上实践实验目录（12章规划）</a></p>
 {{ITEMS}}
 </body></html>"""
 
@@ -236,6 +236,54 @@ video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}<
 <br><a href="/first10.html">▶ 三十八讲正文正片</a></p>
 {{ITEMS}}
 </body></html>"""
+
+
+# ---- 教材线上实践实验目录（labs.html） ----
+LABS = [
+    ("L01", "观察与问题标注：居住摩擦证据图", "第1–2章", "规划中"),
+    ("L02", "人体尺度与动作包络叠加", "第3章", "规划中"),
+    ("L03", "居住需求档案与任务书编制", "第2章", "规划中"),
+    ("L04", "功能分区与动线（U90户型）", "第4章", "规划中"),
+    ("L04K", "厨房工作三角与折返计数", "第7章", "online"),
+    ("L05", "动线与通达：起终点与障碍路径", "第4章", "规划中"),
+    ("L06", "空间围合与视线分析", "第5–6章", "规划中"),
+    ("L07", "采光与照明四场景切换", "第8章", "规划中"),
+    ("L08", "材料色彩七属性对比", "第9章", "规划中"),
+    ("L09", "家具收纳与多情境切换", "第10章", "规划中"),
+    ("L10", "技术疑点三层分类与待核单", "第11章", "规划中"),
+    ("L11", "A/B 表达与同伴评议", "第12章", "规划中"),
+    ("L12", "综合项目作品包（承接各实验）", "第12章", "规划中"),
+]
+LABS_PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>线上实践实验目录</title>
+<style>body{background:#10151c;color:#dfe7ee;font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:1080px;margin:24px auto;padding:0 16px}
+h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
+table{border-collapse:collapse;width:100%;margin:16px 0}td,th{border:1px solid #2a3542;padding:8px 10px;font-size:14px;text-align:left}
+th{color:#8fb}.tag{color:#8fb;font-size:12px;border:1px solid #2a4;border-radius:4px;padding:1px 6px}
+.tag.todo{color:#788;border-color:#445}.item{margin:22px 0}</style></head><body>
+<h1>《室内空间设计》线上实践 · 实验目录</h1>
+<p class="meta">配套读本 v0.4（12章）· 一章一实验 · 全部为单文件网页（无后端、无依赖、平台无关）。
+规则约束：教学常用值/教学假设与国家标准严格区分；三层反馈分列（观察/规则建议/教师判断），不合成 AI 总分；导出 isd-design-v1 数据契约。
+生产管线：lab.yaml 合同 → sol(gpt-6.1-sol 高推理) 生成 → 程序化 QA 门禁（6断言+确定性+视觉审）。
+<br><a href="/">◀ 返回总入口</a></p>
+<table><tr><th>编号</th><th>实验</th><th>教材锚点</th><th>状态</th></tr>{{ROWS}}</table>
+{{FEATURED}}
+</body></html>"""
+
+
+def _labs_page():
+    rows, featured = [], []
+    for _id, _name, _ch, _status in LABS:
+        if _status == "online":
+            _url = f"/isd-{_id.lower()}.html"
+            rows.append(f'<tr><td><b>{_id}</b></td><td><a href="{_url}">{_name}</a></td>'
+                        f'<td>{_ch}</td><td><span class="tag">✅ 可玩</span></td></tr>')
+            featured.append(f'<div class="item"><b><a href="{_url}">🎮 {_name}</a></b>'
+                            f'<span class="tag">✅ 已上线</span><span class="meta"> · {_ch} · '
+                            f'拖拽工作站→模拟四菜一汤→折返计数（基线6次→优化2次，对应教材图7-1）</span></div>')
+        else:
+            rows.append(f'<tr><td>{_id}</td><td>{_name}</td><td>{_ch}</td>'
+                        f'<td><span class="tag todo">规划中</span></td></tr>')
+    return LABS_PAGE.replace("{{ROWS}}", "".join(rows)).replace("{{FEATURED}}", "".join(featured))
 
 
 def _intros_page():
@@ -294,7 +342,8 @@ td,th{border:1px solid #2a3540;padding:4px 10px;text-align:left}th{color:#8fb}</
 <p class="meta"><a href="/intros.html">▶ 章绪论十篇（每章 1-2 分钟导览，龙小淳配音）</a><br><a href="/cases.html">▶ 设计案例研究（论文框架教学片）</a><br>
 <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a><br>
 <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a><br>
-<a href="/first10.html">▶ 前三十六段正片批产（绪论→10.3 全书收官，龙小淳配音，sol 新制 34 段+换声 2 段）</a></p>
+<a href="/first10.html">▶ 前三十六段正片批产（绪论→10.3 全书收官，龙小淳配音，sol 新制 34 段+换声 2 段）</a><br>
+<a href="/labs.html" style="color:#8f8">📋《室内空间设计》线上实践实验目录（首个实验已上线）</a></p>
 <table>
 <tr><th></th><th>v1 默认推理</th><th>hr 高推理</th></tr>
 <tr><td>时长</td><td>396.7s</td><td>348.6s（更贴近 5min 目标）</td></tr>
@@ -442,6 +491,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return
         if self.path == "/first10.html":
             body = _f10_page().encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        if self.path == "/labs.html":
+            body = _labs_page().encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))
