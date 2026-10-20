@@ -5,37 +5,66 @@
   <!-- ===== Panel A: 围合式 ===== -->
   <g transform="translate(60,70)">
     <text x="200" y="22" text-anchor="middle" font-size="17" font-weight="bold" fill="#333">围合式：交谈优先</text>
-    <!-- room 4.2m x 3.4m at 100px/m -->
     <rect x="0" y="40" width="420" height="340" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
-    <!-- sofa along top (north) -->
-    <rect x="70" y="50" width="220" height="55" rx="8" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2"/>
-    <text x="180" y="84" text-anchor="middle" font-size="13" fill="#1a3c5e">三人沙发</text>
-    <!-- armchairs left/right facing inward -->
-    <rect x="25" y="150" width="70" height="70" rx="8" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2"/>
-    <text x="60" y="192" text-anchor="middle" font-size="12" fill="#1a3c5e">单椅</text>
-    <rect x="265" y="150" width="70" height="70" rx="8" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2"/>
-    <text x="300" y="192" text-anchor="middle" font-size="12" fill="#1a3c5e">单椅</text>
-    <!-- coffee table -->
-    <rect x="140" y="160" width="80" height="50" rx="6" fill="#f2ede2" stroke="#8a7a55" stroke-width="2"/>
-    <text x="180" y="191" text-anchor="middle" font-size="12" fill="#5c4f33">茶几</text>
-    <!-- TV wall bottom (south) with balcony door at SE -->
-    <rect x="120" y="372" width="180" height="8" fill="#1a1a1a"/>
-    <text x="210" y="356" text-anchor="middle" font-size="12" fill="#333">电视墙</text>
-    <!-- balcony door opening bottom-right -->
+
+    <!-- 三人沙发 (俯视符号): 外框+扶手+靠背+3座垫 -->
+    <g>
+      <rect x="70" y="50" width="220" height="90" rx="10" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2.2"/>
+      <rect x="74" y="54" width="18" height="82" rx="6" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="268" y="54" width="18" height="82" rx="6" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="94" y="54" width="172" height="20" rx="6" fill="#b3cbe6" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="96" y="80" width="52" height="54" rx="7" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="153" y="80" width="52" height="54" rx="7" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="210" y="80" width="52" height="54" rx="7" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+      <text x="180" y="128" text-anchor="middle" font-size="11.5" fill="#1a3c5e">三人沙发</text>
+    </g>
+
+    <!-- 单椅左（面向右/茶几）: 靠背在左 -->
+    <g>
+      <rect x="25" y="150" width="70" height="70" rx="9" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2.2"/>
+      <rect x="29" y="154" width="15" height="62" rx="5" fill="#b3cbe6" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="33" y="170" width="10" height="30" rx="4" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.2"/>
+      <rect x="78" y="170" width="10" height="30" rx="4" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.2"/>
+      <rect x="48" y="158" width="26" height="54" rx="6" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+    </g>
+    <text x="60" y="240" text-anchor="middle" font-size="11.5" fill="#1a3c5e">单椅</text>
+
+    <!-- 单椅右（面向左）: 靠背在右 -->
+    <g>
+      <rect x="265" y="150" width="70" height="70" rx="9" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2.2"/>
+      <rect x="316" y="154" width="15" height="62" rx="5" fill="#b3cbe6" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="272" y="170" width="10" height="30" rx="4" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.2"/>
+      <rect x="317" y="170" width="10" height="30" rx="4" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.2"/>
+      <rect x="286" y="158" width="26" height="54" rx="6" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+    </g>
+    <text x="300" y="240" text-anchor="middle" font-size="11.5" fill="#1a3c5e">单椅</text>
+
+    <!-- 茶几: 圆角+木纹线 -->
+    <g>
+      <rect x="140" y="160" width="80" height="50" rx="8" fill="#f2ede2" stroke="#8a7a55" stroke-width="2"/>
+      <path d="M 148 168 L 212 202 M 148 202 L 212 168" stroke="#c9bd9d" stroke-width="1.2"/>
+    </g>
+    <text x="180" y="230" text-anchor="middle" font-size="11.5" fill="#5c4f33">茶几</text>
+
+    <!-- 电视 (贴墙薄板+屏幕线) -->
+    <rect x="120" y="366" width="180" height="9" rx="3" fill="#2b2b2b"/>
+    <rect x="124" y="368" width="172" height="5" rx="2" fill="#557" opacity="0.6"/>
+    <text x="210" y="356" text-anchor="middle" font-size="12" fill="#333">电视</text>
+
+    <!-- balcony door -->
     <rect x="340" y="360" width="70" height="20" fill="none" stroke="#2e8b57" stroke-width="3"/>
     <text x="375" y="402" text-anchor="middle" font-size="12" fill="#2e8b57">去阳台</text>
-    <!-- path from corridor (left) to balcony -->
-    <path d="M -18 260 L 105 260 Q 150 260 150 300 L 150 330 Q 150 370 320 370 L 372 370" fill="none" stroke="#e07b00" stroke-width="4" stroke-dasharray="10,6" marker-end="url(#arrA)"/>
+
     <defs>
       <marker id="arrA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M 0 0 L 10 5 L 0 10 z" fill="#e07b00"/>
       </marker>
     </defs>
-    <!-- narrowest gap marker between right armchair and coffee table area on path -->
-    <line x1="222" y1="322" x2="222" y2="370" stroke="#d0021b" stroke-width="2"/>
-    <line x1="216" y1="322" x2="228" y2="322" stroke="#d0021b" stroke-width="2"/>
-    <line x1="216" y1="370" x2="228" y2="370" stroke="#d0021b" stroke-width="2"/>
-    <text x="238" y="342" font-size="12" fill="#d0021b">最窄处 约0.5m</text>
+    <path d="M -18 260 L 105 260 Q 150 260 150 300 L 150 330 Q 150 372 330 372 L 372 372" fill="none" stroke="#e07b00" stroke-width="4" stroke-dasharray="10,6" marker-end="url(#arrA)"/>
+    <line x1="290" y1="336" x2="290" y2="364" stroke="#d0021b" stroke-width="2"/>
+    <line x1="284" y1="336" x2="296" y2="336" stroke="#d0021b" stroke-width="2"/>
+    <line x1="284" y1="364" x2="296" y2="364" stroke="#d0021b" stroke-width="2"/>
+    <text x="300" y="344" font-size="12" fill="#d0021b">通道最窄段（示意）</text>
     <text x="200" y="438" text-anchor="middle" font-size="12.5" fill="#555">座位彼此看得见脸，聊天自然；</text>
     <text x="200" y="458" text-anchor="middle" font-size="12.5" fill="#555">中央与通道被家具占据，去阳台变窄</text>
   </g>
@@ -44,33 +73,57 @@
   <g transform="translate(500,70)">
     <text x="200" y="22" text-anchor="middle" font-size="17" font-weight="bold" fill="#333">沿墙式：游戏地面优先</text>
     <rect x="0" y="40" width="420" height="340" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
-    <!-- sofa top-left along wall -->
-    <rect x="20" y="50" width="200" height="55" rx="8" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2"/>
-    <text x="120" y="84" text-anchor="middle" font-size="13" fill="#1a3c5e">三人沙发（靠墙）</text>
-    <!-- armchair top-right along wall -->
-    <rect x="245" y="50" width="75" height="70" rx="8" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2"/>
-    <text x="282" y="92" text-anchor="middle" font-size="12" fill="#1a3c5e">单椅</text>
-    <!-- TV on east wall -->
-    <rect x="408" y="150" width="8" height="150" fill="#1a1a1a"/>
-    <text x="395" y="230" text-anchor="end" font-size="12" fill="#333">电视</text>
-    <!-- play mat center -->
-    <rect x="90" y="170" width="220" height="130" rx="10" fill="#eaf4ea" stroke="#2e8b57" stroke-width="2" stroke-dasharray="6,4"/>
-    <text x="200" y="230" text-anchor="middle" font-size="13" fill="#2e8b57">孩子游戏区（整块空地）</text>
-    <!-- balcony door bottom-right -->
+
+    <!-- 三人沙发靠墙 -->
+    <g>
+      <rect x="20" y="50" width="200" height="82" rx="10" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2.2"/>
+      <rect x="24" y="54" width="16" height="74" rx="6" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="200" y="54" width="16" height="74" rx="6" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="42" y="54" width="156" height="18" rx="6" fill="#b3cbe6" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="45" y="77" width="48" height="50" rx="7" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="97" y="77" width="48" height="50" rx="7" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="149" y="77" width="48" height="50" rx="7" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+      <text x="120" y="146" text-anchor="middle" font-size="11.5" fill="#1a3c5e">三人沙发</text>
+    </g>
+
+    <!-- 单椅（靠北墙，面向南） -->
+    <g>
+      <rect x="245" y="50" width="66" height="66" rx="9" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2.2"/>
+      <rect x="249" y="54" width="58" height="14" rx="5" fill="#b3cbe6" stroke="#3a6ea5" stroke-width="1.5"/>
+      <rect x="249" y="72" width="12" height="40" rx="4" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.2"/>
+      <rect x="295" y="72" width="12" height="40" rx="4" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.2"/>
+      <rect x="265" y="74" width="26" height="38" rx="6" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+    </g>
+    <text x="278" y="136" text-anchor="middle" font-size="11.5" fill="#1a3c5e">单椅</text>
+
+    <!-- 地毯（虚线边）+ 玩具符号 -->
+    <rect x="90" y="170" width="220" height="130" rx="10" fill="#eaf4ea" stroke="#2e8b57" stroke-width="1.8" stroke-dasharray="7,5"/>
+    <circle cx="140" cy="215" r="10" fill="#f4d35e" stroke="#b58a00" stroke-width="1.5"/>
+    <rect x="175" y="205" width="20" height="20" rx="3" fill="#e07b5f" stroke="#a5472e" stroke-width="1.5"/>
+    <path d="M 225 230 l 12 -20 l 12 20 z" fill="#7fb3d5" stroke="#3a6ea5" stroke-width="1.5"/>
+    <rect x="150" y="248" width="26" height="14" rx="3" fill="#c9a3d5" stroke="#7d4a8f" stroke-width="1.5"/>
+    <circle cx="230" cy="256" r="7" fill="#9fd0a0" stroke="#2e8b57" stroke-width="1.5"/>
+    <text x="200" y="315" text-anchor="middle" font-size="12" fill="#2e8b57">孩子游戏区（地毯＋玩具）</text>
+
+    <!-- 电视 (东墙竖板) -->
+    <rect x="408" y="150" width="9" height="150" rx="3" fill="#2b2b2b"/>
+    <rect x="410" y="154" width="5" height="142" rx="2" fill="#557" opacity="0.6"/>
+    <line x1="396" y1="196" x2="407" y2="188" stroke="#555" stroke-width="1.2"/>
+    <text x="394" y="192" text-anchor="end" font-size="12" fill="#333">电视</text>
+
     <rect x="340" y="360" width="70" height="20" fill="none" stroke="#2e8b57" stroke-width="3"/>
     <text x="375" y="402" text-anchor="middle" font-size="12" fill="#2e8b57">去阳台</text>
-    <!-- wide clear path -->
-    <path d="M -18 300 L 372 300 Q 372 340 372 372" fill="none" stroke="#e07b00" stroke-width="5" stroke-dasharray="10,6" marker-end="url(#arrB)"/>
+
     <defs>
       <marker id="arrB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M 0 0 L 10 5 L 0 10 z" fill="#e07b00"/>
       </marker>
     </defs>
+    <path d="M -18 300 L 372 300 Q 372 340 372 372" fill="none" stroke="#e07b00" stroke-width="5" stroke-dasharray="10,6" marker-end="url(#arrB)"/>
     <text x="200" y="160" text-anchor="middle" font-size="12" fill="#e07b00">通道约2m，畅通</text>
     <text x="200" y="438" text-anchor="middle" font-size="12.5" fill="#555">中央空地大、动线宽松；</text>
     <text x="200" y="458" text-anchor="middle" font-size="12.5" fill="#555">座位隔得远，说话要提高嗓门</text>
   </g>
 
-  <!-- footnote -->
-  <text x="460" y="540" text-anchor="middle" font-size="12.5" fill="#888">橙色虚线＝去阳台动线；红色＝通道最窄处。房间按 4.2m×3.4m 局部绘制，家具比例示意。</text>
+  <text x="460" y="540" text-anchor="middle" font-size="12.5" fill="#888">橙色虚线＝去阳台动线；红色＝通道最窄处。房间按 4.2m×3.4m 局部绘制，家具为俯视符号、比例示意。</text>
 </svg>
