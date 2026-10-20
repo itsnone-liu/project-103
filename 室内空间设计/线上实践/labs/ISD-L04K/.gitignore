@@ -1,1 +1,7 @@
-﻿.qa_profile*`nqa_dom.txt`nqa_result.json`nsol_raw.txt`nsol_repair_raw.txt
+.qa_profile*
+qa_dom.txt
+qa_result.json
+sol_raw.txt
+sol_repair_raw.txt
+sol_continue_raw.txt
+kitchen_lab_v1.html
