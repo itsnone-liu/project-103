@@ -1,0 +1,30 @@
+# ISD-L04K 厨房工作站与折返计数
+
+《室内空间设计》v0.4 第7章配套线上实践（Level A：单文件网页，无后端、无外部依赖、平台无关）。
+对应教材：图7-1（折返计数法）、7.2（工作站与工作三角）、7.5（一字型/L型例题）。
+
+## 使用
+
+- **学生/试教**：双击 `kitchen_lab.html` 直接在浏览器打开。关卡1载入"冰箱对侧"基线（折返6次），关卡2自由拖拽优化（目标≤3次，最优2次＝图7-1乙）。
+- **本机QA**：`D:/ComfyUI_windows_portable/python_embeded/python.exe qa_run.py`（起本地http→chrome headless→程序化自检6断言＋确定性复算＋截图）。通过标准：`"pass": true`。
+
+## 教学规则要点（全部为教学常用值/教学假设，非国家标准）
+
+- 工作三角：单边 1.2–2.7m、总长 4.0–6.6m（入门检查工具，非设计目标）。
+- 折返计数：冰箱—水槽中心距 ≤1.0m → "一次取齐"策略；>1.0m → "分批三趟"策略——**策略随距离切换正是图7-1的教学点**（甲6次/乙2次）。
+- 连续作业链：水槽/备餐/灶台同墙且间隙≤0.05m，链内步进不计折返（教材7.2"相邻工作站共享边界"）。
+- 三层反馈分离：观察（客观几何）/ 规则建议（前缀"教学常用值提示"）/ 教师判断（人工维度，不自动评分）。
+
+## 数据与复现
+
+- 坐标契约：origin=西北角，x东y南，单位米；`isd-design-v1` schema；导出 project.json / plan.png / comparison_report.json；导出→导入等价。
+- 确定性：同场景 JSON 必得同 report（qa_run 断言 evaluate 两次 JSON 等价）。
+- 页内 `window.__LAB_SELFTEST__()` 控制台可调（6断言含基线A=6/B=2）；`KitchenRules` 引擎全纯函数挂在 window 供教学复用。
+
+## 开发管线（sol 高推理，参照103项目）
+
+`lab.yaml`（实验合同）＋`brief.md`（实现简报）→ `sol_generate.py`（gpt-6.1-sol @ codex-proxy, effort=high）→ 产出单文件HTML → 人工修复轮（`sol_repair.py`，超长响应截断时 `sol_continue.py` 续写拼接）→ `qa_run.py` 门禁 → 提交。usage.json 记录每次调用的 tokens/耗时（proxy 不回传 usage 时如实标 `exact_tokens:false`，不伪造）。
+
+## 版本
+
+- v1（2026-10）：首版。折返模型经一轮修复（初版固定分组序列与布局无关的设计缺陷 → 改为策略随距离切换＋连续链规则）。QA 6/6 通过。
