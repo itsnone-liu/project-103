@@ -55,7 +55,12 @@ for _f in sorted((ROOT / "cache" / "cosy_voices").glob("*.mp3")):
     _key = _f.stem
     if _key in _cosy_label:
         FILES[f"/cosy-{_key}.mp3"] = _f
-MIME = {".mp4": "video/mp4", ".mp3": "audio/mpeg", ".md": "text/plain; charset=utf-8", ".log": "text/plain; charset=utf-8", ".jpg": "image/jpeg"}
+MIME = {".mp4": "video/mp4", ".mp3": "audio/mpeg", ".md": "text/plain; charset=utf-8", ".log": "text/plain; charset=utf-8", ".jpg": "image/jpeg", ".html": "text/html; charset=utf-8", ".png": "image/png"}
+
+# ---- 103 教材线上实践（ISD-L04K 厨房实验） ----
+LAB = ROOT / "室内空间设计" / "线上实践" / "labs" / "ISD-L04K"
+FILES["/isd-l04k.html"] = LAB / "kitchen_lab.html"
+FILES["/isd-l04k-qa.png"] = LAB / "qa_initial.png"
 
 # ---- 前十段（first10）批产 ----
 F10 = [
@@ -199,7 +204,7 @@ h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
 video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}</style></head><body>
 <h1>《环境心理学》设计案例研究 · 论文框架教学片</h1>
 <p class="meta">设计论文六段文体（问题→理论框架→诊断→设计策略→实证检验→结论）× 工程图纸视觉母语 × 纪录片叙事；全程代码确定性渲染，数字全部带来源。配音 CosyVoice v2 · 龙小淳；sol(gpt-6.1-sol 高推理) 制作；时长门禁 ≥570s + 冻结扫描。
-<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a> · <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a> · <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a></p>
+<br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a> · <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a> · <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a> · <a href="/isd-l04k.html" style="color:#8f8">🎮 教材线上实践·厨房折返计数实验（ISD-L04K）</a></p>
 {{ITEMS}}
 </body></html>"""
 
