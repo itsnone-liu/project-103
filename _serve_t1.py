@@ -69,6 +69,12 @@ FILES["/isd-l03.html"] = LAB3 / "bubble_lab.html"
 FILES["/isd-l03-qa.png"] = LAB3 / "qa_initial.png"
 LAB6 = ROOT / "室内空间设计" / "线上实践" / "labs" / "ISD-L06"
 FILES["/isd-l06-preview.html"] = LAB6 / "render_preview.html"
+ISD_V = ROOT / "runs" / "isd-3-02" / "out"
+FILES["/isd-3-02.mp4"] = ISD_V / "final_isd-3-02.mp4"
+FILES["/isd-3-02-sheet.jpg"] = ISD_V / "qa_sheet.jpg"
+ISD_V2 = ROOT / "runs" / "isd-4-02" / "out"
+FILES["/isd-4-02.mp4"] = ISD_V2 / "final_isd-4-02.mp4"
+FILES["/isd-4-02-sheet.jpg"] = ISD_V2 / "qa_sheet.jpg"
 for _asset in ("three.min.js", "OrbitControls.js", "RoomEnvironment.js"):
     FILES[f"/isd-l06-vendor/{_asset}"] = LAB6 / "vendor" / _asset
 
@@ -577,6 +583,34 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
+        if self.path.split("?", 1)[0] == "/isdv.html":
+            _rows = []
+            for _p in sorted((ROOT / "runs").glob("isd-*/out/final_isd-*.mp4")):
+                _run = _p.parent.parent.name
+                _kb = _p.stat().st_size // 1024
+                _rows.append(f'<li><a href="/isdv/{_run}.mp4">{_run}.mp4</a> ({_kb} KB)</li>')
+            body = ("<html><head><meta charset='utf-8'><title>ISD 视频课件</title></head><body>"
+                    f"<h2>室内空间设计 · 视频课件（{len(_rows)} 段）</h2><ul>"
+                    + "".join(_rows) + "</ul></body></html>").encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        import re as _re0
+        _m = _re0.match(r"^/isdv/(isd-[A-Za-z0-9\-]+)\.mp4$", self.path.split("?", 1)[0])
+        if _m:
+            f = ROOT / "runs" / _m.group(1) / "out" / f"final_{_m.group(1)}.mp4"
+            if f.exists():
+                self._send_file(f)
+                return
+        _m = _re0.match(r"^/isdv/(isd-[A-Za-z0-9\-]+)-sheet\.jpg$", self.path.split("?", 1)[0])
+        if _m:
+            f = ROOT / "runs" / _m.group(1) / "out" / "qa_sheet.jpg"
+            if f.exists():
+                self._send_file(f)
+                return
         f = FILES.get(self.path.split("?", 1)[0])
         if self.path.split("?", 1)[0] == "/spike-evaluation.md":
             f = ROOT / "runs" / "urban-doc-style-spike" / "EVALUATION.md"
@@ -588,6 +622,28 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
 
     def do_HEAD(self):
+        import re as _reH
+        _m = _reH.match(r"^/isdv/(isd-[A-Za-z0-9\-]+)(-sheet)?\.jpg$", self.path.split("?", 1)[0])
+        if _m:
+            f = (ROOT / "runs" / _m.group(1) / "out" / "qa_sheet.jpg") if _m.group(2) else None
+            if f and f.exists():
+                self.send_response(200)
+                self.send_header("Content-Type", "image/jpeg")
+                self.send_header("Content-Length", str(f.stat().st_size))
+                self.end_headers()
+                return
+        _m = _reH.match(r"^/isdv/(isd-[A-Za-z0-9\-]+)\.mp4$", self.path.split("?", 1)[0])
+        if _m:
+            f = ROOT / "runs" / _m.group(1) / "out" / f"final_{_m.group(1)}.mp4"
+            if f.exists():
+                size = f.stat().st_size
+                self.send_response(200)
+                self.send_header("Content-Type", "video/mp4")
+                self.send_header("Content-Length", str(size))
+                self.send_header("Accept-Ranges", "bytes")
+                self.send_header("ETag", f'W/"{int(f.stat().st_mtime)}-{size}"')
+                self.end_headers()
+                return
         f = FILES.get(self.path.split("?", 1)[0])
         if f and f.exists():
             size = f.stat().st_size
