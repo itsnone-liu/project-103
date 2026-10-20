@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 620" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="860" height="620" fill="#ffffff"/>
+  <text x="430" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#1a1a1a">图5-2 餐桌周围的水下冰山（教学示意图·教学常用值）</text>
+
+  <defs>
+    <marker id="arrC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e07b00"/>
+    </marker>
+  </defs>
+
+  <!-- scale: 120px/m; table center (430,300) -->
+  <!-- circulation band 60cm=72px beyond pull band -->
+  <rect x="184" y="90" width="492" height="420" fill="#e8f1fa" stroke="#7aa7cc" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <!-- chair-pull band 75cm=90px beyond table edge -->
+  <rect x="256" y="162" width="348" height="276" fill="#fdf0dd" stroke="#d8a86a" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <!-- table 1.4x0.8 => 168x96 -->
+  <rect x="346" y="252" width="168" height="96" fill="#f2ede2" stroke="#1a1a1a" stroke-width="3"/>
+  <text x="430" y="307" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#5c4f33">餐桌桌面 1.4×0.8m</text>
+  <text x="356" y="192" text-anchor="end" font-size="11" fill="#3a6ea5">餐椅深约45cm</text>
+  <!-- chairs 0.45m=54px pushed against table -->
+  <g stroke="#3a6ea5" stroke-width="2" fill="#dce8f5">
+    <rect x="356" y="198" width="54" height="54" rx="5"/>
+    <rect x="450" y="198" width="54" height="54" rx="5"/>
+    <rect x="356" y="348" width="54" height="54" rx="5"/>
+    <rect x="450" y="348" width="54" height="54" rx="5"/>
+    <rect x="292" y="273" width="54" height="54" rx="5"/>
+    <rect x="514" y="273" width="54" height="54" rx="5"/>
+  </g>
+  <!-- ghost chair pulled out (dashed) showing 75cm reach -->
+  <rect x="356" y="162" width="54" height="54" rx="5" fill="none" stroke="#d8a86a" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <text x="470" y="188" font-size="11.5" fill="#d8a86a">椅子拉出后到这里</text>
+
+  <!-- band labels, right side, clear of bands -->
+  <text x="700" y="240" font-size="13.5" fill="#d8a86a">橙色带：拉椅后坐人</text>
+  <text x="700" y="258" font-size="13.5" fill="#d8a86a">（桌边往外约75cm）</text>
+  <text x="700" y="292" font-size="13.5" fill="#7aa7cc">蓝色带：通行净宽</text>
+  <text x="700" y="310" font-size="13.5" fill="#7aa7cc">（椅背拉出后到墙约60cm）</text>
+  <line x1="692" y1="236" x2="608" y2="200" stroke="#d8a86a" stroke-width="1.2"/>
+  <line x1="692" y1="288" x2="680" y2="120" stroke="#7aa7cc" stroke-width="1.2"/>
+
+  <!-- serving path from kitchen (top-left) down past table -->
+  <path d="M 120 90 L 120 400 Q 120 480 240 480 L 280 480" fill="none" stroke="#e07b00" stroke-width="4" stroke-dasharray="10,6" marker-end="url(#arrC)"/>
+  <text x="96" y="440" font-size="13" fill="#e07b00">端菜路径（也过最窄处）</text>
+  <text x="120" y="76" text-anchor="middle" font-size="12.5" fill="#888">自厨房来</text>
+
+  <!-- narrowest marker: pulled-out chair back (pull band edge x=256) to wall (circ edge x=184) -->
+  <line x1="256" y1="386" x2="184" y2="386" stroke="#d0021b" stroke-width="2.5"/>
+  <line x1="256" y1="378" x2="256" y2="394" stroke="#d0021b" stroke-width="2.5"/>
+  <line x1="184" y1="378" x2="184" y2="394" stroke="#d0021b" stroke-width="2.5"/>
+  <text x="220" y="416" text-anchor="middle" font-size="13" fill="#d0021b">最窄处：拉出后椅背↔墙 60cm</text>
+
+  <!-- wall hint on west edge -->
+  <text x="184" y="540" text-anchor="start" font-size="12.5" fill="#7aa7cc">蓝色带外缘＝墙或邻接家具</text>
+
+  <!-- iceberg note -->
+  <g transform="translate(180,556)">
+    <path d="M 0 24 L 240 24 L 240 -22 L 268 -22 L 268 24 L 500 24" fill="none" stroke="#7aa7cc" stroke-width="1.8"/>
+    <rect x="240" y="-22" width="28" height="22" fill="#f2ede2" stroke="#1a1a1a" stroke-width="1.8"/>
+    <text x="254" y="-30" text-anchor="middle" font-size="12" fill="#5c4f33">桌面＝水面上</text>
+    <text x="150" y="8" text-anchor="end" font-size="11.5" fill="#7aa7cc">← 水面线（地面）</text>
+    <text x="254" y="42" text-anchor="middle" font-size="12" fill="#3a6ea5">拉椅＋通行＋端菜＝水面下，看不见但占地方</text>
+  </g>
+</svg>

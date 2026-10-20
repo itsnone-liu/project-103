@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 600" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="940" height="600" fill="#ffffff"/>
+  <text x="470" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#1a1a1a">图5-3 U90客餐厅两方案对照：餐桌放北端还是南窗（教学示意图·路径长度为教学假设）</text>
+
+  <!-- ===== Panel A: 餐桌北端 ===== -->
+  <g transform="translate(120,80)">
+    <text x="115" y="20" text-anchor="middle" font-size="16.5" font-weight="bold" fill="#333">方案A：餐桌在北端（近厨房）</text>
+    <!-- room 4.2 x 7.1 at 55px/m => 231 x 390 -->
+    <rect x="0" y="35" width="231" height="390" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
+    <!-- north openings: kitchen door (NW), entrance (mid) -->
+    <line x1="10" y1="35" x2="60" y2="35" stroke="#2e8b57" stroke-width="5"/>
+    <text x="35" y="26" text-anchor="middle" font-size="11.5" fill="#2e8b57">厨房门</text>
+    <line x1="95" y1="35" x2="160" y2="35" stroke="#5a5a5a" stroke-width="5"/>
+    <text x="128" y="26" text-anchor="middle" font-size="11.5" fill="#5a5a5a">玄关入口</text>
+    <!-- east corridor opening to common bath -->
+    <line x1="231" y1="60" x2="231" y2="105" stroke="#5a5a5a" stroke-width="5"/>
+    <text x="248" y="88" font-size="11.5" fill="#5a5a5a">走道→公卫</text>
+    <!-- south balcony door -->
+    <line x1="60" y1="425" x2="140" y2="425" stroke="#2e8b57" stroke-width="5"/>
+    <text x="100" y="445" text-anchor="middle" font-size="11.5" fill="#2e8b57">阳台门（南）</text>
+    <!-- master bed door west south -->
+    <line x1="0" y1="330" x2="0" y2="370" stroke="#bbb" stroke-width="4"/>
+    <text x="-8" y="355" text-anchor="end" font-size="11" fill="#999">主卧门</text>
+    <!-- dining table north -->
+    <rect x="85" y="70" width="80" height="46" rx="4" fill="#f2ede2" stroke="#5c4f33" stroke-width="2"/>
+    <text x="125" y="99" text-anchor="middle" font-size="11.5" fill="#5c4f33">餐桌</text>
+    <!-- living area south -->
+    <rect x="45" y="300" width="150" height="42" rx="8" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2"/>
+    <text x="120" y="327" text-anchor="middle" font-size="11.5" fill="#1a3c5e">沙发（祖母座位）</text>
+    <defs>
+      <marker id="aOr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#e07b00"/></marker>
+      <marker id="aBl" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#3a6ea5"/></marker>
+      <marker id="aGr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2e8b57"/></marker>
+    </defs>
+    <!-- path: serving kitchen->table (short) -->
+    <path d="M 20 55 L 60 55 Q 85 55 85 80" fill="none" stroke="#e07b00" stroke-width="3.5" stroke-dasharray="8,5" marker-end="url(#aOr)"/>
+    <text x="40" y="140" font-size="11.5" fill="#e07b00">端菜 约1.5m</text>
+    <!-- path: entrance -> sofa (long) -->
+    <path d="M 128 45 L 128 300" fill="none" stroke="#3a6ea5" stroke-width="3.5" stroke-dasharray="8,5" marker-end="url(#aBl)"/>
+    <text x="138" y="200" font-size="11.5" fill="#3a6ea5">回家 约6m</text>
+    <!-- path: grandma -> bath (long) -->
+    <path d="M 190 320 Q 226 320 226 180 Q 226 85 231 82" fill="none" stroke="#2e8b57" stroke-width="3.5" stroke-dasharray="8,5" marker-end="url(#aGr)"/>
+    <text x="240" y="225" font-size="11.5" fill="#2e8b57">祖母去公卫 约5m</text>
+    <text x="115" y="478" text-anchor="middle" font-size="12.5" fill="#555">端菜收碗近；回家和祖母起夜都</text>
+    <text x="115" y="496" text-anchor="middle" font-size="12.5" fill="#555">要穿过整个客餐厅；白天餐桌缺阳光</text>
+  </g>
+
+  <!-- ===== Panel B: 餐桌南窗 ===== -->
+  <g transform="translate(560,80)">
+    <text x="115" y="20" text-anchor="middle" font-size="16.5" font-weight="bold" fill="#333">方案B：餐桌在南窗（近阳台）</text>
+    <rect x="0" y="35" width="231" height="390" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
+    <line x1="10" y1="35" x2="60" y2="35" stroke="#2e8b57" stroke-width="5"/>
+    <text x="35" y="26" text-anchor="middle" font-size="11.5" fill="#2e8b57">厨房门</text>
+    <line x1="95" y1="35" x2="160" y2="35" stroke="#5a5a5a" stroke-width="5"/>
+    <text x="128" y="26" text-anchor="middle" font-size="11.5" fill="#5a5a5a">玄关入口</text>
+    <line x1="231" y1="60" x2="231" y2="105" stroke="#5a5a5a" stroke-width="5"/>
+    <text x="248" y="88" font-size="11.5" fill="#5a5a5a">走道→公卫</text>
+    <line x1="60" y1="425" x2="140" y2="425" stroke="#2e8b57" stroke-width="5"/>
+    <text x="100" y="445" text-anchor="middle" font-size="11.5" fill="#2e8b57">阳台门（南）</text>
+    <line x1="0" y1="330" x2="0" y2="370" stroke="#bbb" stroke-width="4"/>
+    <text x="-8" y="355" text-anchor="end" font-size="11" fill="#999">主卧门</text>
+    <!-- living area north -->
+    <rect x="45" y="75" width="150" height="42" rx="8" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2"/>
+    <text x="120" y="102" text-anchor="middle" font-size="11.5" fill="#1a3c5e">沙发（祖母座位）</text>
+    <!-- dining table south near window -->
+    <rect x="85" y="330" width="80" height="46" rx="4" fill="#f2ede2" stroke="#5c4f33" stroke-width="2"/>
+    <text x="125" y="359" text-anchor="middle" font-size="11.5" fill="#5c4f33">餐桌</text>
+    <!-- path: serving kitchen->table (long) -->
+    <path d="M 20 55 Q 20 355 85 353" fill="none" stroke="#e07b00" stroke-width="3.5" stroke-dasharray="8,5" marker-end="url(#bOr)"/>
+    <text x="28" y="240" font-size="11.5" fill="#e07b00">端菜 约6m</text>
+    <!-- path: entrance -> sofa (short) -->
+    <path d="M 128 45 L 128 72" fill="none" stroke="#3a6ea5" stroke-width="3.5" stroke-dasharray="8,5" marker-end="url(#bBl)"/>
+    <text x="140" y="160" font-size="11.5" fill="#3a6ea5">回家 约1.5m</text>
+    <!-- path: grandma -> bath (short) -->
+    <path d="M 190 95 Q 226 95 226 88 L 231 85" fill="none" stroke="#2e8b57" stroke-width="3.5" stroke-dasharray="8,5" marker-end="url(#bGr)"/>
+    <text x="248" y="145" font-size="11.5" fill="#2e8b57">祖母去公卫 约2m</text>
+    <defs>
+      <marker id="bOr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#e07b00"/></marker>
+      <marker id="bBl" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#3a6ea5"/></marker>
+      <marker id="bGr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2e8b57"/></marker>
+    </defs>
+    <text x="115" y="478" text-anchor="middle" font-size="12.5" fill="#555">早餐有阳光、回家和祖母都近；</text>
+    <text x="115" y="496" text-anchor="middle" font-size="12.5" fill="#555">但每顿饭都要端着盘子穿过客厅</text>
+  </g>
+
+  <!-- legend -->
+  <g transform="translate(120,545)" font-size="13" fill="#444">
+    <line x1="0" y1="-4" x2="40" y2="-4" stroke="#e07b00" stroke-width="3.5" stroke-dasharray="8,5"/><text x="48" y="0">端菜路径</text>
+    <line x1="140" y1="-4" x2="180" y2="-4" stroke="#3a6ea5" stroke-width="3.5" stroke-dasharray="8,5"/><text x="188" y="0">回家路径</text>
+    <line x1="280" y1="-4" x2="320" y2="-4" stroke="#2e8b57" stroke-width="3.5" stroke-dasharray="8,5"/><text x="328" y="0">祖母座位→公卫</text>
+    <text x="480" y="0" fill="#888">房间4.2×7.1m；门窗依《户型库》邻接关系绘制</text>
+  </g>
+</svg>
