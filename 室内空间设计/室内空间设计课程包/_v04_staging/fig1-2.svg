@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="900" height="400" fill="#ffffff"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图1-2 三个案例的时间与脉络：各自回答各自年代的问题（年份已核验或标注）</text>
+  <!-- axis -->
+  <line x1="70" y1="220" x2="840" y2="220" stroke="#1a1a1a" stroke-width="2.5"/>
+  <g font-size="13" fill="#555" text-anchor="middle">
+    <text x="170" y="248">1946–1952</text><text x="330" y="248">1953</text>
+    <text x="510" y="248">1990年代初</text><text x="700" y="248">2014</text>
+  </g>
+  <g stroke="#999" stroke-width="1.2">
+    <line x1="170" y1="214" x2="170" y2="226"/><line x1="330" y1="214" x2="330" y2="226"/>
+    <line x1="510" y1="214" x2="510" y2="226"/><line x1="700" y1="214" x2="700" y2="226"/>
+  </g>
+  <!-- cards: two above, two below -->
+  <g>
+    <rect x="90" y="70" width="180" height="120" rx="10" fill="#e8f1fa" stroke="#3a6ea5" stroke-width="1.8"/>
+    <text x="180" y="96" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a3c5e">马赛公寓</text>
+    <text x="180" y="120" text-anchor="middle" font-size="12" fill="#555">法国·集合住宅</text>
+    <text x="180" y="144" text-anchor="middle" font-size="12" fill="#555">回答：战后大量家庭</text>
+    <text x="180" y="162" text-anchor="middle" font-size="12" fill="#555">如何有尊严地共居</text>
+    <line x1="180" y1="190" x2="170" y2="214" stroke="#3a6ea5" stroke-width="1.5"/>
+  </g>
+  <g>
+    <rect x="420" y="270" width="180" height="112" rx="10" fill="#eaf4ea" stroke="#2e8b57" stroke-width="1.8"/>
+    <text x="510" y="296" text-anchor="middle" font-size="15" font-weight="bold" fill="#2e8b57">菊儿胡同</text>
+    <text x="510" y="320" text-anchor="middle" font-size="12" fill="#555">北京·旧城有机更新</text>
+    <text x="510" y="344" text-anchor="middle" font-size="12" fill="#555">回答：旧城如何更新</text>
+    <text x="510" y="362" text-anchor="middle" font-size="12" fill="#555">而不推平生活</text>
+    <line x1="510" y1="270" x2="510" y2="226" stroke="#2e8b57" stroke-width="1.5"/>
+  </g>
+  <g>
+    <rect x="240" y="270" width="180" height="112" rx="10" fill="#fdf0dd" stroke="#d8a86a" stroke-width="1.8"/>
+    <text x="330" y="296" text-anchor="middle" font-size="15" font-weight="bold" fill="#b07a2a">香港公屋起点</text>
+    <text x="330" y="320" text-anchor="middle" font-size="12" fill="#555">石硖尾大火后应急安置</text>
+    <text x="330" y="344" text-anchor="middle" font-size="12" fill="#555">回答：灾难后最快</text>
+    <text x="330" y="362" text-anchor="middle" font-size="12" fill="#555">给多少人一个家</text>
+    <line x1="330" y1="270" x2="330" y2="226" stroke="#d8a86a" stroke-width="1.5"/>
+  </g>
+  <g>
+    <rect x="610" y="70" width="190" height="120" rx="10" fill="#efecf7" stroke="#9a8ac2" stroke-width="1.8"/>
+    <text x="705" y="96" text-anchor="middle" font-size="15" font-weight="bold" fill="#5f4a9e">Kalkbreite</text>
+    <text x="705" y="120" text-anchor="middle" font-size="12" fill="#555">苏黎世·合作住宅</text>
+    <text x="705" y="144" text-anchor="middle" font-size="12" fill="#555">回答：私人面积最小化</text>
+    <text x="705" y="162" text-anchor="middle" font-size="12" fill="#555">之后共享能走多远</text>
+    <line x1="705" y1="190" x2="700" y2="214" stroke="#9a8ac2" stroke-width="1.5"/>
+  </g>
+  <text x="450" y="392" text-anchor="middle" font-size="12.5" fill="#888">菊儿胡同分期年份与奖项名称须核验后引用；Kalkbreite合作社治理细节须核验。</text>
+</svg>

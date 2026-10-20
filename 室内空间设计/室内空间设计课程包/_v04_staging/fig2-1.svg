@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="900" height="460" fill="#ffffff"/>
+  <text x="450" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图2-1 沈家的一天：四条泳道与两个压力带（教学假设）</text>
+  <!-- time axis -->
+  <g font-size="12" fill="#555" text-anchor="middle">
+    <text x="120" y="60">5:00</text><text x="240" y="60">6:30</text><text x="360" y="60">8:00</text>
+    <text x="480" y="60">12:00</text><text x="600" y="60">16:00</text><text x="700" y="60">19:30</text><text x="810" y="60">22:30</text>
+  </g>
+  <!-- pressure bands -->
+  <rect x="230" y="70" width="140" height="330" fill="#fde8e8" opacity="0.55"/>
+  <rect x="770" y="70" width="60" height="330" fill="#fde8e8" opacity="0.55"/>
+  <text x="300" y="422" text-anchor="middle" font-size="12.5" fill="#b04a4a">晨峰 6:30–8:00</text>
+  <text x="800" y="422" text-anchor="middle" font-size="12.5" fill="#b04a4a">夜起</text>
+  <!-- lanes -->
+  <g font-size="13.5" font-weight="bold">
+    <text x="112" y="104" text-anchor="end" fill="#3a6ea5">沈先生</text>
+    <text x="112" y="184" text-anchor="end" fill="#b07a2a">沈太太</text>
+    <text x="112" y="264" text-anchor="end" fill="#2e8b57">女儿</text>
+    <text x="112" y="344" text-anchor="end" fill="#5f4a9e">祖母</text>
+  </g>
+  <g stroke="#e5e5e5" stroke-width="1.2">
+    <line x1="120" y1="110" x2="860" y2="110"/><line x1="120" y1="190" x2="860" y2="190"/>
+    <line x1="120" y1="270" x2="860" y2="270"/><line x1="120" y1="350" x2="860" y2="350"/>
+  </g>
+  <!-- events: rounded blocks on lanes -->
+  <g font-size="11.5" fill="#fff" text-anchor="middle">
+    <rect x="240" y="94" width="70" height="26" rx="13" fill="#3a6ea5"/><text x="275" y="111">主卫淋浴</text>
+    <rect x="320" y="94" width="90" height="26" rx="13" fill="#3a6ea5"/><text x="365" y="111">书房·视频会</text>
+    <rect x="440" y="94" width="230" height="26" rx="13" fill="#3a6ea5"/><text x="555" y="111">居家办公（全天·会议压在门内）</text>
+    <rect x="690" y="94" width="80" height="26" rx="13" fill="#3a6ea5"/><text x="730" y="111">会未散</text>
+    <rect x="250" y="174" width="80" height="26" rx="13" fill="#d8a86a"/><text x="290" y="191">候用主卫</text>
+    <rect x="470" y="174" width="80" height="26" rx="13" fill="#d8a86a"/><text x="510" y="191">烤箱预热</text>
+    <rect x="640" y="174" width="150" height="26" rx="13" fill="#d8a86a"/><text x="715" y="191">餐桌北端·批改作业</text>
+    <rect x="255" y="254" width="70" height="26" rx="13" fill="#2e8b57"/><text x="290" y="271">早餐</text>
+    <rect x="560" y="254" width="130" height="26" rx="13" fill="#2e8b57"/><text x="625" y="271">客厅地毯·拼图问字</text>
+    <rect x="235" y="334" width="90" height="26" rx="13" fill="#9a8ac2"/><text x="280" y="351">公卫·等候</text>
+    <rect x="420" y="334" width="90" height="26" rx="13" fill="#9a8ac2"/><text x="465" y="351">厨房·择菜</text>
+    <rect x="790" y="334" width="66" height="26" rx="13" fill="#9a8ac2"/><text x="823" y="351">起夜</text>
+  </g>
+  <!-- conflicts: red dots with labels -->
+  <g>
+    <circle cx="272" cy="150" r="7" fill="#d0021b"/>
+    <text x="284" y="146" font-size="11.5" fill="#d0021b">主卫冲突：候用</text>
+    <circle cx="290" cy="232" r="7" fill="#d0021b"/>
+    <text x="302" y="228" font-size="11.5" fill="#d0021b">餐桌双任务</text>
+    <circle cx="715" cy="232" r="7" fill="#d0021b"/>
+    <text x="600" y="244" font-size="11.5" fill="#d0021b">拼图问字 × 批改作业（声干扰）</text>
+    <circle cx="823" cy="382" r="7" fill="#d0021b"/>
+    <text x="700" y="388" font-size="11.5" fill="#d0021b">夜起路径：这段路是祖母最重要的设计</text>
+  </g>
+  <text x="450" y="448" text-anchor="middle" font-size="12.5" fill="#888">行为日志画法示意：横轴时刻、每泳道一人，事件块标注"在哪·做什么"；红点＝冲突（设计的靶点）。</text>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="900" height="300" fill="#ffffff"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图2-2 从画像到空间清单：需求研究四件套的流水关系（教学示意）</text>
+  <!-- four boxes -->
+  <g text-anchor="middle">
+    <rect x="60" y="100" width="160" height="110" rx="12" fill="#e8f1fa" stroke="#3a6ea5" stroke-width="2"/>
+    <text x="140" y="132" font-size="15.5" font-weight="bold" fill="#1a3c5e">家庭画像</text>
+    <text x="140" y="158" font-size="12.5" fill="#555">回答：是谁</text>
+    <text x="140" y="178" font-size="12" fill="#888">行为事实，非标签</text>
+    <rect x="270" y="100" width="160" height="110" rx="12" fill="#eaf4ea" stroke="#2e8b57" stroke-width="2"/>
+    <text x="350" y="132" font-size="15.5" font-weight="bold" fill="#2e8b57">行为日志</text>
+    <text x="350" y="158" font-size="12.5" fill="#555">回答：实际怎么生活</text>
+    <text x="350" y="178" font-size="12" fill="#888">产出＝冲突发现</text>
+    <rect x="480" y="100" width="160" height="110" rx="12" fill="#fdf0dd" stroke="#d8a86a" stroke-width="2"/>
+    <text x="560" y="132" font-size="15.5" font-weight="bold" fill="#b07a2a">需求矩阵</text>
+    <text x="560" y="158" font-size="12.5" fill="#555">回答：要什么·多想要</text>
+    <text x="560" y="178" font-size="12" fill="#888">必要／期望／可舍弃</text>
+    <rect x="690" y="100" width="160" height="110" rx="12" fill="#fce8ec" stroke="#d98aa0" stroke-width="2"/>
+    <text x="770" y="132" font-size="15.5" font-weight="bold" fill="#b04a68">功能清单</text>
+    <text x="770" y="158" font-size="12.5" fill="#555">回答：在哪·什么条件</text>
+    <text x="770" y="178" font-size="12" fill="#888">＋反向超载检查</text>
+  </g>
+  <g stroke="#777" stroke-width="2" fill="#777">
+    <line x1="222" y1="155" x2="266" y2="155"/><path d="M 260 148 L 272 155 L 260 162 z"/>
+    <line x1="432" y1="155" x2="476" y2="155"/><path d="M 470 148 L 482 155 L 470 162 z"/>
+    <line x1="642" y1="155" x2="686" y2="155"/><path d="M 680 148 L 692 155 L 680 162 z"/>
+  </g>
+  <!-- conflict feed from log to matrix evidence -->
+  <path d="M 350 214 Q 420 260 530 214" fill="none" stroke="#d0021b" stroke-width="2" stroke-dasharray="7,5"/>
+  <path d="M 524 222 L 534 210 L 538 224 z" fill="#d0021b"/>
+  <text x="435" y="262" text-anchor="middle" font-size="12.5" fill="#d0021b">冲突汇入"证据"列</text>
+  <!-- feedback arrow from checklist back to log -->
+  <path d="M 770 94 Q 560 40 355 94" fill="none" stroke="#888" stroke-width="1.6" stroke-dasharray="6,5"/>
+  <path d="M 362 84 L 350 96 L 366 98 z" fill="#888"/>
+  <text x="560" y="58" text-anchor="middle" font-size="12" fill="#888">清单反核：回到日志验证"真的需要吗"</text>
+  <text x="450" y="292" text-anchor="middle" font-size="12.5" fill="#888">成果①居住需求档案＝四件套合订；它是第4章起的全部设计决策依据。</text>
+</svg>
