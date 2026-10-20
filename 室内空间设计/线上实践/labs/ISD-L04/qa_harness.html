@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>QA harness — ISD-L04</title>
+</head>
+<body>
+<p>QA harness for unit_lab.html (same-origin via local http server)</p>
+<iframe id="lab" src="unit_lab.html" style="width:1920px;height:1080px;border:0"></iframe>
+<pre id="qa_result">PENDING</pre>
+<script>
+(async () => {
+  const out = { steps: [], errors: [] };
+  const log = (k, v) => { out.steps.push([k, v]); };
+  try {
+    const frame = document.getElementById('lab');
+    const win = frame.contentWindow;
+    if (typeof win.__LAB_READY__ === 'undefined') {
+      await new Promise(r => { frame.onload = r; setTimeout(r, 4000); });
+    }
+    for (let i = 0; i < 60 && !win.__LAB_READY__; i++)
+      await new Promise(r => setTimeout(r, 200));
+    log('ready', !!win.__LAB_READY__);
+    log('consoleErrors', win.__LAB_CONSOLE_ERRORS__ || []);
+    if (typeof win.__LAB_SET_LEVEL__ === 'function') {
+      win.__LAB_SET_LEVEL__(2); log('setLevel', 2);
+    } else log('setLevel', 'API missing');
+    if (typeof win.__LAB_SELFTEST__ === 'function') {
+      const r = win.__LAB_SELFTEST__();
+      out.selftest = r;
+      log('selftest', (r && r.failed && r.failed.length === 0) ? 'PASS' : 'FAIL');
+    } else { out.selftest = null; log('selftest', 'API missing'); out.errors.push('no selftest API'); }
+    // baseline A: load, evaluate (M5 violated in schedule pairs; folds=2)
+    if (typeof win.__LAB_LOAD_BASELINE__ === 'function' && typeof win.__LAB_EVALUATE__ === 'function') {
+      win.__LAB_LOAD_BASELINE__('A');
+      const evA = win.__LAB_EVALUATE__();
+      out.evaluateA = {
+        folds: evA.schedule && evA.schedule.bedFolds,
+        schedulePairs: evA.schedule && evA.schedule.pairs,
+        nightM: evA.routes && evA.routes.night && evA.routes.night.lengthM,
+        morningConflicts: evA.morning && evA.morning.conflictCount
+      };
+      log('baselineA_loaded', true);
+      win.__LAB_LOAD_BASELINE__('B');
+      const evB = win.__LAB_EVALUATE__();
+      out.evaluateB = {
+        folds: evB.schedule && evB.schedule.bedFolds,
+        schedulePairs: evB.schedule && evB.schedule.pairs,
+        nightM: evB.routes && evB.routes.night && evB.routes.night.lengthM,
+        morningConflicts: evB.morning && evB.morning.conflictCount
+      };
+      log('baselineB_loaded', true);
+      log('nightB_lt_A', (out.evaluateB.nightM ?? Infinity) < (out.evaluateA.nightM ?? -1));
+      // determinism on current scene
+      const a = JSON.stringify(win.__LAB_EVALUATE__());
+      const b = JSON.stringify(win.__LAB_EVALUATE__());
+      log('determinism', a === b);
+    } else log('baseline APIs', 'missing');
+  } catch (e) { out.errors.push(String(e && e.stack || e)); }
+  document.getElementById('qa_result').textContent = 'QA_RESULT_JSON:' + JSON.stringify(out);
+})();
+</script>
+</body>
+</html>

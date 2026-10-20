@@ -1,0 +1,7 @@
+.qa_profile*
+qa_dom.txt
+qa_result.json
+sol_raw.txt
+sol_continue_raw.txt
+sol_repair_raw.txt
+diag-profile-*

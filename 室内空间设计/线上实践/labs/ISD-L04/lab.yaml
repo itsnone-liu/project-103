@@ -1,0 +1,116 @@
+lab_id: ISD-L04
+version: 0.1.0
+name: U90全户型功能组织与动线冲突（住宅功能分区与动线实验）
+textbook_anchor: 《室内空间设计》读本 v0.4 第4章（4.2 邻接矩阵；4.3 动线四条；4.4 固定约束三色法；4.5 方案A/B与失效条件；实践任务卡"U90两版布局"＝全书核心成果②）
+delivery_level: A（独立网页，静态服务器/本地文件可开，无后端依赖）
+
+scene:
+  # 户型锚点：住宅贯穿案例与户型库 v0.1 §一 U90「青枫里2栋1单元401」（教学虚构）。
+  # 户型库明言"尚无比例平面图、尺寸加总不等于可无冲突拼接"——本实验冻结一张拼合教学假设平面 v1，
+  # 锚定房间表面积（±2%自检断言），边界与过渡带为教学假设，不是施工图。
+  unit: m
+  origin: northwest            # x向东，y向南，原点=西北角内墙角（任务书§8坐标契约）
+  envelope:
+    north_section: {x: [0, 9.6], y: [0, 4.1]}    # 北段（北带+东西走廊）
+    south_section: {x: [0, 11.0], y: [4.1, 10.1]} # 南段东侧外扩1.4m（东户体型，教学假设）
+    balcony_south: {x: [3.3, 6.3], y: [10.1, 11.5]}  # 观景阳台1.4×3.0，图上虚线
+    balcony_north: {x: [1.0, 2.2], y: [-1.2, 0]}     # 生活阳台（洗衣机默认位），图上虚线
+  rooms:                       # 全部净矩形 [x1,x2]×[y1,y2]；area_m2与房间表±2%自检
+    - {id: kitchen,  name: 厨房,          rect: [0, 2.8, 0, 2.25],     area_ref: 6.3,  zone: service}
+    - {id: entry,    name: 玄关,          rect: [2.8, 4.3, 0, 2.0],    area_ref: 3.0,  zone: public}
+    - {id: bath2,    name: 公共卫生间,     rect: [4.3, 6.3, 0, 2.2],    area_ref: 4.4,  zone: service}
+    - {id: study,    name: 书房/老人房,    rect: [6.5, 9.4, 0, 3.0],    area_ref: 8.7,  zone: private}
+    - {id: living,   name: 客餐厅(核心),   rect: [3.6, 7.8, 3.0, 10.1], area_ref: 29.8, zone: public}
+    - {id: dining,   name: 餐区西厅(开放), rect: [0, 3.6, 2.25, 4.9],   area_ref: null, zone: public, note: 厨房南侧开放餐带，不计房间表}
+    - {id: master,   name: 主卧,          rect: [0, 3.6, 6.25, 10.1],   area_ref: 13.9, zone: private}
+    - {id: bath1,    name: 主卫(降板),     rect: [1.7, 3.6, 6.25, 8.25], area_ref: 3.8,  zone: service, note: 主卧内北端}
+    - {id: child,    name: 儿童房,        rect: [7.8, 11.0, 7.1, 10.1], area_ref: 9.6,  zone: private}
+    - {id: storage,  name: 储物/家政区,    rect: [7.8, 11.0, 5.2, 7.1],  area_ref: null, zone: service, note: 可变功能重组对象}
+    - {id: corridor, name: 走廊,          rects: [[3.6,9.6,3.0,4.1],[7.8,11.0,4.1,5.2],[4.3,6.3,2.2,3.0]], zone: circulation, note: 主带+东臂+公卫前过渡}
+  fixed_items:                 # 红色·不可改（教材4.4三色法）
+    - {id: entry_door, type: 入户门, wall: north, x: [3.15, 4.05], w_m: 0.9}
+    - {id: shear1, type: 剪力墙一, seg: [3.6, 3.6, 6.25, 10.1], note: 主卧东界及延伸}
+    - {id: shear2, type: 剪力墙二, seg: [4.3, 9.4, 3.0, 3.0], note: 北带(公卫-书房)南侧承重段}
+    - {id: flue,  type: 烟道,     rect: [0, 0.6, 0.15, 0.75], note: 与ISD-L04K一致}
+    - {id: drain, type: 排水立管, rect: [0, 0.2, 1.4, 1.6], note: 与ISD-L04K一致}
+    - {id: gas,   type: 燃气立管, rect: [2.6, 2.8, 1.0, 1.2], note: 厨房设备区就地约束}
+    - {id: bath1_slab, type: 主卫降板, rect_of: bath1}
+    - {id: bath2_slab, type: 公卫降板, rect_of: bath2}
+    - {id: win_kitchen, type: 窗, wall: north, x: [0.5, 1.5]}
+    - {id: door_kitchen_balcony, type: 生活阳台门, wall: north, x: [1.9, 2.65], note: 与ISD-L04K一致}
+    - {id: win_study, type: 窗, wall: north, x: [7.0, 8.9]}
+    - {id: win_bath2, type: 高窗, wall: north, x: [4.9, 5.7]}
+    - {id: win_master, type: 窗, wall: south, x: [0.9, 2.7]}
+    - {id: win_child, type: 窗, wall: south, x: [8.4, 10.4]}
+    - {id: door_living_balcony, type: 观景阳台门, wall: south, x: [4.6, 6.8]}
+  yellow_doors:                # 黄色·可讨论（学生可选槽位，每樘两槽）
+    - {id: d_kitchen, wall: south_of_kitchen | east_of_kitchen, slots: {south: [1.2, 2.1], east: [0.6, 1.5]}, default: south}
+    - {id: d_bath2,  wall: south_of_bath2,  slots: {west: [4.6, 5.3], east: [5.5, 6.2]}, default: west, note: east槽近书房=夜起近}
+    - {id: d_study,  wall: south_of_study,  slots: {west: [6.8, 7.6], east: [8.3, 9.1]}, default: west}
+    - {id: d_child,  wall: north_of_child,  slots: {west: [8.0, 8.75], east: [9.3, 10.05]}, default: west}
+    - {id: d_master, wall: east_of_master,  slots: {north: [6.6, 7.4], south: [9.0, 9.8]}, default: north}
+
+student_actions: [choose_room_modes, choose_door_slots, drag_furniture, switch_scenario, save_version, compare_AB, run_morning_simulation, toggle_route_overlays, export, write_failure_statement]
+
+design_decisions:              # 学生的"设计变量"——不是自由画墙，而是在固定约束下重组功能（教材4.4）
+  study_mode:   [office 稳定工作室, elder 老人房·固定床, dual 双模式·可变床]
+  storage_mode: [bulk 大件储物(默认), laundry 家务间(洗衣机+烘干), study_nook 女儿学习角, tea 祖母茶歇角]
+  work_pos:     [study 书房, dining 餐桌北端, living_north 客餐厅北侧]   # 沈先生居家办公位
+  bake_pos:     [kitchen 厨房, dining 餐区西厅]                          # 沈太太烘焙位
+  closet_mode:  [open 开放衣帽间, curtain 窗帘隔断, wardrobe 到顶衣柜]     # 主卧可变项(轻量)
+  door_slots:   d_kitchen/d_bath2/d_study/d_child/d_master 各选一槽
+  scenario:     [A 现状(三口+祖母季节性长住), B 五年后(祖母常住+女儿12岁+办公上升)]
+
+teaching_hypotheses:           # 全部为教学常用值/课堂讨论工具，非国家标准
+  adjacency_matrix:            # 教材图4-1五档赋值；证据来源随格标注
+    - {pair: 厨房↔餐区, v: +2, evidence: 访谈, predicate: d_kitchen==south}
+    - {pair: 老人房↔公卫, v: +2, evidence: 访谈+观察, predicate: study_mode∈{elder,dual}; d_bath2==east 记"门位加强"}
+    - {pair: 办公位↔餐桌(就餐/备课), v: -1, evidence: 观察, predicate: work_pos==dining → 违背}
+    - {pair: 办公位↔客厅娱乐, v: -1, evidence: 观察, predicate: work_pos==living_north → 违背}
+    - {pair: 办公位↔客卧(睡眠), v: -2, evidence: 观察, predicate: work_pos==study 且 study_mode≠office → 违背(同室)}
+    - {pair: 洗衣↔晾晒(生活阳台), v: +1, evidence: 课程假设, predicate: storage_mode≠laundry → 满足(洗衣机留北阳台); laundry → 违背并计长晾晒动线}
+    - {pair: 女儿学习角↔餐桌辅导, v: +1, evidence: 访谈, predicate: storage_mode==study_nook → 满足}
+  routes:                      # 教材4.3：至少三条+夜起；路径=房间中心+门中点折线(教学简化，非寻路)
+    - daily_adult: 入户→玄关→走廊→主卧
+    - daily_child: 入户→玄关→走廊东臂→儿童房
+    - visitor:    入户→玄关→客餐厅起居段→走廊→公卫
+    - laundry:    两种口径：①默认(洗衣机北阳台)：阳台→厨房→餐区；②laundry模式：储物区→走廊→客餐厅→餐区→厨房→北阳台
+    - night:      祖母床边(书房)→书房门→走廊→公卫门→公卫；d_bath2槽位改变路径长度
+  morning_peak:                # 7:00–7:30 离散事件模拟（10秒步长，确定性；教材4.3"交叉点"动态化）
+    agents: [祖母, 沈先生, 沈太太, 女儿]
+    rules: 同卫生间占用=排队事件；走廊折线段时间窗相交=让行事件；速度0.8m/s
+    outputs: [event_timeline, wait_minutes, conflict_count, bathroom_occupancy]
+  schedule_conflicts:          # 教材4.5"平面几何看不出的风险"——时段占用矩阵（情境B）
+    stations: [工作位(随work_pos), 餐桌, 客厅, 学习角(随storage_mode), 老人房(随study_mode)]
+    key_overlaps: [先生视讯20-22↔祖母就寝21-6(同室), 工作位在客厅↔晚餐18-19/女儿游戏/周末访客15-17, 餐桌↔太太备课19-21]
+  failure_statement:           # 教材4.5核心："敢说何时失效"；A/B两版各一段，不评分，随导出归档
+
+auto_checks:                   # 确定性（同输入同输出，任务书§9A）
+  - room_areas_vs_table        # 8间±2%（dining/storage/corridor为过渡带不计）
+  - adjacency_satisfied_count
+  - route_lengths_m            # 四条动线各自长度（不合成总分）
+  - route_crossings            # 动线折线两两交点数
+  - morning_conflict_count
+  - morning_wait_minutes
+  - schedule_conflict_pairs
+  - night_path_m
+  - bed_fold_count_per_day     # dual=2, elder=0（照护稳定度代理指标）
+  - collision_pair_count       # 家具AABB
+  - out_of_room_count
+
+heuristic_feedback:            # 规则建议层（标注"教学常用值/讨论工具"，不得称规范）
+  - 邻接矩阵逐条 满足/违背/不适用 + 证据标签（"矩阵只摆冲突，不替你裁决"）
+  - 夜起路径相对槽位变化提示
+  - 早高峰排队/让行事件列表
+  - 时段冲突对列表（"平面看不出的风险"）
+human_review:                  # 教师判断层（不自动评分）
+  - 私密性/访客视线/照护负担/家庭协商等叙述维度
+  - A/B取舍说明与"失效条件"评议
+exports: [project_json, plan_png, comparison_report]
+
+baselines:                    # 教材4.5方案A/B（情境B=五年后为设计对象）
+  A_办公优先: {scenario: B, study_mode: dual, storage_mode: bulk, work_pos: study, bake_pos: kitchen, d_bath2: west, d_study: west, 其余默认}
+  B_照护优先: {scenario: B, study_mode: elder, storage_mode: study_nook, work_pos: living_north, bake_pos: kitchen, d_bath2: east, d_study: east, 其余默认}
+  anchors: [A含"书房:先生视讯↔祖母就寝"时段冲突且翻折2次/日, B夜起距离<A且翻折0, B含"客餐厅:工作↔晚餐"时段冲突, 早高峰冲突数为冻结常数]
+
+assets_style: 教材图4-2/4-3制图风格——白底、2–3px黑线框、房间浅色分区填充(公区暖米/私区淡蓝灰/家务淡绿)、承重墙加粗红线、固定门实线弧、可变门黄色虚线弧可点击、动线叠加彩色虚线(日常蓝/访客紫/家务绿/夜起橙黄加粗)、早高峰小人=圆头符号四色、字号≥12px中文(Microsoft YaHei)
