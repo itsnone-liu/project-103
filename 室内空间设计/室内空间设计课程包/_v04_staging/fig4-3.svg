@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="920" height="480" fill="#ffffff"/>
+  <text x="460" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图4-3 方案A vs 方案B：同一户型，两种优先级（教学示意）</text>
+  <!-- Panel A -->
+  <g transform="translate(60,70)">
+    <text x="200" y="22" text-anchor="middle" font-size="16" font-weight="bold" fill="#3a6ea5">方案A：书房＝稳定工作室</text>
+    <rect x="0" y="40" width="400" height="300" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
+    <!-- study room top-right -->
+    <rect x="250" y="40" width="150" height="130" fill="none" stroke="#bbb" stroke-width="1.4"/>
+    <text x="325" y="62" text-anchor="middle" font-size="12.5" fill="#555">书房（专用办公）</text>
+    <rect x="290" y="90" width="90" height="42" rx="3" fill="#f2ede2" stroke="#8a7a55" stroke-width="1.8"/>
+    <text x="335" y="116" text-anchor="middle" font-size="11" fill="#5c4f33">双屏工位</text>
+    <rect x="305" y="140" width="34" height="26" rx="4" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+    <rect x="306" y="161" width="32" height="5" rx="2" fill="#b3cbe6" stroke="#3a6ea5" stroke-width="1"/>
+    <!-- murphy bed ghost -->
+    <rect x="256" y="100" width="30" height="60" rx="4" fill="none" stroke="#2e8b57" stroke-width="1.6" stroke-dasharray="5,3"/>
+    <text x="271" y="176" text-anchor="middle" font-size="10" fill="#2e8b57">翻折床(客用)</text>
+    <!-- living dining -->
+    <text x="120" y="180" text-anchor="middle" font-size="12.5" fill="#555">客餐厅</text>
+    <rect x="60" y="196" width="80" height="46" fill="#f2ede2" stroke="#8a7a55" stroke-width="1.6"/>
+    <text x="100" y="224" text-anchor="middle" font-size="11" fill="#5c4f33">餐桌</text>
+    <rect x="55" y="270" width="120" height="58" rx="8" fill="#dce8f5" stroke="#3a6ea5" stroke-width="1.8"/>
+    <text x="115" y="304" text-anchor="middle" font-size="11" fill="#1a3c5e">沙发</text>
+    <text x="200" y="380" text-anchor="middle" font-size="12.5" fill="#555">平时办公好；祖母长住期每晚翻折</text>
+    <text x="200" y="402" text-anchor="middle" font-size="12" fill="#d0021b">失效条件：祖母转为常住</text>
+  </g>
+  <!-- Panel B -->
+  <g transform="translate(500,70)">
+    <text x="200" y="22" text-anchor="middle" font-size="16" font-weight="bold" fill="#b07a2a">方案B：书房＝老人房优先</text>
+    <rect x="0" y="40" width="400" height="300" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
+    <!-- elder room -->
+    <rect x="250" y="40" width="150" height="130" fill="none" stroke="#bbb" stroke-width="1.4"/>
+    <text x="325" y="62" text-anchor="middle" font-size="12.5" fill="#555">书房→老人房（固定床）</text>
+    <rect x="256" y="76" width="44" height="86" rx="5" fill="#dce8f5" stroke="#3a6ea5" stroke-width="1.8"/>
+    <rect x="259" y="79" width="20" height="26" rx="4" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1"/>
+    <text x="322" y="130" text-anchor="middle" font-size="10.5" fill="#1a3c5e">夜灯·扶手预留</text>
+    <!-- work station moved to LR north -->
+    <text x="120" y="100" text-anchor="middle" font-size="12.5" fill="#555">客餐厅（北端新工作位）</text>
+    <rect x="70" y="112" width="100" height="44" rx="3" fill="#f2ede2" stroke="#8a7a55" stroke-width="1.8"/>
+    <text x="120" y="138" text-anchor="middle" font-size="11" fill="#5c4f33">沈先生工位</text>
+    <rect x="105" y="164" width="34" height="26" rx="4" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.5"/>
+    <rect x="106" y="185" width="32" height="5" rx="2" fill="#b3cbe6" stroke="#3a6ea5" stroke-width="1"/>
+    <rect x="60" y="220" width="80" height="46" fill="#f2ede2" stroke="#8a7a55" stroke-width="1.6"/>
+    <text x="100" y="248" text-anchor="middle" font-size="11" fill="#5c4f33">餐桌</text>
+    <rect x="55" y="276" width="120" height="52" rx="8" fill="#dce8f5" stroke="#3a6ea5" stroke-width="1.8"/>
+    <text x="115" y="307" text-anchor="middle" font-size="11" fill="#1a3c5e">沙发</text>
+    <text x="200" y="380" text-anchor="middle" font-size="12.5" fill="#555">夜间照护稳；白天客厅"工作×就餐"冲突</text>
+    <text x="200" y="402" text-anchor="middle" font-size="12" fill="#d0021b">失效条件：沈先生办公天数再增</text>
+  </g>
+  <text x="460" y="470" text-anchor="middle" font-size="12.5" fill="#888">没有万能方案：情境一变，优先级反转——好论证要敢说"我何时失效"。</text>
+</svg>

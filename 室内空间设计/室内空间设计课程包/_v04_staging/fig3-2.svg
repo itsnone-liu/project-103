@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="900" height="380" fill="#ffffff"/>
+  <text x="450" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图3-2 买家具买的是"家具＋人＋动作"：床与衣柜的复合尺寸（教学示意）</text>
+  <!-- left: bed complex -->
+  <text x="215" y="72" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">床：宽之外，还有"上下床"</text>
+  <rect x="60" y="300" width="330" height="3" fill="#999"/>
+  <!-- bed symbol: mattress + pillow -->
+  <g stroke="#3a6ea5" stroke-width="2" fill="#eaf2fa">
+    <rect x="120" y="200" width="190" height="100" rx="8"/>
+    <rect x="128" y="206" width="60" height="34" rx="6" fill="#dce8f5" stroke-width="1.5"/>
+  </g>
+  <!-- envelope both sides -->
+  <rect x="72" y="196" width="42" height="108" rx="8" fill="#fdf0dd" stroke="#d8a86a" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <rect x="316" y="196" width="42" height="108" rx="8" fill="#fdf0dd" stroke="#d8a86a" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <g font-size="12" fill="#b07a2a">
+    <text x="93" y="182" text-anchor="middle">起身·铺床</text>
+    <text x="93" y="198" text-anchor="middle">约60cm</text>
+    <text x="337" y="182" text-anchor="middle">上床·取物</text>
+    <text x="337" y="198" text-anchor="middle">约60cm</text>
+  </g>
+  <text x="215" y="326" text-anchor="middle" font-size="12" fill="#888">床垫宽0.9–1.8m ＋ 两侧包络 ＝ 床的"真实占地"</text>
+  <!-- right: wardrobe complex -->
+  <text x="665" y="72" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">衣柜：柜深之外，还有"门与抽屉"</text>
+  <!-- wardrobe plan symbol -->
+  <rect x="560" y="200" width="70" height="100" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="2"/>
+  <line x1="595" y1="200" x2="595" y2="300" stroke="#3a6ea5" stroke-width="1.2"/>
+  <circle cx="577" cy="250" r="2.5" fill="#3a6ea5"/>
+  <circle cx="613" cy="250" r="2.5" fill="#3a6ea5"/>
+  <!-- door swing arcs -->
+  <path d="M 560 300 A 70 70 0 0 1 490 230" fill="none" stroke="#d8a86a" stroke-width="1.8" stroke-dasharray="7,5"/>
+  <path d="M 630 300 A 70 70 0 0 0 700 230" fill="none" stroke="#d8a86a" stroke-width="1.8" stroke-dasharray="7,5"/>
+  <line x1="560" y1="300" x2="490" y2="300" stroke="#d8a86a" stroke-width="1.8"/>
+  <line x1="630" y1="300" x2="700" y2="300" stroke="#d8a86a" stroke-width="1.8"/>
+  <!-- drawer pull -->
+  <rect x="640" y="240" width="46" height="20" fill="none" stroke="#d98aa0" stroke-width="1.6" stroke-dasharray="5,4"/>
+  <g stroke="#d98aa0" stroke-width="1.4" fill="#d98aa0">
+    <line x1="640" y1="250" x2="652" y2="250"/><path d="M 647 244 L 659 250 L 647 256 z"/>
+  </g>
+  <!-- standing person -->
+  <circle cx="755" cy="222" r="9" fill="#fce8ec" stroke="#d98aa0" stroke-width="1.6"/>
+  <line x1="755" y1="231" x2="755" y2="266" stroke="#d98aa0" stroke-width="1.8"/>
+  <text x="755" y="288" text-anchor="middle" font-size="12" fill="#b04a68">取物站位</text>
+  <g font-size="12" fill="#b07a2a">
+    <text x="500" y="326">门扇开启弧≈柜宽</text>
+    <text x="640" y="222" text-anchor="middle">抽屉拉出</text>
+  </g>
+  <text x="665" y="350" text-anchor="middle" font-size="12" fill="#888">柜深0.6m ＋ 门弧/抽屉/站位 ＝ 衣柜的"真实占地"</text>
+  <text x="450" y="372" text-anchor="middle" font-size="12.5" fill="#888">商品页只标外轮廓；设计要画复合尺寸。数值为教学常用值，正式项目以实测为准。</text>
+</svg>

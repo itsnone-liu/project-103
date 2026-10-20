@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="900" height="520" fill="#ffffff"/>
+  <text x="450" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图4-1 沈家功能邻接矩阵（课堂赋值法·教学示例）</text>
+  <!-- matrix grid 7x7, cell 88px, origin 160,80 -->
+  <g font-size="13" fill="#333" text-anchor="middle">
+    <text x="252" y="72">厨房</text><text x="340" y="72">餐区</text><text x="428" y="72">客厅</text>
+    <text x="516" y="72">书房办公</text><text x="604" y="72">老人房</text><text x="692" y="72">儿童房</text>
+    <text x="140" y="116" text-anchor="end">厨房</text><text x="140" y="204" text-anchor="end">餐区</text>
+    <text x="140" y="292" text-anchor="end">客厅</text><text x="140" y="380" text-anchor="end">书房办公</text>
+    <text x="140" y="468" text-anchor="end">老人房</text>
+  </g>
+  <!-- cells: row kitchen -->
+  <g font-size="15" font-weight="bold" text-anchor="middle">
+    <rect x="208" y="88" width="88" height="88" fill="#f5f5f5"/><text x="252" y="140" fill="#aaa">—</text>
+    <rect x="296" y="88" width="88" height="88" fill="#dff0df" stroke="#2e8b57" stroke-width="1.5"/><text x="340" y="140" fill="#2e8b57">+2</text>
+    <rect x="384" y="88" width="88" height="88" fill="#f2f8f2"/><text x="428" y="140" fill="#7cb98a">+1</text>
+    <rect x="472" y="88" width="88" height="88" fill="#fafafa"/><text x="516" y="140" fill="#aaa">0</text>
+    <rect x="560" y="88" width="88" height="88" fill="#fafafa"/><text x="604" y="140" fill="#aaa">0</text>
+    <rect x="648" y="88" width="88" height="88" fill="#fafafa"/><text x="692" y="140" fill="#aaa">0</text>
+    <!-- row dining -->
+    <rect x="296" y="176" width="88" height="88" fill="#f5f5f5"/><text x="340" y="228" fill="#aaa">—</text>
+    <rect x="384" y="176" width="88" height="88" fill="#dff0df" stroke="#2e8b57" stroke-width="1.5"/><text x="428" y="228" fill="#2e8b57">+2</text>
+    <rect x="472" y="176" width="88" height="88" fill="#fdeeee" stroke="#d0021b" stroke-width="1.5"/><text x="516" y="228" fill="#d0021b">−1</text>
+    <rect x="560" y="176" width="88" height="88" fill="#f2f8f2"/><text x="604" y="228" fill="#7cb98a">+1</text>
+    <rect x="648" y="176" width="88" height="88" fill="#f2f8f2"/><text x="692" y="228" fill="#7cb98a">+1</text>
+    <!-- row living -->
+    <rect x="384" y="264" width="88" height="88" fill="#f5f5f5"/><text x="428" y="316" fill="#aaa">—</text>
+    <rect x="472" y="264" width="88" height="88" fill="#fdeeee" stroke="#d0021b" stroke-width="1.5"/><text x="516" y="316" fill="#d0021b">−1</text>
+    <rect x="560" y="264" width="88" height="88" fill="#dff0df" stroke="#2e8b57" stroke-width="1.5"/><text x="604" y="316" fill="#2e8b57">+2</text>
+    <rect x="648" y="264" width="88" height="88" fill="#fdeeee" stroke="#d0021b" stroke-width="1.5"/><text x="692" y="316" fill="#d0021b">−1</text>
+    <!-- row study -->
+    <rect x="472" y="352" width="88" height="88" fill="#f5f5f5"/><text x="516" y="404" fill="#aaa">—</text>
+    <rect x="560" y="352" width="88" height="88" fill="#f2f8f2"/><text x="604" y="404" fill="#7cb98a">+1</text>
+    <rect x="648" y="352" width="88" height="88" fill="#fdeeee" stroke="#d0021b" stroke-width="1.5"/><text x="692" y="404" fill="#d0021b">−1</text>
+    <!-- row elder -->
+    <rect x="560" y="440" width="88" height="88" fill="#f5f5f5"/><text x="604" y="492" fill="#aaa">—</text>
+  </g>
+  <!-- evidence annotations -->
+  <g font-size="11.5">
+    <text x="340" y="108" text-anchor="middle" fill="#2e8b57">端菜·烘焙频繁</text>
+    <text x="604" y="196" text-anchor="middle" fill="#7cb98a">夜起如厕</text>
+    <text x="516" y="284" text-anchor="middle" fill="#d0021b">会议声×拼图</text>
+    <text x="604" y="336" text-anchor="middle" fill="#2e8b57">祖母白天起居</text>
+  </g>
+  <!-- legend -->
+  <g font-size="12.5" fill="#555">
+    <text x="80" y="500">+2 应紧邻</text><text x="190" y="500">+1 宜接近</text>
+    <text x="290" y="500">0 关系弱</text><text x="380" y="500">−1 宜分开</text><text x="480" y="500">−2 应明显分开</text>
+  </g>
+  <text x="760" y="500" font-size="12" fill="#888">数字＝课堂讨论工具</text>
+  <text x="450" y="520" text-anchor="middle" font-size="12" fill="#888">追问两句话：这条关系是谁说的？满足它，破坏了哪条别的？</text>
+</svg>

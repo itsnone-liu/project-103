@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 520" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="920" height="520" fill="#ffffff"/>
+  <text x="460" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图3-3 书房/老人房两版布局：固定床 vs 翻折床（2.9×3.0m·教学假设）</text>
+  <!-- Panel A: fixed bed. room 2.9x3.0 -> 203x210px at 70px/m -->
+  <g transform="translate(80,70)">
+    <text x="101" y="22" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">A：固定床版</text>
+    <rect x="0" y="40" width="203" height="210" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
+    <!-- door bottom-right, swing arc -->
+    <rect x="130" y="246" width="42" height="4" fill="#2b2b2b"/>
+    <path d="M 172 250 A 42 42 0 0 0 130 208" fill="none" stroke="#999" stroke-width="1.4" stroke-dasharray="5,4"/>
+    <text x="183" y="270" font-size="11.5" fill="#555">门</text>
+    <!-- single bed symbol (top-left, 0.9m wide=63px, 2m long=140px) -->
+    <rect x="6" y="46" width="63" height="140" rx="6" fill="#dce8f5" stroke="#3a6ea5" stroke-width="2"/>
+    <rect x="10" y="50" width="28" height="40" rx="5" fill="#c3d7ec" stroke="#3a6ea5" stroke-width="1.2"/>
+    <text x="37" y="122" text-anchor="middle" font-size="11.5" fill="#1a3c5e">固定单人床</text>
+    <!-- desk right side (1.2m=84px long, 0.6=42px deep) with chair -->
+    <rect x="115" y="50" width="84" height="42" rx="3" fill="#f2ede2" stroke="#8a7a55" stroke-width="1.8"/>
+    <text x="157" y="76" text-anchor="middle" font-size="11" fill="#5c4f33">书桌</text>
+    <rect x="140" y="102" width="32" height="28" rx="4" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.6"/>
+    <rect x="141" y="126" width="30" height="5" rx="2" fill="#b3cbe6" stroke="#3a6ea5" stroke-width="1"/>
+    <!-- wardrobe bottom-left -->
+    <rect x="6" y="196" width="63" height="50" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.8"/>
+    <line x1="37" y1="196" x2="37" y2="246" stroke="#3a6ea5" stroke-width="1"/>
+    <text x="37" y="226" text-anchor="middle" font-size="10.5" fill="#1a3c5e">衣柜</text>
+    <!-- narrowest marker: bed right edge x=69 to desk left x=115, at y=170 -->
+    <line x1="69" y1="170" x2="115" y2="170" stroke="#d0021b" stroke-width="2.4"/>
+    <line x1="69" y1="163" x2="69" y2="177" stroke="#d0021b" stroke-width="2.4"/>
+    <line x1="115" y1="163" x2="115" y2="177" stroke="#d0021b" stroke-width="2.4"/>
+    <text x="92" y="192" text-anchor="middle" font-size="11" fill="#d0021b">最窄处</text>
+    <text x="101" y="288" text-anchor="middle" font-size="12" fill="#555">白天面积小，但每天不用动家具</text>
+  </g>
+  <!-- Panel B: folding bed -->
+  <g transform="translate(400,70)">
+    <text x="101" y="22" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">B：翻折床版</text>
+    <rect x="0" y="40" width="203" height="210" fill="#fafafa" stroke="#1a1a1a" stroke-width="3"/>
+    <rect x="130" y="246" width="42" height="4" fill="#2b2b2b"/>
+    <path d="M 172 250 A 42 42 0 0 0 130 208" fill="none" stroke="#999" stroke-width="1.4" stroke-dasharray="5,4"/>
+    <text x="183" y="270" font-size="11.5" fill="#555">门</text>
+    <!-- folding bed: folded state (day) solid, unfolded ghost -->
+    <rect x="6" y="46" width="63" height="140" rx="6" fill="#eef7ee" stroke="#2e8b57" stroke-width="2" stroke-dasharray="7,4"/>
+    <rect x="10" y="50" width="28" height="40" rx="5" fill="#dff0df" stroke="#2e8b57" stroke-width="1.2" stroke-dasharray="5,3"/>
+    <text x="37" y="122" text-anchor="middle" font-size="11" fill="#2e8b57">翻折床（夜展开）</text>
+    <!-- bigger desk -->
+    <rect x="100" y="56" width="99" height="48" rx="3" fill="#f2ede2" stroke="#8a7a55" stroke-width="1.8"/>
+    <text x="149" y="84" text-anchor="middle" font-size="11" fill="#5c4f33">书桌（1.4m）</text>
+    <rect x="130" y="114" width="34" height="30" rx="4" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.6"/>
+    <rect x="131" y="139" width="32" height="5" rx="2" fill="#b3cbe6" stroke="#3a6ea5" stroke-width="1"/>
+    <!-- low cabinet along bottom -->
+    <rect x="6" y="196" width="120" height="30" fill="#eaf2fa" stroke="#3a6ea5" stroke-width="1.6"/>
+    <line x1="66" y1="196" x2="66" y2="226" stroke="#3a6ea5" stroke-width="1"/>
+    <text x="66" y="216" text-anchor="middle" font-size="10.5" fill="#1a3c5e">矮柜</text>
+    <!-- night path from ghost bed to door -->
+    <path d="M 37 190 L 37 218 L 126 218 L 168 244" fill="none" stroke="#d0021b" stroke-width="2.6" stroke-dasharray="8,5"/>
+    <path d="M 161 238 L 172 246 L 158 248 z" fill="#d0021b"/>
+    <text x="84" y="238" font-size="10.5" fill="#d0021b">夜起路径</text>
+    <text x="101" y="288" text-anchor="middle" font-size="12" fill="#555">白天面积大，但每晚翻折＋路径要复核</text>
+  </g>
+  <!-- right notes -->
+  <g font-size="12.5" fill="#555">
+    <text x="680" y="100">比较清单（不能只看面积）：</text>
+    <text x="680" y="126">① 每天要做什么动作？</text>
+    <text x="680" y="150">② 最窄处在哪里、多宽？</text>
+    <text x="680" y="174">③ 祖母能否独立操作？</text>
+    <text x="680" y="198">④ 夜起路径直不直、扶哪？</text>
+  </g>
+  <rect x="672" y="82" width="222" height="128" rx="10" fill="none" stroke="#ddd" stroke-width="1.5"/>
+  <text x="460" y="505" text-anchor="middle" font-size="12.5" fill="#888">虚线＝夜间展开后的床位；红色＝需要复核的安全条件。两版都"摆得下"，差别在使用方式。</text>
+</svg>

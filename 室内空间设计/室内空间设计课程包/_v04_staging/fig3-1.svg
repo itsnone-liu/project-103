@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="900" height="460" fill="#ffffff"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">图3-1 三层尺度模型：以餐桌为例（教学示意·尺寸为教学常用值）</text>
+  <!-- layer 3: buffer -->
+  <ellipse cx="430" cy="250" rx="360" ry="185" fill="#fce8ec" stroke="#d98aa0" stroke-width="1.6" stroke-dasharray="8,5"/>
+  <text x="120" y="112" font-size="13.5" fill="#b04a68">③ 行为缓冲：端菜＋两人会车</text>
+  <!-- layer 2: envelope -->
+  <ellipse cx="430" cy="250" rx="235" ry="125" fill="#fdf0dd" stroke="#d8a86a" stroke-width="1.6" stroke-dasharray="8,5"/>
+  <text x="308" y="156" font-size="13.5" fill="#b07a2a">② 动作包络：拉椅·起身</text>
+  <!-- layer 1: static -->
+  <ellipse cx="430" cy="250" rx="120" ry="70" fill="#e8f1fa" stroke="#3a6ea5" stroke-width="1.8"/>
+  <text x="430" y="196" text-anchor="middle" font-size="13.5" fill="#1a3c5e">① 静态占位</text>
+  <!-- furniture symbols inside: table + 4 chairs -->
+  <g stroke="#5c4f33" stroke-width="2">
+    <rect x="370" y="232" width="120" height="62" fill="#f2ede2"/>
+    <rect x="376" y="238" width="108" height="50" fill="none" stroke="#8a7a55" stroke-width="1"/>
+  </g>
+  <g stroke="#3a6ea5" fill="#eaf2fa" stroke-width="1.8">
+    <rect x="386" y="200" width="34" height="30" rx="4"/><rect x="387" y="200" width="32" height="6" rx="2" fill="#b3cbe6" stroke-width="1"/>
+    <rect x="440" y="200" width="34" height="30" rx="4"/><rect x="441" y="200" width="32" height="6" rx="2" fill="#b3cbe6" stroke-width="1"/>
+    <rect x="386" y="296" width="34" height="30" rx="4"/><rect x="387" y="320" width="32" height="6" rx="2" fill="#b3cbe6" stroke-width="1"/>
+    <rect x="440" y="296" width="34" height="30" rx="4"/><rect x="441" y="320" width="32" height="6" rx="2" fill="#b3cbe6" stroke-width="1"/>
+  </g>
+  <!-- envelope arrows: chair pull -->
+  <g stroke="#d8a86a" stroke-width="1.8" fill="#d8a86a">
+    <line x1="336" y1="250" x2="308" y2="250"/><path d="M 314 244 L 302 250 L 314 256 z"/>
+    <line x1="524" y1="250" x2="552" y2="250"/><path d="M 546 244 L 558 250 L 546 256 z"/>
+  </g>
+  <!-- buffer arrows: serving + passing -->
+  <g stroke="#d98aa0" stroke-width="1.8" fill="#d98aa0">
+    <line x1="430" y1="435" x2="430" y2="405"/><path d="M 424 412 L 430 400 L 436 412 z"/>
+  </g>
+  <circle cx="185" cy="250" r="11" fill="#fce8ec" stroke="#d98aa0" stroke-width="1.8"/>
+  <circle cx="158" cy="250" r="11" fill="#fce8ec" stroke="#d98aa0" stroke-width="1.8"/>
+  <text x="171" y="285" text-anchor="middle" font-size="12" fill="#b04a68">会车两人</text>
+  <!-- side scale notes -->
+  <g font-size="12" fill="#888">
+    <text x="700" y="120">桌面1.4×0.8m</text>
+    <text x="700" y="142">拉椅坐人：桌边外约75cm</text>
+    <text x="700" y="164">通行：椅背后约60cm</text>
+    <text x="700" y="186">端菜：热盘双手，约60cm</text>
+  </g>
+  <line x1="695" y1="115" x2="560" y2="200" stroke="#bbb" stroke-width="1"/>
+  <line x1="695" y1="160" x2="640" y2="255" stroke="#bbb" stroke-width="1"/>
+  <text x="450" y="448" text-anchor="middle" font-size="12.5" fill="#888">三层像涟漪一样从家具向外扩散；图上有"空白"不够，三层都放得下，人才真的有空间。</text>
+</svg>
