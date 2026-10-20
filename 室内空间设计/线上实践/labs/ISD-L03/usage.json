@@ -1,0 +1,24 @@
+{
+ "calls": [
+  {
+   "purpose": "bubble_lab.html v1 generation",
+   "model": "gpt-6.1-sol",
+   "effort": "high",
+   "secs": 373.5,
+   "usage": {
+    "prompt_tokens": 7329,
+    "completion_tokens": 19458,
+    "total_tokens": 26787,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 3388
+    }
+   },
+   "finish": "stop",
+   "response_chars": 44269,
+   "exact_tokens": true
+  }
+ ]
+}

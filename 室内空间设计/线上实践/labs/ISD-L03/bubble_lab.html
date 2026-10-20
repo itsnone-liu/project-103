@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>居住需求档案与气泡图任务书</title>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#202823;background:#f4f5f1;font:14px "Microsoft YaHei",sans-serif}h1{font-size:23px;margin:0 0 8px}h2{font-size:17px;margin:0 0 10px}h3{font-size:14px;margin:10px 0 6px}p{margin:7px 0;line-height:1.65}header,footer{padding:14px 18px;background:white;border-bottom:1px solid #28332e}button,select,input,textarea{font:inherit;font-size:14px}button,select{background:white;border:1px solid #65736a;border-radius:4px;padding:6px 9px;color:inherit}button{cursor:pointer}button:hover:not(:disabled){background:#edf3ed}button:disabled{opacity:.45;cursor:not-allowed}button.on{background:#dcecdc;border:2px solid #205b40}button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #ce990d;outline-offset:2px}nav,.tools,.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:8px 0}.badge{display:inline-block;padding:5px 9px;background:#fff0c8;border:1px solid #9c7b31;font-size:12px}.layout{display:grid;grid-template-columns:235px minmax(650px,1fr) 470px;gap:12px;padding:12px;align-items:start}.card{background:white;border:1px solid #4d5b52;border-radius:5px;padding:12px;margin-bottom:12px;overflow-wrap:anywhere}.muted,small{font-size:12px;color:#526158}.tip{border-left:4px solid #8d9b88;padding:5px 10px;background:#f4f6ef}.tray{min-height:50px}.bubble{cursor:grab;touch-action:none}.chip{display:inline-flex;border:1.4px solid #344c3c;border-radius:50%;padding:9px 13px;margin:4px;background:#fafcf8;min-width:110px;justify-content:center;font-size:12px}.fixed{cursor:default;background:#eee}.ip{display:block;width:100%;text-align:left;margin:5px 0;padding:7px;font-size:12px;line-height:1.6}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.green{color:#24633b}.orange{color:#9b570e}.red{color:#aa302b}.gray{color:#647069}.blue{color:#356e9b}.canvas{overflow:auto;background:white;border:1px solid #4d5b52}.canvas svg{display:block;width:100%;min-width:780px;max-height:720px}svg text{font:12px "Microsoft YaHei",sans-serif;fill:#233129}svg .bubble ellipse{fill:#fffefa;stroke:#344c3c;stroke-width:1.3}svg .selected ellipse,.selected.chip{stroke:#bc8700;stroke-width:3;background:#fff2c2}svg .slot rect{stroke:#49594e;stroke-width:1.2}.edge{cursor:pointer}.layers{display:grid;grid-template-columns:1fr 1.35fr .8fr;gap:8px;font-size:12px}.layers>section{border-left:1px solid #ccd3ca;padding-left:7px}.layers ul{padding-left:16px;margin:5px 0}.layers li{margin:5px 0;line-height:1.65}.layers h3{font-size:13px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border-bottom:1px solid #d8ded7;padding:6px 3px;text-align:left;vertical-align:top}textarea{display:block;width:100%;min-height:85px;margin:5px 0 10px;padding:7px;border:1px solid #8a958c;border-radius:3px}label{line-height:1.7}.edge-list button{font-size:12px;margin:3px;padding:5px}.legend span{display:inline-block;margin:3px 10px 3px 0;font-size:12px}#status{position:sticky;bottom:0;background:#fff8d8;padding:9px 16px;border-top:1px solid #a59256;z-index:4;font-size:13px}.ghost{position:fixed;pointer-events:none;z-index:20;opacity:.88;transform:translate(-50%,-50%);background:#fff2c2;border:2px solid #856612;border-radius:50%;padding:12px}dialog{border:1px solid #344c3c;border-radius:6px;max-width:490px;width:94%;padding:18px}dialog::backdrop{background:#14251d66}dialog label{display:block;margin:9px 0}dialog select{max-width:100%}.wide{width:100%}.scroll{max-height:600px;overflow:auto}details{margin:9px 0}summary{cursor:pointer}#selfout{white-space:pre-wrap;font-size:12px}footer{font-size:12px}.guide{font-size:13px}.highlight{outline:2px solid #bc8700}
+@media(max-width:1400px){.layout{grid-template-columns:220px minmax(630px,1fr)}.right{grid-column:1/-1;display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:12px}.layers{grid-template-columns:1fr}.layers>section{border-left:0;border-top:1px solid #ccc}}@media(max-width:900px){.layout{display:block}.right{display:block}.layers{grid-template-columns:1fr 1fr 1fr}h1{font-size:20px}}
+</style>
+</head>
+<body>
+<header>
+<h1>居住需求档案与气泡图任务书 <small>ISD-L03 · 第2章 / 第4.2节</small></h1>
+<span class="badge">全部为教学假设／课堂讨论工具，非国家标准</span>
+<strong> 检查只摆冲突，不替你裁决。</strong>
+<nav aria-label="实验导航">
+<button id="level1">关卡1·现状诊断</button><button id="level2">关卡2·关系处方</button><button id="challenge" disabled>挑战·任务书导出</button>
+<span>情境：</span><button id="scenarioA">A·现状</button><button id="scenarioB">B·五年后</button>
+<button id="saveA">存为A版</button><button id="saveB">存为B版</button><button id="loadA">载入A版</button><button id="loadB">载入B版</button><button id="reset">重置现状</button>
+</nav>
+<p id="scene"></p><p id="guide" class="tip guide"></p>
+</header>
+<main class="layout">
+<aside>
+<section class="card"><h2>① 功能气泡托盘</h2><p class="muted">未装填气泡按区带分组。拖到允许槽，或使用中栏选择安置；固定卫浴不可移出。</p><div id="tray" class="tray"></div></section>
+<section class="card"><h2>② 需求档案·访谈要点</h2><p class="muted">绿＝覆盖，蓝＝留待情境B，黄＝未覆盖。点击定位主张与证据。</p><div id="interviews"></div></section>
+</aside>
+<section>
+<div class="card">
+<h2>U90 冻结房间槽·气泡推理记录</h2>
+<p class="muted">沈家四口 · 青枫里2栋1单元401 · 约89㎡三居室。缩略格子仅示意相对位置，不是新生成的平面，也不按比例测距。</p>
+<div class="tools"><button id="edgeMode">连边：关闭</button><button id="newEdge">新增／编辑关系</button><button id="clearHighlight">清除高亮</button></div>
+<div class="legend" id="legend"></div>
+<div class="canvas"><svg id="canvas" viewBox="0 0 900 650" role="img" aria-label="U90房间槽与功能气泡图"></svg></div>
+<div class="tools">
+<label>功能 <select id="pickBubble" aria-label="选择功能气泡"></select></label>
+<label>安置到 <select id="pickSlot" aria-label="选择房间槽"></select></label>
+<button id="place">执行安置</button>
+</div>
+<p id="bubbleInfo" class="muted"></p>
+<p class="muted">拖动只接受目录允许的槽；引擎仍可检查假设性错配。占用条以面积权重相加，不进行时段共享折减。面积单位：教学权重㎡。</p>
+<h3>关系主张与证据 <small>点击边或下列标签编辑</small></h3><div id="edgeList" class="edge-list"></div>
+</div>
+<section class="card"><h2>进度文件与自检</h2>
+<div class="tools"><button id="exportState">保存进度文件</button><button id="importState">导入进度／任务书</button><input id="file" type="file" accept=".json,application/json" hidden></div>
+<p class="muted">进度文件不等于任务书；任务书须保存双情境并填写失效条件后导出。数据仅留在本页或你下载的文件中，刷新前请保存。</p>
+<details><summary>白盒自检（8项）</summary><button id="runTests">运行全部自检</button><div id="selfout"></div></details>
+</section>
+</section>
+<aside class="right">
+<section class="card"><h2>检查报告</h2><p class="muted">三层反馈分列；无总分、无自动裁决。</p><div class="layers"><section><h3>观察·客观测量</h3><div id="observations"></div></section><section><h3>规则建议</h3><div id="suggestions"></div></section><section><h3>教师判断·静态提示</h3><p>先解释谁在何时使用，再讨论是否必须共处。</p><p>紧邻与安静可能形成张力；请提出证据、替代解释和代价。</p><p>时段相遇不必然互斥，面积权重也不等于建筑面积。</p><p>不因提示为红色就机械改档。保留有根据的主张，并写明失效条件。</p><strong>检查只摆冲突，不替你裁决。</strong></section></div></section>
+<section class="card"><h2>访谈覆盖与平面对表</h2><p class="muted">每条需求分别核对，边为无向且档位必须相同。示例边不自动等于访谈已满足；未出现的B需求不计遗漏。</p><details open><summary>14条要点逐项核对</summary><div id="coverage"></div></details><h3>主张档位 ↔ 冻结平面</h3><p class="muted">教学常用值·讨论工具：+2需≥4，+1需≥3，−1需≤2，−2需≤1；差1级部分满足，差≥2级不满足。未列槽对按远隔1级。</p><div id="tableCheck"></div></section>
+<section class="card" id="taskCard"><h2>情境与任务书</h2><div id="delta"></div><p id="saved"></p>
+<label for="failureA">A版失效条件（至少20字）</label><textarea id="failureA" placeholder="当______时本任务书失效：______"></textarea>
+<label for="failureB">B版失效条件（至少20字）</label><textarea id="failureB" placeholder="当______时本任务书失效：______"></textarea>
+<p id="progress"></p><button id="exportTask" disabled>导出气泡图任务书</button><p class="muted">含双情境完整图、证据、检查报告、失效条件与规则版本；兼容后续实验的气泡／边契约，不含总分。</p>
+</section>
+</aside>
+</main>
+<footer>成果①：功能主张＋证据＋时段＋失效条件。教材锚点：第2章需求档案与任务书、第4.2节邻接五档、住宅贯穿案例与户型库 v0.1 §1.5／§1.6。所有阈值均为“教学常用值·讨论工具，非国家标准”。</footer>
+<div id="status" role="status" aria-live="polite">正在载入实验。</div>
+<dialog id="edgeDialog">
+<h2>关系主张·证据标签</h2>
+<label>端点一 <select id="edgeA"></select></label><label>端点二 <select id="edgeB"></select></label>
+<label>邻接档位 <select id="edgeV"></select></label><label>证据来源 <select id="edgeEvidence"><option>访谈</option><option>观察</option><option>课程假设</option></select></label>
+<p class="muted">证据是你主张的来源，不代表引擎认可结论。中性也可保留为明确主张。</p>
+<div class="tools"><button id="confirmEdge">确认主张</button><button id="deleteEdge">删除此边</button><button id="cancelEdge">取消</button></div>
+</dialog>
+<script>
+"use strict";
+/* 冻结数据 */
+const B=[
+{id:"sleep_elder",name:"老人睡眠",area:5.5,zone:"私",slots:["study"],periods:[[21,6.5]],day:"每日",scenario:"B"},
+{id:"care_elder",name:"祖母茶歇照护",area:1.5,zone:"公",slots:["living","storage"],periods:[[9,11],[14,16]],day:"每日",scenario:"B"},
+{id:"sleep_master",name:"夫妻睡眠",area:8,zone:"私",slots:["master"],periods:[[22,7]],day:"每日"},
+{id:"sleep_child",name:"女儿睡眠",area:5,zone:"私",slots:["child"],periods:[[20.5,7]],day:"每日"},
+{id:"work_office",name:"先生办公视讯",area:4,zone:"私",slots:["study"],periods:[[9,12],[14,18],[20,22]],day:"工作日"},
+{id:"work_office_w",name:"先生周六加班",area:4,zone:"私",slots:["study"],periods:[[14,19]],day:"周六"},
+{id:"work_prep",name:"太太备课",area:2.5,zone:"半私",slots:["dining"],periods:[[19,21]],day:"每日"},
+{id:"bake",name:"烘焙",area:1.5,zone:"家务",slots:["kitchen","dining"],periods:[[10,12]],day:"周六"},
+{id:"cook",name:"烹饪备餐",area:3,zone:"家务",slots:["kitchen"],periods:[[11.5,12.5],[17.5,18.5]],day:"每日"},
+{id:"meal_break",name:"早餐",area:2,zone:"公",slots:["kitchen","dining"],periods:[[7,7.5]],day:"每日"},
+{id:"meal_dinner",name:"全家晚餐",area:3.5,zone:"公",slots:["dining"],periods:[[18,19]],day:"每日"},
+{id:"tv_eld",name:"电视共处",area:2.5,zone:"公",slots:["living"],periods:[[13,14],[19,21]],day:"每日"},
+{id:"guest",name:"访客接待",area:3,zone:"公",slots:["living"],periods:[[15,17]],day:"周六"},
+{id:"play",name:"女儿游戏会友",area:2.5,zone:"公",slots:["living"],periods:[[15,16]],day:"每日"},
+{id:"study_child",name:"女儿学习",area:2,zone:"半私",slots:["child","storage"],periods:[[16.5,17.5],[19,20]],day:"每日"},
+{id:"laundry",name:"洗衣晾晒",area:2,zone:"家务",slots:["balcony_n","kitchen","storage"],periods:[[9,10]],day:"周六"},
+{id:"storage_bulk",name:"大件储物",area:4,zone:"家务",slots:["storage"],periods:[]},
+{id:"bath_main",name:"主卫",area:3.8,zone:"私",slots:["bath_main_slot"],periods:[[6.9,7.3]],day:"每日",fixed:true},
+{id:"bath_pub",name:"公卫",area:4.4,zone:"共用",slots:["bath_pub_slot"],periods:[[7.1,7.6]],day:"每日",fixed:true}
+];
+const R=[
+{id:"kitchen",name:"厨房",capacity:6.3,zone:"家务"},
+{id:"dining",name:"餐区西厅(开放)",capacity:9.5,zone:"公"},
+{id:"living",name:"客餐厅核心",capacity:29.8,zone:"公"},
+{id:"entry",name:"玄关",capacity:3,zone:"过渡"},
+{id:"study",name:"书房",capacity:8.7,zone:"私"},
+{id:"master",name:"主卧",capacity:13.9,zone:"私"},
+{id:"child",name:"儿童房",capacity:9.6,zone:"私"},
+{id:"storage",name:"储物家政区(开放)",capacity:6.1,zone:"家务"},
+{id:"balcony_n",name:"北阳台",capacity:2,zone:"家务"},
+{id:"bath_main_slot",name:"主卫(套内)",capacity:3.8,zone:"私"},
+{id:"bath_pub_slot",name:"公卫",capacity:4.4,zone:"共用"}
+];
+const IP=[
+{id:"ip1",text:"祖母夜起频繁，卫生间要近",source:"访谈",need:["bubble:sleep_elder","edge:sleep_elder+2bath_pub"]},
+{id:"ip2",text:"祖母21点就寝、晨起早",source:"访谈",need:["bubble:sleep_elder"]},
+{id:"ip3",text:"祖母白天爱看电视、午后茶歇",source:"访谈",need:["bubble:tv_eld","bubble:care_elder"]},
+{id:"ip4",text:"先生每晚20–22视讯，需安静稳定工位",source:"访谈",need:["bubble:work_office","edge:work_office-2tv_eld"]},
+{id:"ip5",text:"先生周六白天加班",source:"访谈",need:["bubble:work_office"]},
+{id:"ip6",text:"太太周末烘焙，烤炉食材需台面",source:"访谈",need:["bubble:bake"]},
+{id:"ip7",text:"太太晚间19–21备课批作业",source:"访谈",need:["bubble:work_prep"]},
+{id:"ip8",text:"全家18–19晚餐是一天主要共处",source:"观察",need:["bubble:meal_dinner"]},
+{id:"ip9",text:"女儿每日课后学习近2小时，五年后需独立学习角",source:"访谈",need:["bubble:study_child"]},
+{id:"ip10",text:"女儿周末邀同学来玩",source:"访谈",need:["bubble:play"]},
+{id:"ip11",text:"洗衣晾晒现状在北阳台，冬冷夏热有抱怨",source:"观察",need:["bubble:laundry"]},
+{id:"ip12",text:"大件储物（行李箱/换季）常年无处放",source:"访谈",need:["bubble:storage_bulk"]},
+{id:"ip13",text:"周末常有祖辈访客15–17",source:"访谈",need:["bubble:guest"]},
+{id:"ip14",text:"主卫/公卫分用可减少早高峰排队",source:"课程假设",need:["edge:sleep_master+2bath_main","edge:sleep_elder+1bath_pub"]}
+];
+const LEVELS={same_room:5,open_adjacent:4,door_adjacent:4,corridor_near:3,adjustable_wall:3,fixed_wall:2,far:1};
+const REL=[
+["kitchen","dining","open_adjacent"],["kitchen","balcony_n","door_adjacent"],["kitchen","entry","fixed_wall"],["kitchen","living","corridor_near"],
+["dining","living","open_adjacent"],["dining","entry","corridor_near"],["dining","master","fixed_wall"],
+["living","study","door_adjacent"],["living","master","door_adjacent"],["living","child","corridor_near"],["living","storage","corridor_near"],["living","bath_pub_slot","corridor_near"],
+["entry","bath_pub_slot","fixed_wall"],["study","bath_pub_slot","corridor_near"],["study","child","far"],
+["master","bath_main_slot","same_room"],["child","bath_pub_slot","corridor_near"],["child","storage","adjustable_wall"],
+["storage","bath_pub_slot","far"],["master","kitchen","far"],["master","child","far"],["study","kitchen","far"]
+];
+const CLAIM={"+2":{need:4,label:"必须紧邻"},"+1":{need:3,label:"宜紧邻"},"0":{need:0,label:"中性"},"-1":{need:-1,label:"宜分离",max:2},"-2":{need:-1,label:"必须分离",max:1}};
+const FILL={kitchen:["cook","meal_break","bake"],dining:["meal_dinner","work_prep"],living:["tv_eld","guest","play"],child:["sleep_child","study_child"],master:["sleep_master"],study:["work_office","work_office_w"],balcony_n:["laundry"],storage:["storage_bulk"],entry:[]};
+const EDGES=[
+{a:"meal_dinner",b:"cook",v:"+2",evidence:"观察"},
+{a:"work_prep",b:"meal_dinner",v:"0",evidence:"观察"},
+{a:"sleep_master",b:"bath_main",v:"+2",evidence:"课程假设"},
+{a:"sleep_child",b:"study_child",v:"+1",evidence:"访谈"},
+{a:"play",b:"tv_eld",v:"+1",evidence:"访谈"},
+{a:"work_office",b:"tv_eld",v:"-2",evidence:"访谈"}
+];
+const ADD={bubbles:["sleep_elder","care_elder"],edges:[{a:"sleep_elder",b:"bath_pub",v:"+2",evidence:"访谈"}]};
+const SCENE={family:"沈家四口（U90青枫里2栋1单元401，~89㎡三居室）",members:["祖母(近70)","沈先生(居家办公)","沈太太(中学教师)","女儿(情境A 7岁/情境B 12岁)"],scenarios:{A:"女儿7岁；祖母尚未常住但每年长住数月；办公已上升。",B:"祖母常住需照护；女儿12岁需独立学习空间；先生办公/视讯进一步增加。"}};
+const RULE="ISD-L03-0.1.0",BM=Object.fromEntries(B.map(b=>[b.id,b])),RM=Object.fromEntries(R.map(r=>[r.id,r]));
+const RELTEXT={same_room:"同格／同一房间槽",open_adjacent:"开放相通",door_adjacent:"门邻直通",corridor_near:"隔走廊近达",adjustable_wall:"非承重可变隔墙",fixed_wall:"固定隔墙",far:"跨区远"};
+const COLOR={"+2":"#165d3c","+1":"#72a86c","0":"#7b8580","-1":"#c27b25","-2":"#ba3d36"},ZONE={"公":"#f6efd9","私":"#e4ecf2","半私":"#e9e8f0","家务":"#e5efdf","过渡":"#eeeeea","共用":"#eee4f4"};
+const freeze=o=>{Object.values(o).forEach(v=>{if(v&&typeof v==="object")freeze(v)});return Object.freeze(o)};
+[B,R,IP,LEVELS,REL,CLAIM,FILL,EDGES,ADD,SCENE].forEach(freeze);
+
+/* 纯函数规则引擎：不访问DOM、时间、随机数或存储 */
+const CP=x=>JSON.parse(JSON.stringify(x)),N=x=>+x.toFixed(5);
+const key=(a,b)=>[a,b].sort().join("|");
+const active=s=>B.filter(b=>!b.scenario||s.scenario==="B");
+const locate=s=>Object.fromEntries(R.flatMap(r=>(s.fill[r.id]||[]).map(id=>[id,r.id])));
+function retray(s){const p=locate(s);s.tray=active(s).filter(b=>!p[b.id]).map(b=>b.id);return s}
+function baseline(q="A"){
+ const s={scenario:"A",tray:[],fill:Object.fromEntries(R.map(r=>[r.id,CP(FILL[r.id]||[])])),edges:CP(EDGES),versions:{A:null,B:null},failures:{A:"",B:""}};
+ s.fill.bath_main_slot=["bath_main"];s.fill.bath_pub_slot=["bath_pub"];retray(s);
+ return q==="B"?change(s,"B"):s;
+}
+function change(state,q){
+ if(!["A","B"].includes(q))throw Error("未知情境");
+ const s=CP(state);if(s.scenario===q)return s;s.scenario=q;
+ if(q==="A"){R.forEach(r=>s.fill[r.id]=s.fill[r.id].filter(id=>!ADD.bubbles.includes(id)));s.edges=s.edges.filter(e=>!ADD.bubbles.includes(e.a)&&!ADD.bubbles.includes(e.b))}
+ else ADD.edges.forEach(e=>{if(!s.edges.some(x=>key(x.a,x.b)===key(e.a,e.b)))s.edges.push(CP(e))});
+ return retray(s);
+}
+function move(state,id,slot=null){
+ const s=CP(state),b=BM[id];
+ if(!b||b.fixed||!active(s).some(x=>x.id===id))return s;
+ if(slot&&!RM[slot])throw Error("未知房间槽");
+ R.forEach(r=>s.fill[r.id]=s.fill[r.id].filter(x=>x!==id));
+ if(slot)s.fill[slot].push(id);return retray(s);
+}
+function addEdge(state,e){
+ if(e.a===e.b)throw Error("请选择两个不同气泡");
+ if(!CLAIM[e.v]||!["访谈","观察","课程假设"].includes(e.evidence))throw Error("档位或证据不合法");
+ const s=CP(state),i=s.edges.findIndex(x=>key(x.a,x.b)===key(e.a,e.b));
+ const t={a:e.a,b:e.b,v:e.v,evidence:e.evidence};
+ if(i<0)s.edges.push(t);else s.edges[i]=t;return s;
+}
+function removeEdge(state,a,b){const s=CP(state);s.edges=s.edges.filter(e=>key(e.a,e.b)!==key(a,b));return s}
+function parseNeed(n){
+ if(n.startsWith("bubble:"))return {type:"bubble",ids:[n.slice(7)]};
+ const m=n.slice(5).match(/^(.+?)([+-][12]|0)(.+)$/);
+ return {type:"edge",ids:[m[1],m[3]],v:m[2]};
+}
+function relation(a,b){
+ if(a===b)return "same_room";
+ const r=REL.find(x=>key(x[0],x[1])===key(a,b));return r?r[2]:"far";
+}
+function segments(p){return p.flatMap(([a,b])=>a>b?[[a,24],[0,b]]:[[a,b]]).sort((a,b)=>a[0]-b[0])}
+function commonDay(a,b){return a===b?a:a==="每日"?b:b==="每日"?a:null}
+function core(s){
+ const p=locate(s),ab=active(s),allowed=new Set(ab.map(b=>b.id));
+ const checks={area_overload:[],time_conflict:[],triangle_tension:[],zone_mismatch:[],coverage:[],table_check:[]};
+ const slots=R.map(r=>{
+  const ids=(s.fill[r.id]||[]).filter(id=>allowed.has(id)),used=N(ids.reduce((v,id)=>v+BM[id].area,0)),ratio=N(used/r.capacity);
+  if(!r.id.startsWith("bath_")&&used>r.capacity*1.05)checks.area_overload.push({slot:r.id,used,capacity:r.capacity,ratio});
+  const bs=ab.filter(b=>ids.includes(b.id));
+  for(let i=0;i<bs.length;i++)for(let j=i+1;j<bs.length;j++){
+   const a=bs[i],b=bs[j],day=commonDay(a.day,b.day);if(!day)continue;
+   const overlap=[];
+   segments(a.periods).forEach(x=>segments(b.periods).forEach(y=>{const lo=Math.max(x[0],y[0]),hi=Math.min(x[1],y[1]);if(lo<hi)overlap.push([lo,hi])}));
+   if(overlap.length)checks.time_conflict.push({slot:r.id,a:a.id,b:b.id,overlap:overlap.sort((x,y)=>x[0]-y[0]),day});
+  }
+  bs.forEach(b=>{
+   if(b.fixed)return;
+   const red=(b.zone==="私"&&["公","家务","过渡"].includes(r.zone))||(b.zone==="公"&&r.zone==="私");
+   const yellow=b.zone==="半私"&&r.zone==="家务";
+   if(red||yellow)checks.zone_mismatch.push({bubble:b.id,slot:r.id,bubbleZone:b.zone,slotZone:r.zone,severity:red?"红":"黄"});
+  });
+  return {slot:r.id,used,capacity:r.capacity,ratio,bubbles:ids};
+ });
+ const em=new Map(s.edges.map(e=>[key(e.a,e.b),e]));
+ const ids=[...new Set(s.edges.flatMap(e=>[e.a,e.b]))].sort();
+ for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++)for(let k=j+1;k<ids.length;k++){
+  const triple=[ids[i],ids[j],ids[k]],edges=[em.get(key(triple[0],triple[1])),em.get(key(triple[1],triple[2])),em.get(key(triple[0],triple[2]))];
+  if(edges.every(Boolean)){const v=edges.map(e=>+e.v);if(Math.max(...v)-Math.min(...v)>=4&&v.some(n=>n>0)&&v.some(n=>n<0))checks.triangle_tension.push({triple,edges:CP(edges)})}
+ }
+ IP.forEach(ip=>{
+  const needs=ip.need.map(need=>{
+   const n=parseNeed(need),pending=n.ids.some(id=>!allowed.has(id));
+   const found=n.type==="bubble"?!!p[n.ids[0]]:s.edges.some(e=>key(e.a,e.b)===key(...n.ids)&&e.v===n.v);
+   return {need,status:pending?"留待情境B":found?"覆盖":"未覆盖"};
+  });
+  const status=needs.some(n=>n.status==="未覆盖")?"未覆盖":needs.some(n=>n.status==="留待情境B")?"留待情境B":"覆盖";
+  checks.coverage.push({id:ip.id,text:ip.text,source:ip.source,status,needs});
+ });
+ s.edges.forEach(e=>{
+  let actualLevel=null,relationName=null,verdict="无法对照",difference=null;
+  if(p[e.a]&&p[e.b]){
+   relationName=relation(p[e.a],p[e.b]);actualLevel=LEVELS[relationName];
+   const c=CLAIM[e.v];difference=e.v==="0"?0:Math.max(0,c.need<0?actualLevel-c.max:c.need-actualLevel);
+   verdict=difference===0?"满足":difference===1?"部分满足":"不满足";
+  }
+  checks.table_check.push({...CP(e),actualLevel,relationName,verdict,difference});
+ });
+ return {checks,facts:{scenario:s.scenario,description:SCENE.scenarios[s.scenario],slots,areaFactor:1.05,ruleVersion:RULE,disclaimer:"教学常用值·讨论工具，非国家标准"}};
+}
+function evaluate(state){
+ const report=core(state),c=report.checks;
+ c.scenario_delta=null;
+ if(state.scenario==="B"){
+  const a=core(change(state,"A")).checks;
+  const added=(xs,ys,f)=>xs.filter(x=>!ys.some(y=>f(x)===f(y)));
+  c.scenario_delta={
+   area_overload:added(c.area_overload,a.area_overload,x=>x.slot),
+   time_conflict:added(c.time_conflict,a.time_conflict,x=>x.slot+"|"+key(x.a,x.b)+"|"+x.day+"|"+JSON.stringify(x.overlap)),
+   coverage:added(c.coverage.filter(x=>x.status==="未覆盖"),a.coverage.filter(x=>x.status==="未覆盖"),x=>x.id)
+  };
+ }
+ report.summary={area_overload:c.area_overload.length,time_conflict:c.time_conflict.length,triangle_tension:c.triangle_tension.length,zone_mismatch:c.zone_mismatch.length,coverage:c.coverage.filter(x=>x.status==="覆盖").length,pending:c.coverage.filter(x=>x.status==="留待情境B").length,uncovered:c.coverage.filter(x=>x.status==="未覆盖").length,table_check:{满足:0,部分满足:0,不满足:0,无法对照:0}};
+ c.table_check.forEach(x=>report.summary.table_check[x.verdict]++);return report;
+}
+function snapshot(s){return CP({scenario:s.scenario,tray:s.tray,fill:s.fill,edges:s.edges})}
+function save(state,q){
+ if(state.scenario!==q)throw Error("请先切换到对应情境，再保存该版");
+ const s=CP(state);s.versions[q]=snapshot(s);return s;
+}
+function restore(state,q){
+ if(!state.versions[q])throw Error("该版尚未保存");
+ return {...CP(state),...CP(state.versions[q])};
+}
+function setFailure(state,q,text){const s=CP(state);s.failures[q]=text;return s}
+const wordCount=t=>[...t.replace(/\s/g,"")].length;
+const unlocked=s=>!!(s.versions.A&&s.versions.B&&wordCount(s.failures.A)>=20&&wordCount(s.failures.B)>=20);
+function validate(s,version=false){
+ if(!s||!["A","B"].includes(s.scenario)||!s.fill||!Array.isArray(s.tray)||!Array.isArray(s.edges))throw Error("文件不是有效的实验状态");
+ const seen=new Set(),allowed=new Set(active(s).map(b=>b.id));
+ R.forEach(r=>{if(!Array.isArray(s.fill[r.id]))throw Error("房间槽数据不完整");s.fill[r.id].forEach(id=>{if(!allowed.has(id)||seen.has(id))throw Error("气泡重复或不属于当前情境");seen.add(id)})});
+ s.tray.forEach(id=>{if(!allowed.has(id)||seen.has(id))throw Error("托盘数据不合法");seen.add(id)});
+ if(seen.size!==allowed.size)throw Error("气泡目录不完整");
+ B.filter(b=>b.fixed).forEach(b=>{if(!(s.fill[b.slots[0]]||[]).includes(b.id))throw Error("固定卫浴不可移出")});
+ const ek=new Set();
+ s.edges.forEach(e=>{if(!allowed.has(e.a)||!allowed.has(e.b)||e.a===e.b||!CLAIM[e.v]||!["访谈","观察","课程假设"].includes(e.evidence)||ek.has(key(e.a,e.b)))throw Error("关系边数据不合法");ek.add(key(e.a,e.b))});
+ if(!version){
+  if(!s.versions||!s.failures||typeof s.failures.A!=="string"||typeof s.failures.B!=="string")throw Error("双版本或失效条件字段缺失");
+  ["A","B"].forEach(q=>{if(s.versions[q]){validate(s.versions[q],true);if(s.versions[q].scenario!==q)throw Error("版本情境不匹配")}});
+ }
+ return s;
+}
+function serialize(s){return JSON.stringify(s,null,2)}
+function deserialize(text){const d=JSON.parse(text);return validate(CP(d.state||d))}
+function graph(s){const p=locate(s);return {scenario:s.scenario,bubbles:active(s).map(b=>({...CP(b),label:b.name,slot:p[b.id]||null})),edges:CP(s.edges),fill:CP(s.fill),tray:CP(s.tray)}}
+function task(s){
+ if(!unlocked(s))throw Error("尚未满足任务书解锁条件");
+ const a=s.versions.A,b=s.versions.B;
+ return {schema:"isd-design-v1",lab:"ISD-L03",title:"居住需求档案与气泡图任务书",version:"0.1.0",ruleVersion:RULE,disclaimer:"教学常用值·讨论工具，非国家标准",family:CP(SCENE),scenario:"B",bubbles:graph(b).bubbles,edges:CP(b.edges),graphs:{A:graph(a),B:graph(b)},versions:CP(s.versions),failures:CP(s.failures),reports:{A:evaluate(a),B:evaluate(b)},interview_points:CP(IP),state:CP(s)};
+}
+window.BubbleEngine=Object.freeze({evaluate,baseline,change,move,fill:move,addEdge,removeEdge,serialize,deserialize,save,restore,setFailure,snapshot,unlocked,task,data:Object.freeze({bubbles:B,room_slots:R,interview_points:IP,relation_levels:LEVELS,slot_relations:REL,claim_vs_actual:CLAIM,current_fill_A:FILL,current_edges_A:EDGES,scenario_B_additions:ADD,scene:SCENE})});
+
+/* 渲染：只读取引擎产出的状态和报告 */
+const E=window.BubbleEngine,$=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const bn=id=>BM[id]?BM[id].name:id,rn=id=>RM[id]?RM[id].name:id;
+const vtext=v=>v.replace("-","−"),statusColor=t=>t==="覆盖"||t==="满足"?"green":t==="留待情境B"?"blue":t==="部分满足"||t==="未覆盖"?"orange":t==="不满足"?"red":"gray";
+const dotColor=t=>({green:"#2b7e45",blue:"#477eac",orange:"#c59119",red:"#b73931",gray:"#888"}[statusColor(t)]);
+const opts=(arr,v)=>arr.map(([id,t])=>`<option value="${esc(id)}"${id===v?" selected":""}>${esc(t)}</option>`).join("");
+const list=(xs,fn)=>xs.length?"<ul>"+xs.map(x=>"<li>"+fn(x)+"</li>").join("")+"</ul>":"<p class='muted'>无</p>";
+const periodText=b=>(b.periods.length?b.periods.map(p=>p.join("–")).join("、")+"时（"+b.day+"）":"持续储物／无占用时段");
+const BOX={balcony_n:[24,8,240,46],kitchen:[24,64,240,142],entry:[276,64,126,132],bath_pub_slot:[414,64,140,132],study:[566,24,308,182],dining:[24,218,240,182],living:[276,218,348,198],storage:[636,218,238,150],master:[24,430,292,206],bath_main_slot:[186,536,116,88],child:[636,380,238,256]};
+let state=E.baseline("A"),level=1,edgeMode=false,edgeFirst=null,selected="bake",highlight=new Set(),highlightEdge=new Set(),highlightIP="",editing=null,lastReport=null,suppressClick=false;
+function say(t){$("status").textContent=t}
+function updateProgress(){
+ const a=wordCount(state.failures.A),b=wordCount(state.failures.B),ok=E.unlocked(state);
+ $("saved").textContent="A版："+(state.versions.A?"已保存":"未保存")+"；B版："+(state.versions.B?"已保存":"未保存")+"。后续修改须重新保存对应版。";
+ $("progress").textContent="解锁进度：双版本 "+(+!!state.versions.A + +!!state.versions.B)+"/2；A失效条件 "+a+"/20字；B失效条件 "+b+"/20字。"+(ok?"已解锁。":"尚未解锁。");
+ $("challenge").disabled=$("exportTask").disabled=!ok;
+ $("loadA").disabled=!state.versions.A;$("loadB").disabled=!state.versions.B;
+ $("saveA").disabled=state.scenario!=="A";$("saveB").disabled=state.scenario!=="B";
+}
+function renderTray(){
+ $("tray").innerHTML=["公","私","半私","家务","共用"].map(z=>{
+  const xs=state.tray.map(id=>BM[id]).filter(b=>b.zone===z);
+  return xs.length?`<h3>${z}区</h3>`+xs.map(b=>`<button class="chip bubble ${highlight.has(b.id)||selected===b.id?"selected":""}" data-bubble="${b.id}" title="${esc(periodText(b))}">${b.name} · ${b.area}㎡</button>`).join(""):"";
+ }).join("")+`<h3>固定气泡</h3>`+B.filter(b=>b.fixed).map(b=>`<button class="chip bubble fixed ${highlight.has(b.id)?"selected":""}" data-bubble="${b.id}">${b.name} · ${b.area}㎡ · 固定</button>`).join("")+(state.tray.length?"":"<p class='muted'>当前可用气泡均已装填。</p>");
+}
+function renderCanvas(report){
+ const pos={},c=report.facts.slots,slotSVG=[];
+ const order=R.filter(r=>r.id!=="bath_main_slot").concat(R.filter(r=>r.id==="bath_main_slot"));
+ order.forEach(r=>{
+  const [x,y,w,h]=BOX[r.id],f=c.find(v=>v.slot===r.id),tiny=r.id==="balcony_n",nested=r.id==="bath_main_slot",bad=f.ratio>1.05&&!r.id.startsWith("bath_");
+  slotSVG.push(`<g class="slot" data-slot="${r.id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="7" fill="${ZONE[r.zone]}"/><text x="${x+8}" y="${y+17}">${esc(r.name)} · ${r.capacity}㎡</text><rect x="${x+8}" y="${y+24}" width="${w-16}" height="5" fill="#fff" stroke="none"/><rect x="${x+8}" y="${y+24}" width="${Math.min(1,f.ratio)*(w-16)}" height="5" fill="${bad?"#ba3d36":"#839d82"}" stroke="none"/>${tiny?"":`<text x="${x+8}" y="${y+43}" fill="${bad?"#a22":"#344"}">${f.used}/${r.capacity}㎡ · ${Math.round(f.ratio*100)}%</text>`}</g>`);
+  const cols=nested?1:Math.max(1,Math.floor((w-12)/116)),cw=(w-14)/cols;
+  f.bubbles.forEach((id,i)=>{
+   const yy=tiny?y+34:y+68+Math.floor(i/cols)*43;
+   pos[id]={x:x+7+cw*(i%cols+.5),y:yy,rx:Math.min(68,(cw-7)/2),ry:tiny?10:18};
+  });
+ });
+ const edges=state.edges.map((e,i)=>{
+  const a=pos[e.a],b=pos[e.b];if(!a||!b)return "";
+  const x=(a.x+b.x)/2,y=(a.y+b.y)/2,hl=highlightEdge.has(key(e.a,e.b));
+  return `<g class="edge" data-edge="${i}"><title>${esc(bn(e.a)+" ↔ "+bn(e.b)+"："+CLAIM[e.v].label+"；证据："+e.evidence)}</title><line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="transparent" stroke-width="16"/><line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${hl?"#bd9000":COLOR[e.v]}" stroke-width="${hl?5:2.5}" ${+e.v<0?'stroke-dasharray="7 4"':""}/><rect x="${x-32}" y="${y-11}" width="64" height="21" rx="3" fill="white" stroke="${COLOR[e.v]}"/><text text-anchor="middle" x="${x}" y="${y+4}">${vtext(e.v)}·${e.evidence}</text></g>`;
+ }).join("");
+ const bubbles=Object.entries(pos).map(([id,p])=>{
+  const b=BM[id],hl=highlight.has(id)||selected===id||edgeFirst===id;
+  return `<g class="bubble ${hl?"selected":""}" data-bubble="${id}" tabindex="0" role="button" aria-label="${esc(b.name+"，"+b.area+"平方米，"+periodText(b))}"><title>${esc(b.name+"；"+periodText(b)+"；允许："+b.slots.map(rn).join("、"))}</title><ellipse cx="${p.x}" cy="${p.y}" rx="${p.rx}" ry="${p.ry}"/><text text-anchor="middle" x="${p.x}" y="${p.y+4}">${b.name} ${b.area}</text></g>`;
+ }).join("");
+ $("canvas").innerHTML=slotSVG.join("")+edges+bubbles+`<text x="340" y="620">冻结槽位 · 无比例尺 · 气泡面积为教学权重</text><text x="340" y="640">连线为学生主张，不是新生成的空间或路径</text>`;
+}
+function renderPick(){
+ const bs=active(state).filter(b=>!b.fixed);
+ if(!bs.some(b=>b.id===selected))selected=bs[0].id;
+ $("pickBubble").innerHTML=opts(bs.map(b=>[b.id,b.name+" · "+b.area+"㎡"]),selected);
+ renderPickSlot();
+}
+function renderPickSlot(){
+ const b=BM[selected],p=locate(state);
+ $("pickSlot").innerHTML=opts([["","气泡托盘"],...b.slots.map(id=>[id,rn(id)])],p[selected]||"");
+ $("bubbleInfo").textContent=b.name+"｜"+b.zone+"区｜"+periodText(b)+"｜允许槽："+b.slots.map(rn).join("、");
+}
+function needText(n){
+ const a=parseNeed(n);
+ return a.type==="bubble"?"装填："+bn(a.ids[0]):bn(a.ids[0])+" "+vtext(a.v)+" "+bn(a.ids[1]);
+}
+function renderReports(r){
+ const c=r.checks;
+ $("observations").innerHTML="<h3>面积权重／槽容量</h3>"+list(r.facts.slots,x=>esc(rn(x.slot))+`：${x.used}/${x.capacity}㎡（${Math.round(x.ratio*100)}%）`)+"<h3>同时占用</h3>"+list(c.time_conflict,x=>esc(bn(x.a)+" × "+bn(x.b))+"<br>"+esc(rn(x.slot)+" · "+x.day+" · "+x.overlap.map(p=>p.join("–")).join("、")+"时"))+"<h3>主张与区带事实</h3>"+list(c.triangle_tension,x=>esc(x.triple.map(bn).join("／"))+"："+x.edges.map(e=>vtext(e.v)).join("、"))+list(c.zone_mismatch,x=>esc(bn(x.bubble)+"（"+x.bubbleZone+"）→"+rn(x.slot)+"（"+x.slotZone+"）"));
+ const group=(title,items,fn,rule)=>`<h3>${title}（${items.length}）</h3><p class="muted">教学常用值·讨论工具：${rule}</p>`+list(items,fn);
+ $("suggestions").innerHTML=
+ group("面积超载",c.area_overload,x=>`<span class="red">${esc(rn(x.slot))}：${x.used} &gt; ${N(x.capacity*1.05)}㎡，占用率${Math.round(x.ratio*100)}%。</span>请讨论装填与共享假设。`,"权重和超过容量×1.05；固定卫浴不检。")+
+ group("时段冲突",c.time_conflict,x=>esc(bn(x.a)+" × "+bn(x.b)+"，"+x.day+" "+x.overlap.map(p=>p.join("–")).join("、")+"时；讨论是否能同时使用。"),"同槽、同日且有正长度重叠；跨午夜拆段，接点相等不算重叠。")+
+ group("三角张力",c.triangle_tension,x=>esc(x.triple.map(bn).join("／"))+"：正负主张跨度达4档，请解释关系链。","完整三角同时有正负边，最高与最低档之差≥4。")+
+ group("区带错配",c.zone_mismatch,x=>`<span class="${x.severity==="红"?"red":"orange"}">${x.severity}色：</span>`+esc(bn(x.bubble)+"→"+rn(x.slot))+"，请讨论私密性及使用方式。","私↔公、私→家务／过渡为红；半私→家务为黄。非上述配对不自动推定冲突。");
+ $("coverage").innerHTML='<table><thead><tr><th>要点</th><th>逐项状态</th></tr></thead><tbody>'+c.coverage.map(x=>`<tr><td><button class="ip" data-ip="${x.id}">${esc(x.id.replace("ip","要点"))}<br><span class="${statusColor(x.status)}">${x.status}</span></button></td><td>${esc(x.text)}<br>${x.needs.map(n=>`<span class="${statusColor(n.status)}">${esc(needText(n.need))}：${n.status}</span>`).join("<br>")}</td></tr>`).join("")+"</tbody></table>";
+ $("tableCheck").innerHTML='<table><thead><tr><th>主张／证据</th><th>事实与结论</th></tr></thead><tbody>'+c.table_check.map((x,i)=>`<tr><td><button data-edit-edge="${i}">${esc(bn(x.a))} ${vtext(x.v)} ${esc(bn(x.b))}</button><br>${x.evidence}</td><td><span class="${statusColor(x.verdict)}">${x.verdict}</span><br>${x.actualLevel===null?"端点未装填":esc(RELTEXT[x.relationName])+" · "+x.actualLevel+"级；差"+x.difference+"级"}</td></tr>`).join("")+"</tbody></table>";
+ const d=c.scenario_delta;
+ $("delta").innerHTML=d?`<h3>B相对A视图·新增项</h3><p class="muted">对照同一状态去掉B新增气泡与相关边的A视图，不使用已保存A版替代。</p>`+
+ "<p>新增超载 "+d.area_overload.length+"；新增时段冲突 "+d.time_conflict.length+"；新增未覆盖 "+d.coverage.length+"。</p>"+
+ list(d.area_overload,x=>esc(rn(x.slot))+"超载："+x.used+"㎡")+
+ list(d.time_conflict,x=>esc(bn(x.a)+" × "+bn(x.b))+" "+x.overlap.map(p=>p.join("–")).join("、")+"时")+
+ list(d.coverage,x=>esc(x.id.replace("ip","要点")+"："+x.text)):"<p>当前情境A。切换B后，新增祖母气泡与夜起关系，再检查新增冲突／超载／未覆盖。</p>";
+}
+function render(){
+ lastReport=E.evaluate(state);
+ $("scene").textContent="当前情境"+state.scenario+"："+SCENE.scenarios[state.scenario]+" 家庭成员："+SCENE.members.join("、")+"。";
+ $("guide").textContent=level===1?"关卡1·现状诊断：先读原始访谈，观察装填、时段与主张之间的差异。记录冲突，不急于改图。":"关卡2·关系处方：用五档边提出功能主张，附证据；尝试安置与替代解释，分别保存A/B版并写清失效条件。所有功能均可自由使用。";
+ ["A","B"].forEach(q=>$("scenario"+q).classList.toggle("on",state.scenario===q));
+ $("level1").classList.toggle("on",level===1);$("level2").classList.toggle("on",level===2);
+ $("edgeMode").textContent="连边："+(edgeMode?"开启"+(edgeFirst?"·已选"+bn(edgeFirst):"·请选择两个气泡"):"关闭");
+ $("edgeMode").classList.toggle("on",edgeMode);
+ $("legend").innerHTML=Object.keys(CLAIM).sort((a,b)=>+b-+a).map(v=>`<span style="color:${COLOR[v]}">━ ${vtext(v)} ${CLAIM[v].label}</span>`).join("");
+ renderTray();renderCanvas(lastReport);renderPick();renderReports(lastReport);
+ $("interviews").innerHTML=lastReport.checks.coverage.map(x=>`<button class="ip ${highlightIP===x.id?"highlight":""}" data-ip="${x.id}"><span class="dot" style="background:${dotColor(x.status)}"></span>${x.id.replace("ip","要点")} · ${esc(x.text)}<br><small>${x.source} · ${x.status}</small></button>`).join("");
+ $("edgeList").innerHTML=state.edges.map((e,i)=>`<button data-edit-edge="${i}" style="border-color:${COLOR[e.v]}">${esc(bn(e.a))} ${vtext(e.v)} ${esc(bn(e.b))} · ${e.evidence}</button>`).join("");
+ $("failureA").value=state.failures.A;$("failureB").value=state.failures.B;updateProgress();
+}
+function commit(s,message){state=s;render();if(message)say(message)}
+function clearMarks(){highlight.clear();highlightEdge.clear();highlightIP="";edgeFirst=null}
+function markIP(id){
+ const p=IP.find(x=>x.id===id);clearMarks();highlightIP=id;
+ p.need.forEach(n=>{const q=parseNeed(n);q.ids.forEach(x=>highlight.add(x));if(q.type==="edge")highlightEdge.add(key(...q.ids))});
+ render();say("已高亮"+id.replace("ip","要点")+"涉及的气泡与边；尚未出现的对象留待情境B。");
+}
+function setScenario(q){clearMarks();commit(E.change(state,q),"已切换情境"+q+"，既有的非祖母装填与边保持不变。")}
+function setLevel(n){level=n===2?2:1;render()}
+function openEdge(a=null,b=null,index=null){
+ editing=index===null?null:CP(state.edges[index]);
+ const bs=active(state),e=editing||{a:a||bs[0].id,b:b||bs[1].id,v:"+1",evidence:"访谈"};
+ const op=bs.map(x=>[x.id,x.name+(state.tray.includes(x.id)?"（未装填）":"")]);
+ $("edgeA").innerHTML=opts(op,e.a);$("edgeB").innerHTML=opts(op,e.b);
+ $("edgeV").innerHTML=opts(["+2","+1","0","-1","-2"].map(v=>[v,vtext(v)+" "+CLAIM[v].label]),e.v);
+ $("edgeEvidence").value=e.evidence;$("deleteEdge").disabled=!editing;
+ $("edgeDialog").showModal();
+}
+function clickBubble(id){
+ if(edgeMode){
+  if(!edgeFirst){edgeFirst=id;render();say("已选"+bn(id)+"，请点第二个气泡。")}
+  else if(edgeFirst===id){edgeFirst=null;render();say("已取消端点。")}
+  else{const a=edgeFirst;edgeFirst=null;render();const i=state.edges.findIndex(e=>key(e.a,e.b)===key(a,id));openEdge(a,id,i<0?null:i)}
+ }else if(!BM[id].fixed){selected=id;render();say("已选"+bn(id)+"；可拖动，或选择允许槽后执行安置。")}
+ else say("固定卫浴不可移动；开启连边可编辑其关系。");
+}
+function placeBubble(id,slot){
+ const b=BM[id];
+ if(b.fixed){say("固定卫浴不可移出。");return}
+ if(slot&&!b.slots.includes(slot)){say("未安置："+b.name+"仅允许 "+b.slots.map(rn).join("、")+"；已弹回原处。");return}
+ selected=id;commit(E.move(state,id,slot||null),b.name+"已安置到"+(slot?rn(slot):"气泡托盘")+"。");
+}
+
+/* 交互：拖动、键盘替代、版本和本地文件 */
+$("level1").onclick=()=>setLevel(1);$("level2").onclick=()=>setLevel(2);
+$("challenge").onclick=()=>{$("taskCard").scrollIntoView({behavior:"smooth"});$("exportTask").focus()};
+["A","B"].forEach(q=>{
+ $("scenario"+q).onclick=()=>setScenario(q);
+ $("save"+q).onclick=()=>{try{commit(E.save(state,q),"已保存"+q+"版快照；导出以保存版为准。")}catch(e){say(e.message)}};
+ $("load"+q).onclick=()=>{try{clearMarks();commit(E.restore(state,q),"已载入"+q+"版。")}catch(e){say(e.message)}};
+ $("failure"+q).addEventListener("input",e=>{state=E.setFailure(state,q,e.target.value);updateProgress()});
+});
+$("reset").onclick=()=>{if(confirm("重置将清除当前装填、双版本与失效条件。是否继续？")){clearMarks();commit(E.baseline("A"),"已重置现状A。")}};
+$("edgeMode").onclick=()=>{edgeMode=!edgeMode;edgeFirst=null;render();say(edgeMode?"连边模式：依次点击两个气泡，再选择档位与证据。":"已关闭连边模式。")};
+$("newEdge").onclick=()=>openEdge();
+$("clearHighlight").onclick=()=>{clearMarks();render();say("已清除高亮。")};
+$("pickBubble").onchange=e=>{selected=e.target.value;render()};
+$("place").onclick=()=>placeBubble(selected,$("pickSlot").value);
+$("cancelEdge").onclick=()=>$("edgeDialog").close();
+$("confirmEdge").onclick=()=>{
+ try{
+  let s=state;const e={a:$("edgeA").value,b:$("edgeB").value,v:$("edgeV").value,evidence:$("edgeEvidence").value};
+  if(e.a===e.b)throw Error("端点不能相同");
+  if(editing&&key(editing.a,editing.b)!==key(e.a,e.b))s=E.removeEdge(s,editing.a,editing.b);
+  s=E.addEdge(s,e);$("edgeDialog").close();commit(s,"已记录主张与证据。");
+ }catch(e){say(e.message)}
+};
+$("deleteEdge").onclick=()=>{if(editing){const s=E.removeEdge(state,editing.a,editing.b);$("edgeDialog").close();commit(s,"已删除该关系主张。")}};
+document.addEventListener("click",e=>{
+ const t=e.target;if(!(t instanceof Element))return;
+ if(suppressClick&&(t.closest("[data-bubble]")||t.closest("#canvas"))){suppressClick=false;e.preventDefault();return}
+ const b=t.closest("[data-bubble]"),ip=t.closest("[data-ip]"),ed=t.closest("[data-edit-edge],[data-edge]");
+ if(b)clickBubble(b.dataset.bubble);
+ else if(ip)markIP(ip.dataset.ip);
+ else if(ed)openEdge(null,null,+(ed.dataset.editEdge??ed.dataset.edge));
+});
+$("canvas").addEventListener("keydown",e=>{const b=e.target.closest("[data-bubble]");if(b&&(e.key==="Enter"||e.key===" ")){e.preventDefault();clickBubble(b.dataset.bubble)}});
+let drag=null;
+document.addEventListener("pointerdown",e=>{
+ const t=e.target instanceof Element?e.target.closest("[data-bubble]"):null;
+ if(!t||edgeMode||BM[t.dataset.bubble].fixed||e.button!==0)return;
+ drag={id:t.dataset.bubble,x:e.clientX,y:e.clientY,moved:false,ghost:null};
+});
+document.addEventListener("pointermove",e=>{
+ if(!drag)return;
+ if(!drag.moved&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>6){
+  drag.moved=true;drag.ghost=document.createElement("div");drag.ghost.className="ghost";drag.ghost.textContent=bn(drag.id);document.body.appendChild(drag.ghost);
+ }
+ if(drag.moved){e.preventDefault();drag.ghost.style.left=e.clientX+"px";drag.ghost.style.top=e.clientY+"px"}
+},{passive:false});
+function dropSlot(x,y){
+ const svg=$("canvas"),pt=svg.createSVGPoint();pt.x=x;pt.y=y;
+ const m=svg.getScreenCTM();if(!m)return null;const p=pt.matrixTransform(m.inverse());
+ return [...R].sort((a,b)=>(a.id==="bath_main_slot"?-1:b.id==="bath_main_slot"?1:0)).find(r=>{const [a,b,w,h]=BOX[r.id];return p.x>=a&&p.x<=a+w&&p.y>=b&&p.y<=b+h})?.id||null;
+}
+document.addEventListener("pointerup",e=>{
+ if(!drag)return;const d=drag;drag=null;if(!d.moved)return;d.ghost.remove();suppressClick=true;setTimeout(()=>suppressClick=false,150);
+ const under=document.elementFromPoint(e.clientX,e.clientY);
+ if(under&&under.closest("#tray"))placeBubble(d.id,null);
+ else{const slot=dropSlot(e.clientX,e.clientY);if(slot)placeBubble(d.id,slot);else say("未落在房间槽内，已弹回原处。")}
+});
+document.addEventListener("pointercancel",()=>{if(drag?.ghost)drag.ghost.remove();drag=null});
+function download(name,data){
+ const url=URL.createObjectURL(new Blob([data],{type:"application/json;charset=utf-8"})),a=document.createElement("a");
+ a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+$("exportState").onclick=()=>{download("沈家气泡实验_进度.json",E.serialize(state));say("已保存进度文件。")};
+$("exportTask").onclick=()=>{try{download("沈家气泡图任务书_双情境.json",E.serialize(E.task(state)));say("双情境任务书已导出；无总分。")}catch(e){say(e.message)}};
+$("importState").onclick=()=>$("file").click();
+$("file").onchange=async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{const s=E.deserialize(await f.text());clearMarks();commit(s,"已导入文件并重新进行确定性检查。")}catch(x){say("导入失败："+x.message)}
+ e.target.value="";
+};
+
+/* QA钩子与八项原断言 */
+window.__LAB_CONSOLE_ERRORS__=[];
+const recordError=x=>window.__LAB_CONSOLE_ERRORS__.push(String(x));
+window.addEventListener("error",e=>recordError(e.message));
+window.addEventListener("unhandledrejection",e=>recordError(e.reason));
+const originalError=console.error.bind(console);
+console.error=(...a)=>{recordError(a.join(" "));originalError(...a)};
+const TESTS=[
+"现状A装填无面积超载；时段冲突恰好2对（play↔guest 15–16周六 living；bake↔cook 11.5–12周六 kitchen）；访谈覆盖未覆盖数=0（ip1/2/3/14 留待情境B）",
+"情境B把 sleep_elder 装入 study → study 超载(13.5>9.14)且时段冲突(sleep_elder×work_office 21–22)",
+"三角张力构造 A+2B,B+2C,A−2C → 检出",
+"sleep_master 拖入 living → 区带冲突检出",
+"删除 laundry → ip11 未覆盖",
+"对表：work_office+2cook 不满足(差3级)；sleep_master+2bath_main 满足(same_room)；sleep_elder+2bath_pub 部分满足(走廊3级vs需4级)",
+"同 state 两次 evaluate JSON 全等",
+"导出→导入→evaluate 等价"
+];
+function selftest(){
+ const failed=[],a=E.baseline("A"),b=E.baseline("B");
+ const assert=(ok)=>{if(!ok)throw Error("断言未通过")};
+ const run=(i,fn)=>{try{fn()}catch(e){failed.push({id:i+1,assertion:TESTS[i],message:e.message})}};
+ run(0,()=>{
+  const r0=E.evaluate(a),c=r0.checks;
+  assert(c.area_overload.length===0&&c.time_conflict.length===2&&c.time_conflict.some(v=>key(v.a,v.b)===key("play","guest")&&v.slot==="living"&&v.day==="周六"&&JSON.stringify(v.overlap)==="[[15,16]]")&&c.time_conflict.some(v=>key(v.a,v.b)===key("bake","cook")&&v.slot==="kitchen"&&v.overlap.some(p=>p[0]===11.5&&p[1]===12))&&r0.summary.uncovered===0&&r0.summary.pending===4);
+ });
+ run(1,()=>{
+  const c=E.evaluate(E.fill(b,"sleep_elder","study")).checks,x=c.area_overload.find(v=>v.slot==="study");
+  assert(x&&x.used===13.5&&N(x.capacity*1.05)===9.135&&x.used>9.14&&c.time_conflict.some(v=>key(v.a,v.b)===key("sleep_elder","work_office")&&v.overlap.some(p=>p[0]===21&&p[1]===22)));
+ });
+ run(2,()=>{
+  let s=CP(a);s.edges=[];
+  [{a:"A",b:"B",v:"+2",evidence:"访谈"},{a:"B",b:"C",v:"+2",evidence:"访谈"},{a:"A",b:"C",v:"-2",evidence:"访谈"}].forEach(e=>s=E.addEdge(s,e));
+  assert(E.evaluate(s).checks.triangle_tension.length===1);
+ });
+ run(3,()=>assert(E.evaluate(E.move(a,"sleep_master","living")).checks.zone_mismatch.some(x=>x.bubble==="sleep_master"&&x.slot==="living"&&x.severity==="红")));
+ run(4,()=>assert(E.evaluate(E.move(a,"laundry",null)).checks.coverage.find(x=>x.id==="ip11").status==="未覆盖"));
+ run(5,()=>{
+  let s=E.fill(b,"sleep_elder","study");s=E.addEdge(s,{a:"work_office",b:"cook",v:"+2",evidence:"访谈"});
+  const t=E.evaluate(s).checks.table_check,find=(a,b)=>t.find(x=>key(x.a,x.b)===key(a,b));
+  const x=find("work_office","cook"),y=find("sleep_master","bath_main"),z=find("sleep_elder","bath_pub");
+  assert(x.verdict==="不满足"&&x.difference===3&&y.verdict==="满足"&&y.relationName==="same_room"&&z.verdict==="部分满足"&&z.actualLevel===3&&z.difference===1);
+ });
+ run(6,()=>assert(JSON.stringify(E.evaluate(a))===JSON.stringify(E.evaluate(a))));
+ run(7,()=>{
+  let s=E.save(a,"A");s=E.change(s,"B");s=E.fill(s,"sleep_elder","study");s=E.save(s,"B");
+  s=E.setFailure(s,"A","当家庭成员作息或办公需求发生显著变化时本任务书失效。");
+  s=E.setFailure(s,"B","当祖母照护强度或女儿独立学习需求超出假设时本任务书失效。");
+  const r=E.evaluate(s);
+  assert(JSON.stringify(r)===JSON.stringify(E.evaluate(E.deserialize(E.serialize(s)))));
+  assert(JSON.stringify(r)===JSON.stringify(E.evaluate(E.deserialize(E.serialize(E.task(s))))));
+ });
+ return {passed:8-failed.length,failed,total:8};
+}
+function showTests(r){
+ $("selfout").textContent="通过 "+r.passed+"/"+r.total+"；失败 "+r.failed.length+" 项。\n"+TESTS.map((t,i)=>(r.failed.some(x=>x.id===i+1)?"未通过":"通过")+" "+(i+1)+"："+t).join("\n")+(r.failed.length?"\n"+r.failed.map(x=>x.message).join("\n"):"");
+}
+$("runTests").onclick=()=>{const r=selftest();showTests(r);say("自检完成：通过"+r.passed+"/8。当前实验状态未改变。")};
+window.__LAB_SET_LEVEL__=setLevel;
+window.__LAB_LOAD_BASELINE__=q=>{clearMarks();commit(E.baseline(q),"已载入情境"+q+"基线。");return CP(state)};
+window.__LAB_SET_SCENARIO__=q=>{setScenario(q);return CP(state)};
+window.__LAB_EVALUATE__=()=>E.evaluate(state);
+window.__LAB_SELFTEST__=selftest;
+render();
+window.__LAB_READY__=true;
+const initialTests=selftest();showTests(initialTests);console.log("实验自检",initialTests);
+say("实验已就绪：现状A面积超载0项，时段冲突1对。自检通过"+initialTests.passed+"/8；请先阅读访谈原始要点。");
+</script>
+</body>
+</html>

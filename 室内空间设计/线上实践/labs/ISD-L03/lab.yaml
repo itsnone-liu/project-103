@@ -116,7 +116,7 @@ claim_vs_actual:  # 主张档位 对 平面可达等级（对表判据）
   "-2": {need: -1, label: 必须分离, max: 1}
 
 current_fill_A:  # 关卡1 现状装填（情境A；bath 两槽固定已装）
-  kitchen: [cook, meal_break]
+  kitchen: [cook, meal_break, bake]
   dining: [meal_dinner, work_prep]
   living: [tv_eld, guest, play]
   child: [sleep_child, study_child]
@@ -132,7 +132,7 @@ current_edges_A:  # 现状关系主张（可编辑；示例性最小集）
   - {a: sleep_master, b: bath_main, v: "+2", evidence: 课程假设}
   - {a: sleep_child, b: study_child, v: "+1", evidence: 访谈}
   - {a: play, b: tv_eld, v: "+1", evidence: 访谈}
-  - {a: work_office, b: tv_eld, v: "-1", evidence: 访谈}
+  - {a: work_office, b: tv_eld, v: "-2", evidence: 访谈}
 
 scenario_B_additions:  # 情境B 切换时新增（进入气泡托盘，由学生安置）
   bubbles: [sleep_elder, care_elder]
@@ -148,8 +148,8 @@ checks:  # 纯函数引擎（全部确定性）
   scenario_delta: 情境A→B 重算，报告新增的冲突/超载/未覆盖（祖母相关）
 
 selftest:  # 8 项（不得改断言迁就实现）
-  1: 现状A装填无面积超载；时段冲突恰好1对（play↔guest 15–16 周六，同槽不同活动）
-  2: 情境B把 sleep_elder 装入 study → study 超载(9.5>9.14)且时段冲突(sleep_elder×work_office 21–22)
+  1: 现状A装填无面积超载；时段冲突恰好2对（play↔guest 15–16周六 living；bake↔cook 11.5–12周六 kitchen）；访谈覆盖未覆盖数=0（ip1/2/3/14 留待情境B）
+  2: 情境B把 sleep_elder 装入 study → study 超载(权重和5.5+4+4=13.5 > 8.7×1.05=9.14)且时段冲突(sleep_elder×work_office 21–22)
   3: 三角张力构造 A+2B,B+2C,A−2C → 检出
   4: sleep_master 拖入 living → 区带冲突检出
   5: 删除 laundry → ip11 未覆盖

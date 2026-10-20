@@ -35,8 +35,9 @@
         timeConflicts: evA.checks && evA.checks.time_conflict && evA.checks.time_conflict.length,
         uncovered: evA.checks && evA.checks.coverage && evA.checks.coverage.filter(c => c.status === '未覆盖').length
       };
-      log('baselineA_timeConflicts_1', out.evaluateA.timeConflicts === 1);
+      log('baselineA_timeConflicts_2', out.evaluateA.timeConflicts === 2);
       log('baselineA_overloads_0', out.evaluateA.overloads === 0);
+      log('baselineA_uncovered_0', out.evaluateA.uncovered === 0);
       win.__LAB_SET_SCENARIO__('B');
       const evB = win.__LAB_EVALUATE__();
       out.evaluateB = {

@@ -67,7 +67,8 @@ def main() -> int:
           and steps.get('selftest') == 'PASS'
           and st.get('passed') == 8 and not st.get('failed')
           and steps.get('baselineA_overloads_0') is True
-          and steps.get('baselineA_timeConflicts_1') is True
+          and steps.get('baselineA_timeConflicts_2') is True
+          and steps.get('baselineA_uncovered_0') is True
           and steps.get('scenarioB_applied') is True
           and steps.get('determinism') is True
           and not errors)
