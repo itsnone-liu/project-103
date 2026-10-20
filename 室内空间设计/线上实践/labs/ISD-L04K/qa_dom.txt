@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<title>QA harness — ISD-L04K</title>
+</head>
+<body>
+<p>QA harness for kitchen_lab.html (same-origin via local http server)</p>
+<iframe id="lab" src="kitchen_lab.html" style="width:1920px;height:1080px;border:0"></iframe>
+<pre id="qa_result">PENDING</pre>
+<script>
+(async () => {
+  const out = { steps: [], errors: [] };
+  const log = (k, v) => { out.steps.push([k, v]); };
+  try {
+    const frame = document.getElementById('lab');
+    const win = frame.contentWindow, doc = frame.contentDocument;
+    // wait for lab boot
+    for (let i = 0; i < 120 && !win.__LAB_READY__; i++)
+      await new Promise(r => setTimeout(r, 250));
+    log('ready', !!win.__LAB_READY__);
+    // console errors inside iframe
+    const errs = win.__LAB_CONSOLE_ERRORS__ || null;
+    log('consoleErrors', errs);
+    // programmatic interaction: switch to level 2, reset to baseline A
+    if (typeof win.__LAB_SET_LEVEL__ === 'function') {
+      win.__LAB_SET_LEVEL__(2); log('setLevel', 2);
+    } else log('setLevel', 'API missing');
+    if (typeof win.__LAB_LOAD_BASELINE__ === 'function') {
+      win.__LAB_LOAD_BASELINE__('A'); log('baseline', 'A');
+    } else log('baseline', 'API missing');
+    // official self-test
+    if (typeof win.__LAB_SELFTEST__ === 'function') {
+      const r = win.__LAB_SELFTEST__();
+      out.selftest = r;
+      log('selftest', (r && r.failed && r.failed.length === 0) ? 'PASS' : 'FAIL');
+    } else { out.selftest = null; log('selftest', 'API missing'); out.errors.push('no selftest API'); }
+    // scene snapshot determinism: evaluate twice, compare
+    if (typeof win.__LAB_EVALUATE__ === 'function') {
+      const a = JSON.stringify(win.__LAB_EVALUATE__());
+      const b = JSON.stringify(win.__LAB_EVALUATE__());
+      log('determinism', a === b);
+      out.evaluate = JSON.parse(a);
+    } else log('evaluate', 'API missing');
+  } catch (e) { out.errors.push(String(e && e.stack || e)); }
+  document.getElementById('qa_result').textContent = 'QA_RESULT_JSON:' + JSON.stringify(out);
+})();
+</script>
+
+
+</body></html>

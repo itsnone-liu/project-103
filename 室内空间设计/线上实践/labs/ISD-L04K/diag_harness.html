@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>diag</title></head>
+<body>
+<iframe id="lab" src="kitchen_lab.html" style="width:1920px;height:1080px;border:0"></iframe>
+<pre id="out">PENDING</pre>
+<script>
+(async () => {
+  const frame = document.getElementById('lab');
+  await new Promise(r => { frame.onload = r; setTimeout(r, 6000); });
+  const win = frame.contentWindow;
+  const K = win.KitchenRules;
+  const out = { ready: !!win.__LAB_READY__ };
+  for (const L of ['A', 'B']) {
+    const sc = K.baseline(L);
+    const ev = K.evaluate(sc);
+    const plan = K.taskPlan(sc);
+    out['baseline_' + L] = {
+      moveCount: ev.errand.moveCount,
+      walkDistanceM: ev.errand.walkDistanceM,
+      strategy: plan.strategy,
+      pickupDistanceM: plan.pickupDistanceM,
+      chain: plan.continuousChain,
+      segments: plan.segments.map(s => `${s.from}->${s.to} d=${s.distanceM.toFixed(2)} counted=${s.counted} chain=${s.chainStep}`)
+    };
+  }
+  document.getElementById('out').textContent = 'DIAG_JSON:' + JSON.stringify(out);
+})();
+</script>
+</body>
+</html>

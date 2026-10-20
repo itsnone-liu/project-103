@@ -19,6 +19,40 @@
    "finish": "stop",
    "response_chars": 58817,
    "exact_tokens": true
+  },
+  {
+   "purpose": "kitchen_lab.html repair round 1",
+   "model": "gpt-6.1-sol",
+   "effort": "high",
+   "secs": 2179.9,
+   "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0
+   },
+   "finish": "stop",
+   "response_chars": 56861,
+   "exact_tokens": false
+  },
+  {
+   "purpose": "repair continue (splice)",
+   "model": "gpt-6.1-sol",
+   "effort": "high",
+   "secs": 113.4,
+   "usage": {
+    "prompt_tokens": 1218,
+    "completion_tokens": 4573,
+    "total_tokens": 5791,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 2588
+    }
+   },
+   "finish": "stop",
+   "response_chars": 7171,
+   "exact_tokens": true
   }
  ]
 }

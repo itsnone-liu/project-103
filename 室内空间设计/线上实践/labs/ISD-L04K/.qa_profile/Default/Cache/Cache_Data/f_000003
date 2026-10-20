@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>厨房工作站与折返计数｜第7章交互实验</title>
+<script>
+/* 在页面启动时安装，供同源 QA iframe 读取；不吞掉控制台输出。 */
+window.__LAB_READY__=false;
+window.__LAB_CONSOLE_ERRORS__=[];
+(() => {
+  const original=console.error;
+  const stringify=value=>{
+    if(value instanceof Error)return value.stack || value.message;
+    if(typeof value==="string")return value;
+    try{return JSON.stringify(value) ?? String(value);}catch{return String(value);}
+  };
+  console.error=function(...args){
+    window.__LAB_CONSOLE_ERRORS__.push(args.map(stringify).join(" "));
+    return original.apply(console,args);
+  };
+  window.addEventListener("error",event=>{
+    window.__LAB_CONSOLE_ERRORS__.push(event.error ? stringify(event.error) : event.message || "页面资源加载错误");
+  });
+  window.addEventListener("unhandledrejection",event=>{
+    window.__LAB_CONSOLE_ERRORS__.push("Unhandled rejection: "+stringify(event.reason));
+  });
+})();
+</script>
+<style>
+:root{--ink:#1a1a1a;--muted:#626b73;--blue:#3a6ea5;--pale:#eaf2fa;--orange:#e07b00;--green:#2e8b57;--red:#d0021b;--line:#ddd;--card:#f7f7f7}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:"Microsoft YaHei",sans-serif;font-size:14px;line-height:1.65}
+button,input,select{font:inherit}
+button{min-height:36px;padding:6px 12px;border:1px solid #c5cbd0;border-radius:6px;background:#fff;color:#263442;cursor:pointer}
+button:hover:not(:disabled){border-color:var(--blue);background:#eef4fa}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #a5c9e9;outline-offset:2px}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+button.primary:hover:not(:disabled){background:#2b5787}
+button.active{background:#eaf2fa;border-color:var(--blue);color:#234f7c;font-weight:bold}
+button.small{font-size:12px;min-height:30px;padding:3px 8px}
+input[type=number]{width:100%;min-width:0;padding:5px;border:1px solid #bbb;border-radius:4px}
+select{min-height:36px;border:1px solid #c5cbd0;border-radius:5px;background:#fff;padding:4px 8px}
+h1,h2,h3,p{margin:0}
+h1{font-size:18px;line-height:1.5}
+h2{font-size:16px;margin-bottom:10px}
+h3{font-size:14px;margin:12px 0 5px}
+header{padding:14px 22px;border-bottom:2px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.subtitle{color:var(--muted);font-size:12px;margin-top:2px}
+.disclaimer{background:#f0f0f0;padding:8px 12px;border-radius:6px;font-size:12px;max-width:470px}
+.topbar{display:flex;align-items:center;gap:10px;padding:10px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.pill{border-radius:24px}
+.level-note{font-size:12px;color:var(--muted);margin-left:auto}
+.guide{margin:12px 22px 0;background:#f3f7fb;border-left:4px solid var(--blue);padding:11px 15px}
+.workspace{display:grid;grid-template-columns:205px minmax(440px,1fr) 420px;gap:14px;padding:14px 22px;align-items:start}
+.rail,.drawing,.panel-card{border:1px solid var(--line);border-radius:8px;background:var(--card)}
+.rail{padding:14px}
+.muted{color:var(--muted)}
+.smalltext{font-size:12px}
+.station-row{display:flex;justify-content:space-between;align-items:center;gap:5px;padding:7px 0;border-bottom:1px solid #e3e3e3}
+.station-row:last-child{border:0}
+.station-name{font-weight:bold}
+.station-size{font-size:12px;color:var(--muted)}
+.selected-box{border-top:1px solid var(--line);margin-top:13px;padding-top:12px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:9px 0}
+.fields label{font-size:12px}
+.button-row{display:flex;gap:7px;flex-wrap:wrap}
+.button-row>*{flex:1}
+.rail .button-row{margin-top:8px}
+.rail .button-row button{padding:5px 7px;font-size:12px}
+.drawing{background:#fff;overflow:hidden}
+.canvas-head{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.canvas-head h2{margin:0}
+.canvas-wrap{position:relative;background:#fff}
+#plan{display:block;width:100%;height:auto;max-height:calc(100vh - 370px);min-height:410px;touch-action:none;user-select:none}
+#plan .station{cursor:grab}
+#plan .station:active{cursor:grabbing}
+#plan .station:focus{outline:none}
+#plan .station:focus .selection-ring{stroke:#3a6ea5;stroke-dasharray:4 3;fill:none;stroke-width:2}
+.canvas-bottom{padding:12px 16px;border-top:1px solid var(--line)}
+.legend{display:flex;flex-wrap:wrap;gap:13px;font-size:12px;color:#535f67;margin-bottom:10px}
+.legend i{display:inline-block;width:23px;margin-right:5px;vertical-align:middle;border-top:2px solid}
+.legend .path{border-color:var(--orange);border-top-style:dashed}
+.legend .triangle{border-color:#7aa7cc}
+.legend .collision{border-color:var(--red)}
+.play-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.play-controls button:first-child{flex:1}
+.play-status{min-height:25px;margin-top:8px;color:#5b6269;font-size:12px}
+.options{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;margin-top:8px}
+.options label{cursor:pointer}
+.sidepanels{display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 225px);overflow:auto;padding-right:4px;scrollbar-gutter:stable}
+.panel-card{padding:15px}
+.card-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.badge{font-size:12px;background:#e8edf1;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.badge.success{background:#e1f1e7;color:var(--green)}
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.score{background:#fff;border:1px solid #ddd;border-radius:7px;padding:10px 12px}
+.score .label{font-size:12px;color:#616b73}
+.number{display:inline-block;font-size:30px;font-weight:bold;line-height:1.4;font-variant-numeric:tabular-nums}
+.unit{font-size:12px;margin-left:5px;font-weight:normal;color:#6b737b}
+.score-note{font-size:12px;color:#69717a}
+.bounce{animation:bounce .36s ease}
+@keyframes bounce{0%,100%{transform:scale(1)}45%{transform:scale(1.25);color:var(--orange)}}
+.task-list{list-style:none;padding:0;margin:8px 0}
+.task-list li{padding:5px 7px;border-left:3px solid transparent;display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.task-list li.current{background:#fff0dd;border-color:var(--orange)}
+.task-list .hands{color:#946017;font-size:12px}
+.contract{border:1px solid #dfc690;background:#fffaf0;border-radius:6px;padding:9px 11px;font-size:12px;margin-top:11px}
+.contract summary{cursor:pointer;font-weight:bold}
+.contract p{margin-top:7px}
+.feedback{padding-top:11px;margin-top:11px;border-top:1px solid #ddd}
+.feedback h3{margin-top:0}
+.facts{display:grid;grid-template-columns:1fr auto;gap:5px 9px;margin:8px 0;font-size:13px}
+.facts dt,.facts dd{margin:0}
+.facts dd{text-align:right;font-variant-numeric:tabular-nums}
+.red{color:var(--red)}
+.rules{padding-left:18px;margin:6px 0;font-size:13px}
+.rules li{margin:7px 0}
+.human{background:#eceeef;border-radius:5px;padding:10px 12px;font-size:13px}
+.human ul{margin:5px 0;padding-left:18px}
+.progress-box{font-size:12px;border:1px solid #ddd;padding:9px;border-radius:5px;background:#fff;margin-top:8px}
+.stars{letter-spacing:3px;color:#92999e}
+.stars .on{color:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:12px;margin:10px 0}
+th,td{border:1px solid #d8dde0;padding:6px 5px;text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{background:#edf0f2}
+td.diff{background:#fff0d9;font-weight:bold}
+.version-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.version-controls>div{display:flex;flex-direction:column;gap:6px}
+.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.export-grid button{font-size:12px;padding:6px}
+#status{padding:8px 22px;background:#f2f5f7;border-top:1px solid #e0e3e5;min-height:36px;font-size:12px}
+footer{padding:10px 22px 14px;color:#626b73;font-size:12px}
+details.selftest{font-size:12px;margin-top:10px}
+#testResult{white-space:pre-wrap;word-break:break-word;background:#fff;padding:8px;margin-top:8px}
+@media(min-width:1750px){.workspace{grid-template-columns:225px minmax(600px,1fr) 470px;gap:20px}#plan{min-height:550px}.sidepanels{max-height:calc(100vh - 230px)}}
+@media(max-width:1220px){.workspace{grid-template-columns:minmax(400px,1fr) 365px;grid-template-areas:"rail rail" "canvas panel"}.rail{grid-area:rail;display:grid;grid-template-columns:1fr 1fr;gap:20px}.station-library{display:flex;flex-wrap:wrap;gap:10px}.station-row{border:0;gap:12px}.selected-box{margin:0;padding:0 0 0 18px;border-top:0;border-left:1px solid #ddd}.rail .fields{display:inline-grid;width:140px;margin:0 8px 0 0}.rail .button-row{display:inline-flex}.drawing{grid-area:canvas}.sidepanels{grid-area:panel;max-height:850px}#plan{max-height:none;min-height:380px}.rail-help{display:none}}
+@media(max-width:820px){header{align-items:flex-start;flex-direction:column;padding:12px}.disclaimer{max-width:none}.topbar{padding:10px 12px}.guide{margin:10px 12px 0}.workspace{padding:12px;display:flex;flex-direction:column}.rail,.drawing,.sidepanels{width:100%}.rail{display:block}.selected-box{border-left:0;border-top:1px solid #ddd;padding:10px 0 0;margin-top:10px}.sidepanels{overflow:visible;max-height:none;padding-right:0}.level-note{width:100%;margin:0}#plan{min-height:0}.panel-card{padding:14px}footer,#status{padding-left:12px;padding-right:12px}}
+@media(prefers-reduced-motion:reduce){.bounce{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>厨房工作站与折返计数</h1>
+    <div class="subtitle">U90厨房布局实验 · 《室内空间设计》第7章 · 实验编号 ISD-L04K</div>
+  </div>
+  <div class="disclaimer">本实验数值均为教学常用值/教学假设，非国家标准条文——第7章</div>
+</header>
+<nav class="topbar" aria-label="实验关卡">
+  <button id="level1" class="pill active">关卡1 · 诊断</button>
+  <button id="level2" class="pill">关卡2 · 处方</button>
+  <button id="challenge" class="pill" disabled>挑战模式 · 待解锁</button>
+  <button id="reset" class="small">重置为基线A</button>
+  <span class="level-note">先观察，再调整，最后讲述取舍；不生成综合评分。</span>
+</nav>
+<div id="guide" class="guide"></div>
+
+<main class="workspace">
+  <aside class="rail" aria-label="工作站工具">
+    <div>
+      <h2>工作站工具</h2>
+      <p class="smalltext muted">画布中拖动选择；“添加”创建副本。</p>
+      <div id="stationLibrary" class="station-library"></div>
+      <p class="rail-help smalltext muted" style="margin-top:12px">台面中心距墙小于0.35米时，松手吸附。冰箱、垃圾桶自由摆放。副本参与碰撞与通道检查，不替代任务站。</p>
+    </div>
+    <div class="selected-box">
+      <h3 id="selectionTitle" style="margin-top:0">已选：冰箱</h3>
+      <div class="fields">
+        <label>中心横坐标（米）<input id="editX" type="number" step="0.05" aria-label="中心横坐标"></label>
+        <label>中心纵坐标（米）<input id="editY" type="number" step="0.05" aria-label="中心纵坐标"></label>
+      </div>
+      <div class="button-row">
+        <button id="applyPosition">应用坐标</button>
+        <button id="rotate">旋转90°</button>
+      </div>
+      <div class="button-row">
+        <button id="snap">贴近墙面</button>
+        <button id="remove">删除副本</button>
+      </div>
+      <p id="selectionInfo" class="smalltext muted" style="margin-top:9px"></p>
+      <p class="rail-help smalltext muted" style="margin-top:9px">方向键微调0.05米，按住上档键为0.01米。越界会回到最后合法位置；重叠保留，以便诊断。</p>
+    </div>
+  </aside>
+
+  <section class="drawing" aria-label="厨房平面与模拟">
+    <div class="canvas-head">
+      <div><h2>U90厨房平面</h2><span class="smalltext muted">西北角为原点 · 横向向东，纵向向南</span></div>
+      <span class="badge">净尺寸 2.80 × 2.25米</span>
+    </div>
+    <div class="canvas-wrap">
+      <svg id="plan" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 510" role="img" aria-label="可交互厨房平面，家具可拖动，固定设施不可移动" tabindex="0"></svg>
+    </div>
+    <div class="canvas-bottom">
+      <div class="legend">
+        <span><i class="triangle"></i>工作三角</span>
+        <span><i class="path"></i>备餐路径</span>
+        <span><i class="path" style="border-top-width:4px"></i>双手占用段</span>
+        <span><i class="collision"></i>碰撞或越界</span>
+        <span>符号几何中心＝使用中心</span>
+      </div>
+      <div class="play-controls">
+        <button id="simulate" class="primary">模拟四菜一汤</button>
+        <button id="pause" disabled>暂停</button>
+        <button id="replay">重放</button>
+        <select id="speed" aria-label="动画播放速度"><option value="1">1倍速度</option><option value="2">2倍速度</option></select>
+      </div>
+      <div id="playStatus" class="play-status" aria-live="polite">尚未模拟；得分卡显示完整任务的预测值。</div>
+      <div class="options">
+        <label><input id="showTriangle" type="checkbox" checked> 显示工作三角</label>
+        <label><input id="showRoute" type="checkbox" checked> 显示任务路径</label>
+        <label><input id="showGrid" type="checkbox" checked> 显示0.5米网格</label>
+      </div>
+    </div>
+  </section>
+
+  <aside class="sidepanels" aria-label="教学反馈与版本面板">
+    <section class="panel-card">
+      <div class="card-heading"><h2 style="margin:0">① 任务卡与得分</h2><span id="scoreMode" class="badge">全程预测</span></div>
+      <div class="score-grid">
+        <div class="score"><div class="label">折返计数（计数移动）</div><span id="moveScore" class="number">6</span><span class="unit">次</span><div id="moveSub" class="score-note"></div></div>
+        <div class="score"><div class="label">累计步行距离</div><span id="walkScore" class="number">0.00</span><span class="unit">米</span><div id="walkSub" class="score-note"></div></div>
+      </div>
+      <div class="smalltext">四菜一汤·晚餐备餐　<span class="muted">行走速度：0.8米/秒</span></div>
+      <ol id="taskList" class="task-list"></ol>
+      <p class="smalltext muted">任务按当前布局生成；不计入场、离场。连续作业链内步进不计折返，但仍计步行距离。冰箱→水槽的送菜段及灶台→垃圾桶段为双手占用，以更粗虚线显示。路径为站间直线，不是避障寻路。</p>
+      <div class="progress-box">
+        <div id="goalState">处方目标：折返≤3次，三角三边均在教学区间内。</div>
+        <div id="stars" class="stars" aria-label="挑战条件"></div>
+        <div id="challengeState" class="muted"></div>
+      </div>
+      <details class="contract" open>
+        <summary>任务合同与计数口径</summary>
+        <p>冰箱—水槽中心距<strong>≤1.00米</strong>时一次取齐：冰箱→水槽→备餐→灶台→垃圾桶；否则分批送菜三趟：冰箱→水槽→冰箱→水槽→冰箱→水槽→备餐→灶台→垃圾桶。末次送达后不再返回冰箱。</p>
+        <p>水槽、备餐、灶台须依次沿同一墙面贴齐，相邻台面边缘间隙均为0–0.05米，才构成连续作业链；链内步进不计折返，其余不同站间移动各计1次。因此连续链下，远距基线A为<strong>6次</strong>、近距基线B为<strong>2次</strong>。距离阈值与链判定都使用未四舍五入的米制几何值。</p>
+        <p>次数、三角与碰撞分别检查，低次数不等于方案合格：一次取齐时冰箱—水槽边长也低于三角1.20米的教学下限。预置布局用于验证任务逻辑，固定设施及家具的相交仍如实报告，不视为可施工方案。</p>
+      </details>
+    </section>
+
+    <section class="panel-card">
+      <h2>② 三层反馈</h2>
+      <div class="feedback" style="margin-top:0">
+        <h3>观察 <span class="smalltext muted">｜客观测量</span></h3>
+        <dl id="facts" class="facts"></dl>
+        <details class="smalltext muted">
+          <summary>测量口径</summary>
+          <p>距离使用站点几何中心。碰撞采用严格相交的轴对齐包围盒，恰好相切不计；计入烟道与排水立管的包围盒，不把门扇虚线当实体。贴墙台面测内侧前缘，自由台面测两个长边，沿前缘法线检查与其投影重叠的障碍，取最小净距；此值不是可通行区域的寻路宽度。</p>
+        </details>
+      </div>
+      <div class="feedback">
+        <h3>规则建议 <span class="smalltext muted">｜启发式，不是规范判定</span></h3>
+        <ul id="rules" class="rules"></ul>
+      </div>
+      <div class="feedback">
+        <h3>教师判断 <span class="smalltext muted">｜不自动评分</span></h3>
+        <div class="human">
+          <ul><li>多人协作可能性</li><li>中餐烹饪习惯与烟道关系</li><li>方案讲述的取舍依据</li></ul>
+          <div class="muted">由教师课后评议</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel-card">
+      <h2>③ 版本对照与导出</h2>
+      <div class="version-controls">
+        <div><button id="saveA">存为A版</button><button id="loadA" class="small" disabled>载入A版</button></div>
+        <div><button id="saveB">存为B版</button><button id="loadB" class="small" disabled>载入B版</button></div>
+      </div>
+      <div id="comparison"></div>
+      <div class="button-row"><button id="loadBaselineB" class="small">查看教学基线B</button></div>
+      <div class="export-grid">
+        <button id="exportProject">导出工程（JSON）</button>
+        <button id="importProject">导入工程（JSON）</button>
+        <button id="exportPNG">导出平面图（PNG）</button>
+        <button id="exportReport">导出对比报告（JSON）</button>
+      </div>
+      <input id="fileInput" type="file" accept=".json,application/json" hidden>
+      <p class="smalltext muted" style="margin-top:9px">快照独立保存；工程包含当前布局和已存版本。对比报告附规则版本及任务计数口径。</p>
+      <details class="selftest">
+        <summary>确定性与合同自检</summary>
+        <button id="runTests" class="small" style="margin-top:8px">运行六项断言</button>
+        <div id="testResult">可在控制台调用 window.__LAB_SELFTEST__()；六项检查均使用实际规则计算，不修改当前布局。</div>
+      </details>
+    </section>
+  </aside>
+</main>
+<div id="status" role="status" aria-live="polite">就绪。先点“模拟四菜一汤”，观察分批送菜与双手占用的移动。</div>
+<footer>数据：U90厨房2.8×2.25m为教材教学假设；工作三角与通道数值为教学常用值。交互实验对应《室内空间设计》v0.4 第7章实践任务卡。</footer>
+
+<script>
+"use strict";
+
+/* 规则层：没有 DOM、时间、随机数或渲染依赖。米制场景是唯一真值。 */
+const KitchenRules = (() => {
+  const WIDTH = 2.8, DEPTH = 2.25, EPS = 1e-8;
+  const SCENARIO = "ISD-L04K-0.2.0";
+  const RULE = "teaching-heuristics-v2";
+  const PICKUP_DISTANCE = 1.0, CHAIN_GAP = 0.05;
+  const DEFINITIONS = Object.freeze({
+    fridge: Object.freeze({name:"冰箱",w:0.6,h:0.65,counter:false,color:"#eaf2fa",stroke:"#3a6ea5"}),
+    sink: Object.freeze({name:"水槽段",w:0.8,h:0.6,counter:true,color:"#eaf2fa",stroke:"#3a6ea5"}),
+    stove: Object.freeze({name:"灶台段",w:0.75,h:0.6,counter:true,color:"#f2ede2",stroke:"#8a7a55"}),
+    prep: Object.freeze({name:"备餐台面",w:1.0,h:0.6,counter:true,color:"#f2ede2",stroke:"#8a7a55"}),
+    trash: Object.freeze({name:"垃圾桶",w:0.35,h:0.35,counter:false,color:"#eff1f1",stroke:"#59666a"})
+  });
+  const TASK = Object.freeze([
+    Object.freeze({at:"fridge",act:"取食材",hands:"full",count:3}),
+    Object.freeze({at:"sink",act:"清洗",hands:"free",count:2}),
+    Object.freeze({at:"prep",act:"切配",hands:"free",count:2}),
+    Object.freeze({at:"stove",act:"烹饪",hands:"free",count:2}),
+    Object.freeze({at:"trash",act:"弃料",hands:"full",count:1})
+  ]);
+  const FIXED = Object.freeze([
+    Object.freeze({id:"flue",name:"烟道",x:0.3,y:0.45,w:0.6,h:0.6}),
+    Object.freeze({id:"drain",name:"排水立管",x:0.1,y:1.5,w:0.2,h:0.2})
+  ]);
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const round = value => Math.round((value + Number.EPSILON) * 100) / 100;
+  const distance = (a,b) => Math.hypot(a.x-b.x,a.y-b.y);
+  const typeOf = (id,o) => o.type || id.split("_")[0];
+  function box(id,o) {
+    const d = DEFINITIONS[typeOf(id,o)];
+    const w = o.rot === 90 ? d.h : d.w;
+    const h = o.rot === 90 ? d.w : d.h;
+    return {id,x:o.x,y:o.y,w,h,l:o.x-w/2,r:o.x+w/2,t:o.y-h/2,b:o.y+h/2};
+  }
+  function fixedBox(f) {
+    return {...f,l:f.x-f.w/2,r:f.x+f.w/2,t:f.y-f.h/2,b:f.y+f.h/2};
+  }
+  function intersects(a,b) {
+    return Math.min(a.r,b.r)-Math.max(a.l,b.l)>EPS &&
+           Math.min(a.b,b.b)-Math.max(a.t,b.t)>EPS;
+  }
+  function outside(b) {
+    return b.l < -EPS || b.t < -EPS || b.r > WIDTH+EPS || b.b > DEPTH+EPS;
+  }
+  function inRange(v,min,max) {return v>=min-EPS && v<=max+EPS;}
+  function triangleAccept(legs,total) {
+    return {legsOK:legs.every(v=>inRange(v,1.2,2.7)),totalOK:inRange(total,4,6.6)};
+  }
+
+  /* 同墙须实际贴齐；先检查 sink→prep→stove 的空间顺序和边缘间隙。
+     相互重叠不冒充“零间隙”，副本也不替代这三个任务站。 */
+  function continuousChain(scene) {
+    const members=["sink","prep","stove"];
+    const entries=members.map(id=>({id,o:scene.objects[id],b:box(id,scene.objects[id])}));
+    const onWall=(entry,wall)=>{
+      const {o,b}=entry;
+      if(outside(b))return false;
+      if(wall==="north")return o.rot===0 && Math.abs(b.t)<=EPS;
+      if(wall==="south")return o.rot===0 && Math.abs(b.b-DEPTH)<=EPS;
+      if(wall==="west")return o.rot===90 && Math.abs(b.l)<=EPS;
+      return o.rot===90 && Math.abs(b.r-WIDTH)<=EPS;
+    };
+    for(const wall of ["north","south","west","east"]){
+      if(!entries.every(entry=>onWall(entry,wall)))continue;
+      const horizontal=wall==="north" || wall==="south";
+      const centers=entries.map(({b})=>horizontal?b.x:b.y);
+      const sign=Math.sign(centers[1]-centers[0]);
+      if(!sign || sign*(centers[2]-centers[1])<=EPS)continue;
+      const gaps=[];
+      for(let i=1;i<entries.length;i++){
+        const a=entries[i-1].b,b=entries[i].b;
+        const gap=horizontal
+          ? (sign>0?b.l-a.r:a.l-b.r)
+          : (sign>0?b.t-a.b:a.t-b.b);
+        gaps.push(gap);
+      }
+      if(gaps.every(gap=>gap>=-EPS && gap<=CHAIN_GAP+EPS)){
+        return {connected:true,wall,members:[...members],gapsM:gaps.map(gap=>round(Math.max(0,gap)))};
+      }
+    }
+    return {connected:false,wall:null,members:[...members],gapsM:[]};
+  }
+
+  /* 一份计划同时供评价、任务卡、动画与导出消费，绝不按基线名称硬编码次数。
+     远距三趟送菜：三次 F→S、两次 S→F；最后一次送达后继续备餐。 */
+  function taskPlan(scene) {
+    const pickupDistanceM=distance(scene.objects.fridge,scene.objects.sink);
+    const oneTrip=pickupDistanceM<=PICKUP_DISTANCE+EPS;
+    const chain=continuousChain(scene);
+    const steps=oneTrip
+      ? [
+          {at:"fridge",act:"一次取齐食材",count:3,hands:"full"},
+          {at:"sink",act:"清洗",count:2,hands:"free"}
+        ]
+      : [
+          {at:"fridge",act:"取第1批食材",count:1,hands:"full"},
+          {at:"sink",act:"送达第1批",count:1,hands:"free"},
+          {at:"fridge",act:"返回取第2批",count:1,hands:"full"},
+          {at:"sink",act:"送达第2批",count:1,hands:"free"},
+          {at:"fridge",act:"返回取第3批",count:1,hands:"full"},
+          {at:"sink",act:"送达并清洗",count:2,hands:"free"}
+        ];
+    steps.push(
+      {at:"prep",act:"切配",count:2,hands:"free"},
+      {at:"stove",act:"烹饪",count:2,hands:"free"},
+      {at:"trash",act:"弃料",count:1,hands:"full"}
+    );
+    const segments=[];
+    for(let i=1;i<steps.length;i++){
+      const from=steps[i-1].at,to=steps[i].at;
+      const chainStep=chain.connected && chain.members.includes(from) && chain.members.includes(to);
+      const handsFull=(from==="fridge" && to==="sink") || (from==="stove" && to==="trash");
+      segments.push({
+        from,to,
+        distanceM:distance(scene.objects[from],scene.objects[to]),
+        handsFull,
+        chainStep,
+        counted:from!==to && !chainStep
+      });
+    }
+    return {
+      strategy:oneTrip?"single-pickup":"three-deliveries",
+      pickupDistanceM,
+      pickupThresholdM:PICKUP_DISTANCE,
+      chainGapThresholdM:CHAIN_GAP,
+      continuousChain:chain,
+      steps,
+      segments
+    };
+  }
+  function taskRoute(scene) {return taskPlan(scene).segments;}
+
+  function aisleClearance(scene,boxes) {
+    let best = Infinity, measurement = null;
+    const obstacles = [...boxes,...FIXED.map(fixedBox)];
+    for (const [id,o] of Object.entries(scene.objects)) {
+      if (!DEFINITIONS[typeOf(id,o)].counter) continue;
+      const a = box(id,o);
+      let directions;
+      if (o.rot===90) {
+        if (Math.abs(a.l)<EPS) directions=["east"];
+        else if (Math.abs(a.r-WIDTH)<EPS) directions=["west"];
+        else directions=["west","east"];
+      } else {
+        if (Math.abs(a.t)<EPS) directions=["south"];
+        else if (Math.abs(a.b-DEPTH)<EPS) directions=["north"];
+        else directions=["north","south"];
+      }
+      for (const dir of directions) {
+        const horizontal = dir==="east" || dir==="west";
+        const positive = dir==="east" || dir==="south";
+        const start = horizontal ? (positive?a.r:a.l) : (positive?a.b:a.t);
+        let gap = Math.max(0, horizontal ? (positive?WIDTH-start:start) : (positive?DEPTH-start:start));
+        for (const b of obstacles) {
+          if (b.id===id) continue;
+          const crossOverlap = horizontal ?
+            Math.min(a.b,b.b)-Math.max(a.t,b.t) :
+            Math.min(a.r,b.r)-Math.max(a.l,b.l);
+          if (crossOverlap<=EPS) continue;
+          const low = horizontal?b.l:b.t, high=horizontal?b.r:b.b;
+          let d;
+          if (positive && high>start+EPS) d=Math.max(0,low-start);
+          else if (!positive && low<start-EPS) d=Math.max(0,start-high);
+          else continue;
+          gap=Math.min(gap,d);
+        }
+        if (gap<best) {
+          best=gap;
+          measurement={id,direction:dir,clearanceM:round(gap)};
+        }
+      }
+    }
+    return {minClearance:round(Number.isFinite(best)?best:0),measurement};
+  }
+  function evaluate(scene) {
+    const objects=scene.objects;
+    const boxes=Object.keys(objects).sort().map(id=>box(id,objects[id]));
+    const fixed=FIXED.map(fixedBox), pairs=[];
+    for (let i=0;i<boxes.length;i++) {
+      for (let j=i+1;j<boxes.length;j++) if (intersects(boxes[i],boxes[j])) pairs.push([boxes[i].id,boxes[j].id]);
+      for (const f of fixed) if (intersects(boxes[i],f)) pairs.push([boxes[i].id,f.id]);
+    }
+    const outIds=boxes.filter(outside).map(b=>b.id);
+    const rawLegs=[
+      distance(objects.fridge,objects.sink),
+      distance(objects.sink,objects.stove),
+      distance(objects.stove,objects.fridge)
+    ];
+    const rawTotal=rawLegs.reduce((a,b)=>a+b,0);
+    const legs=rawLegs.map(round),total=round(rawTotal);
+    const range=triangleAccept(rawLegs,rawTotal);
+    const plan=taskPlan(scene),segments=plan.segments;
+    return {
+      workTriangle:{legs,total,legRange:[1.2,2.7],totalRange:[4,6.6],...range},
+      aisle:aisleClearance(scene,boxes),
+      errand:{
+        moveCount:segments.filter(segment=>segment.counted).length,
+        walkDistanceM:round(segments.reduce((sum,segment)=>sum+segment.distanceM,0)),
+        handsFullMoves:segments.filter(segment=>segment.handsFull).length,
+        strategy:plan.strategy,
+        pickupDistanceM:plan.pickupDistanceM,
+        pickupThresholdM:plan.pickupThresholdM,
+        continuousChain:plan.continuousChain,
+        sequence:plan.steps.map(step=>step.at),
+        segments
+      },
+      collisions:{pairCount:pairs.length,pairs},
+      outOfRoom:{count:outIds.length,ids:outIds}
+    };
+  }
+  function baseline(which="A") {
+    /* 两版共享精确、无间隙的北墙操作链：
+       sink [0.25,1.05] → prep [1.05,2.05] → stove [2.05,2.80]。
+       A：西墙中段对侧（东墙中段）；B：北墙最西侧、靠近链头。
+       不缩小家具或隐藏固定设施，预置几何相交仍由 evaluate 如实报告。 */
+    const positions={
+      fridge:which==="B"
+        ? {x:0.3,y:0.325,rot:0}
+        : {x:2.5,y:1.125,rot:0},
+      sink:{x:0.65,y:0.3,rot:0},
+      prep:{x:1.55,y:0.3,rot:0},
+      stove:{x:2.425,y:0.3,rot:0},
+      trash:{x:0.3,y:1.95,rot:0}
+    };
+    for (const id of Object.keys(positions)) positions[id].type=id;
+    return {objects:positions};
+  }
+  function snap(scene,id,force=false) {
+    const result=clone(scene),o=result.objects[id],d=DEFINITIONS[typeOf(id,o)];
+    if (!d.counter) return result;
+    const walls=[
+      {wall:"west",distance:Math.abs(o.x)},
+      {wall:"east",distance:Math.abs(WIDTH-o.x)},
+      {wall:"north",distance:Math.abs(o.y)},
+      {wall:"south",distance:Math.abs(DEPTH-o.y)}
+    ].sort((a,b)=>a.distance-b.distance);
+    if (!force && walls[0].distance>=0.35-EPS) {
+      o.rot=0;
+      return outside(box(id,o))?clone(scene):result;
+    }
+    const wall=walls[0].wall;
+    o.rot=(wall==="west" || wall==="east")?90:0;
+    const b=box(id,o);
+    if (wall==="west" || wall==="east") {
+      o.x=wall==="west"?b.w/2:WIDTH-b.w/2;
+      o.y=Math.max(b.h/2,Math.min(DEPTH-b.h/2,o.y));
+    } else {
+      o.y=wall==="north"?b.h/2:DEPTH-b.h/2;
+      o.x=Math.max(b.w/2,Math.min(WIDTH-b.w/2,o.x));
+    }
+    return result;
+  }
+  function canonicalScene(scene) {
+    const objects={};
+    Object.keys(scene.objects).sort().forEach(id=>{
+      const o=scene.objects[id];
+      objects[id]={type:typeOf(id,o),x:o.x,y:o.y,rot:o.rot};
+    });
+    return {objects};
+  }
+  function makeProject(scene,versions,savedAt) {
+    const c=canonicalScene(scene);
+    return {
+      schemaVersion:"isd-design-v1",
+      courseId:"ISD-COURSE-01",
+      labId:"ISD-L04K",
+      scene:{unit:"m",origin:"northwest",width:WIDTH,depth:DEPTH},
+      objects:Object.entries(c.objects).map(([id,o])=>({id,...o})),
+      scenarioVersion:SCENARIO,
+      ruleVersion:RULE,
+      versions:{A:versions.A?canonicalScene(versions.A):null,B:versions.B?canonicalScene(versions.B):null},
+      savedAt
+    };
+  }
+  function validateScene(input) {
+    if (!input || typeof input!=="object" || !input.objects || typeof input.objects!=="object" || Array.isArray(input.objects))
+      throw new Error("场景对象格式错误。");
+    const entries=Object.entries(input.objects);
+    if (entries.length<5 || entries.length>60) throw new Error("工作站数量须为5至60个。");
+    const objects={};
+    for (const [id,o] of entries) {
+      if (!/^(fridge|sink|stove|prep|trash)(_[2-9][0-9]*|_1[0-9]+)?$/.test(id)) throw new Error("存在未知工作站编号。");
+      if (!o || typeof o!=="object") throw new Error("工作站数据错误。");
+      const type=o.type || id.split("_")[0];
+      if (!Object.hasOwn(DEFINITIONS,type) || id.split("_")[0]!==type) throw new Error("工作站类型与编号不一致。");
+      if (!Number.isFinite(o.x) || !Number.isFinite(o.y) || ![0,90].includes(o.rot)) throw new Error("坐标或旋转角度无效。");
+      const n={type,x:o.x,y:o.y,rot:o.rot};
+      if (outside(box(id,n))) throw new Error("导入被拒绝：工作站超出房间。");
+      objects[id]=n;
+    }
+    for (const id of Object.keys(DEFINITIONS)) if (!Object.hasOwn(objects,id)) throw new Error("工程缺少任务站："+DEFINITIONS[id].name);
+    return canonicalScene({objects});
+  }
+  function readProject(data) {
+    if (!data || data.schemaVersion!=="isd-design-v1" || data.courseId!=="ISD-COURSE-01" || data.labId!=="ISD-L04K")
+      throw new Error("不是本实验支持的工程文件。");
+    if (data.scenarioVersion!==SCENARIO || data.ruleVersion!==RULE) throw new Error("场景或规则版本不一致，无法保证复算等价。");
+    if (!data.scene || data.scene.unit!=="m" || data.scene.width!==WIDTH || data.scene.depth!==DEPTH ||
+        (data.scene.origin && data.scene.origin!=="northwest")) throw new Error("房间尺寸、单位或原点不一致。");
+    if (!Array.isArray(data.objects)) throw new Error("工作站列表格式错误。");
+    const map={};
+    for (const o of data.objects) {
+      if (!o || typeof o.id!=="string" || Object.hasOwn(map,o.id)) throw new Error("工作站编号缺失或重复。");
+      map[o.id]={type:o.type || o.id.split("_")[0],x:o.x,y:o.y,rot:o.rot};
+    }
+    const scene=validateScene({objects:map});
+    const versions={A:null,B:null};
+    for (const key of ["A","B"]) if (data.versions?.[key]) versions[key]=validateScene(data.versions[key]);
+    return {scene,versions};
+  }
+  return Object.freeze({
+    WIDTH,DEPTH,EPS,SCENARIO,RULE,PICKUP_DISTANCE,CHAIN_GAP,
+    DEFINITIONS,TASK,FIXED,clone,round,distance,typeOf,box,intersects,outside,inRange,
+    triangleAccept,continuousChain,taskPlan,taskRoute,evaluate,baseline,snap,
+    canonicalScene,makeProject,readProject
+  });
+})();
+window.KitchenRules=KitchenRules;
+
+/* 状态和渲染层。 */
+(() => {
+  const E=KitchenRules, $=id=>document.getElementById(id);
+  const S=140, OX=112, OY=88, RW=E.WIDTH*S, RH=E.DEPTH*S;
+  const C=E.DEFINITIONS;
+  let scene=E.baseline("A"), report=E.evaluate(scene);
+  let versions={A:null,B:null}, selected="fridge", level=1;
+  let drag=null, sim=null, frame=0, lastFrame=null, invalidGhost=null, ghostTimer=0;
+  let snapVisual=null;
+  let challengeUnlocked=false, challengeActive=false;
+  const INTRO='腊月二十九的下午，沈太太掌勺，沈先生进门放菜要洗鱼，祖母端着肉馅想找块台面——三个人不是被"面积"绊住，而是被"作业面"绊住。先跑一次模拟，看看这间厨房为什么要跑六趟。';
+  const PRESCRIPTION='拖动工作站，让"四菜一汤"少跑几趟。目标：折返≤3次，且工作三角三边都在教学区间内。想一想：每天十次的折返，和每年十次的绕路，哪个更要紧？';
+  const TASK_NOTE="冰箱—水槽中心距≤1.00米时一次取齐，否则分批送菜三趟；水槽—备餐—灶台同墙贴齐且相邻边缘间隙0–0.05米时构成连续链，链内步进不计折返但计步行距离。不计入场、离场和末次送达后的返回。";
+  const n=v=>Number(v.toFixed(5)), px=x=>n(OX+x*S), py=y=>n(OY+y*S);
+  const fmt=v=>Number(v).toFixed(2);
+  const name=id=>C[scene.objects[id]?.type]?.name || ({flue:"烟道",drain:"排水立管"}[id] || id);
+  const objectTitle=id=>name(id)+(id.includes("_")?" · 副本"+id.split("_")[1]:"");
+  function status(text){$("status").textContent=text;}
+  function updateGuide() {
+    $("guide").textContent=level===1?INTRO:PRESCRIPTION;
+    $("level1").classList.toggle("active",level===1);
+    $("level2").classList.toggle("active",level===2);
+    $("challenge").classList.toggle("active",challengeActive);
+  }
+  function stopSimulation() {
+    cancelAnimationFrame(frame);frame=0;lastFrame=null;sim=null;
+    $("pause").disabled=true;$("pause").textContent="暂停";
+    $("simulate").textContent="模拟四菜一汤";
+    $("playStatus").textContent="尚未模拟；得分卡显示完整任务的预测值。";
+  }
+  function commit(next,message,animateId=null) {
+    const old=animateId?E.clone(scene.objects[animateId]):null;
+    stopSimulation();
+    scene=next;report=E.evaluate(scene);
+    snapVisual=animateId && old?{id:animateId,from:old,to:E.clone(scene.objects[animateId])}:null;
+    renderAll();
+    if (snapVisual) snapVisual=null;
+    if (message) status(message);
+  }
+  function setScene(next,message) {
+    const pointer=drag?.pointer;
+    drag=null;
+    if(pointer!==undefined && $("plan").hasPointerCapture(pointer))$("plan").releasePointerCapture(pointer);
+    clearTimeout(ghostTimer);invalidGhost=null;
+    selected=Object.hasOwn(next.objects,selected)?selected:"fridge";
+    commit(E.clone(next),message);
+  }
+  function drawDefs() {
+    return `<defs>
+      <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="7" height="7" fill="#c8cbd0"/><line x1="0" y1="0" x2="0" y2="7" stroke="#8f969d" stroke-width="2"/>
+      </pattern>
+      <marker id="routeArrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M0 0 L8 4 L0 8 Z" fill="#e07b00"/>
+      </marker>
+      <style>
+        text{font-family:"Microsoft YaHei",sans-serif;font-size:13px;fill:#26313b}
+        .dim{fill:#646c74;font-size:13px}
+        .station{cursor:grab}
+      </style>
+    </defs>`;
+  }
+  function drawRoom() {
+    let grid="";
+    if ($("showGrid").checked) {
+      for (let x=.5;x<E.WIDTH;x+=.5) grid+=`<line x1="${px(x)}" y1="${OY}" x2="${px(x)}" y2="${OY+RH}" stroke="#e4e7e9" stroke-width="1"/><text x="${px(x)}" y="${OY+RH+21}" text-anchor="middle" class="dim">${fmt(x)}</text>`;
+      for (let y=.5;y<E.DEPTH;y+=.5) grid+=`<line x1="${OX}" y1="${py(y)}" x2="${OX+RW}" y2="${py(y)}" stroke="#e4e7e9" stroke-width="1"/><text x="${OX-12}" y="${py(y)+4}" text-anchor="end" class="dim">${fmt(y)}</text>`;
+    }
+    const fixedCollision=new Set(report.collisions.pairs.flat());
+    return `<rect width="620" height="510" fill="#fff"/>
+      <text x="24" y="28" font-weight="bold">北 ↑</text>
+      <text x="${OX}" y="26" class="dim">原点：西北角（0，0）</text>
+      <text x="${OX}" y="47" class="dim">横向向东 →　纵向向南 ↓　单位：米</text>
+      <rect x="${OX}" y="${OY}" width="${RW}" height="${RH}" fill="#fff"/>
+      ${grid}
+      <g stroke="#727980" stroke-width="1" fill="none">
+        <path d="M${OX} 67 V77 M${OX} 72 H${OX+RW} M${OX+RW} 67 V77"/>
+        <path d="M${OX+RW+34} ${OY} h10 M${OX+RW+39} ${OY} V${OY+RH} M${OX+RW+34} ${OY+RH} h10"/>
+      </g>
+      <text x="${OX+RW/2}" y="64" text-anchor="middle" class="dim">2.80米</text>
+      <text x="${OX+RW+54}" y="${OY+RH/2}" text-anchor="middle" class="dim" transform="rotate(90 ${OX+RW+54} ${OY+RH/2})">2.25米</text>
+      <path d="M${px(1.9)} ${OY} H${OX} V${OY+RH} H${OX+RW} V${OY} H${px(2.65)}" fill="none" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="miter"/>
+      <g fill="none" stroke="#7a8188" stroke-width="1.3" stroke-dasharray="5 4">
+        <path d="M${px(1.9)} ${OY} V${py(.75)}"/>
+        <path d="M${px(2.65)} ${OY} A105 105 0 0 1 ${px(1.9)} ${py(.75)}"/>
+      </g>
+      <text x="${px(2.275)}" y="${OY+20}" text-anchor="middle" class="dim">阳台门</text>
+      <g>
+        <rect x="${OX}" y="${py(.15)}" width="84" height="84" fill="url(#hatch)" stroke="${fixedCollision.has("flue")?"#d0021b":"#444"}" stroke-width="2"/>
+        <rect x="${OX+5}" y="${py(.15)+26}" width="74" height="23" fill="#f7f7f7" fill-opacity=".93"/>
+        <text x="${OX+42}" y="${py(.15)+42}" text-anchor="middle">烟道</text>
+        <text x="${OX+79}" y="${py(.15)+16}" text-anchor="end" style="font-size:12px">固定</text>
+        <circle cx="${px(.1)}" cy="${py(1.5)}" r="14" fill="url(#hatch)" stroke="${fixedCollision.has("drain")?"#d0021b":"#444"}" stroke-width="2"/>
+        <path d="M${px(.1)} ${py(1.5)} H${OX-18}" stroke="#626b73" fill="none"/>
+        <text x="${OX-20}" y="${py(1.5)-5}" text-anchor="end">排水立管</text>
+        <text x="${OX-20}" y="${py(1.5)+13}" text-anchor="end" class="dim">固定</text>
+      </g>
+      <text x="${OX+RW/2}" y="${OY+RH+60}" text-anchor="middle" class="dim">示意比例：1米＝140绘图单位；缩放不改变米制坐标</text>`;
+  }
+  function drawTriangle() {
+    if (!$("showTriangle").checked) return "";
+    const f=scene.objects.fridge,s=scene.objects.sink,t=scene.objects.stove;
+    let text=`<path d="M${px(f.x)} ${py(f.y)} L${px(s.x)} ${py(s.y)} L${px(t.x)} ${py(t.y)} Z" fill="#7aa7cc" fill-opacity=".055" stroke="#7aa7cc" stroke-opacity=".8" stroke-width="1.5"/>`;
+    [[f,s],[s,t],[t,f]].forEach(([a,b],i)=>{
+      const dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1;
+      const x=px((a.x+b.x)/2)-dy/len*13,y=py((a.y+b.y)/2)+dx/len*13;
+      text+=`<g><rect x="${x-30}" y="${y-11}" width="60" height="21" rx="3" fill="#fff" fill-opacity=".94"/><text x="${x}" y="${y+4}" text-anchor="middle" style="fill:#48769c">${fmt(report.workTriangle.legs[i])}米</text></g>`;
+    });
+    return text;
+  }
+  function furniture(id,o) {
+    const d=C[o.type],w=d.w*S,h=d.h*S;
+    const bad=report.collisions.pairs.some(p=>p.includes(id)) || report.outOfRoom.ids.includes(id);
+    const stroke=bad?"#d0021b":d.stroke, bw=E.box(id,o).w*S,bh=E.box(id,o).h*S;
+    let shape=`<rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" fill="${bad?"#fce7e9":d.color}" stroke="${stroke}" stroke-width="${bad?3:2}"/>`;
+    if (d.counter) shape+=`<rect x="${-w/2+4}" y="${-h/2+4}" width="${w-8}" height="${h-8}" fill="none" stroke="${stroke}" stroke-width="1"/>`;
+    if (o.type==="fridge") shape+=`<path d="M${-w/2+5} ${-h/2+5} L${w/2-5} ${h/2-5} M${-w/2+5} ${h/2-5} L${w/2-5} ${-h/2+5}" stroke="${stroke}" stroke-width="1" opacity=".6"/>`;
+    if (o.type==="sink") shape+=`<ellipse cx="0" cy="-5" rx="${w*.31}" ry="${h*.25}" fill="#fff" stroke="${stroke}" stroke-width="2"/><path d="M0 ${-h/2+7} v10" stroke="${stroke}" stroke-width="2"/><circle cx="0" cy="${-h/2+9}" r="3" fill="${stroke}"/>`;
+    if (o.type==="stove") {
+      for (const x of [-w*.23,w*.23]) shape+=`<circle cx="${x}" cy="-5" r="17" fill="#fff" stroke="${stroke}" stroke-width="1.7"/><circle cx="${x}" cy="-5" r="10" fill="none" stroke="${stroke}" stroke-width="1.3"/>`;
+    }
+    if (o.type==="trash") shape+=`<path d="M${-w/2+6} ${-h/2+6} L${w/2-6} ${h/2-6} M${w/2-6} ${-h/2+6} L${-w/2+6} ${h/2-6}" stroke="${stroke}" stroke-width="1.3"/>`;
+    const label=o.type==="prep"?"备餐":o.type==="sink"?"水槽":o.type==="stove"?"灶台":d.name;
+    const ly=["sink","stove"].includes(o.type)?bh/2-11:5;
+    let animation="";
+    if (snapVisual?.id===id) animation=`<animateTransform attributeName="transform" type="translate" from="${px(snapVisual.from.x)} ${py(snapVisual.from.y)}" to="${px(o.x)} ${py(o.y)}" dur="0.15s" fill="remove"/>`;
+    return `<g class="station" data-object="${id}" tabindex="0" role="button" aria-label="${d.name}${id.includes("_")?"副本":""}，中心横坐标${fmt(o.x)}米，纵坐标${fmt(o.y)}米" transform="translate(${px(o.x)} ${py(o.y)})">
+      ${animation}
+      <title>${d.name}：拖动或使用方向键调整</title>
+      <g transform="rotate(${o.rot})">${shape}</g>
+      <rect class="selection-ring" x="${-bw/2-5}" y="${-bh/2-5}" width="${bw+10}" height="${bh+10}" rx="3" fill="none" stroke="${selected===id?"#3a6ea5":"none"}" stroke-width="1.5" stroke-dasharray="4 3" pointer-events="none"/>
+      <rect x="${-label.length*7-3}" y="${ly-13}" width="${label.length*14+6}" height="19" fill="#fff" fill-opacity=".88" pointer-events="none"/>
+      <text x="0" y="${ly+1}" text-anchor="middle" pointer-events="none">${label}</text>
+      ${id.includes("_")?`<text x="${bw/2-3}" y="${-bh/2+13}" text-anchor="end" style="font-size:12px">副本</text>`:""}
+    </g>`;
+  }
+  function routeLine(segment,a,b,active=false) {
+    return `<line data-route-from="${segment.from}" data-route-to="${segment.to}" data-hands-full="${segment.handsFull}" data-counted="${segment.counted}" x1="${px(a.x)}" y1="${py(a.y)}" x2="${px(b.x)}" y2="${py(b.y)}" stroke="#e07b00" stroke-width="${segment.handsFull?5:2.5}" stroke-dasharray="${segment.handsFull?"10 5":"7 5"}" opacity="${active?1:segment.handsFull?.45:.3}" marker-end="url(#routeArrow)" pointer-events="none"/>`;
+  }
+  function routeBackground() {
+    if (!$("showRoute").checked) return "";
+    return report.errand.segments.map(segment=>
+      routeLine(segment,scene.objects[segment.from],scene.objects[segment.to])
+    ).join("");
+  }
+  function drawAnimation() {
+    if (!sim) return "";
+    let result="";
+    if ($("showRoute").checked) {
+      sim.segments.forEach((segment,index)=>{
+        if(index>sim.index || (index===sim.index && !sim.running))return;
+        const a=scene.objects[segment.from];
+        const b=index<sim.index?scene.objects[segment.to]:sim.position;
+        if(E.distance(a,b)>E.EPS)result+=routeLine(segment,a,b,true);
+      });
+    }
+    result+=`<g transform="translate(${px(sim.position.x)} ${py(sim.position.y)})" pointer-events="none">
+      <circle r="18" fill="#fff" fill-opacity=".87"/>
+      <g fill="none" stroke="#4a5568" stroke-width="2.3" stroke-linecap="round">
+        <circle cx="0" cy="-10" r="4.3" fill="#fff"/>
+        <path d="M0 -5 V6 M-7 0 L0 -3 L7 0 M0 6 L-5 14 M0 6 L5 14"/>
+      </g>
+      ${sim.running && sim.segments[sim.index]?.handsFull?'<circle cx="13" cy="-9" r="4" fill="#e07b00"/>':""}
+    </g>`;
+    return result;
+  }
+  function drawGhost() {
+    if (!invalidGhost) return "";
+    const b=E.box(invalidGhost.id,invalidGhost.object);
+    return `<rect x="${px(b.l)}" y="${py(b.t)}" width="${b.w*S}" height="${b.h*S}" fill="#d0021b" fill-opacity=".16" stroke="#d0021b" stroke-width="2" pointer-events="none"/>`;
+  }
+  function renderPlan() {
+    $("plan").innerHTML=drawDefs()+drawRoom()+routeBackground()+drawTriangle()+
+      Object.entries(scene.objects).map(([id,o])=>furniture(id,o)).join("")+
+      drawGhost()+drawAnimation();
+  }
+  function renderSelection() {
+    const o=scene.objects[selected],d=C[o.type];
+    $("selectionTitle").textContent="已选："+objectTitle(selected);
+    if (document.activeElement!==$("editX")) $("editX").value=Number(o.x.toFixed(4));
+    if (document.activeElement!==$("editY")) $("editY").value=Number(o.y.toFixed(4));
+    $("selectionInfo").textContent=`原始尺寸 ${fmt(d.w)} × ${fmt(d.h)}米；当前旋转${o.rot}°。${d.counter?"台面可吸附墙面。":"自由工作站，不参与吸附。"}`;
+    $("snap").disabled=!d.counter;
+    $("remove").disabled=!selected.includes("_");
+  }
+  function renderScores(bounce=false) {
+    const has=!!sim;
+    $("scoreMode").textContent=has?(sim.running?(sim.paused?"已暂停":"模拟中"):"模拟完成"):"全程预测";
+    $("moveScore").textContent=has?sim.completed:report.errand.moveCount;
+    $("walkScore").textContent=fmt(has?sim.walked:report.errand.walkDistanceM);
+    $("moveSub").textContent=has?`全程 ${report.errand.moveCount} 次；双手占用已完成 ${sim.fullCompleted} 段`:`双手占用 ${report.errand.handsFullMoves} 段`;
+    $("walkSub").textContent=has?`全程 ${fmt(report.errand.walkDistanceM)} 米`:"含链内步进的全部直线距离";
+    if (bounce) {
+      for (const id of ["moveScore","walkScore"]) {
+        const el=$(id);el.classList.remove("bounce");void el.offsetWidth;el.classList.add("bounce");
+      }
+    }
+    const goal=report.errand.moveCount<=3 && report.workTriangle.legsOK;
+    if (goal) challengeUnlocked=true;
+    $("goalState").textContent=goal
+      ?"✓ 达成：折返与三角边长目标已达成。"
+      :`处方目标：折返≤3次且三角三边在教学区间内。次数${report.errand.moveCount<=3?"已达成":"未达成"}；三角边长${report.workTriangle.legsOK?"已达成":"未达成"}。`;
+    $("goalState").style.color=goal?"#2e8b57":"";
+    $("challenge").disabled=!challengeUnlocked;
+    $("challenge").textContent=challengeUnlocked?"挑战模式 · 已解锁":"挑战模式 · 待解锁";
+    const conditions=[goal,goal&&report.aisle.minClearance>=1,goal&&report.collisions.pairCount===0&&report.outOfRoom.count===0];
+    $("stars").innerHTML=conditions.map(x=>`<span class="${x?"on":""}">${x?"★":"☆"}</span>`).join("");
+    $("challengeState").textContent="三星附加条件：在达成处方目标基础上，通道≥1.00米、碰撞为0且无越界；不是综合评分。";
+    const plan=E.taskPlan(scene);
+    $("taskList").innerHTML=plan.steps.map((t,i)=>{
+      const active=sim?.running
+        ? (sim.completedSegments===0 && sim.walked===0 ? i===0 : i===Math.min(sim.index+1,plan.steps.length-1))
+        : false;
+      const incoming=i>0?plan.segments[i-1]:null;
+      const note=incoming
+        ? (incoming.chainStep?"链内步进 · 不计数":incoming.handsFull?"双手占用":"空手返回／移动")
+        : "出发站";
+      return `<li class="${active?"current":""}"><span>${i+1}. ${t.act}（${C[t.at].name}×${t.count}）</span><span class="${incoming?.handsFull?"hands":"muted"}">${note}</span></li>`;
+    }).join("");
+  }
+  function renderFacts() {
+    const t=report.workTriangle,errand=report.errand;
+    const walls={north:"北墙",south:"南墙",west:"西墙",east:"东墙"};
+    const entries=[
+      ["冰箱—水槽",fmt(t.legs[0])+"米"],
+      ["水槽—灶台",fmt(t.legs[1])+"米"],
+      ["灶台—冰箱",fmt(t.legs[2])+"米"],
+      ["工作三角总长",fmt(t.total)+"米"],
+      ["台前最小净距",fmt(report.aisle.minClearance)+"米"],
+      ["取菜策略",errand.strategy==="single-pickup"?"一次取齐":"分批送菜三趟"],
+      ["连续作业链",errand.continuousChain.connected?walls[errand.continuousChain.wall]+" · 已连接":"未形成"],
+      ["任务折返次数",errand.moveCount+"次"],
+      ["任务步行距离",fmt(errand.walkDistanceM)+"米"],
+      ["双手占用移动数",errand.handsFullMoves+"段"],
+      ["碰撞对数",report.collisions.pairCount+"对",report.collisions.pairCount>0],
+      ["越界物件数",report.outOfRoom.count+"个",report.outOfRoom.count>0]
+    ];
+    $("facts").innerHTML="";
+    for (const [label,value,bad] of entries) {
+      const dt=document.createElement("dt"),dd=document.createElement("dd");
+      dt.textContent=label;dd.textContent=value;
+      if (bad) dd.className="red";
+      $("facts").append(dt,dd);
+    }
+    if (report.collisions.pairCount) {
+      const dt=document.createElement("dt"),dd=document.createElement("dd");
+      dt.textContent="相交物件";dd.className="red";dd.style.maxWidth="240px";
+      dd.textContent=report.collisions.pairs.map(p=>p.map(name).join("／")).join("；");
+      $("facts").append(dt,dd);
+    }
+    const lines=[],names=["冰箱—水槽","水槽—灶台","灶台—冰箱"];
+    const rawLegs=[
+      E.distance(scene.objects.fridge,scene.objects.sink),
+      E.distance(scene.objects.sink,scene.objects.stove),
+      E.distance(scene.objects.stove,scene.objects.fridge)
+    ];
+    rawLegs.forEach((v,i)=>{
+      if (!E.inRange(v,1.2,2.7)) lines.push(`${names[i]}边长${fmt(v)}米，${v<1.2?"低于":"超出"}教学常用区间1.20–2.70米——站间距离可能${v<1.2?"偏短，需检查操作面":"过长"}。`);
+    });
+    if (t.legsOK) lines.push("工作三角三边均在1.20–2.70米的教学常用区间内；这只是入门检查工具，不是设计目标。");
+    lines.push(`三角总长${fmt(t.total)}米，${t.totalOK?"位于":"不在"}4.00–6.60米的教学常用区间。`);
+    lines.push(`台前最小净距${fmt(report.aisle.minClearance)}米，${report.aisle.minClearance<1?"低于1.00米的教学常用值；检查对向家具和局部障碍":"达到1.00米的教学常用值；仍需教师判断多人协作"}。`);
+    const base=E.evaluate(E.baseline("A")).errand;
+    const delta=E.round(base.walkDistanceM-errand.walkDistanceM);
+    const countDelta=base.moveCount-errand.moveCount;
+    lines.push(`折返${errand.moveCount}次：相对基线A（${base.moveCount}次）${countDelta>=0?"减少":"增加"}${Math.abs(countDelta)}次。当前${errand.strategy==="single-pickup"?"中心距≤1.00米，一次取齐":"中心距>1.00米，分批送菜三趟"}；${errand.continuousChain.connected?"链内两段步进不计数":"作业链未形成，站间步进照常计数"}。`);
+    lines.push(`相对基线A，直线步行距离${delta>=0?"减少":"增加"}${fmt(Math.abs(delta))}米。链内步进虽不计折返，距离仍计入；应同时观察高频环节与双手占用段。`);
+    if(errand.strategy==="single-pickup"){
+      lines.push("一次取齐要求冰箱—水槽≤1.00米，与三角该边≥1.20米的教学下限不能同时满足。请讲述任务效率与三角启发式之间的取舍，不把低次数直接等同于设计合格。");
+    }
+    $("rules").innerHTML="";
+    lines.forEach(line=>{const li=document.createElement("li");li.textContent="教学常用值提示："+line;$("rules").append(li);});
+  }
+  function renderComparison() {
+    for (const k of ["A","B"]) $("load"+k).disabled=!versions[k];
+    const a=versions.A?E.evaluate(versions.A):null,b=versions.B?E.evaluate(versions.B):null;
+    const rows=[
+      ["折返次数（次）",r=>r.errand.moveCount,false],
+      ["总步行（米）",r=>r.errand.walkDistanceM,true],
+      ["三角总长（米）",r=>r.workTriangle.total,true],
+      ["最小通道（米）",r=>r.aisle.minClearance,true]
+    ];
+    $("comparison").innerHTML=`<table aria-label="A版与B版指标对照"><thead><tr><th>指标</th><th>A版${a?"":"（未存）"}</th><th>B版${b?"":"（未存）"}</th></tr></thead><tbody>${
+      rows.map(([label,get,fixed])=>{
+        const va=a?get(a):null,vb=b?get(b):null,diff=va!==null&&vb!==null&&va!==vb;
+        return `<tr><td>${label}</td><td class="${diff?"diff":""}">${va===null?"—":fixed?fmt(va):va}</td><td class="${diff?"diff":""}">${vb===null?"—":fixed?fmt(vb):vb}</td></tr>`;
+      }).join("")
+    }</tbody></table><p class="smalltext muted">浅橙色表示两版数据不同，不表示优劣。载入快照不会修改已存数据。</p>`;
+  }
+  function renderAll() {
+    updateGuide();renderPlan();renderSelection();renderScores();renderFacts();renderComparison();
+  }
+  function showInvalid(id,object) {
+    invalidGhost={id,object:E.clone(object)};
+    clearTimeout(ghostTimer);
+    ghostTimer=setTimeout(()=>{invalidGhost=null;renderPlan();},500);
+  }
+  function checkAndCommit(next,text,animateId=null) {
+    const b=E.box(selected,next.objects[selected]);
+    if (E.outside(b)) {
+      showInvalid(selected,next.objects[selected]);renderPlan();
+      status("越界已阻止：物件返回最后合法位置。");
+      renderSelection();return false;
+    }
+    commit(next,text,animateId);return true;
+  }
+
+  /* 画布拖动：SVG坐标转换，禁止将屏幕像素写入场景。 */
+  function eventPoint(event) {
+    const matrix=$("plan").getScreenCTM();
+    if (!matrix) return null;
+    const point=new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse());
+    return {x:(point.x-OX)/S,y:(point.y-OY)/S};
+  }
+  $("plan").addEventListener("pointerdown",event=>{
+    const group=event.target.closest("[data-object]");
+    if (!group || event.button!==0) return;
+    const point=eventPoint(event);if (!point) return;
+    event.preventDefault();
+    stopSimulation();selected=group.dataset.object;
+    const o=scene.objects[selected];
+    drag={id:selected,pointer:event.pointerId,offset:{x:point.x-o.x,y:point.y-o.y},start:E.clone(o),lastLegal:E.clone(o)};
+    snapVisual=null;
+    $("plan").setPointerCapture(event.pointerId);
+    $("plan").focus({preventScroll:true});
+    renderAll();
+  });
+  $("plan").addEventListener("pointermove",event=>{
+    if (!drag || drag.pointer!==event.pointerId) return;
+    const point=eventPoint(event);if (!point) return;
+    const o=scene.objects[drag.id];
+    o.x=n(point.x-drag.offset.x);o.y=n(point.y-drag.offset.y);
+    if (!E.outside(E.box(drag.id,o))) drag.lastLegal=E.clone(o);
+    report=E.evaluate(scene);
+    renderPlan();renderSelection();renderFacts();renderScores();
+  });
+  function endDrag(event,cancel=false) {
+    if (!drag || event.pointerId!==drag.pointer) return;
+    const d=drag;drag=null;
+    if ($("plan").hasPointerCapture(event.pointerId)) $("plan").releasePointerCapture(event.pointerId);
+    const invalid=E.outside(E.box(d.id,scene.objects[d.id]));
+    if (cancel) {
+      scene.objects[d.id]=d.start;
+      commit(E.clone(scene),"本次拖动已取消。");return;
+    }
+    if (invalid) {
+      showInvalid(d.id,scene.objects[d.id]);
+      scene.objects[d.id]=d.lastLegal;
+      commit(E.clone(scene),"越界已回弹至最后合法位置；红色残影表示被阻止的位置。");
+    } else {
+      const next=E.snap(scene,d.id);
+      commit(next,"位置已更新；取菜策略、连续链和几何检查已重新计算。",d.id);
+    }
+  }
+  $("plan").addEventListener("pointerup",event=>endDrag(event));
+  $("plan").addEventListener("pointercancel",event=>endDrag(event,true));
+  $("plan").addEventListener("lostpointercapture",event=>{if(drag)endDrag(event,true);});
+  $("plan").addEventListener("keydown",event=>{
+    const group=event.target.closest("[data-object]");
+    if (group) selected=group.dataset.object;
+    if (!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(event.key)) return;
+    event.preventDefault();if (drag) return;
+    const next=E.clone(scene),step=event.shiftKey ? .01 : .05;
+    if (event.key==="ArrowLeft") next.objects[selected].x-=step;
+    if (event.key==="ArrowRight") next.objects[selected].x+=step;
+    if (event.key==="ArrowUp") next.objects[selected].y-=step;
+    if (event.key==="ArrowDown") next.objects[selected].y+=step;
+    next.objects[selected].x=n(next.objects[selected].x);next.objects[selected].y=n(next.objects[selected].y);
+    checkAndCommit(next,"已按米制坐标微调工作站。");
+  });
+  $("plan").addEventListener("focusin",event=>{
+    const group=event.target.closest("[data-object]");
+    if (group && selected!==group.dataset.object) {selected=group.dataset.object;renderSelection();}
+  });
+  $("applyPosition").onclick=()=>{
+    const x=$("editX").valueAsNumber,y=$("editY").valueAsNumber;
+    if (!Number.isFinite(x)||!Number.isFinite(y)) return status("请输入有效的米制坐标。");
+    const next=E.clone(scene);next.objects[selected].x=x;next.objects[selected].y=y;
+    checkAndCommit(next,"坐标已应用。");
+  };
+  $("rotate").onclick=()=>{
+    const next=E.clone(scene);next.objects[selected].rot=next.objects[selected].rot===0?90:0;
+    checkAndCommit(next,"已旋转90°。");
+  };
+  $("snap").onclick=()=>checkAndCommit(E.snap(scene,selected,true),"已沿最近墙面贴齐。",selected);
+  $("remove").onclick=()=>{
+    if (!selected.includes("_")) return;
+    const next=E.clone(scene);delete next.objects[selected];selected="fridge";commit(next,"已删除副本，任务站仍完整保留。");
+  };
+  Object.entries(C).forEach(([type,d])=>{
+    const row=document.createElement("div");row.className="station-row";
+    const text=document.createElement("div");
+    const title=document.createElement("div");title.className="station-name";title.textContent=d.name;
+    const size=document.createElement("div");size.className="station-size";size.textContent=`${fmt(d.w)} × ${fmt(d.h)}米`;
+    const button=document.createElement("button");button.className="small";button.textContent="添加";button.setAttribute("aria-label","添加"+d.name+"副本");
+    text.append(title,size);row.append(text,button);$("stationLibrary").append(row);
+    button.onclick=()=>{
+      if (Object.keys(scene.objects).length>=60) return status("最多可放置60个工作站。");
+      let index=2;while(Object.hasOwn(scene.objects,type+"_"+index)) index++;
+      const id=type+"_"+index,next=E.clone(scene);
+      const candidates=[];
+      for(let y=d.h/2;y<=E.DEPTH-d.h/2+E.EPS;y+=.1)
+        for(let x=d.w/2;x<=E.WIDTH-d.w/2+E.EPS;x+=.1) candidates.push({type,x:n(x),y:n(y),rot:0});
+      let best={type,x:1.4,y:1.125,rot:0},minimum=Infinity;
+      for(const candidate of candidates){
+        next.objects[id]=candidate;
+        const count=E.evaluate(next).collisions.pairs.filter(p=>p.includes(id)).length;
+        if(count<minimum){minimum=count;best=candidate;if(!count)break;}
+      }
+      next.objects[id]=best;selected=id;
+      commit(next,"已添加"+d.name+"副本。副本参与几何检查，不替代取菜站或连续链任务站。");
+    };
+  });
+
+  /* 动画只消费同一规则层生成的任务段，不反写场景或评价结果。
+     completed 是折返计数；completedSegments 是所有已到达段，二者不可混用。 */
+  function playStatus() {
+    if (!sim) return;
+    if (!sim.running) {
+      $("playStatus").textContent=`模拟完成：${sim.completed}次计数移动，${fmt(sim.walked)}米；双手占用${sim.fullCompleted}段。`;
+    } else {
+      const seg=sim.segments[sim.index];
+      const state=document.hidden?"标签页隐藏，自动暂停":sim.paused?"已暂停":"行走中";
+      $("playStatus").textContent=`${state}：${name(seg.from)} → ${name(seg.to)}${seg.handsFull?" · 双手占用":""}${seg.chainStep?" · 链内步进不计数":""}；已到达${sim.completedSegments}/${sim.segments.length}段，计数${sim.completed}/${report.errand.moveCount}次。`;
+    }
+  }
+  function startSimulation() {
+    if (drag) return;
+    stopSimulation();
+    const plan=E.taskPlan(scene);
+    sim={
+      segments:plan.segments,index:0,segmentWalk:0,
+      completed:0,completedSegments:0,walked:0,fullCompleted:0,
+      running:true,paused:false,
+      position:{x:scene.objects.fridge.x,y:scene.objects.fridge.y},
+      speed:Number($("speed").value)
+    };
+    $("pause").disabled=false;$("simulate").textContent="从头模拟";
+    lastFrame=null;renderScores();renderPlan();playStatus();
+    status(`开始模拟：${plan.strategy==="single-pickup"?"一次取齐":"分批送菜三趟"}。双手占用段以粗虚线及橙点标记；连续链内步进不计折返。`);
+    schedule();
+  }
+  function schedule() {
+    cancelAnimationFrame(frame);frame=0;
+    if (sim?.running && !sim.paused && !document.hidden) frame=requestAnimationFrame(tick);
+  }
+  function tick(time) {
+    frame=0;
+    if (!sim?.running || sim.paused || document.hidden) {lastFrame=null;return;}
+    const dt=lastFrame===null?0:Math.min(.1,(time-lastFrame)/1000);lastFrame=time;
+    let remaining=dt*.8*sim.speed,bounced=false;
+    while(sim.running) {
+      const segment=sim.segments[sim.index];
+      const a=scene.objects[segment.from],b=scene.objects[segment.to];
+      const length=segment.distanceM;
+      const left=Math.max(0,length-sim.segmentWalk);
+      const advance=Math.min(remaining,left);
+      sim.segmentWalk+=advance;sim.walked+=advance;remaining-=advance;
+      const ratio=length<E.EPS?1:Math.min(1,sim.segmentWalk/length);
+      sim.position={x:a.x+(b.x-a.x)*ratio,y:a.y+(b.y-a.y)*ratio};
+      if (left<=advance+E.EPS) {
+        sim.position={x:b.x,y:b.y};
+        sim.completedSegments++;
+        if(segment.counted)sim.completed++;
+        if(segment.handsFull)sim.fullCompleted++;
+        sim.index++;sim.segmentWalk=0;bounced=true;
+        if (sim.index>=sim.segments.length) {
+          sim.running=false;sim.walked=report.errand.walkDistanceM;
+          $("pause").disabled=true;$("simulate").textContent="模拟四菜一汤";
+          status(`模拟
+完成：${sim.completed}次计数移动，共${fmt(sim.walked)}米。`);
+          break;
+        }
+      }
+      if (remaining<=E.EPS) break;
+    }
+    renderPlan();
+    if (bounced) renderScores();
+    playStatus();
+    schedule();
+  }
+
+  function stopSimulation() {
+    cancelAnimationFrame(frame);
+    frame=0;
+    lastFrame=null;
+    sim=null;
+    $("pause").disabled=true;
+    $("pause").textContent="暂停";
+    $("simulate").textContent="模拟四菜一汤";
+  }
+
+  /* 关卡、挑战与重置（接线）。 */
+  $("level1").onclick=()=>{level=1;challengeActive=false;updateGuide();status("已切换至诊断关卡；当前布局保留。需要初始场景时请重置为基线A。");};
+  $("level2").onclick=()=>{level=2;challengeActive=false;updateGuide();status("已进入处方关卡：把冰箱移到操作链同侧可切换为一次取齐；保持链连续，折返即可降到2次。");};
+  $("challenge").onclick=()=>{
+    if (!challengeUnlocked) return;
+    level=2;challengeActive=!challengeActive;
+    $("challenge").classList.toggle("active",challengeActive);updateGuide();
+    status(challengeActive?"挑战模式：在处方目标基础上继续检查通道与碰撞。":"已退出挑战模式。");
+  };
+  $("reset").onclick=()=>setScene(E.baseline("A"),"已重置为基线A：冰箱位于东侧对侧。已存A/B版本不受影响。");
+
+  $("simulate").onclick=startSimulation;
+  $("pause").onclick=()=>{
+    if (!sim?.running) return;
+    sim.paused=!sim.paused;
+    lastFrame=null;
+    $("pause").textContent=sim.paused?"继续":"暂停";
+    playStatus();
+    schedule();
+  };
+  $("speed").addEventListener("input",()=>{
+    const value=Number($("speed").value);
+    if (sim && Number.isFinite(value) && value>0) {
+      sim.speed=value;
+      lastFrame=null;
+    }
+  });
+  document.addEventListener("visibilitychange",()=>{
+    lastFrame=null;
+    playStatus();
+    schedule();
+  });
+  window.addEventListener("pagehide",()=>{
+    cancelAnimationFrame(frame);
+    frame=0;
+    lastFrame=null;
+  });
+
+  /*
+   * 自检使用实际规则层，不另外实现一套“期望结果计算器”。
+   * 优先读取规则层公开的预设；若预设仅由界面按钮持有，则通过
+   * 相同按钮加载，测试结束后恢复用户场景。
+   */
+  function runSelfTests() {
+    const savedScene=E.clone(scene);
+    const savedSelection=selected;
+    const results=[];
+    let usedPresetControl=false;
+
+    function assert(condition,message) {
+      if (!condition) throw new Error(message);
+    }
+    function test(title,body) {
+      try {
+        body();
+        results.push({title,ok:true});
+      } catch (error) {
+        results.push({title,ok:false,message:String(error.message||error)});
+      }
+    }
+    function sceneValue(value) {
+      return value && typeof value==="object" &&
+        value.objects && value.objects.fridge ? E.clone(value) : null;
+    }
+    function baseline(letter) {
+      const keys=[
+        letter,letter.toLowerCase(),
+        "baseline"+letter,"preset"+letter,"layout"+letter
+      ];
+      const containers=[
+        E.baselines,E.BASELINES,E.presets,E.PRESETS,E.layouts,E.LAYOUTS,E
+      ];
+      for (const container of containers) {
+        if (!container || typeof container!=="object") continue;
+        for (const key of keys) {
+          let value=container[key];
+          if (typeof value==="function") {
+            try { value=value.call(container); } catch (_) { continue; }
+          }
+          const found=sceneValue(value);
+          if (found) return found;
+        }
+      }
+      for (const key of [
+        "baseline","preset","makeBaseline","makePreset",
+        "createBaseline","createPreset"
+      ]) {
+        if (typeof E[key]!=="function") continue;
+        try {
+          const found=sceneValue(E[key](letter));
+          if (found) return found;
+        } catch (_) {
+          /* 某些规则层只公开预设数据或界面入口。 */
+        }
+      }
+
+      const lower=letter.toLowerCase();
+      const controls=Array.from(document.querySelectorAll(
+        "button,input[type=button],input[type=radio]"
+      ));
+      const control=controls.find(el=>{
+        const id=(el.id||"").replace(/[^a-z0-9]/gi,"").toLowerCase();
+        const data=[
+          el.dataset.baseline,el.dataset.preset,el.dataset.layout
+        ].filter(Boolean).map(value=>String(value).toLowerCase());
+        const text=(el.textContent||el.value||"").trim();
+        return data.includes(lower) ||
+          ["baseline","preset","layout","load"].some(prefix=>id===prefix+lower) ||
+          new RegExp("(?:基线|基准|方案|布局|预设)\\s*"+letter+"(?![a-z])","i").test(text) ||
+          new RegExp("^"+letter+"\\s*(?:[：:、.（(—-]|方案|布局)","i").test(text);
+      });
+      assert(control && !control.disabled,"未找到基线"+letter+"的可用预设入口");
+      usedPresetControl=true;
+      control.click();
+      const found=sceneValue(scene);
+      assert(found,"基线"+letter+"没有生成有效场景");
+      return found;
+    }
+
+    stopSimulation();
+    try {
+      let a=null,b=null;
+      test("读取基线 A",()=>{a=baseline("A");});
+      test("读取基线 B",()=>{b=baseline("B");});
+
+      function checkBaseline(label,fixture,expectedMoves) {
+        assert(fixture,"基线"+label+"不可用");
+        const before=JSON.stringify(fixture);
+        const evaluation=E.evaluate(fixture);
+        const plan=E.taskPlan(fixture);
+        assert(
+          evaluation.errand.moveCount===expectedMoves,
+          `基线${label}：期望${expectedMoves}次，实际${evaluation.errand.moveCount}次`
+        );
+        assert(
+          plan.segments.filter(segment=>segment.counted).length===expectedMoves,
+          "任务段的计数标记与基线"+label+"折返数不一致"
+        );
+        assert(
+          plan.segments.every(segment=>!segment.chainStep || !segment.counted),
+          "连续链内步进不得计为折返"
+        );
+        assert(
+          plan.segments.every(segment=>
+            Number.isFinite(segment.distanceM) && segment.distanceM>=0
+          ),
+          "任务段距离必须为有限非负数"
+        );
+        const distance=plan.segments.reduce((sum,segment)=>sum+segment.distanceM,0);
+        assert(
+          Math.abs(distance-evaluation.errand.walkDistanceM)<=0.05,
+          "任务段总距离与评价步行距离不一致（显示舍入容差0.05m）"
+        );
+        assert(
+          JSON.stringify(fixture)===before,
+          "评价或任务规划不应修改输入场景"
+        );
+      }
+
+      /* 同墙且相邻间隙不超过 0.05m 的水槽、备菜台、灶台形成连续链。
+         链内仍然行走并累加距离，但 counted 必须为 false。 */
+      test("基线 A：连续链规则下 moveCount = 6",()=>checkBaseline("A",a,6));
+      test("基线 B：连续链规则下 moveCount = 2",()=>checkBaseline("B",b,2));
+
+      test("基线 B：连续链步进保留在动画计划中",()=>{
+        assert(b,"基线 B 不可用");
+        const steps=E.taskPlan(b).segments.filter(segment=>segment.chainStep);
+        assert(steps.length>0,"连续链不能通过删除链内任务段来实现零计数");
+        assert(steps.every(segment=>!segment.counted),"链内步进错误计数");
+      });
+
+      test("克隆场景可独立编辑",()=>{
+        const copy=E.clone(savedScene);
+        const originalX=savedScene.objects.fridge.x;
+        copy.objects.fridge.x=originalX+.1;
+        assert(
+          savedScene.objects.fridge.x===originalX,
+          "clone 必须隔离对象坐标"
+        );
+      });
+    } finally {
+      selected=savedSelection;
+      if (usedPresetControl) {
+        commit(E.clone(savedScene),"自检结束，已恢复原场景。");
+        selected=savedSelection;
+      } else {
+        scene=E.clone(savedScene);
+      }
+      report=E.evaluate(scene);
+      renderScores();
+      renderPlan();
+    }
+
+    const failed=results.filter(result=>!result.ok);
+    const summary=failed.length
+      ? `自检：${results.length-failed.length}/${results.length}项通过。`+
+        failed.map(result=>`${result.title}：${result.message}`).join("；")
+      : `自检全部通过（${results.length}项）：基线 A 为6次，基线 B 为2次；连续链内步进不计折返。`;
+    const output=$("selfTestResults")||$("testResults");
+    if (output) output.textContent=summary;
+    for (const result of results) {
+      if (!result.ok) console.error("[厨房布局自检]",result.title,result.message);
+    }
+    status(summary);
+    return {ok:failed.length===0,results};
+  }
+
+  /* 初始化不启动动画；页面隐藏或暂停时也不持续申请动画帧。 */
+  (function bootLab() {
+    stopSimulation();
+    commit(E.clone(scene),"已就绪：选择预设或拖动工作站，再模拟四菜一汤。");
+
+    const testButton=$("selfTest")||$("runTests")||$("runSelfTests");
+    if (testButton) testButton.onclick=runSelfTests;
+
+    runSelfTests();
+  })();
+
+  /* QA 桥接：同源测试 iframe 专用钩子，不影响页面功能。 */
+  window.__LAB_READY__=true;
+  window.__LAB_SET_LEVEL__=n=>{(n===2?$("level2"):$("level1")).click();};
+  window.__LAB_LOAD_BASELINE__=L=>{stopSimulation();commit(E.baseline(L==="B"?"B":"A"),"已载入基线"+(L==="B"?"B":"A")+"。");};
+  window.__LAB_EVALUATE__=()=>E.evaluate(scene);
+  window.__LAB_SELFTEST__=()=>{
+    const r=runSelfTests();
+    const failed=r.results.filter(result=>!result.ok).map(result=>result.title+"："+result.message);
+    return {passed:r.results.length-failed.length,failed,total:r.results.length};
+  };
+})();
+</script>
+</body></html>

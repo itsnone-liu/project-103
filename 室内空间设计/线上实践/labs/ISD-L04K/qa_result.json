@@ -1,0 +1,173 @@
+{
+ "steps": [
+  [
+   "ready",
+   true
+  ],
+  [
+   "consoleErrors",
+   []
+  ],
+  [
+   "setLevel",
+   2
+  ],
+  [
+   "baseline",
+   "A"
+  ],
+  [
+   "selftest",
+   "PASS"
+  ],
+  [
+   "determinism",
+   true
+  ]
+ ],
+ "errors": [],
+ "selftest": {
+  "passed": 6,
+  "failed": [],
+  "total": 6
+ },
+ "evaluate": {
+  "workTriangle": {
+   "legs": [
+    2.03,
+    1.78,
+    0.83
+   ],
+   "total": 4.63,
+   "legRange": [
+    1.2,
+    2.7
+   ],
+   "totalRange": [
+    4,
+    6.6
+   ],
+   "legsOK": false,
+   "totalOK": true
+  },
+  "aisle": {
+   "minClearance": 0,
+   "measurement": {
+    "id": "sink",
+    "direction": "south",
+    "clearanceM": 0
+   }
+  },
+  "errand": {
+   "moveCount": 6,
+   "walkDistanceM": 14.59,
+   "handsFullMoves": 4,
+   "strategy": "three-deliveries",
+   "pickupDistanceM": 2.025617189895465,
+   "pickupThresholdM": 1,
+   "continuousChain": {
+    "connected": true,
+    "wall": "north",
+    "members": [
+     "sink",
+     "prep",
+     "stove"
+    ],
+    "gapsM": [
+     0,
+     0
+    ]
+   },
+   "sequence": [
+    "fridge",
+    "sink",
+    "fridge",
+    "sink",
+    "fridge",
+    "sink",
+    "prep",
+    "stove",
+    "trash"
+   ],
+   "segments": [
+    {
+     "from": "fridge",
+     "to": "sink",
+     "distanceM": 2.025617189895465,
+     "handsFull": true,
+     "chainStep": false,
+     "counted": true
+    },
+    {
+     "from": "sink",
+     "to": "fridge",
+     "distanceM": 2.025617189895465,
+     "handsFull": false,
+     "chainStep": false,
+     "counted": true
+    },
+    {
+     "from": "fridge",
+     "to": "sink",
+     "distanceM": 2.025617189895465,
+     "handsFull": true,
+     "chainStep": false,
+     "counted": true
+    },
+    {
+     "from": "sink",
+     "to": "fridge",
+     "distanceM": 2.025617189895465,
+     "handsFull": false,
+     "chainStep": false,
+     "counted": true
+    },
+    {
+     "from": "fridge",
+     "to": "sink",
+     "distanceM": 2.025617189895465,
+     "handsFull": true,
+     "chainStep": false,
+     "counted": true
+    },
+    {
+     "from": "sink",
+     "to": "prep",
+     "distanceM": 0.9,
+     "handsFull": false,
+     "chainStep": true,
+     "counted": false
+    },
+    {
+     "from": "prep",
+     "to": "stove",
+     "distanceM": 0.8749999999999998,
+     "handsFull": false,
+     "chainStep": true,
+     "counted": false
+    },
+    {
+     "from": "stove",
+     "to": "trash",
+     "distanceM": 2.6903763677225534,
+     "handsFull": true,
+     "chainStep": false,
+     "counted": true
+    }
+   ]
+  },
+  "collisions": {
+   "pairCount": 1,
+   "pairs": [
+    [
+     "sink",
+     "flue"
+    ]
+   ]
+  },
+  "outOfRoom": {
+   "count": 0,
+   "ids": []
+  }
+ }
+}
