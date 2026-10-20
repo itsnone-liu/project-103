@@ -21,24 +21,44 @@
    "PASS"
   ],
   [
+   "challengeEnabled",
+   true
+  ],
+  [
+   "goalStateText",
+   "✓ 达成：折返与三角边长目标已达成。"
+  ],
+  [
+   "challengeText",
+   "挑战模式 · 已解锁"
+  ],
+  [
+   "triangleLegsOK",
+   true
+  ],
+  [
+   "challengeActive",
+   true
+  ],
+  [
    "determinism",
    true
   ]
  ],
  "errors": [],
  "selftest": {
-  "passed": 6,
+  "passed": 7,
   "failed": [],
-  "total": 6
+  "total": 7
  },
  "evaluate": {
   "workTriangle": {
    "legs": [
-    2.03,
+    1.63,
     1.78,
-    0.83
+    2.41
    ],
-   "total": 4.63,
+   "total": 5.81,
    "legRange": [
     1.2,
     2.7
@@ -47,7 +67,7 @@
     4,
     6.6
    ],
-   "legsOK": false,
+   "legsOK": true,
    "totalOK": true
   },
   "aisle": {
@@ -59,12 +79,12 @@
    }
   },
   "errand": {
-   "moveCount": 6,
-   "walkDistanceM": 14.59,
-   "handsFullMoves": 4,
-   "strategy": "three-deliveries",
-   "pickupDistanceM": 2.025617189895465,
-   "pickupThresholdM": 1,
+   "moveCount": 2,
+   "walkDistanceM": 5.05,
+   "handsFullMoves": 2,
+   "strategy": "single-pickup",
+   "pickupDistanceM": 1.625,
+   "pickupThresholdM": 2,
    "continuousChain": {
     "connected": true,
     "wall": "north",
@@ -81,10 +101,6 @@
    "sequence": [
     "fridge",
     "sink",
-    "fridge",
-    "sink",
-    "fridge",
-    "sink",
     "prep",
     "stove",
     "trash"
@@ -93,39 +109,7 @@
     {
      "from": "fridge",
      "to": "sink",
-     "distanceM": 2.025617189895465,
-     "handsFull": true,
-     "chainStep": false,
-     "counted": true
-    },
-    {
-     "from": "sink",
-     "to": "fridge",
-     "distanceM": 2.025617189895465,
-     "handsFull": false,
-     "chainStep": false,
-     "counted": true
-    },
-    {
-     "from": "fridge",
-     "to": "sink",
-     "distanceM": 2.025617189895465,
-     "handsFull": true,
-     "chainStep": false,
-     "counted": true
-    },
-    {
-     "from": "sink",
-     "to": "fridge",
-     "distanceM": 2.025617189895465,
-     "handsFull": false,
-     "chainStep": false,
-     "counted": true
-    },
-    {
-     "from": "fridge",
-     "to": "sink",
-     "distanceM": 2.025617189895465,
+     "distanceM": 1.625,
      "handsFull": true,
      "chainStep": false,
      "counted": true
@@ -149,7 +133,7 @@
     {
      "from": "stove",
      "to": "trash",
-     "distanceM": 2.6903763677225534,
+     "distanceM": 1.651703665915893,
      "handsFull": true,
      "chainStep": false,
      "counted": true

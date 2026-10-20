@@ -1,4 +1,5 @@
 .qa_profile*
+diag-profile-*
 qa_dom.txt
 qa_result.json
 sol_raw.txt
