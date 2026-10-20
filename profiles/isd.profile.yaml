@@ -1,0 +1,47 @@
+# 室内空间设计课程 production-profile（2026-10-20 v1，分段方案批准稿）
+# 用法: python -m pipeline.produce runs/isd-XX --topic runs/isd-XX/topic-XX.md --model sol --effort high --profile profiles/isd.profile.yaml --title isd-XX
+
+mode: PROJECT_ROUTE
+
+visual:
+  style: isd_clean
+  style_note: |
+    【全课程视觉纪律 v1（继承 dh 批已验证四条款）】
+    A. 无假刷新：逐句整屏淡入只在"画面主体状态变化"句触发；入场动画必须带来可见变化。
+    B. 组级连续运镜：多句同图的平移/推进用组级进度连续推进，禁止每句重播；每句仍须可见增量。
+    C. 演绎-对证分离：教材原图（fig*.svg 母题）只在对证位出现（角标"教材图3-1"）；主体一律 Canvas 升级重绘。
+    D. 一句一世界：每句给专属可见状态，不许同状态重播。
+    【isd 附加条款（2026-10-20 用户裁定：空间课特点强制）】
+    E. 空间操作优先：每个正文段至少一次可见的空间状态变化——布局切换、构件移动、参数滑动看后果、A/B 同框对比；
+       纯静态讲解连续不得超过 3 句。旁白为空间操作服务，不是朗读讲稿。
+    F. 笔迹跟随（S3 尺度人体类默认入场）：尺度线、包络弧、门扇开启弧随旁白逐笔生长（确定性 stroke 进度），
+       不是淡入；标注是"手画出来的"。
+    G. 平面抬升（S5/S6 转折点运镜）：二维分析做完后镜头把墙立起看空间后果；每段至多一次。
+    H. 教材 SVG 母题升级重绘：保留母题与线型语汇，但更形象具体——家具画成家具、人形画成人体、
+       材质有质感、光有方向；不允许把教材示意线稿原样平铺当主体画面。
+    I. 案例数据纪律：U90 沈家画面只用户型库冻结几何（与线上实验 L04 同源），不另编户型与坐标；
+       数字三分标注（教学常用值/教学假设/待核验），国标只给查核入口不转述条款数值。
+
+backend:
+  preferred: web_2d
+  allowed:
+    - web_2d
+    - manim
+
+narration:
+  sentences: 40-46 句
+  duration: 280-320 秒（门禁下限 270，用户裁定不必严格 300）
+  note: |
+    主题文件含六节时长预算与必讲锚点；纪录片解说口吻——冷静克制带温度；分析句后留呼吸。
+    字数预算（龙小淳语速实测 4.6-4.9 字/秒）：280-320s 成片 → 旁白总字数 1250-1450 字，
+    写稿即按预算，避免 TTS 后撞时长门禁再返工。
+    尺寸数字读法：毫米/米单位齐全（"六百毫米"不写"600"），百分位数读"P5/P95"为"P五/P九十五"。
+
+storyboard:
+  pacing: medium
+  intro_max_seconds: 30
+
+knowledge:
+  use_project_cases: true
+  use_global_success_cases: false
+  use_failure_memory: true
