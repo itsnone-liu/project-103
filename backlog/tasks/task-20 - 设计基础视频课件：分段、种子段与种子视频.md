@@ -1,10 +1,10 @@
 ---
 id: TASK-20
 title: 设计基础视频课件：分段、种子段与种子视频
-status: Done
+status: In Progress
 assignee: []
 created_date: '2026-11-26T07:21:00Z'
-updated_date: '2026-11-26T08:35:00Z'
+updated_date: '2026-11-26T14:50:00Z'
 labels: []
 dependencies: []
 priority: high
@@ -25,6 +25,7 @@ ordinal: 20000
 - [x] #3 参考库含本地模板、外部参考与采/不采判断
 - [x] #4 种子视频产出final mp4，通过时长、音画、抽帧QA
 - [x] #5 台账MD/CSV与GitHub进度提交完成；结果文件不提交GitHub
+- [ ] #6 种子2 `dsb-5-05` 成片通过时长、音画、QA、Math-check 门禁并待用户审片
 <!-- AC:END -->
 
 ## Definition of Done
@@ -42,7 +43,7 @@ ordinal: 20000
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
-2026-11-26 种子1完成。做到哪：分段方案、参考库、profile、dsb-2-03 topic/storyboard/code/成片落地；320.50s、54句、1548字，TTS audit PASS、QA PASS，MP4与验收记录已归档网盘种子1目录，SHA256一致。下一步：用户审片，确认后做种子2 dsb-5-05，再决定批产。坑在哪：6—7座要写清向下取整；7人/7次口径统一；教材图整页缩图不可读，要裁到关键流程；render缺教材图资源会报ASSET_MISSING。
+2026-11-26 种子1经用户通过。做到哪：分段方案、参考库、profile、dsb-2-03 topic/storyboard/code/成片落地；320.50s、54句、1548字，TTS audit PASS、QA PASS，MP4与验收记录已归档网盘种子1目录，SHA256一致。下一步：种子2 dsb-5-05 已启动，topic 已写；重点验证 F4 空间状态机＋F7 三层面积账（29.07／28.07／23.27㎡）与三路径比较（5.8／8.0／10.0m）。坑在哪：三层账容易混层；路径长度与转折数必须同帧对齐；GLM 代码生成要过字幕带与契约门禁；教材图整页缩图不可读，要裁到关键流程。
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
