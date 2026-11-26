@@ -122,7 +122,7 @@
 | 数据边界 | “教学假设/教学常用值/须专业核验”三类标签均出现；教材图 2-4 只在对证位出现一次 |
 | 验收 | TTS audit PASS；QA PASS；blank_frames=0；最长连续低差约 7.75s（<20s 门禁）；54 条字幕 |
 | 网盘 | `/apps/ss2archive/103/设计基础/视频课件/种子1/`；MP4＋验收记录＋manifest；SHA256 一致 |
-| 画廊 | 本地 `http://127.0.0.1:8861/dsbv.html`；LAN `http://192.168.0.105:8861/dsbv.html`；公网（临时）`https://controllers-nickel-pit-keyboards.trycloudflare.com/dsbv.html`；稳定中继待 Tailscale 恢复 |
+| 画廊 | 本地 `http://127.0.0.1:8861/dsbv.html`；LAN `http://192.168.0.105:8861/dsbv.html`；公网 `http://199.68.217.229:8861/dsbv.html`；Tailscale 用户态节点 `100.74.238.39`，公网页 200、视频 Range 206 |
 
 种子 2 候选为 `dsb-5-05`《54㎡ 里，路、坐、转身、树池之后还剩多少》，用于验证 F4 空间状态机＋F7 面积账。待用户审片后再决定是否继续。
 
