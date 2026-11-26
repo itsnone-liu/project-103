@@ -12,6 +12,22 @@ node_modules/
 dist/
 build/
 
+# Course result files: local + Baidu Netdisk only, never GitHub
+*.doc
+*.docx
+*.pdf
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.svg
+*.tif
+*.tiff
+
 # Rendered media and generated review frames
 *.mp4
 *.mp3
@@ -56,3 +72,8 @@ case-d/*/node_modules/
 
 # standalone public repo for the online-practice pilot plan
 interactive-practice-pilot/
+
+# Large binaries: keep locally / archive externally, do not add to GitHub history
+现代设计史/教材/现代设计史（2026年版）.pdf
+tools/ffmpeg/bin/ffmpeg.exe
+tools/ffmpeg/bin/ffprobe.exe

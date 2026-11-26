@@ -18,6 +18,7 @@
 | `base-compare/` | Case A-D 双模型对照实验存档（回归基线，含手绘宿主 runtime） |
 | `runs/architecture-smoke/` | 无头渲染设施（compositor/ffmpeg 依赖宿主） |
 | `p103/` | 上一代 Remotion 线包（run 管理/tts/timeline/video_qa） |
+| `课程课件完成情况台账_v1.md` / `.csv` | **课程课件进度唯一事实源**；每完成一个阶段性任务即更新并 push GitHub；GitHub 只提交进度，DOCX/PDF/视频/配图等结果文件走网盘归档。规则见 `课程生产框架_v1.md` 第 7 节 |
 
 ## 快速开始
 
