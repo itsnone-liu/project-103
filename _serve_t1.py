@@ -81,7 +81,6 @@ FILES["/xdsds/yangjuan_ans.md"] = _xds / "样卷_答案_v1.md"
 FILES["/xdsds/tiku.md"] = _xds / "题库_v1.md"
 FILES["/xdsds/zhangce.md"] = _xds / "章节测验_v1.md"
 FILES["/xdsds/suitang.md"] = _xds / "随堂测验题_v1.md"
-FILES["/xdsds.html"] = _xds / "_gallery_xdsds.html"
 # ===== XDSDS GALLERY END =====
 # ===== DSB GALLERY BEGIN =====
 _dsb = ROOT / "设计基础"
@@ -119,7 +118,6 @@ FILES["/dsb5v/topic.md"] = ROOT / "runs" / "dsb-5-05" / "topic-dsb-5-05.md"
 FILES["/dsbb.html"] = _dsb / "_gallery_dsb_batches.html"
 # ===== DSB BATCH GALLERY END =====
 # ===== DSB GALLERY END =====
-FILES["/xdsds.html"] = _xds / "_gallery_xdsds.html"
 
 # ===== BSD COURSE FILES BEGIN =====
 _bsd = ROOT / "商业空间设计"
@@ -331,7 +329,6 @@ h1{font-size:20px}.meta{color:#9ab;font-size:13px;line-height:1.7}a{color:#7fd}
 video{width:100%;border-radius:8px;background:#000;margin-top:8px}s{color:#667}</style></head><body>
 <h1>《环境心理学》设计案例研究 · 论文框架教学片</h1>
 <p class="meta">设计论文六段文体（问题→理论框架→诊断→设计策略→实证检验→结论）× 工程图纸视觉母语 × 纪录片叙事；全程代码确定性渲染，数字全部带来源。配音 CosyVoice v2 · 龙小淳；sol(gpt-6.1-sol 高推理) 制作；时长门禁 ≥570s + 冻结扫描。
-<br><a href="/isdv.html" style="color:#ffd">🎬《室内空间设计》视频课件 51 段全量（章节化画廊）</a>
 <br><a href="/intros.html">▶ 章绪论十篇</a> · <a href="/first10.html">▶ 三十八讲正文正片</a> · <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a> · <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a> · <a href="/isd-l03.html" style="color:#8f8">🎮 需求档案与气泡图任务书实验（ISD-L03·成果①）</a> · <a href="/isd-l06-preview.html" style="color:#8ff">🧊 U90双档3D渲染预演（L06渲染层）</a> · <a href="/isd-l04.html" style="color:#8f8">🎮 U90全户型功能组织实验（ISD-L04·成果②）</a> · <a href="/isd-l04k.html" style="color:#8f8">🎮 厨房折返计数实验（ISD-L04K）</a> · <a href="/labs.html" style="color:#8f8">📋 线上实践实验目录（12章规划）</a></p>
 {{ITEMS}}
 </body></html>"""
@@ -992,19 +989,13 @@ h1{font-size:20px}h2{font-size:15px;color:#8fb;margin-top:28px}a{color:#7fd}vide
 .meta{color:#9ab;font-size:13px;line-height:1.7}table{border-collapse:collapse;font-size:13px}
 td,th{border:1px solid #2a3540;padding:4px 10px;text-align:left}th{color:#8fb}</style></head><body>
 <h1>《看不见的气泡》T1 种子 · 两版对比</h1>
-<p class="meta"><a href="/ijc/videos.html" style="color:#7fd;font-size:16px">▶《室内构造与材料学》视频课件（咖啡厅项目贯穿 · 44段已上线44段 · B1–B5全部过线）</a><br><br>
+<p class="meta"><a href="/dsbb.html" style="color:#e8a07f;font-size:16px">▶《设计基础》视频课件批产画廊（B1—B5）</a><br><br>
 <a href="/intros.html">▶ 章绪论十篇（每章 1-2 分钟导览，龙小淳配音）</a><br><a href="/cases.html">▶ 设计案例研究（论文框架教学片）</a><br>
 <a href="/case-v2.html" style="color:#fc8">▶ 案例A v2 验收页（定稿）</a><br>
 <a href="/case-2.html" style="color:#fc8">▶ 案例B《隔间》验收页（定稿）</a><br>
 <a href="/first10.html">▶ 前三十六段正片批产（绪论→10.3 全书收官，龙小淳配音，sol 新制 34 段+换声 2 段）</a><br>
-<a href="/isdv.html" style="color:#8cf">▶《室内空间设计》视频课件 51 段全量画廊</a><br>
-<a href="/lightcolorv.html" style="color:#f9a">▶《光与色彩》视频课件（种子片 1 段已上线，57 节规划中）</a><br>
-<a href="/colorv.html" style="color:#f9a">▶《室内色彩与图案设计》视频课件 49 段画廊（种子片 2 段已上线，批产推进中）</a><br>
-<a href="/muiv.html" style="color:#8ff">▶《移动UI交互设计》视频课件 43 段画廊（B1 批次 ch1–3 待审）</a><br>
-<a href="/drwv.html" style="color:#8df">▶《设计制图》视频课件 41 段画廊（批产四批全部完成，41 段全量上线）</a><br>
-<a href="/dss/videos.html" style="color:#ffd">▶《设计标准与规范》视频课件（41 段）</a><br><a href="/erg/videos.html" style="color:#ffd">▶《人体工程学》视频课件 48 段画廊（B1–B7 全量上线）</a><br>
 <a href="/dsbv.html" style="color:#e8a07f">▶《设计基础》视频课件 · 种子 1（已通过）</a> · <a href="/dsb5v.html" style="color:#e8a07f">种子 2（dsb-5-05 三层面积账 × 三方案路径）</a><br>
-<a href="/labs.html" style="color:#8f8">📋《室内空间设计》线上实践实验目录（首个实验已上线）</a> 🎧 <a href="/qwen3tts.html" style="color:#fe8">qwen3-tts-flash 百炼试听（Cherry·26s）</a> · <a href="/xdsds.html" style="color:#fd8">《现代设计史》考核件（大纲+样卷+题库+章测）</a></p>
+🎧 <a href="/qwen3tts.html" style="color:#fe8">qwen3-tts-flash 百炼试听（Cherry·26s）</a> · 旧课已归档网盘并清理本地（人体工程学/商业空间设计/光与色彩/室内色彩与图案设计/室内空间设计/室内构造与材料学/设计标准与规范/现代设计史/设计制图/移动UI交互设计）</p>
 <table>
 <tr><th></th><th>v1 默认推理</th><th>hr 高推理</th></tr>
 <tr><td>时长</td><td>396.7s</td><td>348.6s（更贴近 5min 目标）</td></tr>
@@ -1158,14 +1149,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
-        if self.path == "/labs.html":
-            body = _labs_page().encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
-            return
         if self.path == "/intros.html":
             body = _intros_page().encode("utf-8")
             self.send_response(200)
@@ -1222,61 +1205,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
-        if self.path.split("?", 1)[0] == "/isdv.html":
-            body = _isd_page().encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
-            return
-        if self.path.split("?", 1)[0] == "/lightcolorv.html":
-            body = _lc_page().encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
-            return
-        if self.path.split("?", 1)[0] == "/colorv.html":
-            body = _color_page().encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
-            return
-        if self.path.split("?", 1)[0] == "/muiv.html":
-            body = _mui_page().encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
-            return
-        if self.path.split("?", 1)[0] == "/drwv.html":
-            body = _drw_page().encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
-            return
         import re as _re0
-        _m = _re0.match(r"^/(?:isdv|colorv|muiv|drwv|lightcolorv)/(isd-|color-|mui-|drw-|lightcolor-)([A-Za-z0-9\-]+)\.mp4$", self.path.split("?", 1)[0])
-        if _m:
-            _run = _m.group(1) + _m.group(2)
-            f = ROOT / "runs" / _run / "out" / f"final_{_run}.mp4"
-            if f.exists():
-                self._send_file(f)
-                return
-        _m = _re0.match(r"^/(?:isdv|colorv|muiv|drwv|lightcolorv)/(isd-|color-|mui-|drw-|lightcolor-)([A-Za-z0-9\-]+)-sheet\.jpg$", self.path.split("?", 1)[0])
-        if _m:
-            _run = _m.group(1) + _m.group(2)   # 2026-11-05 修：原实现只取前缀，-sheet.jpg 恒 404
-            f = ROOT / "runs" / _run / "out" / "qa_sheet.jpg"
-            if f.exists():
-                self._send_file(f)
-                return
         # ===== DSB BATCH BEGIN（2026-11-27）/dsbv/<seg>.(mp4|-sheet.jpg|.md) =====
         _m = _re0.match(r"^/dsbv/(dsb-[A-Za-z0-9\-]+)\.mp4$", self.path.split("?", 1)[0])
         if _m:
@@ -1649,7 +1578,6 @@ if "{{DSSROWS}}" not in LABS_PAGE and "{{BSDROWS}}</table>" in LABS_PAGE:
 # ======== IJC GALLERY AUTO BEGIN ========
 # 本块由 _labs/ijc_gallery.py 生成，勿手改（重跑整块替换）
 _ijc_runs = ROOT / "runs"
-FILES["/ijc/videos.html"] = ROOT / "_labs" / "ijc_videos.html"
 FILES["/ijc/v/ijc-1-1.mp4"] = _ijc_runs / "ijc-1-1/out/final_ijc-1-1.mp4"
 FILES["/ijc/img/ijc-1-1.jpg"] = _ijc_runs / "ijc-1-1/out/qa_sheet.jpg"
 FILES["/ijc/v/ijc-1-2.mp4"] = _ijc_runs / "ijc-1-2/out/final_ijc-1-2.mp4"
@@ -1754,7 +1682,6 @@ FILES["/ijc/img/ijc-intro.jpg"] = _ijc_runs / "ijc-intro/out/qa_sheet.jpg"
 # ======== ERG GALLERY AUTO BEGIN ========
 # 本块由 _labs/erg_gallery.py 生成，勿手改（重跑整块替换）
 _erg_runs = ROOT / "runs"
-FILES["/erg/videos.html"] = ROOT / "_labs" / "erg_videos.html"
 FILES["/erg/v/erg-1-1.mp4"] = _erg_runs / "erg-1-1/out/final_erg-1-1.mp4"
 FILES["/erg/img/erg-1-1.jpg"] = _erg_runs / "erg-1-1/out/qa_sheet.jpg"
 FILES["/erg/v/erg-1-2.mp4"] = _erg_runs / "erg-1-2/out/final_erg-1-2.mp4"
@@ -1869,7 +1796,6 @@ FILES["/erg/img/erg-INTRO.jpg"] = _erg_runs / "erg-INTRO/out/qa_sheet.jpg"
 # === DSS GALLERY AUTO BEGIN ===
 # 本块由 _labs/dss_gallery.py 生成，勿手改（重跑整块替换）
 _dss_runs = ROOT / "runs"
-FILES["/dss/videos.html"] = ROOT / "_labs" / "dss_videos.html"
 FILES["/dss/v/dss-1-1.mp4"] = _dss_runs / "dss-1-1/out/final_dss-1-1.mp4"
 FILES["/dss/img/dss-1-1.jpg"] = _dss_runs / "dss-1-1/out/qa_sheet.jpg"
 FILES["/dss/v/dss-1-2.mp4"] = _dss_runs / "dss-1-2/out/final_dss-1-2.mp4"
